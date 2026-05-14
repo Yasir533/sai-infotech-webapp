@@ -101,38 +101,29 @@ export default function Contact() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length) { setErrors(errs); return }
-    setLoading(true)
-    try {
-      const formData = new FormData()
-      formData.append('name', form.name)
-      formData.append('email', form.email)
-      formData.append('phone', form.phone)
-      formData.append('message', form.message)
-      formData.append('services', form.services.join(', '))
+  e.preventDefault();
 
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        body: formData,
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        if (data && data.errors) setErrors(data.errors)
-        else setErrors({ form: data.error || 'Failed to send message' })
-        setLoading(false)
-        return
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/contact",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       }
-      setSubmitted(true)
-      setForm({ name: '', email: '', phone: '', message: '', services: [] })
-      setErrors({})
-    } catch (err) {
-      console.error(err)
-      setErrors({ form: 'Network error. Please try again later.' })
-    }
-    setLoading(false)
+    );
+
+    const data = await response.json();
+
+    alert(data.message);
+
+  } catch (error) {
+    console.log(error);
+    alert("Network Error");
   }
+};
 
   const handleChange = (field, val) => {
     setForm((f) => ({ ...f, [field]: val }))
