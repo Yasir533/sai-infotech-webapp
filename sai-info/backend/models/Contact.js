@@ -5,10 +5,17 @@ const contactSchema = new mongoose.Schema({
   email: String,
   phone: String,
   message: String,
+
+  services: [
+    {
+      type: String,
+    },
+  ],
+
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Contact", contactSchema);

@@ -1,13 +1,31 @@
 import React, { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { FiMapPin, FiPhone, FiMail, FiSend, FiCheck } from 'react-icons/fi'
+import {
+  FiMapPin,
+  FiPhone,
+  FiMail,
+  FiSend,
+  FiCheck,
+} from 'react-icons/fi'
+
+const SERVICE_OPTIONS = [
+  'IT Solution (Sales/Rentals)',
+  'AMS (Annual Maintenance Services)',
+  'Laptop and Notebook Repair Solutions',
+  'Desktop & Laptop Motherboard Specialists',
+  'Data Recovery & Back-up Specialists',
+  "PC's / Servers / Networking",
+  'CCTV Installation & Maintenance',
+  'Audio Visual Solutions',
+  'Wind Power Control Systems',
+]
 
 const contactInfo = [
   {
     icon: FiMapPin,
     title: 'Regd. Office',
     lines: [
-      '#9, 1st Main, Ground Floor, Vijay Rangamma Layout,',
+      '#9, 1st Main, Ground Floor, Vijay Rangamma Layout',
       'Basavanagudi, Bangalore-560004',
     ],
     color: 'from-blue-600 to-blue-400',
@@ -35,6 +53,7 @@ export default function Contact() {
     email: '',
     phone: '',
     message: '',
+    services: [],
   })
 
   const [loading, setLoading] = useState(false)
@@ -45,6 +64,20 @@ export default function Contact() {
       ...form,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const toggleService = (service) => {
+    if (form.services.includes(service)) {
+      setForm({
+        ...form,
+        services: form.services.filter((s) => s !== service),
+      })
+    } else {
+      setForm({
+        ...form,
+        services: [...form.services, service],
+      })
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -74,6 +107,7 @@ export default function Contact() {
           email: '',
           phone: '',
           message: '',
+          services: [],
         })
       } else {
         alert(data.message)
@@ -107,7 +141,7 @@ export default function Contact() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-14">
-          {/* Contact Info */}
+          {/* Left Side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -140,7 +174,7 @@ export default function Contact() {
             ))}
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Right Side */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -164,78 +198,79 @@ export default function Contact() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Name */}
-                <div>
-                  <label className="block text-slate-300 mb-2">
-                    Full Name
-                  </label>
-
-                  <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Enter your name"
-                    required
-                    className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white outline-none"
-                  />
-                </div>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  required
+                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                />
 
                 {/* Email */}
-                <div>
-                  <label className="block text-slate-300 mb-2">
-                    Email Address
-                  </label>
-
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
-                    required
-                    className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white outline-none"
-                  />
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="Email Address"
+                  required
+                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                />
 
                 {/* Phone */}
-                <div>
-                  <label className="block text-slate-300 mb-2">
-                    Phone Number
-                  </label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
+                  required
+                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                />
 
-                  <input
-                    type="text"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder="Enter phone number"
-                    required
-                    className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white outline-none"
-                  />
+                {/* Services */}
+                <div>
+                  <h3 className="text-white font-semibold mb-3">
+                    Select Services
+                  </h3>
+
+                  <div className="flex flex-wrap gap-3">
+                    {SERVICE_OPTIONS.map((service, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => toggleService(service)}
+                        className={`px-4 py-2 rounded-xl border transition-all duration-300 text-sm
+                        ${
+                          form.services.includes(service)
+                            ? 'bg-blue-600 border-blue-600 text-white'
+                            : 'bg-slate-800 border-slate-600 text-slate-300'
+                        }`}
+                      >
+                        {service}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Message */}
-                <div>
-                  <label className="block text-slate-300 mb-2">
-                    Message
-                  </label>
-
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    rows="5"
-                    placeholder="Enter your message"
-                    required
-                    className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white outline-none resize-none"
-                  />
-                </div>
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  rows="5"
+                  placeholder="Your Message"
+                  required
+                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white resize-none"
+                />
 
                 {/* Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     'Sending...'
