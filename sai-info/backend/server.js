@@ -35,10 +35,19 @@ mongoose.connect(process.env.MONGO_URI)
 .catch((err) => console.log(err));
 
 app.post("/api/contact", async (req, res) => {
-  try {
-    const { name, email, phone, message, services } = req.body;
 
-    // Save to MongoDB
+  try {
+
+    const {
+      name,
+      email,
+      phone,
+      message,
+      services
+    } = req.body;
+
+    // Save in MongoDB
+
     const newContact = new Contact({
       name,
       email,
@@ -49,56 +58,95 @@ app.post("/api/contact", async (req, res) => {
 
     await newContact.save();
 
-    // Send Email
-    // Auto Reply to Customer
+    // =========================
+    // 1. SEND MAIL TO ADMIN
+    // =========================
 
-await transporter.sendMail({
-  from: process.env.EMAIL_USER,
-  to: email,
+    await transporter.sendMail({
 
-  subject: "Thank You for Contacting SAI INFOTECH",
+      from: process.env.EMAIL_USER,
 
-  html: `
-    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-      
-      <h2 style="color:#2563eb;">
-        Thank You for Contacting SAI INFOTECH
-      </h2>
+      to: process.env.ADMIN_EMAIL,
 
-      <p>Dear <strong>${name}</strong>,</p>
+      subject: "New Customer Enquiry - SAI INFOTECH",
 
-      <p>
-        Thank you for reaching out to us.
-        We have received your enquiry successfully.
-      </p>
+      html: `
+        <h2>New Customer Enquiry</h2>
 
-      <p>
-        Our technical team will contact you shortly regarding:
-      </p>
+        <p><strong>Name:</strong> ${name}</p>
 
-      <p style="background:#f3f4f6; padding:10px; border-radius:8px;">
-        ${
-          Array.isArray(services)
-            ? services.join(", ")
-            : services
-        }
-      </p>
+        <p><strong>Email:</strong> ${email}</p>
 
-      <p>
-        We appreciate your interest in SAI INFOTECH.
-      </p>
+        <p><strong>Phone:</strong> ${phone}</p>
 
-      <br/>
+        <p>
+          <strong>Services:</strong>
+          ${
+            Array.isArray(services)
+              ? services.join(", ")
+              : services
+          }
+        </p>
 
-      <p>
-        Regards,<br/>
-        <strong>SAI INFOTECH</strong><br/>
-        Technical Solutions Trust
-      </p>
+        <p><strong>Message:</strong></p>
 
-    </div>
-  `,
-});
+        <p>${message}</p>
+      `,
+    });
+
+    // =========================
+    // 2. AUTO REPLY TO USER
+    // =========================
+
+    await transporter.sendMail({
+
+      from: process.env.EMAIL_USER,
+
+      to: email,
+
+      subject: "Thank You for Contacting SAI INFOTECH",
+
+      html: `
+        <div style="font-family: Arial; padding:20px;">
+
+          <h2 style="color:#2563eb;">
+            Thank You for Contacting SAI INFOTECH
+          </h2>
+
+          <p>Dear ${name},</p>
+
+          <p>
+            Your enquiry has been received successfully.
+          </p>
+
+          <p>
+            Our technical team will contact you shortly.
+          </p>
+
+          <p>
+            <strong>Selected Services:</strong>
+          </p>
+
+          <p>
+            ${
+              Array.isArray(services)
+                ? services.join(", ")
+                : services
+            }
+          </p>
+
+          <br/>
+
+          <p>
+            Regards,<br/>
+            SAI INFOTECH
+          </p>
+
+        </div>
+      `,
+    });
+
+    // =========================
 
     res.status(201).json({
       success: true,
@@ -106,7 +154,9 @@ await transporter.sendMail({
     });
 
   } catch (error) {
-    console.error("FULL ERROR:", error);
+
+    console.log("FULL ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: "Server Error",
