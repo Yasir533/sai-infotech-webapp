@@ -218,6 +218,47 @@ app.put("/api/enquiries/:id", async (req, res) => {
   }
 });
 
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    // Simple AI replies
+    let reply = "";
+
+    const msg = message.toLowerCase();
+
+    if (msg.includes("data recovery")) {
+      reply =
+        "We provide professional data recovery solutions for hard disks, SSDs, laptops, and servers.";
+    } else if (msg.includes("laptop")) {
+      reply =
+        "We repair laptops, motherboards, chip-level issues, and provide AMC services.";
+    } else if (msg.includes("contact")) {
+      reply =
+        "You can contact SAI INFOTECH at +91 99459 81999 or email ssmb@sais.in";
+    } else if (msg.includes("services")) {
+      reply =
+        "We provide IT Solutions, CCTV Installation, Data Recovery, Networking, Motherboard Repair, and more.";
+    } else {
+      reply =
+        "Welcome to SAI INFOTECH. Please ask about our services, repairs, networking, CCTV, or data recovery.";
+    }
+
+    res.json({
+      success: true,
+      reply,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
