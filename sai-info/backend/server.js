@@ -222,10 +222,13 @@ app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
+    console.log("/api/chat received:", message);
+
+    // Ensure message is a string to avoid runtime errors
+    const msg = (message ?? "").toString().toLowerCase();
+
     // Simple AI replies
     let reply = "";
-
-    const msg = message.toLowerCase();
 
     if (msg.includes("data recovery")) {
       reply =
