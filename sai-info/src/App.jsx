@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from 'react'
+
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom"
+
 import Loader from './components/Loader'
 import VideoBackground from './components/VideoBackground'
 import Navbar from './components/Navbar'
@@ -13,25 +20,16 @@ import FloatingButtons from './components/FloatingButtons'
 import ScrollToTop from './components/ScrollToTop'
 import AIChat from './components/AIChat'
 
-function App() {
-  const [loading, setLoading] = useState(true)
+import AdminDashboard from "./pages/AdminDashboard"
 
-  useEffect(() => {
-    document.documentElement.classList.add('dark')
-    localStorage.setItem('theme', 'dark')
-  }, [])
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2200)
-    return () => clearTimeout(timer)
-  }, [])
-
-  if (loading) return <Loader />
+function HomePage() {
 
   return (
     <div className="gradient-bg min-h-screen">
       <VideoBackground />
+
       <Navbar />
+
       <main>
         <Hero />
         <About />
@@ -40,11 +38,62 @@ function App() {
         <Certificate />
         <Contact />
       </main>
+
       <Footer />
+
       <FloatingButtons />
+
       <ScrollToTop />
+
       <AIChat />
     </div>
+  )
+}
+
+function App() {
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+
+    document.documentElement.classList.add('dark')
+
+    localStorage.setItem('theme', 'dark')
+
+  }, [])
+
+  useEffect(() => {
+
+    const timer = setTimeout(
+      () => setLoading(false),
+      2200
+    )
+
+    return () => clearTimeout(timer)
+
+  }, [])
+
+  if (loading) return <Loader />
+
+  return (
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
+
+        <Route
+          path="/admin"
+          element={<AdminDashboard />}
+        />
+
+      </Routes>
+
+    </BrowserRouter>
   )
 }
 
