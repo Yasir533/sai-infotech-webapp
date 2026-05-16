@@ -169,6 +169,17 @@ export default function Contact() {
                       {line}
                     </p>
                   ))}
+
+                  {info.title === 'Regd. Office' && (
+                    <a
+                      href="https://maps.app.goo.gl/Sr7UjP81EKUvNHnX9"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                    >
+                      View on Maps
+                    </a>
+                  )}
                 </div>
               </div>
             ))}

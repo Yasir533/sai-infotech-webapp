@@ -84,10 +84,24 @@ export default function AdminDashboard() {
     fetchEnquiries(true);
   };
 
+  const normalizedSearch = search.trim().toLowerCase();
+
   const filteredEnquiries = enquiries.filter((item) => {
-    const matchesSearch = (item.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
-      (item.email ?? "").toLowerCase().includes(search.toLowerCase()) ||
-      (item.phone ?? "").includes(search);
+    const searchableText = [
+      item.name,
+      item.email,
+      item.phone,
+      item.message,
+      item.status,
+      Array.isArray(item.services) ? item.services.join(" ") : item.services,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch =
+      normalizedSearch === "" || searchableText.includes(normalizedSearch);
+
     if (statusFilter === "pending") return matchesSearch && item.status !== "Completed";
     if (statusFilter === "completed") return matchesSearch && item.status === "Completed";
     return matchesSearch;
@@ -155,6 +169,15 @@ export default function AdminDashboard() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 py-3 pl-12 pr-4 text-sm outline-none transition focus:border-cyan-500 focus:bg-slate-900"
               />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-xs text-slate-300 transition hover:bg-slate-800"
+                >
+                  Clear
+                </button>
+              )}
             </div>
 
           </div>
