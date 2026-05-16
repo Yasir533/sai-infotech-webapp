@@ -25,7 +25,7 @@ const services = [
   { title: 'Cloud Products', desc: 'Cloud setup, migration & management', icon: FiCloud, color: '#0ea5e9',
     details: ['Cloud migration services', 'AWS/Azure/GCP setup', 'Cloud backup solutions', 'SaaS deployment', 'Cloud cost optimization'] },
   { title: 'Annual Maintenance', desc: 'Comprehensive AMC & preventive support', icon: FiTool, color: '#d946ef',
-    details: ['Annual maintenance contracts', 'Preventive maintenance', 'On-site support visits', 'Priority response SLA', 'Hardware health checks'] },
+    details: ['Annual maintenance contracts', 'Preventive maintenance', 'On-site support visits', 'Priority response SLA', 'Hardware health checks','Remote support'] },
   { title: 'Server Maintenance', desc: 'Server upkeep, health & preventive maintenance', icon: FiServer, color: '#2563eb',
     details: ['Server health monitoring', 'OS updates & patching', 'Hardware replacements', 'Performance tuning', 'Disaster recovery planning'] },
 ]

@@ -5,7 +5,7 @@ export default function ITProductsCard() {
       className="
         relative
         block
-        w-[320px]
+        w-[350px]
         rounded-[20px]
         overflow-hidden
         border border-cyan-400/30
@@ -28,8 +28,10 @@ export default function ITProductsCard() {
 
       {/* TOP CONTENT */}
       <div className="relative z-10 flex flex-col gap-3">
+
         {/* Icon & Title */}
         <div className="flex items-center gap-3">
+
           <div
             className="
               min-w-[48px]
@@ -51,16 +53,20 @@ export default function ITProductsCard() {
           <h2 className="text-[24px] leading-none font-black text-cyan-300 tracking-[-1px]">
             IT Products
           </h2>
+
         </div>
 
         {/* DESCRIPTION */}
         <p className="text-[10px] leading-[1.3] text-white/75 font-medium">
-          Wide range of quality IT products. Checked, good condition & affordable.
+          Wide range of quality IT products. Checked, good condition &
+          affordable.
         </p>
+
       </div>
 
       {/* BUTTON */}
       <div className="relative z-10 mt-5">
+
         <button
           className="
             w-full
@@ -88,25 +94,29 @@ export default function ITProductsCard() {
           <span className="text-[16px] mt-[-2px]">
             →
           </span>
+
         </button>
+
       </div>
 
-      {/* FEATURES BADGES */}
-      <div className="relative z-10 mt-4 space-y-2">
-        <div className="flex items-center gap-2 text-cyan-300 text-[9px] font-semibold">
+      {/* FEATURES */}
+      <div className="relative z-10 mt-4 flex items-center justify-between gap-3 flex-wrap">
+
+        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Quality Checked</span>
         </div>
 
-        <div className="flex items-center gap-2 text-cyan-300 text-[9px] font-semibold">
+        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Good Condition</span>
         </div>
 
-        <div className="flex items-center gap-2 text-cyan-300 text-[9px] font-semibold">
+        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Affordable Price</span>
         </div>
+
       </div>
     </a>
   )
