@@ -183,6 +183,18 @@ export default function Contact() {
                       {line}
                     </p>
                   ))}
+                  {info.title === 'Regd. Office' && (
+                    <div className="mt-3">
+                      <a
+                        href="https://maps.app.goo.gl/nr6kvoQtCdyEo42k7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:bg-slate-700"
+                      >
+                        View Map
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
