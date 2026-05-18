@@ -108,16 +108,15 @@ export default function Contact() {
     setLoading(true)
 
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/contact',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(form),
-        }
-      )
+      // Determine API base dynamically so mobile devices can reach the backend.
+      // Prefer Vite env `VITE_API_BASE`, otherwise fall back to laptop host on port 5000.
+      const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'http://localhost:5000' : `${window.location.protocol}//${window.location.hostname}:5000`)
+
+      const response = await fetch(`${API_BASE}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
 
       const data = await response.json()
 
