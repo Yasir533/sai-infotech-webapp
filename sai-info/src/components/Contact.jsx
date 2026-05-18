@@ -34,7 +34,7 @@ const contactInfo = [
     icon: FiPhone,
     title: 'Phone',
     lines: ['+91 99459 81999'],
-    color: 'from-indigo-600 to-indigo-400',
+    color: 'from-emerald-600 to-emerald-400',
   },
   {
     icon: FiMail,
@@ -43,6 +43,12 @@ const contactInfo = [
     color: 'from-violet-600 to-violet-400',
   },
 ]
+
+const iconImageByTitle = {
+  'Regd. Office': '/icons/icons8-location-pin-24.png',
+  Phone: '/icons/icons8-call-48.png',
+  Email: '/icons/icons8-mail-24.png',
+}
 
 export default function Contact() {
   const ref = useRef(null)
@@ -172,7 +178,23 @@ export default function Contact() {
                 <div
                   className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}
                 >
-                  <info.icon className="text-white" size={22} />
+                  {iconImageByTitle[info.title] ? (
+                    <>
+                      <img
+                        src={iconImageByTitle[info.title]}
+                        alt={info.title}
+                        className="w-6 h-6 object-contain"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none'
+                          const next = e.currentTarget.nextSibling
+                          if (next) next.style.display = 'block'
+                        }}
+                      />
+                      <info.icon className="text-white" size={22} style={{ display: 'none' }} />
+                    </>
+                  ) : (
+                    <info.icon className="text-white" size={22} />
+                  )}
                 </div>
 
                 <div>
