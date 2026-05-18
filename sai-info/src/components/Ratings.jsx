@@ -58,14 +58,6 @@ export default function Ratings() {
   const ratingWhole = useCounter(4, 1200, inView)
   const ratingDec = useCounter(9, 1400, inView)
 
-  const ratingBreakdown = [
-    { stars: 5, percentage: 72, count: 36 },
-    { stars: 4, percentage: 18, count: 9 },
-    { stars: 3, percentage: 7, count: 3 },
-    { stars: 2, percentage: 2, count: 1 },
-    { stars: 1, percentage: 1, count: 0 },
-  ]
-
   return (
     <section
       id="testimonials"
@@ -163,38 +155,6 @@ export default function Ratings() {
               <p className="text-slate-400 text-xs mt-4">
                 Based on {customerCount}+ reviews
               </p>
-            </div>
-
-            {/* Divider */}
-            <div className="h-px bg-white/10 my-5" />
-
-            {/* Rating Breakdown - Compact */}
-            <div className="space-y-3 mb-6">
-              {ratingBreakdown.map((item) => (
-                <div key={item.stars} className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 min-w-12">
-                    <span className="text-xs font-semibold text-white">{item.stars}</span>
-                    <HiStar size={12} color="#facc15" />
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="bg-slate-700/40 rounded-full h-1.5 overflow-hidden border border-white/5">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={inView ? { width: `${item.percentage}%` } : { width: 0 }}
-                        transition={{ duration: 1, delay: 0.3 + item.stars * 0.1 }}
-                        className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="text-right min-w-10">
-                    <span className="text-xs font-semibold text-slate-300">
-                      {item.percentage}%
-                    </span>
-                  </div>
-                </div>
-              ))}
             </div>
 
             {/* Footer */}
