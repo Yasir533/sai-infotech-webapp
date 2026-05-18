@@ -46,7 +46,7 @@ const contactInfo = [
 
 const iconImageByTitle = {
   'Regd. Office': '/icons/icons8-location-pin-24.png',
-  Phone: '/icons/icons8-call-48.png',
+  Phone: '/icons/icons8-online-support-50.png',
   Email: '/icons/icons8-mail-24.png',
 }
 
