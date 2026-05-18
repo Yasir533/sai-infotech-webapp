@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import {
   FiMapPin,
@@ -55,6 +55,20 @@ export default function Contact() {
     message: '',
     services: [],
   })
+
+  const [servicesOpen, setServicesOpen] = useState(false)
+  const servicesRef = useRef(null)
+
+  useEffect(() => {
+    function handleClick(e) {
+      if (servicesRef.current && !servicesRef.current.contains(e.target)) {
+        setServicesOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
 
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -230,29 +244,59 @@ export default function Contact() {
                   className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
                 />
 
-                {/* Services */}
-                <div>
-                  <h3 className="text-white font-semibold mb-3">
-                    Select Services
-                  </h3>
+                {/* Services (multi-select dropdown) */}
+                <div ref={servicesRef} className="relative">
+                  <h3 className="text-white font-semibold mb-3">Select Services</h3>
 
-                  <div className="flex flex-wrap gap-3">
-                    {SERVICE_OPTIONS.map((service, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => toggleService(service)}
-                        className={`px-4 py-2 rounded-xl border transition-all duration-300 text-sm
-                        ${
-                          form.services.includes(service)
-                            ? 'bg-blue-600 border-blue-600 text-white'
-                            : 'bg-slate-800 border-slate-600 text-slate-300'
-                        }`}
-                      >
-                        {service}
-                      </button>
-                    ))}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setServicesOpen((s) => !s)}
+                    className="w-full text-left rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm flex items-center justify-between"
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {form.services.length === 0 ? (
+                        <span className="text-slate-400">Choose services...</span>
+                      ) : (
+                        form.services.map((s, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1 rounded-full bg-slate-700 text-xs text-white"
+                          >
+                            {s}
+                          </span>
+                        ))
+                      )}
+                    </div>
+
+                    <svg
+                      className={`w-4 h-4 ml-3 text-slate-300 transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path d="M5 7l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+
+                  {servicesOpen && (
+                    <div className="absolute z-30 mt-2 w-full rounded-xl border border-slate-700 bg-slate-900 p-3 shadow-lg">
+                      <div className="max-h-56 overflow-auto">
+                        {SERVICE_OPTIONS.map((service, index) => {
+                          const checked = form.services.includes(service)
+                          return (
+                            <label key={index} className="flex items-center gap-3 p-2 rounded hover:bg-slate-800 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() => toggleService(service)}
+                                className="h-4 w-4 text-blue-600"
+                              />
+                              <span className="text-sm text-slate-200">{service}</span>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Message */}
