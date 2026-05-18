@@ -48,6 +48,8 @@ export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
 
+  // Use FiMail (from react-icons) for email icon — avoid optional FontAwesome import
+
   const [form, setForm] = useState({
     name: '',
     email: '',
