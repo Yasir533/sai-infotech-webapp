@@ -21,6 +21,7 @@ import ScrollToTop from './components/ScrollToTop'
 import AIChat from './components/AIChat'
 
 import AdminDashboard from "./pages/AdminDashboard"
+import ITProducts from "./pages/ITProducts"
 
 function HomePage() {
 
@@ -89,6 +90,11 @@ function App() {
         <Route
           path="/admin"
           element={<AdminDashboard />}
+        />
+
+        <Route
+          path="/it-products"
+          element={<ITProducts />}
         />
 
       </Routes>

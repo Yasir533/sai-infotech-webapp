@@ -1,6 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
 const Contact = require("./models/Contact");
@@ -10,6 +13,25 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from uploads folder
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadsDir = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir);
+    }
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -259,6 +281,112 @@ app.post("/api/chat", async (req, res) => {
       success: false,
       message: "Server Error",
     });
+  }
+});
+
+// Simple products endpoint - reads backend/products.json if available
+
+app.get('/api/products', async (req, res) => {
+  try {
+    const productsPath = path.join(__dirname, 'products.json');
+
+    if (fs.existsSync(productsPath)) {
+      const raw = fs.readFileSync(productsPath, 'utf8');
+      const products = JSON.parse(raw);
+      return res.json(products);
+    }
+
+    // default: return empty array so frontend can show informative UI
+    res.json([]);
+  } catch (error) {
+    console.log('Products API error', error);
+    res.status(500).json({ message: 'Error fetching products' });
+  }
+});
+
+// Upload new product with image
+app.post('/api/products', upload.single('image'), async (req, res) => {
+  try {
+    const { name, category, description, price } = req.body;
+
+    if (!name || !req.file) {
+      return res.status(400).json({ message: 'Name and image are required' });
+    }
+
+    const imageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+
+    const newProduct = {
+      _id: Date.now().toString(),
+      name,
+      category: category || 'general',
+      description: description || '',
+      price: price || '0',
+      image: imageUrl,
+    };
+
+    // Read existing products
+    const productsPath = path.join(__dirname, 'products.json');
+    let products = [];
+
+    if (fs.existsSync(productsPath)) {
+      const raw = fs.readFileSync(productsPath, 'utf8');
+      products = JSON.parse(raw);
+    }
+
+    // Add new product
+    products.push(newProduct);
+
+    // Save to file
+    fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+
+    res.status(201).json({
+      success: true,
+      message: 'Product uploaded successfully',
+      product: newProduct,
+    });
+  } catch (error) {
+    console.log('Product upload error', error);
+    res.status(500).json({ message: 'Error uploading product' });
+  }
+});
+
+// Delete product by id and remove its uploaded image if present
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    const productsPath = path.join(__dirname, 'products.json');
+
+    if (!fs.existsSync(productsPath)) {
+      return res.status(404).json({ message: 'Products list not found' });
+    }
+
+    const raw = fs.readFileSync(productsPath, 'utf8');
+    const products = JSON.parse(raw);
+
+    const productIndex = products.findIndex((p) => p._id === req.params.id);
+
+    if (productIndex === -1) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const [deletedProduct] = products.splice(productIndex, 1);
+    fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+
+    // Remove uploaded file from /uploads when image URL points to localhost uploads path
+    if (deletedProduct?.image && deletedProduct.image.includes('/uploads/')) {
+      const filename = deletedProduct.image.split('/uploads/')[1];
+      const imagePath = path.join(__dirname, 'uploads', filename);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Product deleted successfully',
+    });
+  } catch (error) {
+    console.log('Product delete error', error);
+    res.status(500).json({ message: 'Error deleting product' });
   }
 });
 

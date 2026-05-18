@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 export default function ITProductsCard() {
   return (
-    <a
-      href="/it-products"
+    <Link
+      to="/it-products"
       className="
         relative
         block
@@ -118,6 +120,6 @@ export default function ITProductsCard() {
         </div>
 
       </div>
-    </a>
+    </Link>
   )
 }
