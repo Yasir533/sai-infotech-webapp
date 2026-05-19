@@ -304,16 +304,16 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// Upload new product with image
-app.post('/api/products', upload.single('image'), async (req, res) => {
+// Upload new product with up to 10 images
+app.post('/api/products', upload.array('images', 10), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
-    if (!name || !req.file) {
-      return res.status(400).json({ message: 'Name and image are required' });
+    if (!name || !req.files || req.files.length === 0) {
+      return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    const imageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    const images = req.files.map((file) => `http://localhost:5000/uploads/${file.filename}`);
 
     const newProduct = {
       _id: Date.now().toString(),
@@ -321,7 +321,8 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
       category: category || 'general',
       description: description || '',
       price: price || '0',
-      image: imageUrl,
+      image: images[0],
+      images,
     };
 
     // Read existing products
@@ -345,6 +346,13 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
+    if (error instanceof multer.MulterError) {
+      if (error.code === 'LIMIT_UNEXPECTED_FILE') {
+        return res.status(400).json({ message: 'You can upload a maximum of 10 photos' });
+      }
+      return res.status(400).json({ message: error.message });
+    }
+
     console.log('Product upload error', error);
     res.status(500).json({ message: 'Error uploading product' });
   }
@@ -371,14 +379,22 @@ app.delete('/api/products/:id', async (req, res) => {
     const [deletedProduct] = products.splice(productIndex, 1);
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
 
-    // Remove uploaded file from /uploads when image URL points to localhost uploads path
-    if (deletedProduct?.image && deletedProduct.image.includes('/uploads/')) {
-      const filename = deletedProduct.image.split('/uploads/')[1];
-      const imagePath = path.join(__dirname, 'uploads', filename);
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
+    // Remove uploaded files from /uploads when image URLs point to localhost uploads path
+    const imageUrls = Array.isArray(deletedProduct?.images)
+      ? deletedProduct.images
+      : deletedProduct?.image
+        ? [deletedProduct.image]
+        : [];
+
+    imageUrls.forEach((imageUrl) => {
+      if (imageUrl && imageUrl.includes('/uploads/')) {
+        const filename = imageUrl.split('/uploads/')[1];
+        const imagePath = path.join(__dirname, 'uploads', filename);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
       }
-    }
+    });
 
     res.json({
       success: true,

@@ -26,7 +26,7 @@ export default function AdminDashboard() {
   const [productCategory, setProductCategory] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
-  const [productImage, setProductImage] = useState(null);
+  const [productImages, setProductImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
   const [products, setProducts] = useState([]);
@@ -120,8 +120,13 @@ export default function AdminDashboard() {
   const uploadProduct = async (e) => {
     e.preventDefault();
 
-    if (!productName || !productImage) {
-      setUploadMessage("Please fill in name and select an image");
+    if (!productName || productImages.length === 0) {
+      setUploadMessage("Please fill in name and select at least one image");
+      return;
+    }
+
+    if (productImages.length > 10) {
+      setUploadMessage("You can upload a maximum of 10 photos at a time");
       return;
     }
 
@@ -132,7 +137,10 @@ export default function AdminDashboard() {
       formData.append("category", productCategory);
       formData.append("description", productDescription);
       formData.append("price", productPrice);
-      formData.append("image", productImage);
+
+      productImages.forEach((image) => {
+        formData.append("images", image);
+      });
 
       const res = await fetch("http://localhost:5000/api/products", {
         method: "POST",
@@ -147,7 +155,7 @@ export default function AdminDashboard() {
         setProductCategory("");
         setProductDescription("");
         setProductPrice("");
-        setProductImage(null);
+        setProductImages([]);
         fetchProducts();
         setTimeout(() => setUploadMessage(""), 3000);
       } else {
@@ -624,17 +632,23 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Product Image *</label>
+                <label className="block text-sm font-medium mb-2">Product Photos *</label>
                 <div className="relative border-2 border-dashed border-slate-700 rounded-2xl p-8 text-center hover:border-cyan-500/50 transition">
                   <FiUpload className="mx-auto mb-2 text-slate-400" size={32} />
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setProductImage(e.target.files?.[0] || null)}
+                    multiple
+                    onChange={(e) => setProductImages(Array.from(e.target.files || []))}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <p className="text-sm text-slate-400">
-                    {productImage ? productImage.name : "Click or drag image here"}
+                    {productImages.length > 0
+                      ? `${productImages.length} photo${productImages.length === 1 ? "" : "s"} selected`
+                      : "Click or drag photos here"}
+                  </p>
+                  <p className="mt-2 text-xs text-slate-500">
+                    You can upload up to 10 photos.
                   </p>
                 </div>
               </div>
