@@ -33,13 +33,13 @@ const contactInfo = [
   {
     icon: FiPhone,
     title: 'Phone',
-    lines: ['+91 99459 81999'],
+    lines: ['+91 99459 81999','+91 83103 38544','+91 76769 52139'],
     color: 'from-emerald-600 to-emerald-400',
   },
   {
     icon: FiMail,
     title: 'Email',
-    lines: ['ssmb@sais.in'],
+    lines: ['ssmb@sais.in','acts@sais.in'],
     color: 'from-violet-600 to-violet-400',
   },
 ]
