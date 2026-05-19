@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "_id": "1779177456646",
+    "name": "ABCD",
+    "category": "Disk",
+    "description": "Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools\r\n",
+    "price": "4500",
+    "image": "http://localhost:5000/uploads/1779177456591.png",
+    "images": [
+      "http://localhost:5000/uploads/1779177456591.png",
+      "http://localhost:5000/uploads/1779177456594.png",
+      "http://localhost:5000/uploads/1779177456616.png",
+      "http://localhost:5000/uploads/1779177456628.png",
+      "http://localhost:5000/uploads/1779177456643.png",
+      "http://localhost:5000/uploads/1779177456644.png"
+    ]
+  },
+  {
+    "_id": "1779177950313",
+    "name": "EFGH",
+    "category": "Pics",
+    "description": "Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools\r\n:5000/api/enquiries:1  Failed to load resource: net::ERR_CONNECTION_REFUSED\r\nAdminDashboard.jsx:56 TypeError: Failed to fetch\r\n    at fetchEnquiries (AdminDashboard.jsx:46:30)\r\n    at AdminDashboard.jsx:82:5\r\n    at commitHookEffectListMount (react-dom.development.js:23189:26)\r\n    at commitPassiveMountOnFiber (react-dom.development.js:24965:13)\r\n    at commitPassiveMountEffects_complete (react-dom.development.js:24930:9)\r\n    at commitPassiveMountEffects_begin (react-dom.development.js:24917:7)\r\n    at commitPassiveMountEffects (react-dom.development.js:24905:3)\r\n    at flushPassiveEffectsImpl (react-dom.development.js:27078:3)\r\n    at flushPassiveEffects (react-dom.development.js:27023:14)\r\n    at react-dom.development.js:26808:9\r\n:5000/api/products:1  Failed to load resource: net::ERR_CONNECTION_REFUSED\r\nAdminDashboard.jsx:75 TypeError: Failed to fetch\r\n    at fetchProducts (AdminDashboard.jsx:67:30)\r\n    at AdminDashboard.jsx:83:5\r\n    at commitHookEffectListMount (react-dom.development.js:23189:26)\r\n    at commitPassiveMountOnFiber (react-dom.development.js:24965:13)\r\n    at commitPassiveMountEffects_complete (react-dom.development.js:24930:9)\r\n    at commitPassiveMountEffects_begin (react-dom.development.js:24917:7)\r\n    at commitPassiveMountEffects (react-dom.development.js:24905:3)\r\n    at flushPassiveEffectsImpl (react-dom.development.js:27078:3)\r\n    at flushPassiveEffects (react-dom.development.js:27023:14)\r\n    at react-dom.development.js:26808:9\r\n:5000/api/enquiries:1  Failed to load resource: net::ERR_CONNECTION_REFUSED\r\nAdminDashboard.jsx:56 TypeError: Failed to fetch\r\n    at fetchEnquiries (AdminDashboard.jsx:46:30)\r\n    at AdminDashboard.jsx:82:5\r\n    at commitHookEffectListMount (react-dom.development.js:23189:26)\r\n    at invokePassiveEffectMountInDEV (react-dom.development.js:25193:13)\r\n    at invokeEffectsInDev (react-dom.development.js:27390:11)\r\n    at commitDoubleInvokeEffectsInDEV (react-dom.development.js:27369:7)\r\n    at flushPassiveEffectsImpl (react-dom.development.js:27095:5)\r\n    at flushPassiveEffects (react-dom.development.js:27023:14)\r\n    at react-dom.development.js:26808:9\r\n    at workLoop (scheduler.development.js:266:34)\r\n:5000/api/products:1  Failed to load resource: net::ERR_CONNECTION_REFUSED\r\nAdminDashboard.jsx:75 TypeError: Failed to fetch\r\n    at fetchProducts (AdminDashboard.jsx:67:30)\r\n    at AdminDashboard.jsx:83:5\r\n    at commitHookEffectListMount (react-dom.development.js:23189:26)\r\n    at invokePassiveEffectMountInDEV (react-dom.development.js:25193:13)\r\n    at invokeEffectsInDev (react-dom.development.js:27390:11)\r\n    at commitDoubleInvokeEffectsInDEV (react-dom.development.js:27369:7)\r\n    at flushPassiveEffectsImpl (react-dom.development.js:27095:5)\r\n    at flushPassiveEffects (react-dom.development.js:27023:14)\r\n    at react-dom.development.js:26808:9\r\n    at workLoop (scheduler.development.js:266:34)",
+    "price": "6500",
+    "image": "http://localhost:5000/uploads/1779177950257.png",
+    "images": [
+      "http://localhost:5000/uploads/1779177950257.png",
+      "http://localhost:5000/uploads/1779177950258.png",
+      "http://localhost:5000/uploads/1779177950260.png",
+      "http://localhost:5000/uploads/1779177950262.png",
+      "http://localhost:5000/uploads/1779177950263.png",
+      "http://localhost:5000/uploads/1779177950267.png",
+      "http://localhost:5000/uploads/1779177950277.png",
+      "http://localhost:5000/uploads/1779177950292.png",
+      "http://localhost:5000/uploads/1779177950307.png",
+      "http://localhost:5000/uploads/1779177950309.png"
+    ]
+  }
+]

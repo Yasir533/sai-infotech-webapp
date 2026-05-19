@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export default function ITProducts() {
   const [products, setProducts] = useState([]);
@@ -10,6 +11,7 @@ export default function ITProducts() {
   const [category, setCategory] = useState("all");
   const [visibleCount, setVisibleCount] = useState(6);
   const [selected, setSelected] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -141,46 +143,119 @@ export default function ITProducts() {
 
         {/* Modal */}
         {selected && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="max-w-3xl w-full rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden">
-              <div className="relative h-80 bg-black">
-                <img
-                  src={selected.image}
-                  alt={selected.name}
-                  onError={handleImgError}
-                  className="object-cover w-full h-full"
-                />
-                <button
-                  onClick={() => setSelected(null)}
-                  className="absolute top-4 right-4 rounded-full bg-black/40 px-3 py-2"
-                >
-                  Close
-                </button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+            <div className="max-w-3xl w-full max-h-[90vh] rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col">
+              <div className="relative h-80 bg-black flex-shrink-0">
+                {(() => {
+                  const images = Array.isArray(selected.images) ? selected.images : (selected.image ? [selected.image] : []);
+                  const currentImage = images[selectedImageIndex] || selected.image;
+                  const hasMultiple = images.length > 1;
+
+                  return (
+                    <>
+                      <img
+                        src={currentImage}
+                        alt={selected.name}
+                        onError={handleImgError}
+                        className="object-cover w-full h-full"
+                      />
+
+                      {/* Image counter */}
+                      {hasMultiple && (
+                        <div className="absolute bottom-4 left-4 bg-black/70 rounded-lg px-3 py-1 text-sm text-slate-300">
+                          {selectedImageIndex + 1} / {images.length}
+                        </div>
+                      )}
+
+                      {/* Previous button */}
+                      {hasMultiple && (
+                        <button
+                          onClick={() => setSelectedImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 hover:bg-black/70 p-2 text-white transition"
+                        >
+                          <FiChevronLeft size={24} />
+                        </button>
+                      )}
+
+                      {/* Next button */}
+                      {hasMultiple && (
+                        <button
+                          onClick={() => setSelectedImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 hover:bg-black/70 p-2 text-white transition"
+                        >
+                          <FiChevronRight size={24} />
+                        </button>
+                      )}
+
+                      {/* Close button */}
+                      <button
+                        onClick={() => {
+                          setSelected(null);
+                          setSelectedImageIndex(0);
+                        }}
+                        className="absolute top-4 right-4 rounded-full bg-black/40 px-3 py-2"
+                      >
+                        Close
+                      </button>
+                    </>
+                  );
+                })()}
               </div>
 
-              <div className="p-6">
+              <div className="p-6 overflow-y-auto flex-1">
                 <h2 className="text-2xl font-bold mb-2">{selected.name}</h2>
                 {selected.category && <div className="mb-2 text-sm text-slate-400">{selected.category}</div>}
                 {selected.price && <div className="mb-4 text-3xl font-bold text-sky-400">₹{parseInt(selected.price).toLocaleString()}</div>}
                 <p className="text-slate-300 mb-4">{selected.description || "No description provided."}</p>
 
-                <div className="flex gap-3">
-                  <a
-                    href={`https://api.whatsapp.com/send?phone=919945981999&text=Hi, I'm interested in ${encodeURIComponent(selected.name)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2 text-sm font-semibold"
-                  >
-                    Enquire on WhatsApp
-                  </a>
+                {/* Thumbnail gallery */}
+                {(() => {
+                  const images = Array.isArray(selected.images) ? selected.images : (selected.image ? [selected.image] : []);
+                  if (images.length > 1) {
+                    return (
+                      <div className="mb-4 flex gap-2 overflow-x-auto pb-2">
+                        {images.map((img, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedImageIndex(idx)}
+                            className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition ${
+                              selectedImageIndex === idx ? "border-sky-500" : "border-slate-600"
+                            }`}
+                          >
+                            <img
+                              src={img}
+                              alt={`${selected.name} ${idx + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={handleImgError}
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
 
-                  <button
-                    onClick={() => setSelected(null)}
-                    className="rounded-xl border border-slate-700 px-4 py-2 text-sm"
-                  >
-                    Close
-                  </button>
-                </div>
+              <div className="border-t border-slate-700 bg-slate-800/50 p-6 flex gap-3 flex-shrink-0">
+                <a
+                  href={`https://api.whatsapp.com/send?phone=919945981999&text=Hi, I'm interested in ${encodeURIComponent(selected.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2 text-sm font-semibold"
+                >
+                  Enquire on WhatsApp
+                </a>
+
+                <button
+                  onClick={() => {
+                    setSelected(null);
+                    setSelectedImageIndex(0);
+                  }}
+                  className="rounded-xl border border-slate-700 px-4 py-2 text-sm"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>

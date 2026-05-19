@@ -169,6 +169,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleProductImagesChange = (e) => {
+    const selectedFiles = Array.from(e.target.files || []);
+
+    if (selectedFiles.length === 0) {
+      return;
+    }
+
+    setProductImages((currentImages) => {
+      const combinedImages = [...currentImages, ...selectedFiles];
+      return combinedImages.slice(0, 10);
+    });
+
+    e.target.value = "";
+  };
+
   const deleteProduct = async (id) => {
 
     if (!window.confirm("Delete this product?")) {
@@ -639,7 +654,7 @@ export default function AdminDashboard() {
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(e) => setProductImages(Array.from(e.target.files || []))}
+                    onChange={handleProductImagesChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <p className="text-sm text-slate-400">
@@ -648,7 +663,7 @@ export default function AdminDashboard() {
                       : "Click or drag photos here"}
                   </p>
                   <p className="mt-2 text-xs text-slate-500">
-                    You can upload up to 10 photos.
+                    Pick photos again to add more. Maximum 10 photos total.
                   </p>
                 </div>
               </div>
