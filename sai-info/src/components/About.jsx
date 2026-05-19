@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { FiMapPin, FiCalendar, FiUsers, FiAward, FiCheckCircle, FiSmile, FiTarget, FiEye, FiHeart, FiX } from 'react-icons/fi'
+import { FiTarget, FiEye, FiHeart, FiX } from 'react-icons/fi'
 
 const highlights = [
-  { icon: FiCalendar, label: 'Experience', value: '25+ Years' },
-  { icon: FiCheckCircle, label: 'Success Rate', value: '100%' },
-  { icon: FiSmile, label: 'Happy Clients', value: '100+' },
-  { icon: FiAward, label: 'Quality', value: 'ISO Certified' },
+  { icon: '/icons/icons8-experience-50.png', label: 'Experience', value: '25+ Years' },
+  { icon: '/icons/icons8-tick-50.png', label: 'Success Rate', value: '100%' },
+  { icon: '/icons/icons8-happy-50.png', label: 'Happy Clients', value: '100+' },
+  { icon: '/icons/icons8-certified-50.png', label: 'Quality', value: 'ISO Certified' },
 ]
 
 const mvvSections = [
@@ -130,8 +130,8 @@ export default function About() {
                   transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
                   className="glass rounded-3xl p-6 border border-white/8 hover-card text-center"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-500/20 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="text-blue-400" size={22} />
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
+                    <img src={item.icon} alt={item.label} className="w-6 h-6 object-contain" />
                   </div>
                   <div className="text-2xl font-black text-gradient mb-1">{item.value}</div>
                   <div className="text-slate-500 text-sm">{item.label}</div>
