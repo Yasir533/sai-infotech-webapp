@@ -201,11 +201,34 @@ export default function Contact() {
                     {info.title}
                   </h3>
 
-                  {info.lines.map((line, index) => (
-                    <p key={index} className="text-slate-300 text-sm">
-                      {line}
-                    </p>
-                  ))}
+                  {info.lines.map((line, index) => {
+                    if (info.title === 'Phone') {
+                      const tel = String(line).replace(/[^0-9+]/g, '');
+                      return (
+                        <p key={index} className="text-slate-300 text-sm">
+                          <a href={`tel:${tel}`} className="hover:underline">
+                            {line}
+                          </a>
+                        </p>
+                      );
+                    }
+
+                    if (info.title === 'Email') {
+                      return (
+                        <p key={index} className="text-slate-300 text-sm">
+                          <a href={`mailto:${line}`} className="hover:underline">
+                            {line}
+                          </a>
+                        </p>
+                      );
+                    }
+
+                    return (
+                      <p key={index} className="text-slate-300 text-sm">
+                        {line}
+                      </p>
+                    );
+                  })}
                   {info.title === 'Regd. Office' && (
                     <div className="mt-3">
                       <a
