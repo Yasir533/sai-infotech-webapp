@@ -51,47 +51,52 @@ export default function Hero() {
         className="relative min-h-screen flex items-center overflow-hidden pt-24 lg:pt-28"
       >
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
 
             {/* LEFT CONTENT */}
             <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-5/12 flex-shrink-0">
 
+              {/* MAIN TITLE */}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-6xl sm:text-7xl xl:text-8xl font-black leading-[1.0] mb-3"
+                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[0.92] mb-3"
               >
                 <span className="text-white">SAI</span>
                 <br />
                 <span className="text-gradient">INFOTECH</span>
               </motion.h1>
 
+              {/* SUBTITLE */}
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-xl sm:text-2xl font-bold text-white mb-2"
+                className="text-lg sm:text-xl font-bold text-white mb-2"
               >
                 IT Solution{' '}
                 <span className="text-blue-400">(Sales/Rentals)</span>
               </motion.h2>
 
+              {/* TYPING TEXT */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-lg sm:text-xl font-semibold mb-5 h-7"
+                className="text-base sm:text-lg font-semibold mb-5 h-7"
               >
                 <span className="text-cyan-400">{displayText}</span>
                 <span className="text-cyan-400 typing-cursor" />
               </motion.div>
 
+              {/* DESCRIPTION */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-md"
+                className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md"
               >
                 Premium IT services in Bangalore since 2019.
                 We specialize in chip-level repairs,
@@ -106,9 +111,10 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.36 }}
                 className="flex flex-wrap gap-4 justify-center lg:justify-start"
               >
+
                 <a
                   href="#about"
-                  className="px-8 py-4 rounded-xl font-bold text-white flex items-center gap-2 text-base"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm"
                   style={{
                     background: 'rgba(30,40,70,0.85)',
                     border: '1px solid rgba(255,255,255,0.15)',
@@ -121,7 +127,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-8 py-4 rounded-xl font-bold text-white flex items-center gap-2 text-base"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm"
                   style={{
                     background: 'rgba(30,40,70,0.85)',
                     border: '1px solid rgba(255,255,255,0.15)',
@@ -131,9 +137,10 @@ export default function Hero() {
                   <span>Contact Us</span>
                   <HiArrowRight />
                 </a>
+
               </motion.div>
 
-              {/* IT PRODUCTS CARD */}
+              {/* PRODUCTS CARD */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -142,9 +149,10 @@ export default function Hero() {
               >
                 <ITProductsCard />
               </motion.div>
+
             </div>
 
-            {/* RIGHT SIDE ORBIT SECTION */}
+            {/* RIGHT SIDE */}
             <motion.div
               id="services"
               initial={{ opacity: 0, x: 60 }}
@@ -158,6 +166,7 @@ export default function Hero() {
             </motion.div>
 
           </div>
+
         </div>
 
         {/* SCROLL INDICATOR */}
@@ -167,12 +176,15 @@ export default function Hero() {
           transition={{ delay: 1.2 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
+
           <span className="text-slate-600 text-xs tracking-widest">
             SCROLL
           </span>
 
           <div className="w-0.5 h-12 bg-gradient-to-b from-blue-500/60 to-transparent" />
+
         </motion.div>
+
       </section>
     </>
   )
