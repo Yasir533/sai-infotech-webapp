@@ -291,11 +291,6 @@ export default function AdminDashboard() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
 
-            <div className="flex items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-3 text-xs text-slate-400">
-              <FiRefreshCw className={refreshing ? "animate-spin text-cyan-400" : "text-cyan-400"} />
-              {refreshing ? "Refreshing live data..." : `Last sync ${formatLastUpdated}`}
-            </div>
-
             {/* SEARCH */}
             <div className="relative w-full lg:w-96">
 
