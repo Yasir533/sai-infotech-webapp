@@ -131,20 +131,11 @@ export default function About() {
                 in Bangalore since 2019.
               </p>
 
-              <p className="text-slate-400 leading-relaxed mb-6">
+              <p className="text-slate-400 leading-relaxed">
                 We offer comprehensive IT services through
                 drop-off, walk-in, on-site, and pickup service
                 modes — designed to maximize convenience for
                 our clients across Bangalore.
-              </p>
-
-              <p className="text-slate-400 leading-relaxed">
-                Our mission is to deliver{' '}
-                <span className="text-white font-medium">
-                  high-quality IT solutions
-                </span>{' '}
-                while maximizing customer satisfaction through
-                innovation, reliability, and technical excellence.
               </p>
 
             </div>
