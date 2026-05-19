@@ -218,23 +218,20 @@ export default function OrbitalServices() {
             const ex = CX + Math.cos(angle) * radius
             const ey = CY + Math.sin(angle) * radius
 
-            const cx2 = CX + Math.cos(angle) * radius
-            const cy2 = CY + Math.sin(angle) * radius
-
             return (
               <g key={service.title}>
                 <line
                   x1={ex}
                   y1={ey}
-                  x2={cx2}
-                  y2={cy2}
+                  x2={ex}
+                  y2={ey}
                   stroke="rgba(56,189,248,0.6)"
                   strokeWidth="1"
                 />
 
                 <circle
-                  cx={cx2}
-                  cy={cy2}
+                  cx={ex}
+                  cy={ey}
                   r="4"
                   fill="#22d3ee"
                 />
@@ -267,6 +264,7 @@ export default function OrbitalServices() {
           <p className="text-gray-300 text-[10px] md:text-sm max-w-[150px] md:max-w-[200px] leading-relaxed px-2">
             IT Solutions, Cloud, Networking & Hardware Services.
           </p>
+
         </div>
 
         {/* Service Cards */}
@@ -301,17 +299,16 @@ export default function OrbitalServices() {
                   <Icon className="text-white w-3 h-3" />
                 </div>
 
-                <h3 className="text-white text-[7px] md:text-[10px] font-bold leading-tight">
+                <h3 className="text-white text-[9px] md:text-[13px] font-bold leading-tight">
                   {service.title}
                 </h3>
 
-                <p className="text-gray-400 text-[6px] md:text-[9px] mt-1 leading-snug">
-                  {service.desc}
-                </p>
               </div>
+
             </div>
           )
         })}
+
       </div>
 
       {/* Modal */}
@@ -351,6 +348,7 @@ export default function OrbitalServices() {
                   {selected.desc}
                 </p>
               </div>
+
             </div>
 
             <ul className="space-y-3">
@@ -364,9 +362,12 @@ export default function OrbitalServices() {
                 </li>
               ))}
             </ul>
+
           </div>
+
         </div>
       )}
+
     </div>
   )
 }
