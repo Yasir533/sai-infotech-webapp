@@ -22,6 +22,7 @@ import AIChat from './components/AIChat'
 
 import AdminDashboard from "./pages/AdminDashboard"
 import ITProducts from "./pages/ITProducts"
+import AdminReset from "./pages/AdminReset"
 
 function HomePage() {
 
@@ -90,6 +91,11 @@ function App() {
         <Route
           path="/admin"
           element={<AdminDashboard />}
+        />
+
+        <Route
+          path="/admin-reset"
+          element={<AdminReset />}
         />
 
         <Route

@@ -9,6 +9,7 @@ import {
   FiSearch,
   FiRefreshCw,
   FiUpload,
+  
 } from "react-icons/fi";
 
 export default function AdminDashboard() {
@@ -32,6 +33,13 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState("");
+
+  // Server-backed admin auth
+  const [authenticated, setAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
 
 
   const fetchEnquiries = async (showRefreshingState = false) => {
@@ -88,6 +96,52 @@ export default function AdminDashboard() {
 
     return () => clearInterval(intervalId);
   }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      setAuthError("");
+      const res = await fetch("http://localhost:5000/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+
+      if (res.ok) {
+        setAuthenticated(true);
+        setAuthError("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setAuthError(data.message || "Invalid password");
+      }
+    } catch (err) {
+      console.log('Login error', err);
+      setAuthError('Server error');
+    }
+  };
+
+  const handleForgot = async () => {
+    setForgotMessage("");
+    setForgotLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/forgot", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) setForgotMessage('Reset link sent to admin email');
+      else setForgotMessage(data.message || 'Error sending reset email');
+    } catch (err) {
+      console.log('Forgot error', err);
+      setForgotMessage('Server error');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setPasswordInput("");
+  };
 
   const deleteEnquiry = async (id) => {
 
@@ -259,6 +313,54 @@ export default function AdminDashboard() {
   const formatLastUpdated = lastUpdated
     ? lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     : "--:--";
+
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
+        <div className="w-full max-w-sm rounded-2xl border border-slate-800 bg-slate-900/80 p-8">
+          <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Password</label>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
+                placeholder="Enter admin password"
+              />
+            </div>
+
+            {authError && <div className="text-sm text-rose-400">{authError}</div>}
+
+            <div className="flex gap-3">
+              <button className="flex-1 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-semibold">
+                Login
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between mt-2">
+              <button
+                type="button"
+                onClick={handleForgot}
+                disabled={forgotLoading}
+                className="text-xs text-slate-300 hover:text-white"
+              >
+                {forgotLoading ? 'Sending...' : 'Forgot password?'}
+              </button>
+              <div className="text-xs text-slate-400">
+                Tip: set `VITE_ADMIN_PASSWORD` in your environment to change the password.
+              </div>
+            </div>
+
+            {forgotMessage && (
+              <div className="mt-2 text-xs text-emerald-400">{forgotMessage}</div>
+            )}
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
 

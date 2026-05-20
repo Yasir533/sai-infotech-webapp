@@ -8,6 +8,8 @@ require("dotenv").config();
 
 const Contact = require("./models/Contact");
 const nodemailer = require("nodemailer");
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const app = express();
 
@@ -55,6 +57,87 @@ transporter.verify((error, success) => {
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch((err) => console.log(err));
+
+// Admin credentials storage (file-based simple approach)
+const adminFile = path.join(__dirname, 'admin.json');
+function readAdmin() {
+  try {
+    if (!fs.existsSync(adminFile)) {
+      const defaultPassword = process.env.INIT_ADMIN_PASSWORD || 'admin123';
+      const hash = bcrypt.hashSync(defaultPassword, 10);
+      const obj = { passwordHash: hash };
+      fs.writeFileSync(adminFile, JSON.stringify(obj, null, 2));
+      return obj;
+    }
+    const raw = fs.readFileSync(adminFile, 'utf8');
+    return JSON.parse(raw || '{}');
+  } catch (err) {
+    console.log('Admin read error', err);
+    return {};
+  }
+}
+
+function writeAdmin(obj) {
+  fs.writeFileSync(adminFile, JSON.stringify(obj, null, 2));
+}
+
+// Admin login
+app.post('/api/admin/login', (req, res) => {
+  const { password } = req.body || {};
+  if (!password) return res.status(400).json({ success: false, message: 'Password required' });
+  const admin = readAdmin();
+  const match = bcrypt.compareSync(password, admin.passwordHash || '');
+  if (match) return res.json({ success: true });
+  return res.status(401).json({ success: false, message: 'Invalid password' });
+});
+
+// Forgot password - generate token and email to ADMIN_EMAIL
+app.post('/api/admin/forgot', async (req, res) => {
+  try {
+    const token = crypto.randomBytes(24).toString('hex');
+    const admin = readAdmin();
+    admin.resetToken = token;
+    admin.resetTokenExpiry = Date.now() + 3600 * 1000; // 1 hour
+    writeAdmin(admin);
+
+    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/admin-reset?token=${token}`;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.ADMIN_EMAIL,
+      subject: 'SAI INFOTECH - Admin Password Reset',
+      html: `<p>You requested a password reset. Click the link below to reset the admin password (valid 1 hour):</p>
+             <p><a href="${resetLink}">${resetLink}</a></p>`,
+    });
+
+    res.json({ success: true, message: 'Reset email sent' });
+  } catch (err) {
+    console.log('Forgot password error', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Reset endpoint
+app.post('/api/admin/reset', (req, res) => {
+  try {
+    const { token, newPassword } = req.body || {};
+    if (!token || !newPassword) return res.status(400).json({ success: false, message: 'Token and newPassword required' });
+    const admin = readAdmin();
+    if (!admin.resetToken || admin.resetToken !== token) return res.status(400).json({ success: false, message: 'Invalid token' });
+    if (Date.now() > (admin.resetTokenExpiry || 0)) return res.status(400).json({ success: false, message: 'Token expired' });
+
+    const hash = bcrypt.hashSync(newPassword, 10);
+    admin.passwordHash = hash;
+    delete admin.resetToken;
+    delete admin.resetTokenExpiry;
+    writeAdmin(admin);
+
+    res.json({ success: true, message: 'Password updated' });
+  } catch (err) {
+    console.log('Reset error', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 app.post("/api/contact", async (req, res) => {
 
