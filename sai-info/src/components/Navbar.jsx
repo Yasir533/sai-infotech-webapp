@@ -23,15 +23,19 @@ export default function Navbar() {
 
   useEffect(() => {
 
-    const onScroll = () => setScrolled(window.scrollY > 50)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
 
     window.addEventListener('scroll', onScroll)
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
 
   }, [])
 
-  // FIXED MOBILE SCROLL NAVIGATION
+  // FINAL MOBILE FIX
   const handleNavClick = (e, href) => {
 
     e.preventDefault()
@@ -40,24 +44,20 @@ export default function Navbar() {
 
     setMenuOpen(false)
 
-    const target = document.querySelector(href)
+    setTimeout(() => {
 
-    if (target) {
+      const target = document.querySelector(href)
 
-      const navbarOffset = 90
+      if (target) {
 
-      const elementPosition =
-        target.getBoundingClientRect().top +
-        window.pageYOffset
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
 
-      const offsetPosition =
-        elementPosition - navbarOffset
+      }
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
-    }
+    }, 300)
   }
 
   return (
@@ -109,9 +109,7 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(e) =>
-                  handleNavClick(e, link.href)
-                }
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   active === link.href
                     ? 'text-blue-400 bg-blue-500/10'
@@ -125,9 +123,7 @@ export default function Navbar() {
 
             <a
               href="#contact"
-              onClick={(e) =>
-                handleNavClick(e, '#contact')
-              }
+              onClick={(e) => handleNavClick(e, '#contact')}
               className="ml-3 btn-primary px-5 py-2 rounded-xl text-sm font-semibold text-white"
             >
               <span>Get Service</span>
@@ -173,9 +169,7 @@ export default function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={(e) =>
-                    handleNavClick(e, link.href)
-                  }
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className={`px-4 py-3 rounded-xl font-medium transition-all ${
                     active === link.href
                       ? 'text-blue-400 bg-blue-500/10'
@@ -189,9 +183,7 @@ export default function Navbar() {
 
               <a
                 href="#contact"
-                onClick={(e) =>
-                  handleNavClick(e, '#contact')
-                }
+                onClick={(e) => handleNavClick(e, '#contact')}
                 className="mt-2 btn-primary px-4 py-3 rounded-xl text-center font-semibold text-white"
               >
                 <span>Get Service</span>
