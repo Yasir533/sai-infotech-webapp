@@ -168,24 +168,24 @@ export default function OrbitalServices() {
     typeof window !== 'undefined' &&
     window.innerWidth < 768
 
-  // ONLY DESKTOP POSITION FIXED
+  // MOBILE FIX ONLY
   const radius = useMemo(
-    () => (isMobile ? 120 : 230),
+    () => (isMobile ? 118 : 230),
     [isMobile]
   )
 
   const SIZE = useMemo(
-    () => (isMobile ? 320 : 620),
+    () => (isMobile ? 340 : 620),
     [isMobile]
   )
 
-  // SHIFTED SLIGHTLY RIGHT
+  // MOBILE CENTERED / DESKTOP SAME
   const CX = isMobile ? SIZE / 2 : SIZE / 2 + 40
   const CY = SIZE / 2
 
   return (
 
-    <div className="relative flex items-center justify-end w-full overflow-hidden px-2 md:pr-24 py-10">
+    <div className="relative flex items-center justify-center md:justify-end w-full overflow-hidden px-2 md:pr-24 py-10">
 
       <div
         className="relative"
@@ -207,7 +207,7 @@ export default function OrbitalServices() {
           <circle
             cx={CX}
             cy={CY}
-            r={isMobile ? 120 : 220}
+            r={isMobile ? 118 : 220}
             fill="none"
             stroke="rgba(34,211,238,0.25)"
             strokeWidth="1"
@@ -216,7 +216,7 @@ export default function OrbitalServices() {
           <circle
             cx={CX}
             cy={CY}
-            r={isMobile ? 100 : 190}
+            r={isMobile ? 95 : 190}
             fill="none"
             stroke="rgba(34,211,238,0.15)"
             strokeWidth="1"
@@ -264,8 +264,8 @@ export default function OrbitalServices() {
         <div
           className="absolute z-10 rounded-full bg-[#06111f]/90 border border-cyan-400/30 flex flex-col items-center justify-center text-center shadow-[0_0_50px_rgba(0,255,255,0.15)]"
           style={{
-            width: isMobile ? 150 : 300,
-            height: isMobile ? 150 : 300,
+            width: isMobile ? 145 : 300,
+            height: isMobile ? 145 : 300,
             left: CX,
             top: CY,
             transform: 'translate(-50%,-50%)',
@@ -318,7 +318,7 @@ export default function OrbitalServices() {
               onClick={() => setSelected(service)}
             >
 
-              <div className="w-[68px] md:w-[105px] bg-[#081120]/90 border border-cyan-400/20 rounded-xl p-2 backdrop-blur-xl shadow-[0_0_15px_rgba(0,255,255,0.08)] hover:border-cyan-400/60 hover:scale-105 transition-all duration-300">
+              <div className="w-[58px] md:w-[105px] bg-[#081120]/90 border border-cyan-400/20 rounded-xl p-2 backdrop-blur-xl shadow-[0_0_15px_rgba(0,255,255,0.08)] hover:border-cyan-400/60 hover:scale-105 transition-all duration-300">
 
                 <div
                   className="w-5 h-5 rounded-md flex items-center justify-center mb-1"
@@ -329,7 +329,7 @@ export default function OrbitalServices() {
                   <Icon className="text-white w-3 h-3" />
                 </div>
 
-                <h3 className="text-white text-[8px] md:text-[13px] font-bold leading-tight">
+                <h3 className="text-white text-[7px] md:text-[13px] font-bold leading-tight">
                   {service.title}
                 </h3>
 
