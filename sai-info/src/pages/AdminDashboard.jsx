@@ -339,7 +339,7 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center mt-2">
               <button
                 type="button"
                 onClick={handleForgot}
@@ -348,9 +348,6 @@ export default function AdminDashboard() {
               >
                 {forgotLoading ? 'Sending...' : 'Forgot password?'}
               </button>
-              <div className="text-xs text-slate-400">
-                Tip: set `VITE_ADMIN_PASSWORD` in your environment to change the password.
-              </div>
             </div>
 
             {forgotMessage && (

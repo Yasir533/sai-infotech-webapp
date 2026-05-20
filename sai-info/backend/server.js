@@ -83,6 +83,8 @@ function writeAdmin(obj) {
 
 // Admin login
 app.post('/api/admin/login', (req, res) => {
+  console.log('ADMIN LOGIN REQ', req.method, req.url);
+  console.log('ADMIN LOGIN BODY', req.body);
   const { password } = req.body || {};
   if (!password) return res.status(400).json({ success: false, message: 'Password required' });
   const admin = readAdmin();
@@ -93,6 +95,7 @@ app.post('/api/admin/login', (req, res) => {
 
 // Forgot password - generate token and email to ADMIN_EMAIL
 app.post('/api/admin/forgot', async (req, res) => {
+  console.log('ADMIN FORGOT REQ', req.method, req.url);
   try {
     const token = crypto.randomBytes(24).toString('hex');
     const admin = readAdmin();
@@ -119,6 +122,7 @@ app.post('/api/admin/forgot', async (req, res) => {
 
 // Reset endpoint
 app.post('/api/admin/reset', (req, res) => {
+  console.log('ADMIN RESET REQ', req.method, req.url);
   try {
     const { token, newPassword } = req.body || {};
     if (!token || !newPassword) return res.status(400).json({ success: false, message: 'Token and newPassword required' });
