@@ -7,6 +7,7 @@ import {
   FiSend,
   FiCheck,
 } from 'react-icons/fi'
+import { getApiBase } from '../utils/apiBase'
 
 const SERVICE_OPTIONS = [
   'IT Solution (Sales/Rentals)',
@@ -110,7 +111,7 @@ export default function Contact() {
     try {
       // Determine API base dynamically so mobile devices can reach the backend.
       // Prefer Vite env `VITE_API_BASE`, otherwise fall back to laptop host on port 5000.
-      const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'http://localhost:5000' : `${window.location.protocol}//${window.location.hostname}:5000`)
+      const API_BASE = getApiBase()
 
       const response = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',

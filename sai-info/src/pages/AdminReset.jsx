@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { getApiBase } from '../utils/apiBase'
 
 const OTP_LENGTH = 6
 
 export default function AdminReset() {
+  const API_BASE = getApiBase()
   const navigate = useNavigate()
   const [step, setStep] = useState(1)
   const [email, setEmail] = useState('')
@@ -49,14 +51,14 @@ export default function AdminReset() {
     setError('')
 
     try {
-      let response = await fetch('http://localhost:5000/api/admin/send-otp', {
+      let response = await fetch(`${API_BASE}/api/admin/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
 
       if (response.status === 404) {
-        response = await fetch('http://localhost:5000/api/admin/forgot', {
+        response = await fetch(`${API_BASE}/api/admin/forgot`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
@@ -97,7 +99,7 @@ export default function AdminReset() {
     setError('')
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/verify-otp', {
+      const response = await fetch(`${API_BASE}/api/admin/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp: otpValue }),
@@ -142,7 +144,7 @@ export default function AdminReset() {
     setMessage('')
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/reset-password', {
+      const response = await fetch(`${API_BASE}/api/admin/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

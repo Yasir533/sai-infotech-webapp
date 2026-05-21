@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { getApiBase } from "../utils/apiBase";
 
 export default function ITProducts() {
   const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ export default function ITProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/products");
+        const res = await fetch(`${getApiBase()}/api/products`);
         if (!res.ok) throw new Error("No API or empty response");
         const data = await res.json();
         setProducts(Array.isArray(data) ? data : []);

@@ -12,8 +12,11 @@ import {
   FiUpload,
   
 } from "react-icons/fi";
+import { getApiBase } from "../utils/apiBase";
 
 export default function AdminDashboard() {
+
+  const API_BASE = getApiBase();
 
   const [enquiries, setEnquiries] = useState([]);
   const [search, setSearch] = useState("");
@@ -51,7 +54,7 @@ export default function AdminDashboard() {
         setLoading(true);
       }
 
-      const response = await fetch("http://localhost:5000/api/enquiries", {
+      const response = await fetch(`${API_BASE}/api/enquiries`, {
         headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
       });
 
@@ -77,7 +80,7 @@ export default function AdminDashboard() {
     try {
       setProductsLoading(true);
 
-      const response = await fetch("http://localhost:5000/api/products");
+      const response = await fetch(`${API_BASE}/api/products`);
 
       const data = await response.json();
 
@@ -108,7 +111,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       setAuthError("");
-      const res = await fetch("http://localhost:5000/api/admin/login", {
+      const res = await fetch(`${API_BASE}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password: passwordInput }),
@@ -146,7 +149,7 @@ export default function AdminDashboard() {
     }
 
     await fetch(
-      `http://localhost:5000/api/enquiries/${id}`,
+      `${API_BASE}/api/enquiries/${id}`,
       {
         method: "DELETE",
         headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
@@ -159,7 +162,7 @@ export default function AdminDashboard() {
   const markCompleted = async (id) => {
 
     await fetch(
-      `http://localhost:5000/api/enquiries/${id}`,
+      `${API_BASE}/api/enquiries/${id}`,
       {
         method: "PUT",
         headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
@@ -194,7 +197,7 @@ export default function AdminDashboard() {
         formData.append("images", image);
       });
 
-      const res = await fetch("http://localhost:5000/api/products", {
+      const res = await fetch(`${API_BASE}/api/products`, {
         method: "POST",
         headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
         body: formData,
@@ -247,7 +250,7 @@ export default function AdminDashboard() {
       setDeletingProductId(id);
 
       const response = await fetch(
-        `http://localhost:5000/api/products/${id}`,
+        `${API_BASE}/api/products/${id}`,
         {
           method: "DELETE",
           headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getApiBase } from "../utils/apiBase";
 
 export default function AIChat() {
 
@@ -36,21 +37,17 @@ export default function AIChat() {
     setChat((prev) => [...prev, userMessage]);
 
     try {
+      const response = await fetch(`${getApiBase()}/api/chat`, {
+        method: "POST",
 
-      const response = await fetch(
-        "http://localhost:5000/api/chat",
-        {
-          method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            message,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          message,
+        }),
+      });
 
       const data = await response.json();
 

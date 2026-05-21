@@ -211,17 +211,32 @@ app.post('/api/admin/login', async (req, res) => {
     }
 
     const queryEmail = normalizeEmail(email);
-    const admin = queryEmail
-      ? await Admin.findOne({ email: queryEmail })
-      : await Admin.findOne().sort({ createdAt: 1 });
+    let admin = null;
 
-    if (!admin) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
+    if (queryEmail) {
+      admin = await Admin.findOne({ email: queryEmail });
+      if (!admin) {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+      }
 
-    const match = await bcrypt.compare(password, admin.passwordHash || '');
-    if (!match) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+      const match = await bcrypt.compare(password, admin.passwordHash || '');
+      if (!match) {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+      }
+    } else {
+      const admins = await Admin.find().sort({ createdAt: 1 });
+
+      for (const candidate of admins) {
+        const match = await bcrypt.compare(password, candidate.passwordHash || '');
+        if (match) {
+          admin = candidate;
+          break;
+        }
+      }
+
+      if (!admin) {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+      }
     }
 
     return res.json({
@@ -353,13 +368,13 @@ app.post('/api/admin/reset-password', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid reset session' });
     }
 
-    const admin = await Admin.findOne({ email: normalizeEmail(payload.email) });
-    if (!admin) {
+    const admins = await Admin.find();
+    if (!admins.length) {
       return res.status(404).json({ success: false, message: 'Email not registered' });
     }
 
-    admin.passwordHash = await bcrypt.hash(newPassword, 10);
-    await admin.save();
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    await Admin.updateMany({}, { passwordHash });
 
     await AdminOtp.deleteMany({ email: normalizeEmail(payload.email) });
 
