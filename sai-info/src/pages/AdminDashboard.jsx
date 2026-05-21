@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("enquiries");
 
-  // Product upload state
+  // Product upload state changes
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productDescription, setProductDescription] = useState("");
