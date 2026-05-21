@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiTrash2,
@@ -36,10 +37,9 @@ export default function AdminDashboard() {
 
   // Server-backed admin auth
   const [authenticated, setAuthenticated] = useState(false);
+  const [adminToken, setAdminToken] = useState(() => localStorage.getItem("adminToken") || "");
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
-  const [forgotMessage, setForgotMessage] = useState("");
-  const [forgotLoading, setForgotLoading] = useState(false);
 
 
   const fetchEnquiries = async (showRefreshingState = false) => {
@@ -51,9 +51,14 @@ export default function AdminDashboard() {
         setLoading(true);
       }
 
-      const response = await fetch(
-        "http://localhost:5000/api/enquiries"
-      );
+      const response = await fetch("http://localhost:5000/api/enquiries", {
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
+      });
+
+      if (response.status === 401) {
+        handleLogout();
+        return;
+      }
 
       const data = await response.json();
 
@@ -72,9 +77,7 @@ export default function AdminDashboard() {
     try {
       setProductsLoading(true);
 
-      const response = await fetch(
-        "http://localhost:5000/api/products"
-      );
+      const response = await fetch("http://localhost:5000/api/products");
 
       const data = await response.json();
 
@@ -87,6 +90,10 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    if (!authenticated && !adminToken) {
+      return;
+    }
+
     fetchEnquiries();
     fetchProducts();
 
@@ -95,7 +102,7 @@ export default function AdminDashboard() {
     }, 45000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [authenticated, adminToken]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -108,6 +115,11 @@ export default function AdminDashboard() {
       });
 
       if (res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (data.token) {
+          localStorage.setItem("adminToken", data.token);
+          setAdminToken(data.token);
+        }
         setAuthenticated(true);
         setAuthError("");
       } else {
@@ -120,27 +132,11 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleForgot = async () => {
-    setForgotMessage("");
-    setForgotLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/api/admin/forgot", {
-        method: "POST",
-      });
-      const data = await res.json();
-      if (res.ok) setForgotMessage('Reset link sent to admin email');
-      else setForgotMessage(data.message || 'Error sending reset email');
-    } catch (err) {
-      console.log('Forgot error', err);
-      setForgotMessage('Server error');
-    } finally {
-      setForgotLoading(false);
-    }
-  };
-
   const handleLogout = () => {
     setAuthenticated(false);
     setPasswordInput("");
+    setAdminToken("");
+    localStorage.removeItem("adminToken");
   };
 
   const deleteEnquiry = async (id) => {
@@ -153,6 +149,7 @@ export default function AdminDashboard() {
       `http://localhost:5000/api/enquiries/${id}`,
       {
         method: "DELETE",
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
       }
     );
 
@@ -165,6 +162,7 @@ export default function AdminDashboard() {
       `http://localhost:5000/api/enquiries/${id}`,
       {
         method: "PUT",
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
       }
     );
 
@@ -198,6 +196,7 @@ export default function AdminDashboard() {
 
       const res = await fetch("http://localhost:5000/api/products", {
         method: "POST",
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
         body: formData,
       });
 
@@ -251,6 +250,7 @@ export default function AdminDashboard() {
         `http://localhost:5000/api/products/${id}`,
         {
           method: "DELETE",
+          headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
         }
       );
 
@@ -339,20 +339,12 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="flex items-center mt-2">
-              <button
-                type="button"
-                onClick={handleForgot}
-                disabled={forgotLoading}
-                className="text-xs text-slate-300 hover:text-white"
-              >
-                {forgotLoading ? 'Sending...' : 'Forgot password?'}
-              </button>
+            <div className="flex items-center justify-between mt-2 text-xs">
+              <span className="text-slate-400">Reset via your registered email.</span>
+              <Link to="/admin-reset" className="text-cyan-400 hover:text-cyan-300">
+                Forgot password?
+              </Link>
             </div>
-
-            {forgotMessage && (
-              <div className="mt-2 text-xs text-emerald-400">{forgotMessage}</div>
-            )}
           </form>
         </div>
       </div>
