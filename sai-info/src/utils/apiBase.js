@@ -8,7 +8,9 @@ export function getApiBase() {
       return 'http://localhost:5000';
     }
 
-    return `${window.location.protocol}//${window.location.hostname}:5000`;
+    // For public deployments, prefer the current origin when the API is proxied
+    // behind the same domain. Override with VITE_API_BASE when the backend is hosted separately.
+    return window.location.origin;
   }
 
   return 'http://localhost:5000';
