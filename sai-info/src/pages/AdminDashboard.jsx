@@ -13,10 +13,18 @@ import {
   
 } from "react-icons/fi";
 import { getApiBase } from "../utils/apiBase";
+import imageCompression from "browser-image-compression";
 
 export default function AdminDashboard() {
 
   const API_BASE = getApiBase();
+
+  // Resolve relative /uploads/ paths to full URLs for any device
+  function resolveImg(src) {
+    if (!src) return "";
+    if (src.startsWith("/uploads/")) return `${API_BASE}${src}`;
+    return src;
+  }
 
   const [enquiries, setEnquiries] = useState([]);
   const [search, setSearch] = useState("");
@@ -187,13 +195,31 @@ export default function AdminDashboard() {
 
     try {
       setUploading(true);
+
+      const compressionOptions = {
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1400,
+        useWebWorker: true,
+      };
+
+      const compressedImages = await Promise.all(
+        productImages.map(async (image) => {
+          try {
+            return await imageCompression(image, compressionOptions);
+          } catch (err) {
+            console.log("Compression failed for one image:", err);
+            return image;
+          }
+        })
+      );
+
       const formData = new FormData();
       formData.append("name", productName);
       formData.append("category", productCategory);
       formData.append("description", productDescription);
       formData.append("price", productPrice);
 
-      productImages.forEach((image) => {
+      compressedImages.forEach((image) => {
         formData.append("images", image);
       });
 
@@ -784,7 +810,7 @@ export default function AdminDashboard() {
                     >
                       <div className="flex items-center gap-3">
                         <img
-                          src={item.image}
+                          src={resolveImg(item.image)}
                           alt={item.name}
                           className="h-16 w-16 rounded-lg object-cover bg-slate-700"
                         />

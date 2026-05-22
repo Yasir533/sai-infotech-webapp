@@ -65,6 +65,7 @@ mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("MongoDB Connected");
   await ensureAdminSeed();
+  migrateProductImageUrls();
 })
 .catch((err) => console.log(err));
 
@@ -73,6 +74,47 @@ const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.JWT_SECRET 
 const RESET_JWT_SECRET = process.env.ADMIN_RESET_JWT_SECRET || ADMIN_JWT_SECRET;
 const DEFAULT_ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "admin@sai-infotech.com").trim().toLowerCase();
 const DEFAULT_ADMIN_PASSWORD = process.env.INIT_ADMIN_PASSWORD || "admin123";
+
+// ─────────────────────────────────────────────────────────────
+// ONE-TIME MIGRATION: strip hardcoded "http://localhost:5000"
+// from existing products.json so images work on all devices.
+// ─────────────────────────────────────────────────────────────
+function migrateProductImageUrls() {
+  try {
+    const productsPath = path.join(__dirname, 'products.json');
+    if (!fs.existsSync(productsPath)) return;
+
+    const raw = fs.readFileSync(productsPath, 'utf8');
+    const products = JSON.parse(raw);
+    let changed = false;
+
+    const fixUrl = (url) => {
+      if (!url) return url;
+      // Strip any hardcoded origin so only the relative path remains
+      return url.replace(/^https?:\/\/[^/]+(?=\/uploads\/)/, '');
+    };
+
+    products.forEach((p) => {
+      const fixedImage = fixUrl(p.image);
+      if (fixedImage !== p.image) { p.image = fixedImage; changed = true; }
+
+      if (Array.isArray(p.images)) {
+        p.images = p.images.map((img) => {
+          const fixed = fixUrl(img);
+          if (fixed !== img) changed = true;
+          return fixed;
+        });
+      }
+    });
+
+    if (changed) {
+      fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+      console.log('products.json migrated: removed hardcoded localhost URLs');
+    }
+  } catch (err) {
+    console.log('Product URL migration error:', err);
+  }
+}
 
 function normalizeEmail(email) {
   return (email || "").trim().toLowerCase();
@@ -642,7 +684,10 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    const images = req.files.map((file) => `http://localhost:5000/uploads/${file.filename}`);
+    // ✅ FIX: Store relative paths so images load on ALL devices (phones, PCs, any network).
+    // Previously "http://localhost:5000/uploads/..." was hardcoded — that only works on the
+    // local PC. The frontend now prepends the dynamic API base for each device.
+    const images = req.files.map((file) => `/uploads/${file.filename}`);
 
     const newProduct = {
       _id: Date.now().toString(),
@@ -708,7 +753,7 @@ app.delete('/api/products/:id', async (req, res) => {
     const [deletedProduct] = products.splice(productIndex, 1);
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
 
-    // Remove uploaded files from /uploads when image URLs point to localhost uploads path
+    // Remove uploaded files from /uploads when image URLs point to uploads path
     const imageUrls = Array.isArray(deletedProduct?.images)
       ? deletedProduct.images
       : deletedProduct?.image
