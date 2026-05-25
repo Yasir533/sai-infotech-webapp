@@ -3,15 +3,7 @@ export function getApiBase() {
     return import.meta.env.VITE_API_BASE;
   }
 
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname === 'localhost') {
-      return 'http://localhost:5000';
-    }
-
-    // Public frontend deployment should point to the Render backend by default.
-    // Override with VITE_API_BASE if you move the API to another host.
-    return 'https://sai-infotech-webapp.onrender.com';
-  }
-
+  // Default to the public backend so local VS Code runs still target the live site.
+  // Set VITE_API_BASE in a local .env file if you want to point to a private backend.
   return 'https://sai-infotech-webapp.onrender.com';
 }
