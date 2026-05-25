@@ -19,6 +19,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Basic uptime routes so Render root URL is browser-friendly
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    service: 'SAI INFOTECH Backend',
+    message: 'Backend is running',
+    endpoints: ['/health', '/api/products', '/api/contact (POST)'],
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ success: true, status: 'ok' });
+});
+
 // Serve static files from uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
