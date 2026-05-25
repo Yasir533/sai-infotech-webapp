@@ -58,9 +58,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const transporter = nodemailer.createTransport({
+  service: "gmail",
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
+  logger: true,
+  debug: true,
 
   auth: {
     user: process.env.EMAIL_USER,
@@ -486,6 +489,7 @@ app.post("/api/contact", async (req, res) => {
 
     setImmediate(async () => {
       try {
+        console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', process.env.ADMIN_EMAIL, 'and user');
         await transporter.sendMail({
 
           from: process.env.EMAIL_USER,
@@ -565,6 +569,8 @@ app.post("/api/contact", async (req, res) => {
             </div>
           `,
         });
+
+        console.log('CONTACT MAIL SEND COMPLETE:', newContact._id);
       } catch (mailError) {
         console.log('CONTACT MAIL ERROR:', mailError);
       }
