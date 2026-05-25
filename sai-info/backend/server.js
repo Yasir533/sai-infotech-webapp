@@ -453,6 +453,8 @@ app.post("/api/contact", async (req, res) => {
       services
     } = req.body;
 
+    console.log('CONTACT RECEIVED BODY:', JSON.stringify(req.body));
+
     // Save in MongoDB
 
     const newContact = new Contact({
@@ -464,6 +466,8 @@ app.post("/api/contact", async (req, res) => {
     });
 
     await newContact.save();
+
+    console.log('CONTACT SAVED ID:', newContact._id);
 
     // =========================
     // 1. SEND MAIL TO ADMIN
