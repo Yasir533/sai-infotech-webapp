@@ -8,10 +8,10 @@ export function getApiBase() {
       return 'http://localhost:5000';
     }
 
-    // For public deployments, prefer the current origin when the API is proxied
-    // behind the same domain. Override with VITE_API_BASE when the backend is hosted separately.
-    return window.location.origin;
+    // Public frontend deployment should point to the Render backend by default.
+    // Override with VITE_API_BASE if you move the API to another host.
+    return 'https://sai-infotech-webapp.onrender.com';
   }
 
-  return 'http://localhost:5000';
+  return 'https://sai-infotech-webapp.onrender.com';
 }
