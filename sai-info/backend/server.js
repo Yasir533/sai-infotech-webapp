@@ -469,99 +469,100 @@ app.post("/api/contact", async (req, res) => {
 
     console.log('CONTACT SAVED ID:', newContact._id);
 
+    // Respond immediately so the public site feels fast.
+    res.status(201).json({
+      success: true,
+      message: "Message Sent Successfully",
+    });
+
     // =========================
     // 1. SEND MAIL TO ADMIN
     // =========================
 
-    await transporter.sendMail({
+    setImmediate(async () => {
+      try {
+        await transporter.sendMail({
 
-      from: process.env.EMAIL_USER,
+          from: process.env.EMAIL_USER,
 
-      to: process.env.ADMIN_EMAIL,
+          to: process.env.ADMIN_EMAIL,
 
-      subject: "New Customer Enquiry - SAI INFOTECH",
+          subject: "New Customer Enquiry - SAI INFOTECH",
 
-      html: `
-        <h2>New Customer Enquiry</h2>
+          html: `
+            <h2>New Customer Enquiry</h2>
 
-        <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Name:</strong> ${name}</p>
 
-        <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Email:</strong> ${email}</p>
 
-        <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
 
-        <p>
-          <strong>Services:</strong>
-          ${
-            Array.isArray(services)
-              ? services.join(", ")
-              : services
-          }
-        </p>
+            <p>
+              <strong>Services:</strong>
+              ${
+                Array.isArray(services)
+                  ? services.join(", ")
+                  : services
+              }
+            </p>
 
-        <p><strong>Message:</strong></p>
+            <p><strong>Message:</strong></p>
 
-        <p>${message}</p>
-      `,
-    });
+            <p>${message}</p>
+          `,
+        });
 
-    // =========================
-    // 2. AUTO REPLY TO USER
-    // =========================
+        await transporter.sendMail({
 
-    await transporter.sendMail({
+          from: process.env.EMAIL_USER,
 
-      from: process.env.EMAIL_USER,
+          to: email,
 
-      to: email,
+          subject: "Thank You for Contacting SAI INFOTECH",
 
-      subject: "Thank You for Contacting SAI INFOTECH",
+          html: `
+            <div style="font-family: Arial; padding:20px;">
 
-      html: `
-        <div style="font-family: Arial; padding:20px;">
+              <h2 style="color:#2563eb;">
+                Thank You for Contacting SAI INFOTECH
+              </h2>
 
-          <h2 style="color:#2563eb;">
-            Thank You for Contacting SAI INFOTECH
-          </h2>
+              <p>Dear ${name},</p>
 
-          <p>Dear ${name},</p>
+              <p>
+                Your enquiry has been received successfully.
+              </p>
 
-          <p>
-            Your enquiry has been received successfully.
-          </p>
+              <p>
+                Our technical team will contact you shortly.
+              </p>
 
-          <p>
-            Our technical team will contact you shortly.
-          </p>
+              <p>
+                <strong>Selected Services:</strong>
+              </p>
 
-          <p>
-            <strong>Selected Services:</strong>
-          </p>
+              <p>
+                ${
+                  Array.isArray(services)
+                    ? services.join(", ")
+                    : services
+                }
+              </p>
 
-          <p>
-            ${
-              Array.isArray(services)
-                ? services.join(", ")
-                : services
-            }
-          </p>
+              <br/>
 
-          <br/>
+              <p>
+                Regards,<br/>
+                SAI INFOTECH
+              </p>
 
-          <p>
-            Regards,<br/>
-            SAI INFOTECH
-          </p>
-
-        </div>
-      `,
-    });
-
-    // =========================
-
-    res.status(201).json({
-      success: true,
-      message: "Message Sent Successfully",
+            </div>
+          `,
+        });
+      } catch (mailError) {
+        console.log('CONTACT MAIL ERROR:', mailError);
+      }
     });
 
   } catch (error) {
