@@ -5,14 +5,14 @@ import OrbitalServices from './OrbitalServices'
 import ITProductsCard from './ITProductsCard'
 
 const typingPhrases = [
-  'Chip Level Servicing',
-  'Data Recovery',
-  'IT Solutions',
-  'Network Setup',
-  'Motherboard Repair',
+  'Component Level Refurbishing',
   'AV Solutions',
-  'CCTV Surveillance',
-  'Wind Power Control',
+  'Surveillance / CCTV',
+  'Managed Services',
+  'IT / ITeS Lifecycle Management',
+  'E-Waste Management',
+  'Wind Energy Controls',
+  'PLC & Automation Systems',
 ]
 
 export default function Hero() {
@@ -62,7 +62,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-3 whitespace-nowrap"
+                className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-3 whitespace-nowrap"
               >
                 <span className="text-white">SAI </span>
                 <span className="text-gradient">INFOTECH</span>
@@ -73,10 +73,9 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-lg sm:text-xl font-bold text-white mb-2"
+                className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed"
               >
-                IT Solution{' '}
-                <span className="text-blue-400">(Sales/Rentals)</span>
+                IT / ITeS / Technology Services and Managed Services
               </motion.h2>
 
               {/* TYPING TEXT */}
@@ -98,9 +97,10 @@ export default function Hero() {
                 className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md"
               >
                 Premium IT services in Bangalore since 2019.
-                We specialize in chip-level repairs,
-                complete data recovery, enterprise networking,
-                and end-to-end IT infrastructure solutions.
+                We specialize in enterprise-grade technology solutions,
+                managed IT services, component-level refurbishing,
+                automation systems, surveillance infrastructure,
+                and end-to-end IT lifecycle management.
               </motion.p>
 
               {/* BUTTONS */}
