@@ -55,23 +55,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  family: 4,
-  authMethod: "LOGIN",
-  tls: {
-    minVersion: "TLSv1.2",
-  },
-  connectionTimeout: 60000,
-  greetingTimeout: 30000,
-  socketTimeout: 60000,
-  logger: true,
-  debug: true,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -81,7 +68,7 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 
 transporter.verify((error, success) => {
   if (error) {
-    console.log("EMAIL ERROR:", error);
+    console.log("EMAIL ERROR:", error.message);
   } else {
     console.log("Email Server Ready");
   }
