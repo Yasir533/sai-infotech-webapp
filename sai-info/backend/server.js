@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Basic uptime routes so Render root URL is browser-friendly
 app.get('/', (req, res) => {
   res.json({
     success: true,
@@ -38,10 +37,8 @@ app.get('/health', (req, res) => {
   res.json({ success: true, status: 'ok' });
 });
 
-// Serve static files from uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadsDir = path.join(__dirname, "uploads");
@@ -68,7 +65,6 @@ const transporter = nodemailer.createTransport({
   socketTimeout: 30000,
   logger: true,
   debug: true,
-
   auth: {
     user: process.env.EMAIL_USER,
     pass: (process.env.EMAIL_PASS || "").replace(/\s+/g, ""),
@@ -101,10 +97,6 @@ const RESET_JWT_SECRET = process.env.ADMIN_RESET_JWT_SECRET || ADMIN_JWT_SECRET;
 const DEFAULT_ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "admin@sai-infotech.com").trim().toLowerCase();
 const DEFAULT_ADMIN_PASSWORD = process.env.INIT_ADMIN_PASSWORD || "admin123";
 
-// ─────────────────────────────────────────────────────────────
-// ONE-TIME MIGRATION: strip hardcoded "http://localhost:5000"
-// from existing products.json so images work on all devices.
-// ─────────────────────────────────────────────────────────────
 function migrateProductImageUrls() {
   try {
     const productsPath = path.join(__dirname, 'products.json');
@@ -116,7 +108,6 @@ function migrateProductImageUrls() {
 
     const fixUrl = (url) => {
       if (!url) return url;
-      // Strip any hardcoded origin so only the relative path remains
       return url.replace(/^https?:\/\/[^/]+(?=\/uploads\/)/, '');
     };
 
@@ -267,7 +258,6 @@ function requireAdminAuth(req, res, next) {
   }
 }
 
-// Admin login
 app.post('/api/admin/login', async (req, res) => {
   console.log('ADMIN LOGIN REQ', req.method, req.url);
   console.log('ADMIN LOGIN BODY', req.body);
@@ -320,7 +310,6 @@ app.post('/api/admin/login', async (req, res) => {
   }
 });
 
-// Forgot password - send 6-digit OTP to the registered admin email
 app.post('/api/admin/send-otp', async (req, res) => {
   console.log('ADMIN SEND OTP REQ', req.method, req.url);
 
@@ -340,7 +329,6 @@ app.post('/api/admin/send-otp', async (req, res) => {
   }
 });
 
-// Legacy compatibility route for older admin login screens
 app.post('/api/admin/forgot', async (req, res) => {
   console.log('ADMIN FORGOT REQ', req.method, req.url);
 
@@ -356,7 +344,6 @@ app.post('/api/admin/forgot', async (req, res) => {
   }
 });
 
-// Verify OTP and issue a short-lived reset token
 app.post('/api/admin/verify-otp', async (req, res) => {
   console.log('ADMIN VERIFY OTP REQ', req.method, req.url);
 
@@ -403,7 +390,6 @@ app.post('/api/admin/verify-otp', async (req, res) => {
   }
 });
 
-// Reset password using the verified reset token
 app.post('/api/admin/reset-password', async (req, res) => {
   console.log('ADMIN RESET PASSWORD REQ', req.method, req.url);
 
@@ -454,16 +440,8 @@ app.post('/api/admin/reset-password', async (req, res) => {
 });
 
 app.post("/api/contact", async (req, res) => {
-
   try {
-
-    const {
-      name,
-      email,
-      phone,
-      message,
-      services
-    } = req.body;
+    const { name, email, phone, message, services } = req.body;
 
     console.log('CONTACT RECEIVED BODY:', JSON.stringify(req.body));
 
@@ -473,22 +451,11 @@ app.post("/api/contact", async (req, res) => {
       console.log('CONTACT MAIL CONFIG WARNING: No admin recipient email is configured');
     }
 
-    // Save in MongoDB
-
-    const newContact = new Contact({
-      name,
-      email,
-      phone,
-      message,
-      services,
-    });
-
+    const newContact = new Contact({ name, email, phone, message, services });
     await newContact.save();
 
     console.log('CONTACT SAVED ID:', newContact._id);
 
-    // Try both mail sends independently so a mail failure doesn't break the
-    // saved enquiry flow.
     console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
 
     const mailResults = {
@@ -507,10 +474,7 @@ app.post("/api/contact", async (req, res) => {
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Phone:</strong> ${phone}</p>
-          <p>
-            <strong>Services:</strong>
-            ${Array.isArray(services) ? services.join(", ") : services}
-          </p>
+          <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
           <p><strong>Message:</strong></p>
           <p>${message}</p>
         `,
@@ -530,19 +494,14 @@ app.post("/api/contact", async (req, res) => {
         subject: "Thank You for Contacting SAI INFOTECH",
         html: `
           <div style="font-family: Arial; padding:20px;">
-            <h2 style="color:#2563eb;">
-              Thank You for Contacting SAI INFOTECH
-            </h2>
+            <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
             <p>Dear ${name},</p>
             <p>Your enquiry has been received successfully.</p>
             <p>Our technical team will contact you shortly.</p>
             <p><strong>Selected Services:</strong></p>
             <p>${Array.isArray(services) ? services.join(", ") : services}</p>
             <br/>
-            <p>
-              Regards,<br/>
-              SAI INFOTECH
-            </p>
+            <p>Regards,<br/>SAI INFOTECH</p>
           </div>
         `,
       });
@@ -567,116 +526,208 @@ app.post("/api/contact", async (req, res) => {
     });
 
   } catch (error) {
-
     console.log("FULL ERROR:", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 });
 
 app.get("/api/enquiries", async (req, res) => {
   try {
     const enquiries = await Contact.find().sort({ createdAt: -1 });
-
     res.json(enquiries);
-
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: "Error fetching enquiries",
-    });
+    res.status(500).json({ message: "Error fetching enquiries" });
   }
 });
 
 app.delete("/api/enquiries/:id", async (req, res) => {
   try {
     await Contact.findByIdAndDelete(req.params.id);
-
-    res.json({
-      message: "Enquiry Deleted",
-    });
-
+    res.json({ message: "Enquiry Deleted" });
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: "Delete Failed",
-    });
+    res.status(500).json({ message: "Delete Failed" });
   }
 });
 
 app.put("/api/enquiries/:id", async (req, res) => {
   try {
-    await Contact.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: "Completed",
-      }
-    );
-
-    res.json({
-      message: "Marked as Completed",
-    });
-
+    await Contact.findByIdAndUpdate(req.params.id, { status: "Completed" });
+    res.json({ message: "Marked as Completed" });
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      message: "Update Failed",
-    });
+    res.status(500).json({ message: "Update Failed" });
   }
 });
 
+// ─── CHATBOT ────────────────────────────────────────────────
 app.post("/api/chat", async (req, res) => {
   try {
+
     const { message } = req.body;
 
     console.log("/api/chat received:", message);
 
-    // Ensure message is a string to avoid runtime errors
     const msg = (message ?? "").toString().toLowerCase();
 
-    // Simple AI replies
     let reply = "";
 
-    if (msg.includes("data recovery")) {
+    // SERVICES
+    if (
+      msg.includes("services") ||
+      msg.includes("service")
+    ) {
+
       reply =
-        "We provide professional data recovery solutions for hard disks, SSDs, laptops, and servers.";
-    } else if (msg.includes("laptop")) {
-      reply =
-        "We repair laptops, motherboards, chip-level issues, and provide AMC services.";
-    } else if (msg.includes("contact")) {
-      reply =
-        "You can contact SAI INFOTECH at +91 99459 81999 or email ssmb@sais.in";
-    } else if (msg.includes("services")) {
-      reply =
-        "We provide IT Solutions, CCTV Installation, Data Recovery, Networking, Motherboard Repair, and more.";
-    } else {
-      reply =
-        "Welcome to SAI INFOTECH. Please ask about our services, repairs, networking, CCTV, or data recovery.";
+        "SAI INFOTECH provides:\n\n• Component Level Refurbishing\n• AV Solutions\n• Surveillance / CCTV\n• Managed Services\n• IT / ITeS Lifecycle Management\n• E-Waste Management\n• Wind Energy Controls\n• PLC & Automation Systems";
+
     }
 
-    res.json({
-      success: true,
-      reply,
-    });
+    // CCTV & SURVEILLANCE
+    else if (
+      msg.includes("cctv") ||
+      msg.includes("surveillance")
+    ) {
+
+      reply =
+        "We provide complete Surveillance & CCTV solutions for offices, industries, commercial spaces, and homes including installation, maintenance, and monitoring.";
+
+    }
+
+    // MANAGED SERVICES
+    else if (
+      msg.includes("managed") ||
+      msg.includes("management")
+    ) {
+
+      reply =
+        "Our Managed Services include IT infrastructure management, technical support, monitoring, maintenance, and enterprise technology solutions.";
+
+    }
+
+    // AV SOLUTIONS
+    else if (
+      msg.includes("av") ||
+      msg.includes("audio") ||
+      msg.includes("video")
+    ) {
+
+      reply =
+        "We provide AV Solutions including conference room setups, display systems, projectors, audio systems, and enterprise AV integrations.";
+
+    }
+
+    // PLC & AUTOMATION
+    else if (
+      msg.includes("plc") ||
+      msg.includes("automation")
+    ) {
+
+      reply =
+        "We provide PLC & Automation Systems for industrial controls, smart automation, process control systems, and industrial integration solutions.";
+
+    }
+
+    // E-WASTE
+    else if (
+      msg.includes("e-waste") ||
+      msg.includes("ewaste") ||
+      msg.includes("recycle")
+    ) {
+
+      reply =
+        "SAI INFOTECH provides professional E-Waste Management solutions including safe disposal, recycling, and lifecycle management of electronic equipment.";
+
+    }
+
+    // REFURBISHING
+    else if (
+      msg.includes("refurbishing") ||
+      msg.includes("component")
+    ) {
+
+      reply =
+        "We specialize in Component Level Refurbishing for IT hardware, motherboards, industrial electronics, and enterprise systems.";
+
+    }
+
+    // WIND ENERGY
+    else if (
+      msg.includes("wind") ||
+      msg.includes("energy")
+    ) {
+
+      reply =
+        "We provide Wind Energy Control solutions including industrial monitoring systems, control panels, and support systems.";
+
+    }
+
+    // CONTACT
+    else if (
+      msg.includes("contact") ||
+      msg.includes("phone") ||
+      msg.includes("number")
+    ) {
+
+      reply =
+        "You can contact SAI INFOTECH at:\n\n☎ Office: +91 76769 52139";
+
+    }
+
+    // LOCATION
+    else if (
+      msg.includes("location") ||
+      msg.includes("address")
+    ) {
+
+      reply =
+        "Please contact SAI INFOTECH directly for office location and business assistance.";
+
+    }
+
+    // ABOUT COMPANY
+    else if (
+      msg.includes("about") ||
+      msg.includes("company")
+    ) {
+
+      reply =
+        "SAI INFOTECH is a professional IT and technology solutions company providing managed services, surveillance solutions, automation systems, refurbishing, AV solutions, and enterprise IT lifecycle management.";
+
+    }
+
+    // SUPPORT
+    else if (
+      msg.includes("support") ||
+      msg.includes("help")
+    ) {
+
+      reply =
+        "Our technical support team is available to assist you with IT services, automation systems, surveillance solutions, refurbishing, and enterprise support services.";
+
+    }
+
+    // DEFAULT RESPONSE
+    else {
+
+      reply =
+        "Welcome to SAI INFOTECH 👋\n\nPlease ask about:\n\n• Managed Services\n• CCTV Solutions\n• AV Solutions\n• PLC & Automation\n• E-Waste Management\n• Wind Energy Controls\n• Component Refurbishing\n• Contact Details";
+
+    }
+
+    res.json({ success: true, reply });
 
   } catch (error) {
+
     console.log(error);
 
-    res.status(500).json({
-      success: false,
-      message: "Server Error",
-    });
+    res.status(500).json({ success: false, message: "Server Error" });
+
   }
 });
 
-// Simple products endpoint - reads backend/products.json if available
-
+// ─── PRODUCTS ───────────────────────────────────────────────
 app.get('/api/products', async (req, res) => {
   try {
     const productsPath = path.join(__dirname, 'products.json');
@@ -687,7 +738,6 @@ app.get('/api/products', async (req, res) => {
       return res.json(products);
     }
 
-    // default: return empty array so frontend can show informative UI
     res.json([]);
   } catch (error) {
     console.log('Products API error', error);
@@ -695,7 +745,6 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// Upload new product with up to 10 images
 app.post('/api/products', upload.array('images', 10), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
@@ -704,9 +753,6 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    // ✅ FIX: Store relative paths so images load on ALL devices (phones, PCs, any network).
-    // Previously "http://localhost:5000/uploads/..." was hardcoded — that only works on the
-    // local PC. The frontend now prepends the dynamic API base for each device.
     const images = req.files.map((file) => `/uploads/${file.filename}`);
 
     const newProduct = {
@@ -719,7 +765,6 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       images,
     };
 
-    // Read existing products
     const productsPath = path.join(__dirname, 'products.json');
     let products = [];
 
@@ -728,10 +773,7 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       products = JSON.parse(raw);
     }
 
-    // Add new product
     products.push(newProduct);
-
-    // Save to file
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
 
     res.status(201).json({
@@ -752,7 +794,6 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
   }
 });
 
-// Delete product by id and remove its uploaded image if present
 app.delete('/api/products/:id', async (req, res) => {
   try {
     const productsPath = path.join(__dirname, 'products.json');
@@ -773,7 +814,6 @@ app.delete('/api/products/:id', async (req, res) => {
     const [deletedProduct] = products.splice(productIndex, 1);
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
 
-    // Remove uploaded files from /uploads when image URLs point to uploads path
     const imageUrls = Array.isArray(deletedProduct?.images)
       ? deletedProduct.images
       : deletedProduct?.image
@@ -790,10 +830,7 @@ app.delete('/api/products/:id', async (req, res) => {
       }
     });
 
-    res.json({
-      success: true,
-      message: 'Product deleted successfully',
-    });
+    res.json({ success: true, message: 'Product deleted successfully' });
   } catch (error) {
     console.log('Product delete error', error);
     res.status(500).json({ message: 'Error deleting product' });
