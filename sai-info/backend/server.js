@@ -456,73 +456,75 @@ app.post("/api/contact", async (req, res) => {
 
     console.log('CONTACT SAVED ID:', newContact._id);
 
-    console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
-
-    const mailResults = {
-      admin: { ok: false, messageId: null, error: null },
-      customer: { ok: false, messageId: null, error: null },
-    };
-
-    try {
-      const adminMailResult = await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: contactRecipient,
-        replyTo: email,
-        subject: "New Customer Enquiry - SAI INFOTECH",
-        html: `
-          <h2>New Customer Enquiry</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        `,
-      });
-
-      mailResults.admin.ok = true;
-      mailResults.admin.messageId = adminMailResult.messageId;
-    } catch (mailError) {
-      mailResults.admin.error = mailError?.message || String(mailError);
-      console.log('CONTACT ADMIN MAIL ERROR:', mailError);
-    }
-
-    try {
-      const customerMailResult = await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "Thank You for Contacting SAI INFOTECH",
-        html: `
-          <div style="font-family: Arial; padding:20px;">
-            <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
-            <p>Dear ${name},</p>
-            <p>Your enquiry has been received successfully.</p>
-            <p>Our technical team will contact you shortly.</p>
-            <p><strong>Selected Services:</strong></p>
-            <p>${Array.isArray(services) ? services.join(", ") : services}</p>
-            <br/>
-            <p>Regards,<br/>SAI INFOTECH</p>
-          </div>
-        `,
-      });
-
-      mailResults.customer.ok = true;
-      mailResults.customer.messageId = customerMailResult.messageId;
-    } catch (mailError) {
-      mailResults.customer.error = mailError?.message || String(mailError);
-      console.log('CONTACT CUSTOMER MAIL ERROR:', mailError);
-    }
-
-    console.log('CONTACT MAIL SEND COMPLETE:', {
-      contactId: newContact._id,
-      recipient: contactRecipient,
-      mailResults,
-    });
-
+    // Return success immediately so the browser doesn't wait on SMTP.
     res.status(201).json({
       success: true,
       message: "Message Sent Successfully",
-      mailStatus: mailResults,
+    });
+
+    setImmediate(async () => {
+      console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
+
+      const mailResults = {
+        admin: { ok: false, messageId: null, error: null },
+        customer: { ok: false, messageId: null, error: null },
+      };
+
+      try {
+        const adminMailResult = await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: contactRecipient,
+          replyTo: email,
+          subject: "New Customer Enquiry - SAI INFOTECH",
+          html: `
+            <h2>New Customer Enquiry</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+          `,
+        });
+
+        mailResults.admin.ok = true;
+        mailResults.admin.messageId = adminMailResult.messageId;
+      } catch (mailError) {
+        mailResults.admin.error = mailError?.message || String(mailError);
+        console.log('CONTACT ADMIN MAIL ERROR:', mailError);
+      }
+
+      try {
+        const customerMailResult = await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: email,
+          subject: "Thank You for Contacting SAI INFOTECH",
+          html: `
+            <div style="font-family: Arial; padding:20px;">
+              <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
+              <p>Dear ${name},</p>
+              <p>Your enquiry has been received successfully.</p>
+              <p>Our technical team will contact you shortly.</p>
+              <p><strong>Selected Services:</strong></p>
+              <p>${Array.isArray(services) ? services.join(", ") : services}</p>
+              <br/>
+              <p>Regards,<br/>SAI INFOTECH</p>
+            </div>
+          `,
+        });
+
+        mailResults.customer.ok = true;
+        mailResults.customer.messageId = customerMailResult.messageId;
+      } catch (mailError) {
+        mailResults.customer.error = mailError?.message || String(mailError);
+        console.log('CONTACT CUSTOMER MAIL ERROR:', mailError);
+      }
+
+      console.log('CONTACT MAIL SEND COMPLETE:', {
+        contactId: newContact._id,
+        recipient: contactRecipient,
+        mailResults,
+      });
     });
 
   } catch (error) {
