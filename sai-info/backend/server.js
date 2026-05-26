@@ -58,10 +58,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
+  family: 4,
   logger: true,
   debug: true,
 
