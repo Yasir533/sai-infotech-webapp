@@ -483,103 +483,62 @@ app.post("/api/contact", async (req, res) => {
 
     console.log('CONTACT SAVED ID:', newContact._id);
 
-    // Respond immediately so the public site feels fast.
+    // Send the admin notification and the customer confirmation before
+    // returning success so delivery problems are visible to the caller.
+    console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
+
+    const adminMailResult = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: contactRecipient,
+      replyTo: email,
+      subject: "New Customer Enquiry - SAI INFOTECH",
+      html: `
+        <h2>New Customer Enquiry</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p>
+          <strong>Services:</strong>
+          ${Array.isArray(services) ? services.join(", ") : services}
+        </p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    });
+
+    const customerMailResult = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Thank You for Contacting SAI INFOTECH",
+      html: `
+        <div style="font-family: Arial; padding:20px;">
+          <h2 style="color:#2563eb;">
+            Thank You for Contacting SAI INFOTECH
+          </h2>
+          <p>Dear ${name},</p>
+          <p>Your enquiry has been received successfully.</p>
+          <p>Our technical team will contact you shortly.</p>
+          <p><strong>Selected Services:</strong></p>
+          <p>${Array.isArray(services) ? services.join(", ") : services}</p>
+          <br/>
+          <p>
+            Regards,<br/>
+            SAI INFOTECH
+          </p>
+        </div>
+      `,
+    });
+
+    console.log('CONTACT MAIL SEND COMPLETE:', {
+      contactId: newContact._id,
+      adminMessageId: adminMailResult.messageId,
+      customerMessageId: customerMailResult.messageId,
+      recipient: contactRecipient,
+    });
+
     res.status(201).json({
       success: true,
       message: "Message Sent Successfully",
-    });
-
-    // =========================
-    // 1. SEND MAIL TO ADMIN
-    // =========================
-
-    setImmediate(async () => {
-      try {
-        console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
-        await transporter.sendMail({
-
-          from: process.env.EMAIL_USER,
-
-          to: contactRecipient,
-
-          subject: "New Customer Enquiry - SAI INFOTECH",
-
-          html: `
-            <h2>New Customer Enquiry</h2>
-
-            <p><strong>Name:</strong> ${name}</p>
-
-            <p><strong>Email:</strong> ${email}</p>
-
-            <p><strong>Phone:</strong> ${phone}</p>
-
-            <p>
-              <strong>Services:</strong>
-              ${
-                Array.isArray(services)
-                  ? services.join(", ")
-                  : services
-              }
-            </p>
-
-            <p><strong>Message:</strong></p>
-
-            <p>${message}</p>
-          `,
-        });
-
-        await transporter.sendMail({
-
-          from: process.env.EMAIL_USER,
-
-          to: email,
-
-          subject: "Thank You for Contacting SAI INFOTECH",
-
-          html: `
-            <div style="font-family: Arial; padding:20px;">
-
-              <h2 style="color:#2563eb;">
-                Thank You for Contacting SAI INFOTECH
-              </h2>
-
-              <p>Dear ${name},</p>
-
-              <p>
-                Your enquiry has been received successfully.
-              </p>
-
-              <p>
-                Our technical team will contact you shortly.
-              </p>
-
-              <p>
-                <strong>Selected Services:</strong>
-              </p>
-
-              <p>
-                ${
-                  Array.isArray(services)
-                    ? services.join(", ")
-                    : services
-                }
-              </p>
-
-              <br/>
-
-              <p>
-                Regards,<br/>
-                SAI INFOTECH
-              </p>
-
-            </div>
-          `,
-        });
-
-        console.log('CONTACT MAIL SEND COMPLETE:', newContact._id);
-      } catch (mailError) {
-        console.log('CONTACT MAIL ERROR:', mailError);
-      }
     });
 
   } catch (error) {
