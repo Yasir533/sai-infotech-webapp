@@ -434,33 +434,47 @@ app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, phone, message, services } = req.body;
 
-    console.log('CONTACT RECEIVED BODY:', JSON.stringify(req.body));
+    console.log("CONTACT RECEIVED BODY:", JSON.stringify(req.body));
 
-    const contactRecipient = (process.env.ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL || process.env.EMAIL_USER || "").trim().toLowerCase();
+    const contactRecipient = (
+      process.env.ADMIN_EMAIL ||
+      DEFAULT_ADMIN_EMAIL ||
+      process.env.EMAIL_USER ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+    console.log("ADMIN EMAIL:", contactRecipient);
+    console.log("CUSTOMER EMAIL:", email);
 
     if (!contactRecipient) {
-      console.log('CONTACT MAIL CONFIG WARNING: No admin recipient email is configured');
+      console.log("CONTACT MAIL CONFIG WARNING: No admin recipient email is configured");
     }
 
-    const newContact = new Contact({ name, email, phone, message, services });
+    const newContact = new Contact({
+      name,
+      email,
+      phone,
+      message,
+      services,
+    });
+
     await newContact.save();
 
-    console.log('CONTACT SAVED ID:', newContact._id);
+    console.log("CONTACT SAVED ID:", newContact._id);
 
-    // Return success immediately so the browser doesn't wait on SMTP.
+    // send success response first
     res.status(201).json({
       success: true,
       message: "Message Sent Successfully",
     });
 
+    // send emails in background
     setImmediate(async () => {
-      console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
+      console.log("CONTACT MAIL SEND START");
 
-      const mailResults = {
-        admin: { ok: false, messageId: null, error: null },
-        customer: { ok: false, messageId: null, error: null },
-      };
-
+      // ===== ADMIN MAIL =====
       try {
         const adminMailResult = await transporter.sendMail({
           from: process.env.EMAIL_USER,
@@ -469,22 +483,38 @@ app.post("/api/contact", async (req, res) => {
           subject: "New Customer Enquiry - SAI INFOTECH",
           html: `
             <h2>New Customer Enquiry</h2>
+
             <p><strong>Name:</strong> ${name}</p>
+
             <p><strong>Email:</strong> ${email}</p>
+
             <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
+
+            <p><strong>Services:</strong>
+              ${
+                Array.isArray(services)
+                  ? services.join(", ")
+                  : services
+              }
+            </p>
+
             <p><strong>Message:</strong></p>
+
             <p>${message}</p>
           `,
         });
 
-        mailResults.admin.ok = true;
-        mailResults.admin.messageId = adminMailResult.messageId;
+        console.log("ADMIN MAIL SENT");
+        console.log("ADMIN MAIL RESPONSE:", adminMailResult);
+
       } catch (mailError) {
-        mailResults.admin.error = mailError?.message || String(mailError);
-        console.log('CONTACT ADMIN MAIL ERROR:', mailError);
+
+        console.log("CONTACT ADMIN MAIL ERROR:");
+        console.log(mailError);
+
       }
 
+      // ===== CUSTOMER MAIL =====
       try {
         const customerMailResult = await transporter.sendMail({
           from: process.env.EMAIL_USER,
@@ -492,35 +522,59 @@ app.post("/api/contact", async (req, res) => {
           subject: "Thank You for Contacting SAI INFOTECH",
           html: `
             <div style="font-family: Arial; padding:20px;">
-              <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
+
+              <h2 style="color:#2563eb;">
+                Thank You for Contacting SAI INFOTECH
+              </h2>
+
               <p>Dear ${name},</p>
+
               <p>Your enquiry has been received successfully.</p>
+
               <p>Our technical team will contact you shortly.</p>
+
               <p><strong>Selected Services:</strong></p>
-              <p>${Array.isArray(services) ? services.join(", ") : services}</p>
+
+              <p>
+                ${
+                  Array.isArray(services)
+                    ? services.join(", ")
+                    : services
+                }
+              </p>
+
               <br/>
-              <p>Regards,<br/>SAI INFOTECH</p>
+
+              <p>
+                Regards,<br/>
+                SAI INFOTECH
+              </p>
+
             </div>
           `,
         });
 
-        mailResults.customer.ok = true;
-        mailResults.customer.messageId = customerMailResult.messageId;
+        console.log("CUSTOMER MAIL SENT");
+        console.log("CUSTOMER MAIL RESPONSE:", customerMailResult);
+
       } catch (mailError) {
-        mailResults.customer.error = mailError?.message || String(mailError);
-        console.log('CONTACT CUSTOMER MAIL ERROR:', mailError);
+
+        console.log("CONTACT CUSTOMER MAIL ERROR:");
+        console.log(mailError);
+
       }
 
-      console.log('CONTACT MAIL SEND COMPLETE:', {
-        contactId: newContact._id,
-        recipient: contactRecipient,
-        mailResults,
-      });
+      console.log("CONTACT MAIL SEND COMPLETE");
     });
 
   } catch (error) {
+
     console.log("FULL ERROR:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
   }
 });
 
