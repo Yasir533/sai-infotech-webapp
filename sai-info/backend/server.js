@@ -56,13 +56,17 @@ const upload = multer({ storage });
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
+  requireTLS: true,
   family: 4,
   authMethod: "LOGIN",
-  connectionTimeout: 30000,
-  greetingTimeout: 15000,
-  socketTimeout: 30000,
+  tls: {
+    minVersion: "TLSv1.2",
+  },
+  connectionTimeout: 60000,
+  greetingTimeout: 30000,
+  socketTimeout: 60000,
   logger: true,
   debug: true,
   auth: {
