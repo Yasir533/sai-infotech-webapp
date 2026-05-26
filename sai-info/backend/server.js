@@ -463,6 +463,12 @@ app.post("/api/contact", async (req, res) => {
 
     console.log('CONTACT RECEIVED BODY:', JSON.stringify(req.body));
 
+    const contactRecipient = (process.env.ADMIN_EMAIL || DEFAULT_ADMIN_EMAIL || process.env.EMAIL_USER || "").trim().toLowerCase();
+
+    if (!contactRecipient) {
+      console.log('CONTACT MAIL CONFIG WARNING: No admin recipient email is configured');
+    }
+
     // Save in MongoDB
 
     const newContact = new Contact({
@@ -489,12 +495,12 @@ app.post("/api/contact", async (req, res) => {
 
     setImmediate(async () => {
       try {
-        console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', process.env.ADMIN_EMAIL, 'and user');
+        console.log('CONTACT MAIL SEND START:', process.env.EMAIL_USER, '->', contactRecipient, 'and user');
         await transporter.sendMail({
 
           from: process.env.EMAIL_USER,
 
-          to: process.env.ADMIN_EMAIL,
+          to: contactRecipient,
 
           subject: "New Customer Enquiry - SAI INFOTECH",
 
