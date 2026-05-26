@@ -322,7 +322,9 @@ export default function ITProducts() {
                   ? [selected.image]
                   : [];
 
-                const currentImage = resolveImg(images[selectedImageIndex] || selected.image);
+                const currentImage = resolveImg(
+                  images[selectedImageIndex] || selected.image
+                );
 
                 const hasMultiple = images.length > 1;
 
@@ -647,7 +649,7 @@ export default function ITProducts() {
                         "
                       >
                         <a
-                          href={`https://api.whatsapp.com/send?phone=919945981999&text=Hi, I'm interested in ${encodeURIComponent(
+                          href={`https://api.whatsapp.com/send?phone=917676952139&text=Hi, I'm interested in ${encodeURIComponent(
                             selected.name
                           )}`}
                           target="_blank"
@@ -683,6 +685,7 @@ export default function ITProducts() {
                           Close
                         </button>
                       </div>
+
                     </div>
                   </>
                 );

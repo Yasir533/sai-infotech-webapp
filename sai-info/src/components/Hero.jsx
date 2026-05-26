@@ -62,10 +62,9 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[0.92] mb-3"
+                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-3 whitespace-nowrap"
               >
-                <span className="text-white">SAI</span>
-                <br />
+                <span className="text-white">SAI </span>
                 <span className="text-gradient">INFOTECH</span>
               </motion.h1>
 
