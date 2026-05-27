@@ -4,7 +4,12 @@ const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const dns = require("dns");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
+
+if (typeof dns.setDefaultResultOrder === "function") {
+  dns.setDefaultResultOrder("ipv4first");
+}
 
 const Contact = require("./models/Contact");
 const Admin = require("./models/Admin");
