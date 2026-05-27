@@ -6,6 +6,9 @@ const fs = require("fs");
 const path = require("path");
 const dns = require("dns");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "smtp";
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const RESEND_FROM = process.env.RESEND_FROM;
 
 if (typeof dns.setDefaultResultOrder === "function") {
   dns.setDefaultResultOrder("ipv4first");
@@ -59,16 +62,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 
+  family: 4,
+
   tls: {
     rejectUnauthorized: false,
-    family: 4,
   },
 
   connectionTimeout: 20000,
