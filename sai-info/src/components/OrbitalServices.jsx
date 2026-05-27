@@ -42,7 +42,7 @@ const services = [
     ],
   },
   {
-    title: 'Network Setup',
+    title: 'Data Central Management',
     desc: 'LAN/WAN, WiFi & enterprise connectivity',
     icon: FiWifi,
     color: '#9333ea',
@@ -107,7 +107,7 @@ const services = [
     ],
   },
   {
-    title: 'IT Solution',
+    title: 'Automation Services',
     desc: 'IT sales, rentals & display infrastructure',
     icon: FiMonitor,
     color: '#f97316',
@@ -284,8 +284,7 @@ export default function OrbitalServices() {
           <div className="w-12 md:w-20 h-1 bg-cyan-400 rounded-full my-3" />
 
           <p className="text-gray-300 text-[10px] md:text-sm max-w-[150px] md:max-w-[200px] leading-relaxed px-2">
-            IT Solutions, Cloud, Networking &
-            Hardware Services.
+            Drop-off, Walk-in, On-site & Pickup.
           </p>
 
         </div>

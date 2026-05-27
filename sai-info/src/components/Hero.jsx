@@ -75,7 +75,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.12 }}
                 className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed"
               >
-                IT / ITeS / Technology Services and Managed Services
+                IT / ITeS / Technology Services & Managed Services
               </motion.h2>
 
               {/* TYPING TEXT */}

@@ -54,8 +54,22 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+const SMTP_SECURE = (process.env.SMTP_SECURE || "true").toLowerCase() === "true";
+const SMTP_FAMILY = Number(process.env.SMTP_FAMILY || 4);
+const SMTP_CONNECTION_TIMEOUT = Number(process.env.SMTP_CONNECTION_TIMEOUT || 10000);
+const SMTP_GREETING_TIMEOUT = Number(process.env.SMTP_GREETING_TIMEOUT || 10000);
+const SMTP_SOCKET_TIMEOUT = Number(process.env.SMTP_SOCKET_TIMEOUT || 10000);
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  secure: SMTP_SECURE,
+  family: SMTP_FAMILY,
+  connectionTimeout: SMTP_CONNECTION_TIMEOUT,
+  greetingTimeout: SMTP_GREETING_TIMEOUT,
+  socketTimeout: SMTP_SOCKET_TIMEOUT,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -464,33 +478,56 @@ app.post("/api/contact", async (req, res) => {
 
     console.log("CONTACT SAVED ID:", newContact._id);
 
-    // send success response first
-    res.status(201).json({
-      success: true,
-      message: "Message Sent Successfully",
-    });
+    console.log("CONTACT MAIL SEND START");
 
-    // send emails in background
-    setImmediate(async () => {
-      console.log("CONTACT MAIL SEND START");
+    const [adminMailResult, customerMailResult] = await Promise.all([
+      transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: contactRecipient,
+        replyTo: email,
+        subject: "New Customer Enquiry - SAI INFOTECH",
+        html: `
+          <h2>New Customer Enquiry</h2>
 
-      // ===== ADMIN MAIL =====
-      try {
-        const adminMailResult = await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: contactRecipient,
-          replyTo: email,
-          subject: "New Customer Enquiry - SAI INFOTECH",
-          html: `
-            <h2>New Customer Enquiry</h2>
+          <p><strong>Name:</strong> ${name}</p>
 
-            <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
 
-            <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
 
-            <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Services:</strong>
+            ${
+              Array.isArray(services)
+                ? services.join(", ")
+                : services
+            }
+          </p>
 
-            <p><strong>Services:</strong>
+          <p><strong>Message:</strong></p>
+
+          <p>${message}</p>
+        `,
+      }),
+      transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Thank You for Contacting SAI INFOTECH",
+        html: `
+          <div style="font-family: Arial; padding:20px;">
+
+            <h2 style="color:#2563eb;">
+              Thank You for Contacting SAI INFOTECH
+            </h2>
+
+            <p>Dear ${name},</p>
+
+            <p>Your enquiry has been received successfully.</p>
+
+            <p>Our technical team will contact you shortly.</p>
+
+            <p><strong>Selected Services:</strong></p>
+
+            <p>
               ${
                 Array.isArray(services)
                   ? services.join(", ")
@@ -498,73 +535,27 @@ app.post("/api/contact", async (req, res) => {
               }
             </p>
 
-            <p><strong>Message:</strong></p>
+            <br/>
 
-            <p>${message}</p>
-          `,
-        });
+            <p>
+              Regards,<br/>
+              SAI INFOTECH
+            </p>
 
-        console.log("ADMIN MAIL SENT");
-        console.log("ADMIN MAIL RESPONSE:", adminMailResult);
+          </div>
+        `,
+      }),
+    ]);
 
-      } catch (mailError) {
+    console.log("ADMIN MAIL SENT");
+    console.log("ADMIN MAIL RESPONSE:", adminMailResult);
+    console.log("CUSTOMER MAIL SENT");
+    console.log("CUSTOMER MAIL RESPONSE:", customerMailResult);
+    console.log("CONTACT MAIL SEND COMPLETE");
 
-        console.log("CONTACT ADMIN MAIL ERROR:");
-        console.log(mailError);
-
-      }
-
-      // ===== CUSTOMER MAIL =====
-      try {
-        const customerMailResult = await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: email,
-          subject: "Thank You for Contacting SAI INFOTECH",
-          html: `
-            <div style="font-family: Arial; padding:20px;">
-
-              <h2 style="color:#2563eb;">
-                Thank You for Contacting SAI INFOTECH
-              </h2>
-
-              <p>Dear ${name},</p>
-
-              <p>Your enquiry has been received successfully.</p>
-
-              <p>Our technical team will contact you shortly.</p>
-
-              <p><strong>Selected Services:</strong></p>
-
-              <p>
-                ${
-                  Array.isArray(services)
-                    ? services.join(", ")
-                    : services
-                }
-              </p>
-
-              <br/>
-
-              <p>
-                Regards,<br/>
-                SAI INFOTECH
-              </p>
-
-            </div>
-          `,
-        });
-
-        console.log("CUSTOMER MAIL SENT");
-        console.log("CUSTOMER MAIL RESPONSE:", customerMailResult);
-
-      } catch (mailError) {
-
-        console.log("CONTACT CUSTOMER MAIL ERROR:");
-        console.log(mailError);
-
-      }
-
-      console.log("CONTACT MAIL SEND COMPLETE");
+    res.status(201).json({
+      success: true,
+      message: "Message Sent Successfully",
     });
 
   } catch (error) {
