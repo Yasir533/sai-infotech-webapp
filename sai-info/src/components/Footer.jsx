@@ -1,5 +1,4 @@
 import React from 'react'
-import { motion } from 'framer-motion'
 import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
 import { FaLinkedinIn } from 'react-icons/fa'
 import logoImg from '../assets/logo.png'
@@ -23,32 +22,39 @@ const serviceLinks = [
   { label: 'Remote Support', href: '#it-solutions' },
 ]
 
+const linkStyle = { color: '#ffffff', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }
+const headingStyle = { color: '#ffffff', fontWeight: 600, marginBottom: '20px', letterSpacing: '0.05em' }
+
 export default function Footer() {
   return (
     <footer
-      className="relative border-t border-white/8 overflow-hidden"
       style={{
+        position: 'relative',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        overflow: 'hidden',
         backgroundImage: "url('/bg.jpeg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="absolute inset-0 bg-black/10" />
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)' }} />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+      <div style={{ position: 'relative', maxWidth: '1280px', margin: '0 auto', padding: '64px 24px 32px' }}>
 
         {/* Top grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 mb-14 items-start">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '56px' }}>
 
           {/* Logo */}
-          <div className="lg:col-span-1 flex items-start justify-center lg:justify-start">
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
             <a href="#home">
               <img
                 src={logoImg}
                 alt="SAI INFOTECH"
-                className="h-20 w-auto object-contain"
                 style={{
+                  height: '80px',
+                  width: 'auto',
+                  objectFit: 'contain',
                   maxWidth: '260px',
                   filter: 'drop-shadow(0 0 25px rgba(0,255,255,0.9)) brightness(1.25)'
                 }}
@@ -58,18 +64,15 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-5 tracking-wide">
-              Quick Links
-            </h4>
-
-            <ul className="space-y-3">
+            <h4 style={headingStyle}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {quickLinks.map((link, i) => (
                 <li key={i}>
-                  <a
-                    href={link.href}
-                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  <a href={link.href} style={linkStyle}
+                    onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                    onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
                   >
-                    <span className="w-1 h-1 rounded-full bg-blue-600 group-hover:w-3 transition-all" />
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2563eb', flexShrink: 0 }} />
                     {link.label}
                   </a>
                 </li>
@@ -79,18 +82,15 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-5 tracking-wide">
-              Services
-            </h4>
-
-            <ul className="space-y-3">
+            <h4 style={headingStyle}>Services</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {serviceLinks.map((link, i) => (
                 <li key={i}>
-                  <a
-                    href={link.href}
-                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                  <a href={link.href} style={linkStyle}
+                    onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                    onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
                   >
-                    <span className="w-1 h-1 rounded-full bg-cyan-600 group-hover:w-3 transition-all" />
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0891b2', flexShrink: 0 }} />
                     {link.label}
                   </a>
                 </li>
@@ -100,87 +100,43 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-white font-semibold mb-5 tracking-wide">
-              Contact Info
-            </h4>
+            <h4 style={headingStyle}>Contact Info</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-            <div className="space-y-4">
-
-              {/* Address */}
-              <div className="flex items-start gap-3">
-                <FiMapPin
-                  className="text-blue-400 mt-0.5 flex-shrink-0"
-                  size={15}
-                />
-
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  #9, 1st Main, Ground Floor, Vijay Rangamma Layout,
-                  <br />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <FiMapPin style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} size={15} />
+                <p style={{ color: '#ffffff', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
+                  #9, 1st Main, Ground Floor, Vijay Rangamma Layout,<br />
                   Basavanagudi, Bangalore-560004
                 </p>
               </div>
 
-              {/* Phone */}
-              <div className="flex items-center gap-3">
-                <FiPhone
-                  className="text-blue-400 flex-shrink-0"
-                  size={15}
-                />
-
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <FiPhone style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} size={15} />
                 <div>
-                  <a
-                    href="tel:+919945981999"
-                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
-                  >
-                    +91 99459 81999
-                  </a>
-
-                  <a
-                    href="tel:+918310338544"
-                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
-                  >
-                    +91 83103 38544
-                  </a>
-
-                  <a
-                    href="tel:+917676952139"
-                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
-                  >
-                    +91 76769 52139 (Office)
-                  </a>
+                  {['+91 99459 81999', '+91 83103 38544', '+91 76769 52139 (Office)'].map((num, i) => (
+                    <a key={i} href={`tel:${num.replace(/\s/g,'')}`} style={{ ...linkStyle, display: 'block', marginBottom: '4px' }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                      onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
+                    >{num}</a>
+                  ))}
                 </div>
               </div>
 
-              {/* Email */}
-              <div className="flex items-center gap-3">
-                <FiMail
-                  className="text-blue-400 flex-shrink-0"
-                  size={15}
-                />
-
-                <a
-                  href="mailto:mahaling.saiservices@gmail.com"
-                  className="text-slate-300 hover:text-blue-400 transition-colors text-sm break-all"
-                >
-                  mahaling.saiservices@gmail.com
-                </a>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <FiMail style={{ color: '#60a5fa', flexShrink: 0 }} size={15} />
+                <a href="mailto:mahaling.saiservices@gmail.com" style={linkStyle}
+                  onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
+                >mahaling.saiservices@gmail.com</a>
               </div>
 
-              {/* LinkedIn */}
-              <div className="flex items-center gap-3">
-                <FaLinkedinIn
-                  className="text-blue-400 flex-shrink-0"
-                  size={15}
-                />
-
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-300 hover:text-blue-400 transition-colors text-sm"
-                >
-                  linkedin.com
-                </a>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <FaLinkedinIn style={{ color: '#60a5fa', flexShrink: 0 }} size={15} />
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={linkStyle}
+                  onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
+                >linkedin.com</a>
               </div>
 
             </div>
@@ -188,26 +144,20 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8" />
+        <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)', marginBottom: '32px' }} />
 
         {/* Bottom */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
-          <p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+          <p style={{ color: '#ffffff', fontSize: '14px', margin: 0 }}>
             © {new Date().getFullYear()} SAI INFOTECH. All rights reserved.
           </p>
-
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-400 transition-colors">
-              Privacy Policy
-            </a>
-
-            <a href="#" className="hover:text-slate-400 transition-colors">
-              Terms of Service
-            </a>
-
-            <a href="#" className="hover:text-slate-400 transition-colors">
-              Sitemap
-            </a>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            {['Privacy Policy', 'Terms of Service', 'Sitemap'].map((label, i) => (
+              <a key={i} href="#" style={{ color: '#ffffff', fontSize: '14px', textDecoration: 'none' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
+                onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
+              >{label}</a>
+            ))}
           </div>
         </div>
 
