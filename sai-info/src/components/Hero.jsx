@@ -73,7 +73,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed"
+                className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed whitespace-nowrap"
               >
                 IT / ITeS / Technology Services & Managed Services
               </motion.h2>
