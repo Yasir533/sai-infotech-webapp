@@ -97,10 +97,7 @@ export default function MissionVisionValues() {
                 duration: 0.55,
                 delay: i * 0.15,
               }}
-              whileHover={{
-                y: -6,
-              }}
-              className="glass rounded-3xl border border-white/10 overflow-hidden transition-all duration-300 group hover:border-cyan-400/20"
+              className="glass rounded-3xl border border-white/10 overflow-hidden "
               style={{
                 boxShadow: `0 10px 30px ${sec.glow}`,
               }}

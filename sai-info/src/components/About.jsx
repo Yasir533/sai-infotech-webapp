@@ -2,10 +2,8 @@ import React, { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 
 import {
-  FiCalendar,
   FiAward,
   FiCheckCircle,
-  FiSmile,
   FiX,
 } from 'react-icons/fi'
 
@@ -76,6 +74,7 @@ const serviceModes = [
 ]
 
 export default function About() {
+
   const ref = useRef(null)
 
   const inView = useInView(ref, {
@@ -83,10 +82,11 @@ export default function About() {
     margin: '-100px',
   })
 
+  // ✅ FIXED: Use click-only state, no hover timeout logic
   const [activeMVV, setActiveMVV] = useState(null)
-  const hoverTimeout = useRef(null)
 
   return (
+
     <section id="about" className="section-pad relative">
 
       <div className="absolute inset-0 dot-pattern opacity-20" />
@@ -98,46 +98,92 @@ export default function About() {
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <span className="text-blue-400 text-sm font-semibold tracking-widest uppercase">
-            Who We Are
-          </span>
 
-          <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-            About <span className="text-gradient">SAI INFOTECH</span>
+          <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">
+            About Us
+          </p>
+
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
+            Trusted IT Solutions for
+            <span className="text-gradient block">
+              Modern Businesses
+            </span>
           </h2>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full" />
+          <p className="max-w-3xl mx-auto text-slate-400 text-lg leading-relaxed">
+            We provide end-to-end IT infrastructure, networking,
+            surveillance, cloud, and enterprise solutions with
+            25+ years of trusted expertise.
+          </p>
+
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
 
           {/* Left */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.7 }}
+            className="space-y-8"
           >
 
-            <div className="glass rounded-3xl p-8 border border-white/10 mb-8">
+            <div className="glass rounded-3xl p-8 border border-white/10">
 
-              <p className="text-slate-300 text-lg leading-relaxed mb-6">
-                <span className="text-blue-400 font-semibold">
-                  SAI INFOTECH
-                </span>{' '}
-                is a premier computer refurbishing, service,
-                sales, and networking company headquartered
-                in Bangalore since 2019.
-              </p>
+              <div className="flex items-center gap-3 mb-5">
 
-              <p className="text-slate-400 leading-relaxed">
-                We offer comprehensive IT services through
-                drop-off, walk-in, on-site, and pickup service
-                modes — designed to maximize convenience for
-                our clients across Bangalore.
-              </p>
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+                  <FiAward className="text-blue-400 text-xl" />
+                </div>
+
+                <div>
+                  <h3 className="text-white text-2xl font-bold">
+                    Why Choose Us
+                  </h3>
+
+                  <p className="text-slate-400 text-sm">
+                    Excellence in every solution
+                  </p>
+                </div>
+
+              </div>
+
+              <div className="space-y-4">
+
+                {[
+                  'Certified & experienced technical team',
+                  'Advanced infrastructure & tools',
+                  'Enterprise-grade service quality',
+                  'Fast response & support',
+                ].map((point, i) => (
+
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.2 + i * 0.1,
+                    }}
+                    className="flex items-center gap-3"
+                  >
+
+                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                      <FiCheckCircle className="text-blue-400 text-sm" />
+                    </div>
+
+                    <span className="text-slate-300">
+                      {point}
+                    </span>
+
+                  </motion.div>
+
+                ))}
+
+              </div>
 
             </div>
 
@@ -145,6 +191,7 @@ export default function About() {
             <div className="grid grid-cols-2 gap-4">
 
               {serviceModes.map((mode, i) => (
+
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
@@ -153,7 +200,7 @@ export default function About() {
                     duration: 0.5,
                     delay: 0.4 + i * 0.1,
                   }}
-                  className="glass rounded-2xl p-4 border border-white/10 hover-card"
+                  className="glass rounded-2xl p-4 border border-white/10"
                 >
 
                   <div className="w-2 h-2 rounded-full bg-blue-400 mb-3" />
@@ -167,6 +214,7 @@ export default function About() {
                   </p>
 
                 </motion.div>
+
               ))}
 
             </div>
@@ -185,6 +233,7 @@ export default function About() {
             <div className="grid grid-cols-2 gap-6">
 
               {highlights.map((item, i) => (
+
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -193,7 +242,7 @@ export default function About() {
                     duration: 0.5,
                     delay: 0.5 + i * 0.1,
                   }}
-                  className="glass rounded-3xl p-6 border border-white/10 hover-card text-center"
+                  className="glass rounded-3xl p-6 border border-white/10 text-center"
                 >
 
                   <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
@@ -215,6 +264,7 @@ export default function About() {
                   </div>
 
                 </motion.div>
+
               ))}
 
             </div>
@@ -236,22 +286,16 @@ export default function About() {
               <div className="flex justify-around">
 
                 {mvvSections.map((sec, i) => (
+
+                  // ✅ FIXED: onClick only — removed onMouseEnter and onMouseLeave entirely
                   <button
                     key={i}
-                    onMouseEnter={() => {
-                      clearTimeout(hoverTimeout.current)
-                      setActiveMVV(sec)
-                    }}
-                    onMouseLeave={() => {
-                      hoverTimeout.current = setTimeout(() => {
-                        setActiveMVV(null)
-                      }, 200)
-                    }}
+                    onClick={() => setActiveMVV(sec)}
                     className="flex flex-col items-center gap-2 group cursor-pointer"
                   >
 
                     <div
-                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200`}
+                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center shadow-lg `}
                     >
 
                       <img
@@ -262,11 +306,12 @@ export default function About() {
 
                     </div>
 
-                    <span className="text-slate-400 text-xs font-semibold group-hover:text-white transition-colors">
+                    <span className="text-slate-400 text-xs font-semibold ">
                       {sec.title}
                     </span>
 
                   </button>
+
                 ))}
 
               </div>
@@ -279,15 +324,18 @@ export default function About() {
 
       </div>
 
-      {/* Modal */}
+      {/* Modal — ✅ FIXED: Only opens on click, closes on X button or backdrop click */}
       <AnimatePresence>
 
         {activeMVV && (
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            // ✅ Click backdrop to close
+            onClick={() => setActiveMVV(null)}
           >
 
             <motion.div
@@ -311,10 +359,8 @@ export default function About() {
               style={{
                 boxShadow: `0 0 40px ${activeMVV.glow}`,
               }}
-              onMouseEnter={() => {
-                clearTimeout(hoverTimeout.current)
-              }}
-              onMouseLeave={() => setActiveMVV(null)}
+              // ✅ Prevent backdrop click from firing when clicking inside modal
+              onClick={(e) => e.stopPropagation()}
             >
 
               <button
@@ -347,6 +393,7 @@ export default function About() {
               <ul className="space-y-3">
 
                 {activeMVV.points.map((point, j) => (
+
                   <li
                     key={j}
                     className="flex items-start gap-3"
@@ -361,6 +408,7 @@ export default function About() {
                     </span>
 
                   </li>
+
                 ))}
 
               </ul>
@@ -368,6 +416,7 @@ export default function About() {
             </motion.div>
 
           </motion.div>
+
         )}
 
       </AnimatePresence>

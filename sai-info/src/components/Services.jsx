@@ -121,7 +121,6 @@ function getAngle(i, n) {
 /* ─── Main export ────────────────────────────────────────────────── */
 export default function Services() {
   const [activeModal, setActiveModal] = useState(null)
-  const [hovered, setHovered]         = useState(null)
   const [isMobile, setIsMobile]       = useState(false)
 
   useEffect(() => {
@@ -184,14 +183,13 @@ export default function Services() {
                   const a  = getAngle(i, n)
                   const dx = CX + Math.cos(a) * ORX
                   const dy = CY + Math.sin(a) * ORY
-                  const isHov = hovered === i
+                  const isHov = false
                   return (
                     <line key={i}
                       x1={CX} y1={CY} x2={dx} y2={dy}
-                      stroke={isHov ? svc.glowColor : 'rgba(14,165,233,0.20)'}
-                      strokeWidth={isHov ? 1.8 : 0.9}
-                      strokeDasharray={isHov ? '' : '4 8'}
-                      style={{ transition: 'stroke 0.25s,stroke-width 0.25s' }}
+                      stroke='rgba(14,165,233,0.20)'
+                      strokeWidth={0.9}
+                      strokeDasharray='4 8'
                     />
                   )
                 })}
@@ -269,17 +267,14 @@ export default function Services() {
                 const left = cx - cardW / 2
                 const top  = cy - cardH / 2
 
-                const isHov = hovered === i
+                const isHov = false
 
                 return (
                   <motion.div key={i}
-                    style={{ position: 'absolute', left, top, width: cardW, zIndex: isHov ? 20 : 3, cursor: 'pointer' }}
+                    style={{ position: 'absolute', left, top, width: cardW, zIndex: 3, cursor: 'pointer' }}
                     initial={{ opacity: 0, scale: 0.75 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.06, duration: 0.5, ease: 'easeOut' }}
-                    whileHover={{ scale: 1.07 }}
-                    onMouseEnter={() => setHovered(i)}
-                    onMouseLeave={() => setHovered(null)}
                     onClick={() => setActiveModal(svc)}
                   >
                     <div style={{
@@ -287,32 +282,19 @@ export default function Services() {
                       padding: '12px 14px',
                       position: 'relative',
                       overflow: 'hidden',
-                      background: isHov
-                        ? `linear-gradient(145deg,${svc.glowColor}18,rgba(4,8,26,0.94))`
-                        : 'rgba(6,11,30,0.82)',
-                      border: `1px solid ${isHov ? svc.glowColor + '60' : 'rgba(56,189,248,0.15)'}`,
+                      background: 'rgba(6,11,30,0.82)',
+                      border: '1px solid rgba(56,189,248,0.15)',
                       backdropFilter: 'blur(18px)',
-                      boxShadow: isHov
-                        ? `0 0 32px ${svc.glowColor}28,0 8px 32px rgba(0,0,0,0.55)`
-                        : '0 4px 18px rgba(0,0,0,0.48)',
-                      transition: 'background 0.25s,border-color 0.25s,box-shadow 0.25s',
+                      boxShadow: '0 4px 18px rgba(0,0,0,0.48)',
                     }}>
-                      {/* Top glow line on hover */}
-                      {isHov && (
-                        <div style={{
-                          position: 'absolute', top: 0, left: 14, right: 14, height: 1,
-                          background: `linear-gradient(90deg,transparent,${svc.glowColor},transparent)`,
-                        }} />
-                      )}
                       {/* Icon + label row */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                         <div style={{
                           width: 32, height: 32, borderRadius: 10, flexShrink: 0,
                           background: `linear-gradient(135deg,${svc.iconBg}ee,${svc.iconBg}77)`,
-                          boxShadow: isHov ? `0 0 18px ${svc.glowColor}70` : `0 2px 8px ${svc.glowColor}38`,
+                          boxShadow: `0 2px 8px ${svc.glowColor}38`,
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          transform: isHov ? 'scale(1.12)' : 'scale(1)',
-                          transition: 'transform 0.25s,box-shadow 0.25s',
+                          transform: 'scale(1)',
                         }}>
                           <Icon style={{ color: '#fff', width: 15, height: 15 }} />
                         </div>
@@ -327,7 +309,7 @@ export default function Services() {
                       {/* CTA */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 700, color: svc.glowColor }}>
                         <span>Explore details</span>
-                        <FiArrowRight style={{ width: 9, height: 9, transition: 'transform 0.2s', transform: isHov ? 'translateX(3px)' : 'none' }} />
+                        <FiArrowRight style={{ width: 9, height: 9 }} />
                       </div>
                     </div>
                   </motion.div>
@@ -365,13 +347,8 @@ export default function Services() {
                       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                       transition={{ delay: i * 0.06, duration: 0.45 }}
                       onClick={() => setActiveModal(svc)}
-                      className="group relative rounded-2xl p-4 cursor-pointer"
-                      style={{ background: 'rgba(6,11,30,0.82)', border: '1px solid rgba(56,189,248,0.14)', backdropFilter: 'blur(16px)' }}
-                      whileHover={{ y: -4 }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = svc.glowColor + '55'; e.currentTarget.style.boxShadow = `0 0 24px ${svc.glowColor}1a`; e.currentTarget.style.background = `linear-gradient(145deg,${svc.glowColor}10,rgba(4,8,26,0.92))` }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(56,189,248,0.14)'; e.currentTarget.style.boxShadow = ''; e.currentTarget.style.background = 'rgba(6,11,30,0.82)' }}>
-                      <div className="absolute top-0 left-4 right-4 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
-                        style={{ background: `linear-gradient(90deg,transparent,${svc.glowColor},transparent)` }} />
+                      className="relative rounded-2xl p-4 cursor-pointer"
+                      style={{ background: 'rgba(6,11,30,0.82)', border: '1px solid rgba(56,189,248,0.14)', backdropFilter: 'blur(16px)' }}>
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                           style={{ background: `linear-gradient(135deg,${svc.iconBg}ee,${svc.iconBg}77)`, boxShadow: `0 4px 12px ${svc.glowColor}35` }}>
@@ -382,7 +359,7 @@ export default function Services() {
                       <p className="text-slate-400 text-xs leading-relaxed mb-3">{svc.shortDesc}</p>
                       <div className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: svc.glowColor }}>
                         <span>Explore details</span>
-                        <FiArrowRight size={11} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        <FiArrowRight size={11} />
                       </div>
                     </motion.div>
                   )

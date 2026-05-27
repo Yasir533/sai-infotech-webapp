@@ -52,19 +52,19 @@ export default function ITSolutions() {
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              whileHover={{ y: -8, scale: 1.02 }}
+              
               className="glass rounded-3xl p-7 border border-white/8 hover:border-blue-500/25 group transition-all duration-300 cursor-default"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-500/20 border border-blue-500/20 flex items-center justify-center flex-shrink-0 group-hover:from-blue-600 group-hover:to-cyan-500 transition-all duration-300">
-                  <sol.icon className="text-blue-400 group-hover:text-white transition-colors duration-300" size={20} />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-500/20 border border-blue-500/20 flex items-center justify-center flex-shrink-0 ">
+                  <sol.icon className="text-blue-400 " size={20} />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold mb-2 group-hover:text-blue-300 transition-colors">{sol.title}</h3>
+                  <h3 className="text-white font-semibold mb-2 ">{sol.title}</h3>
                   <p className="text-slate-500 text-sm leading-relaxed">{sol.desc}</p>
                 </div>
               </div>
-              <div className="mt-6 h-0.5 bg-gradient-to-r from-blue-600/0 via-blue-600/40 to-blue-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+              <div className="mt-6 h-0.5 bg-gradient-to-r from-blue-600/0 via-blue-600/40 to-blue-600/0  rounded-full" />
             </motion.div>
           ))}
         </div>
