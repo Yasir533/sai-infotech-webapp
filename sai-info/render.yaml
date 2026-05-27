@@ -11,6 +11,8 @@ services:
         value: 5000
       - key: MONGO_URI
         sync: false
+      - key: EMAIL_PROVIDER
+        value: smtp
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT
@@ -30,6 +32,10 @@ services:
       - key: EMAIL_USER
         sync: false
       - key: EMAIL_PASS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
         sync: false
       - key: ADMIN_EMAIL
         sync: false

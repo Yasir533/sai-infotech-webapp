@@ -67,6 +67,9 @@ const SMTP_CONNECTION_TIMEOUT = Number(process.env.SMTP_CONNECTION_TIMEOUT || 10
 const SMTP_GREETING_TIMEOUT = Number(process.env.SMTP_GREETING_TIMEOUT || 10000);
 const SMTP_SOCKET_TIMEOUT = Number(process.env.SMTP_SOCKET_TIMEOUT || 10000);
 const SMTP_REQUIRE_TLS = (process.env.SMTP_REQUIRE_TLS || "true").toLowerCase() === "true";
+const EMAIL_PROVIDER = (process.env.EMAIL_PROVIDER || "smtp").trim().toLowerCase();
+const RESEND_API_KEY = (process.env.RESEND_API_KEY || "").trim();
+const RESEND_FROM = (process.env.RESEND_FROM || process.env.EMAIL_USER || "").trim();
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -86,17 +89,66 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-  console.log("EMAIL CONFIG WARNING: EMAIL_USER or EMAIL_PASS is missing in backend/.env");
+async function sendEmail({ to, subject, html, text, replyTo }) {
+  if (EMAIL_PROVIDER === "resend") {
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is missing");
+    }
+
+    if (!RESEND_FROM) {
+      throw new Error("RESEND_FROM is missing");
+    }
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: RESEND_FROM,
+        to,
+        subject,
+        html,
+        text,
+        reply_to: replyTo,
+      }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.message || `Resend request failed with status ${response.status}`);
+    }
+
+    return result;
+  }
+
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log("EMAIL CONFIG WARNING: EMAIL_USER or EMAIL_PASS is missing in backend/.env");
+  }
+
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html,
+    text,
+    replyTo,
+  });
 }
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("EMAIL ERROR:", error.message);
-  } else {
-    console.log("Email Server Ready");
-  }
-});
+if (EMAIL_PROVIDER === "smtp") {
+  transporter.verify((error) => {
+    if (error) {
+      console.log("EMAIL ERROR:", error.message);
+    } else {
+      console.log("Email Server Ready");
+    }
+  });
+} else {
+  console.log(`Email provider set to ${EMAIL_PROVIDER}`);
+}
 
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
@@ -232,8 +284,7 @@ async function sendAdminOtpEmail(normalizedEmail) {
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: normalizedEmail,
     subject: 'SAI INFOTECH - Admin OTP Verification',
     html: `
@@ -491,8 +542,7 @@ app.post("/api/contact", async (req, res) => {
     console.log("CONTACT MAIL SEND START");
 
     const [adminMailResult, customerMailResult] = await Promise.allSettled([
-      transporter.sendMail({
-        from: process.env.EMAIL_USER,
+      sendEmail({
         to: contactRecipient,
         replyTo: email,
         subject: "New Customer Enquiry - SAI INFOTECH",
@@ -518,8 +568,7 @@ app.post("/api/contact", async (req, res) => {
           <p>${message}</p>
         `,
       }),
-      transporter.sendMail({
-        from: process.env.EMAIL_USER,
+      sendEmail({
         to: email,
         subject: "Thank You for Contacting SAI INFOTECH",
         html: `
