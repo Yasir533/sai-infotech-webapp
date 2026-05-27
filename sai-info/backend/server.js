@@ -58,35 +58,20 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
-const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
-const SMTP_SECURE = (process.env.SMTP_SECURE || "false").toLowerCase() === "true";
-const SMTP_FAMILY = Number(process.env.SMTP_FAMILY || 4);
-const SMTP_CONNECTION_TIMEOUT = Number(process.env.SMTP_CONNECTION_TIMEOUT || 10000);
-const SMTP_GREETING_TIMEOUT = Number(process.env.SMTP_GREETING_TIMEOUT || 10000);
-const SMTP_SOCKET_TIMEOUT = Number(process.env.SMTP_SOCKET_TIMEOUT || 10000);
-const SMTP_REQUIRE_TLS = (process.env.SMTP_REQUIRE_TLS || "true").toLowerCase() === "true";
-const EMAIL_PROVIDER = (process.env.EMAIL_PROVIDER || "smtp").trim().toLowerCase();
-const RESEND_API_KEY = (process.env.RESEND_API_KEY || "").trim();
-const RESEND_FROM = (process.env.RESEND_FROM || process.env.EMAIL_USER || "").trim();
-
 const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: SMTP_SECURE,
-  family: SMTP_FAMILY,
-  lookup: (hostname, options, callback) => {
-    dns.lookup(hostname, { family: 4 }, callback);
-  },
-  connectionTimeout: SMTP_CONNECTION_TIMEOUT,
-  greetingTimeout: SMTP_GREETING_TIMEOUT,
-  socketTimeout: SMTP_SOCKET_TIMEOUT,
-  requireTLS: SMTP_REQUIRE_TLS,
+  service: "gmail",
+
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+
+  tls: {
+    rejectUnauthorized: false,
+    family: 4,
+  },
+
+  connectionTimeout: 20000,
 });
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
