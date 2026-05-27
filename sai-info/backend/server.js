@@ -123,18 +123,13 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
   });
 }
 
-if (EMAIL_PROVIDER === "smtp") {
-  transporter.verify((error) => {
-    if (error) {
-      console.log("EMAIL ERROR:", error.message);
-    } else {
-      console.log("Email Server Ready");
-    }
-  });
-} else {
-  console.log(`Email provider set to ${EMAIL_PROVIDER}`);
-}
-
+transporter.verify((error) => {
+  if (error) {
+    console.log("EMAIL ERROR:", error.message);
+  } else {
+    console.log("Email Server Ready");
+  }
+});
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("MongoDB Connected");
