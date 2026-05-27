@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import {
   FiCpu,
   FiHardDrive,
@@ -168,7 +168,6 @@ export default function OrbitalServices() {
     typeof window !== 'undefined' &&
     window.innerWidth < 768
 
-  // MOBILE FIX ONLY
   const radius = useMemo(
     () => (isMobile ? 118 : 230),
     [isMobile]
@@ -179,9 +178,10 @@ export default function OrbitalServices() {
     [isMobile]
   )
 
-  // MOBILE CENTERED / DESKTOP SAME
   const CX = isMobile ? SIZE / 2 : SIZE / 2 + 40
   const CY = SIZE / 2
+
+  const hoverTimeout = useRef(null)
 
   return (
 
@@ -314,7 +314,12 @@ export default function OrbitalServices() {
                 top: cy2,
                 transform: 'translate(-50%,-50%)',
               }}
-              onClick={() => setSelected(service)}
+              onMouseEnter={() => setSelected(service)}
+              onMouseLeave={() => {
+                hoverTimeout.current = setTimeout(() => {
+                  setSelected(null)
+                }, 200)
+              }}
             >
 
               <div className="w-[58px] md:w-[105px] bg-[#081120]/90 border border-cyan-400/20 rounded-xl p-2 backdrop-blur-xl shadow-[0_0_15px_rgba(0,255,255,0.08)] hover:border-cyan-400/60 hover:scale-105 transition-all duration-300">
@@ -345,12 +350,14 @@ export default function OrbitalServices() {
 
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
-          onClick={() => setSelected(null)}
         >
 
           <div
             className="relative bg-[#06111f] border border-cyan-400/30 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-[0_0_60px_rgba(0,255,255,0.2)]"
-            onClick={(e) => e.stopPropagation()}
+            onMouseEnter={() => {
+              clearTimeout(hoverTimeout.current)
+            }}
+            onMouseLeave={() => setSelected(null)}
           >
 
             <button
