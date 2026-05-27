@@ -487,7 +487,7 @@ app.post("/api/contact", async (req, res) => {
 
     console.log("CONTACT MAIL SEND START");
 
-    const [adminMailResult, customerMailResult] = await Promise.all([
+    const [adminMailResult, customerMailResult] = await Promise.allSettled([
       transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: contactRecipient,
@@ -554,10 +554,20 @@ app.post("/api/contact", async (req, res) => {
       }),
     ]);
 
-    console.log("ADMIN MAIL SENT");
-    console.log("ADMIN MAIL RESPONSE:", adminMailResult);
-    console.log("CUSTOMER MAIL SENT");
-    console.log("CUSTOMER MAIL RESPONSE:", customerMailResult);
+    if (adminMailResult.status === "fulfilled") {
+      console.log("ADMIN MAIL SENT");
+      console.log("ADMIN MAIL RESPONSE:", adminMailResult.value);
+    } else {
+      console.log("CONTACT ADMIN MAIL ERROR:", adminMailResult.reason);
+    }
+
+    if (customerMailResult.status === "fulfilled") {
+      console.log("CUSTOMER MAIL SENT");
+      console.log("CUSTOMER MAIL RESPONSE:", customerMailResult.value);
+    } else {
+      console.log("CONTACT CUSTOMER MAIL ERROR:", customerMailResult.reason);
+    }
+
     console.log("CONTACT MAIL SEND COMPLETE");
 
     res.status(201).json({
