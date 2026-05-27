@@ -55,12 +55,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
-const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
-const SMTP_SECURE = (process.env.SMTP_SECURE || "true").toLowerCase() === "true";
+const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
+const SMTP_SECURE = (process.env.SMTP_SECURE || "false").toLowerCase() === "true";
 const SMTP_FAMILY = Number(process.env.SMTP_FAMILY || 4);
 const SMTP_CONNECTION_TIMEOUT = Number(process.env.SMTP_CONNECTION_TIMEOUT || 10000);
 const SMTP_GREETING_TIMEOUT = Number(process.env.SMTP_GREETING_TIMEOUT || 10000);
 const SMTP_SOCKET_TIMEOUT = Number(process.env.SMTP_SOCKET_TIMEOUT || 10000);
+const SMTP_REQUIRE_TLS = (process.env.SMTP_REQUIRE_TLS || "true").toLowerCase() === "true";
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -70,6 +71,7 @@ const transporter = nodemailer.createTransport({
   connectionTimeout: SMTP_CONNECTION_TIMEOUT,
   greetingTimeout: SMTP_GREETING_TIMEOUT,
   socketTimeout: SMTP_SOCKET_TIMEOUT,
+  requireTLS: SMTP_REQUIRE_TLS,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
