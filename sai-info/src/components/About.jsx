@@ -84,6 +84,7 @@ export default function About() {
   })
 
   const [activeMVV, setActiveMVV] = useState(null)
+  const hoverTimeout = useRef(null)
 
   return (
     <section id="about" className="section-pad relative">
@@ -237,7 +238,15 @@ export default function About() {
                 {mvvSections.map((sec, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveMVV(sec)}
+                    onMouseEnter={() => {
+                      clearTimeout(hoverTimeout.current)
+                      setActiveMVV(sec)
+                    }}
+                    onMouseLeave={() => {
+                      hoverTimeout.current = setTimeout(() => {
+                        setActiveMVV(null)
+                      }, 200)
+                    }}
                     className="flex flex-col items-center gap-2 group cursor-pointer"
                   >
 
@@ -279,7 +288,6 @@ export default function About() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            onClick={() => setActiveMVV(null)}
           >
 
             <motion.div
@@ -303,7 +311,10 @@ export default function About() {
               style={{
                 boxShadow: `0 0 40px ${activeMVV.glow}`,
               }}
-              onClick={(e) => e.stopPropagation()}
+              onMouseEnter={() => {
+                clearTimeout(hoverTimeout.current)
+              }}
+              onMouseLeave={() => setActiveMVV(null)}
             >
 
               <button
