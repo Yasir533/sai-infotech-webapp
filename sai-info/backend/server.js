@@ -73,6 +73,9 @@ const transporter = nodemailer.createTransport({
   port: SMTP_PORT,
   secure: SMTP_SECURE,
   family: SMTP_FAMILY,
+  lookup: (hostname, options, callback) => {
+    dns.lookup(hostname, { family: 4 }, callback);
+  },
   connectionTimeout: SMTP_CONNECTION_TIMEOUT,
   greetingTimeout: SMTP_GREETING_TIMEOUT,
   socketTimeout: SMTP_SOCKET_TIMEOUT,
