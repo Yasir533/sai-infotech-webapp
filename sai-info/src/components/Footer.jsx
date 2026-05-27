@@ -25,8 +25,16 @@ const serviceLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/8">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
+    <footer
+      className="relative border-t border-white/8 overflow-hidden"
+      style={{
+        backgroundImage: "url('/bg.jpeg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="absolute inset-0 bg-black/10" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
 
@@ -42,7 +50,7 @@ export default function Footer() {
                 className="h-20 w-auto object-contain"
                 style={{
                   maxWidth: '260px',
-                  filter: 'drop-shadow(0 0 12px rgba(6,182,212,0.45))'
+                  filter: 'drop-shadow(0 0 25px rgba(0,255,255,0.9)) brightness(1.25)'
                 }}
               />
             </a>
@@ -59,7 +67,7 @@ export default function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="text-slate-500 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-blue-600 group-hover:w-3 transition-all" />
                     {link.label}
@@ -80,7 +88,7 @@ export default function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="text-slate-500 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-cyan-600 group-hover:w-3 transition-all" />
                     {link.label}
@@ -105,7 +113,7 @@ export default function Footer() {
                   size={15}
                 />
 
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-300 text-sm leading-relaxed">
                   #9, 1st Main, Ground Floor, Vijay Rangamma Layout,
                   <br />
                   Basavanagudi, Bangalore-560004
@@ -122,21 +130,21 @@ export default function Footer() {
                 <div>
                   <a
                     href="tel:+919945981999"
-                    className="text-slate-500 hover:text-blue-400 transition-colors text-sm block"
+                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
                   >
                     +91 99459 81999
                   </a>
 
                   <a
                     href="tel:+918310338544"
-                    className="text-slate-500 hover:text-blue-400 transition-colors text-sm block"
+                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
                   >
                     +91 83103 38544
                   </a>
 
                   <a
                     href="tel:+917676952139"
-                    className="text-slate-500 hover:text-blue-400 transition-colors text-sm block"
+                    className="text-slate-300 hover:text-blue-400 transition-colors text-sm block"
                   >
                     +91 76769 52139 (Office)
                   </a>
@@ -152,7 +160,7 @@ export default function Footer() {
 
                 <a
                   href="mailto:mahaling.saiservices@gmail.com"
-                  className="text-slate-500 hover:text-blue-400 transition-colors text-sm break-all"
+                  className="text-slate-300 hover:text-blue-400 transition-colors text-sm break-all"
                 >
                   mahaling.saiservices@gmail.com
                 </a>
@@ -169,7 +177,7 @@ export default function Footer() {
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-500 hover:text-blue-400 transition-colors text-sm"
+                  className="text-slate-300 hover:text-blue-400 transition-colors text-sm"
                 >
                   linkedin.com
                 </a>
@@ -183,7 +191,7 @@ export default function Footer() {
         <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8" />
 
         {/* Bottom */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-600 text-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
           <p>
             © {new Date().getFullYear()} SAI INFOTECH. All rights reserved.
           </p>
