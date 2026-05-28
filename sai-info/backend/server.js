@@ -63,8 +63,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
 
   auth: {
     user: process.env.EMAIL_USER,
@@ -73,11 +73,16 @@ const transporter = nodemailer.createTransport({
 
   family: 4,
 
-  tls: {
-    rejectUnauthorized: false,
-  },
-
-  connectionTimeout: 20000,
+  connectionTimeout: 60000,
+  greetingTimeout: 30000,
+  socketTimeout: 60000,
+});
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("EMAIL ERROR FULL:", error);
+  } else {
+    console.log("Email Server Ready");
+  }
 });
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
