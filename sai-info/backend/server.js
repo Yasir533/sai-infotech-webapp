@@ -6,9 +6,6 @@ const fs = require("fs");
 const path = require("path");
 const dns = require("dns");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
-const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "smtp";
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM = process.env.RESEND_FROM;
 
 if (typeof dns.setDefaultResultOrder === "function") {
   dns.setDefaultResultOrder("ipv4first");
