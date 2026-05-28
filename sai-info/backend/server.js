@@ -349,14 +349,28 @@ async function sendAdminOtpEmail(normalizedEmail) {
     to: normalizedEmail,
     subject: 'SAI INFOTECH - Admin OTP Verification',
     html: `
-      <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
-        <h2 style="color:#2563eb;margin:0 0 12px">Admin Password Reset OTP</h2>
-        <p style="margin:0 0 10px">Use the one-time code below to continue resetting your admin password.</p>
-        <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">${otp}</div>
-        <p style="margin:12px 0 0">This code expires in 5 minutes.</p>
-        <p style="margin:8px 0 0;color:#475569">If you did not request this, you can ignore this email.</p>
-      </div>
-    `,
+  <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
+    <h2 style="color:#2563eb;margin:0 0 12px">
+      Admin Password Reset OTP
+    </h2>
+
+    <p style="margin:0 0 10px">
+      Use the one-time code below to continue resetting your admin password.
+    </p>
+
+    <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">
+      ${otp}
+    </div>
+
+    <p style="margin:12px 0 0">
+      This code expires in 5 minutes.
+    </p>
+
+    <p style="margin:8px 0 0;color:#475569">
+      If you did not request this, you can ignore this email.
+    </p>
+  </div>
+`,
   });
 
   return {
