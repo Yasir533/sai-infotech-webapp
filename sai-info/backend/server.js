@@ -18,7 +18,6 @@ const nodemailer = require("nodemailer");
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const fetch = require("node-fetch");
 
 const app = express();
 
