@@ -61,16 +61,12 @@ const upload = multer({ storage });
 
 // ─── EMAIL CONFIG ───────────────────────────────────────────
 
-const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "resend";
-
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-
-const RESEND_FROM = process.env.RESEND_FROM;
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "nodemailer";
 
 let transporter = null;
 
-// SMTP ONLY
-if (EMAIL_PROVIDER === "smtp") {
+// NODEMAILER (Gmail)
+if (EMAIL_PROVIDER === "nodemailer" || EMAIL_PROVIDER === "smtp") {
 
   transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -97,17 +93,19 @@ if (EMAIL_PROVIDER === "smtp") {
     if (error) {
       console.log("EMAIL ERROR FULL:", error);
     } else {
-      console.log("Email Server Ready");
+      console.log("Email Server Ready ✓");
     }
   });
 }
 
 // ─── SEND EMAIL FUNCTION ────────────────────────────────────
 
-// sendEmail function
 async function sendEmail({ to, subject, html, text, replyTo }) {
 
   if (EMAIL_PROVIDER === "resend") {
+
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const RESEND_FROM = process.env.RESEND_FROM;
 
     if (!RESEND_API_KEY) {
       throw new Error("RESEND_API_KEY is missing");
@@ -145,8 +143,13 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
     return result;
   }
 
+  // Nodemailer / SMTP (Gmail)
+  if (!transporter) {
+    throw new Error("Email transporter is not initialized. Check EMAIL_USER and EMAIL_PASS in your .env");
+  }
+
   return transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"SAI INFOTECH" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
@@ -292,35 +295,35 @@ async function sendAdminOtpEmail(normalizedEmail) {
   );
 
   await sendEmail({
-  to: normalizedEmail,
-  subject: 'SAI INFOTECH - Admin OTP Verification',
+    to: normalizedEmail,
+    subject: 'SAI INFOTECH - Admin OTP Verification',
+    html: `
+      <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
 
-  html: `
-    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
+        <h2 style="color:#2563eb;margin:0 0 12px">
+          Admin Password Reset OTP
+        </h2>
 
-      <h2 style="color:#2563eb;margin:0 0 12px">
-        Admin Password Reset OTP
-      </h2>
+        <p style="margin:0 0 10px">
+          Use the one-time code below to continue resetting your admin password.
+        </p>
 
-      <p style="margin:0 0 10px">
-        Use the one-time code below to continue resetting your admin password.
-      </p>
+        <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">
+          ${otp}
+        </div>
 
-      <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">
-        ${otp}
+        <p style="margin:12px 0 0">
+          This code expires in 5 minutes.
+        </p>
+
+        <p style="margin:8px 0 0;color:#475569">
+          If you did not request this, you can ignore this email.
+        </p>
+
       </div>
+    `,
+  });
 
-      <p style="margin:12px 0 0">
-        This code expires in 5 minutes.
-      </p>
-
-      <p style="margin:8px 0 0;color:#475569">
-        If you did not request this, you can ignore this email.
-      </p>
-
-    </div>
-  `,
-});
   return {
     status: 200,
     body: {
@@ -703,157 +706,39 @@ app.post("/api/chat", async (req, res) => {
 
     let reply = "";
 
-    // SERVICES
-    if (
-      msg.includes("services") ||
-      msg.includes("service")
-    ) {
-
-      reply =
-        "SAI INFOTECH provides:\n\n• Component Level Refurbishing\n• AV Solutions\n• Surveillance / CCTV\n• Managed Services\n• IT / ITeS Lifecycle Management\n• E-Waste Management\n• Wind Energy Controls\n• PLC & Automation Systems";
-
-    }
-
-    // CCTV & SURVEILLANCE
-    else if (
-      msg.includes("cctv") ||
-      msg.includes("surveillance")
-    ) {
-
-      reply =
-        "We provide complete Surveillance & CCTV solutions for offices, industries, commercial spaces, and homes including installation, maintenance, and monitoring.";
-
-    }
-
-    // MANAGED SERVICES
-    else if (
-      msg.includes("managed") ||
-      msg.includes("management")
-    ) {
-
-      reply =
-        "Our Managed Services include IT infrastructure management, technical support, monitoring, maintenance, and enterprise technology solutions.";
-
-    }
-
-    // AV SOLUTIONS
-    else if (
-      msg.includes("av") ||
-      msg.includes("audio") ||
-      msg.includes("video")
-    ) {
-
-      reply =
-        "We provide AV Solutions including conference room setups, display systems, projectors, audio systems, and enterprise AV integrations.";
-
-    }
-
-    // PLC & AUTOMATION
-    else if (
-      msg.includes("plc") ||
-      msg.includes("automation")
-    ) {
-
-      reply =
-        "We provide PLC & Automation Systems for industrial controls, smart automation, process control systems, and industrial integration solutions.";
-
-    }
-
-    // E-WASTE
-    else if (
-      msg.includes("e-waste") ||
-      msg.includes("ewaste") ||
-      msg.includes("recycle")
-    ) {
-
-      reply =
-        "SAI INFOTECH provides professional E-Waste Management solutions including safe disposal, recycling, and lifecycle management of electronic equipment.";
-
-    }
-
-    // REFURBISHING
-    else if (
-      msg.includes("refurbishing") ||
-      msg.includes("component")
-    ) {
-
-      reply =
-        "We specialize in Component Level Refurbishing for IT hardware, motherboards, industrial electronics, and enterprise systems.";
-
-    }
-
-    // WIND ENERGY
-    else if (
-      msg.includes("wind") ||
-      msg.includes("energy")
-    ) {
-
-      reply =
-        "We provide Wind Energy Control solutions including industrial monitoring systems, control panels, and support systems.";
-
-    }
-
-    // CONTACT
-    else if (
-      msg.includes("contact") ||
-      msg.includes("phone") ||
-      msg.includes("number")
-    ) {
-
-      reply =
-        "You can contact SAI INFOTECH at:\n\n☎ Office: +91 76769 52139";
-
-    }
-
-    // LOCATION
-    else if (
-      msg.includes("location") ||
-      msg.includes("address")
-    ) {
-
-      reply =
-        "Please contact SAI INFOTECH directly for office location and business assistance.";
-
-    }
-
-    // ABOUT COMPANY
-    else if (
-      msg.includes("about") ||
-      msg.includes("company")
-    ) {
-
-      reply =
-        "SAI INFOTECH is a professional IT and technology solutions company providing managed services, surveillance solutions, automation systems, refurbishing, AV solutions, and enterprise IT lifecycle management.";
-
-    }
-
-    // SUPPORT
-    else if (
-      msg.includes("support") ||
-      msg.includes("help")
-    ) {
-
-      reply =
-        "Our technical support team is available to assist you with IT services, automation systems, surveillance solutions, refurbishing, and enterprise support services.";
-
-    }
-
-    // DEFAULT RESPONSE
-    else {
-
-      reply =
-        "Welcome to SAI INFOTECH 👋\n\nPlease ask about:\n\n• Managed Services\n• CCTV Solutions\n• AV Solutions\n• PLC & Automation\n• E-Waste Management\n• Wind Energy Controls\n• Component Refurbishing\n• Contact Details";
-
+    if (msg.includes("services") || msg.includes("service")) {
+      reply = "SAI INFOTECH provides:\n\n• Component Level Refurbishing\n• AV Solutions\n• Surveillance / CCTV\n• Managed Services\n• IT / ITeS Lifecycle Management\n• E-Waste Management\n• Wind Energy Controls\n• PLC & Automation Systems";
+    } else if (msg.includes("cctv") || msg.includes("surveillance")) {
+      reply = "We provide complete Surveillance & CCTV solutions for offices, industries, commercial spaces, and homes including installation, maintenance, and monitoring.";
+    } else if (msg.includes("managed") || msg.includes("management")) {
+      reply = "Our Managed Services include IT infrastructure management, technical support, monitoring, maintenance, and enterprise technology solutions.";
+    } else if (msg.includes("av") || msg.includes("audio") || msg.includes("video")) {
+      reply = "We provide AV Solutions including conference room setups, display systems, projectors, audio systems, and enterprise AV integrations.";
+    } else if (msg.includes("plc") || msg.includes("automation")) {
+      reply = "We provide PLC & Automation Systems for industrial controls, smart automation, process control systems, and industrial integration solutions.";
+    } else if (msg.includes("e-waste") || msg.includes("ewaste") || msg.includes("recycle")) {
+      reply = "SAI INFOTECH provides professional E-Waste Management solutions including safe disposal, recycling, and lifecycle management of electronic equipment.";
+    } else if (msg.includes("refurbishing") || msg.includes("component")) {
+      reply = "We specialize in Component Level Refurbishing for IT hardware, motherboards, industrial electronics, and enterprise systems.";
+    } else if (msg.includes("wind") || msg.includes("energy")) {
+      reply = "We provide Wind Energy Control solutions including industrial monitoring systems, control panels, and support systems.";
+    } else if (msg.includes("contact") || msg.includes("phone") || msg.includes("number")) {
+      reply = "You can contact SAI INFOTECH at:\n\n☎ Office: +91 76769 52139";
+    } else if (msg.includes("location") || msg.includes("address")) {
+      reply = "Please contact SAI INFOTECH directly for office location and business assistance.";
+    } else if (msg.includes("about") || msg.includes("company")) {
+      reply = "SAI INFOTECH is a professional IT and technology solutions company providing managed services, surveillance solutions, automation systems, refurbishing, AV solutions, and enterprise IT lifecycle management.";
+    } else if (msg.includes("support") || msg.includes("help")) {
+      reply = "Our technical support team is available to assist you with IT services, automation systems, surveillance solutions, refurbishing, and enterprise support services.";
+    } else {
+      reply = "Welcome to SAI INFOTECH 👋\n\nPlease ask about:\n\n• Managed Services\n• CCTV Solutions\n• AV Solutions\n• PLC & Automation\n• E-Waste Management\n• Wind Energy Controls\n• Component Refurbishing\n• Contact Details";
     }
 
     res.json({ success: true, reply });
 
   } catch (error) {
-
     console.log(error);
-
     res.status(500).json({ success: false, message: "Server Error" });
-
   }
 });
 
