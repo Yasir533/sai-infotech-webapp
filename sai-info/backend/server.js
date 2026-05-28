@@ -61,32 +61,112 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+// ─── EMAIL CONFIG ───────────────────────────────────────────
 
-  family: 4,
+const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "resend";
 
-  connectionTimeout: 60000,
-  greetingTimeout: 30000,
-  socketTimeout: 60000,
-});
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("EMAIL ERROR FULL:", error);
-  } else {
-    console.log("Email Server Ready");
-  }
-});
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+const RESEND_FROM = process.env.RESEND_FROM;
+
+let transporter = null;
+
+// SMTP ONLY
+if (EMAIL_PROVIDER === "smtp") {
+
+  transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+
+    tls: {
+      rejectUnauthorized: false,
+    },
+
+    family: 4,
+
+    connectionTimeout: 120000,
+    greetingTimeout: 60000,
+    socketTimeout: 120000,
+  });
+
+  transporter.verify((error) => {
+    if (error) {
+      console.log("EMAIL ERROR FULL:", error);
+    } else {
+      console.log("Email Server Ready");
+    }
+  });
+}
+
+// ─── SEND EMAIL FUNCTION ────────────────────────────────────
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
+
+  // RESEND
   if (EMAIL_PROVIDER === "resend") {
+
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is missing");
+    }
+
+    if (!RESEND_FROM) {
+      throw new Error("RESEND_FROM is missing");
+    }
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        from: RESEND_FROM,
+        to,
+        subject,
+        html,
+        text,
+        reply_to: replyTo,
+      }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(
+        result.message ||
+        `Resend request failed with status ${response.status}`
+      );
+    }
+
+    return result;
+  }
+
+  // SMTP
+  return transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html,
+    text,
+    replyTo,
+  });
+}
+
+async function sendEmail({ to, subject, html, text, replyTo }) 
+{
+
+  // RESEND
+  if (EMAIL_PROVIDER === "resend") {
+
     if (!RESEND_API_KEY) {
       throw new Error("RESEND_API_KEY is missing");
     }
@@ -114,16 +194,16 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
     const result = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      throw new Error(result.message || `Resend request failed with status ${response.status}`);
+      throw new Error(
+        result.message ||
+        `Resend request failed with status ${response.status}`
+      );
     }
 
     return result;
   }
 
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.log("EMAIL CONFIG WARNING: EMAIL_USER or EMAIL_PASS is missing in backend/.env");
-  }
-
+  // SMTP
   return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to,
@@ -133,14 +213,7 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
     replyTo,
   });
 }
-
-transporter.verify((error) => {
-  if (error) {
-    console.log("EMAIL ERROR:", error.message);
-  } else {
-    console.log("Email Server Ready");
-  }
-});
+```
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("MongoDB Connected");
