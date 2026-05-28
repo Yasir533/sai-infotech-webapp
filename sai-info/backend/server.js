@@ -104,64 +104,9 @@ if (EMAIL_PROVIDER === "smtp") {
 
 // ─── SEND EMAIL FUNCTION ────────────────────────────────────
 
+// sendEmail function
 async function sendEmail({ to, subject, html, text, replyTo }) {
 
-  // RESEND
-  if (EMAIL_PROVIDER === "resend") {
-
-    if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY is missing");
-    }
-
-    if (!RESEND_FROM) {
-      throw new Error("RESEND_FROM is missing");
-    }
-
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        from: RESEND_FROM,
-        to,
-        subject,
-        html,
-        text,
-        reply_to: replyTo,
-      }),
-    });
-
-    const result = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(
-        result.message ||
-        `Resend request failed with status ${response.status}`
-      );
-    }
-
-    return result;
-  }
-
-  // SMTP
-  return transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to,
-    subject,
-    html,
-    text,
-    replyTo,
-  });
-}
-
-async function sendEmail({ to, subject, html, text, replyTo }) 
-{
-
-  // RESEND
   if (EMAIL_PROVIDER === "resend") {
 
     if (!RESEND_API_KEY) {
@@ -200,7 +145,6 @@ async function sendEmail({ to, subject, html, text, replyTo })
     return result;
   }
 
-  // SMTP
   return transporter.sendMail({
     from: process.env.EMAIL_USER,
     to,
@@ -210,7 +154,9 @@ async function sendEmail({ to, subject, html, text, replyTo })
     replyTo,
   });
 }
-```
+
+// MongoDB connection
+
 mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("MongoDB Connected");
@@ -346,33 +292,35 @@ async function sendAdminOtpEmail(normalizedEmail) {
   );
 
   await sendEmail({
-    to: normalizedEmail,
-    subject: 'SAI INFOTECH - Admin OTP Verification',
-    html: `
-  <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
-    <h2 style="color:#2563eb;margin:0 0 12px">
-      Admin Password Reset OTP
-    </h2>
+  to: normalizedEmail,
+  subject: 'SAI INFOTECH - Admin OTP Verification',
 
-    <p style="margin:0 0 10px">
-      Use the one-time code below to continue resetting your admin password.
-    </p>
+  html: `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
 
-    <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">
-      ${otp}
+      <h2 style="color:#2563eb;margin:0 0 12px">
+        Admin Password Reset OTP
+      </h2>
+
+      <p style="margin:0 0 10px">
+        Use the one-time code below to continue resetting your admin password.
+      </p>
+
+      <div style="display:inline-block;padding:14px 18px;font-size:28px;letter-spacing:0.35em;font-weight:700;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe">
+        ${otp}
+      </div>
+
+      <p style="margin:12px 0 0">
+        This code expires in 5 minutes.
+      </p>
+
+      <p style="margin:8px 0 0;color:#475569">
+        If you did not request this, you can ignore this email.
+      </p>
+
     </div>
-
-    <p style="margin:12px 0 0">
-      This code expires in 5 minutes.
-    </p>
-
-    <p style="margin:8px 0 0;color:#475569">
-      If you did not request this, you can ignore this email.
-    </p>
-  </div>
-`,
-  });
-
+  `,
+});
   return {
     status: 200,
     body: {
