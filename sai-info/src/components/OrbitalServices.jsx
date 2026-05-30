@@ -107,13 +107,13 @@ const SERVICES = [
   { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
 ]
 
-// Badge positions as top/left px on the DESIGN canvas (640px).
-// All use translate(-50%,-50%) to centre — no right/bottom anchors.
+// Badge positions as top/left px on the DESIGN canvas (780px).
+// Corners of the canvas, well clear of the cards and globe.
 const BADGES = [
-  { label:'10+ Yrs',       sub:'Experience',   pos:{ left:  83, top: 115 } },
-  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 557, top:  77 } },
-  { label:'ISO Certified', sub:'Process',      pos:{ left:  51, top: 510 } },
-  { label:'Pan India',     sub:'Service',      pos:{ left: 557, top: 525 } },
+  { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 101, top: 140 } },
+  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 679, top:  94 } },
+  { label:'ISO Certified', sub:'Process',      pos:{ left:  62, top: 622 } },
+  { label:'Pan India',     sub:'Service',      pos:{ left: 679, top: 640 } },
 ]
 
 export default function OrbitalServices() {
@@ -133,50 +133,60 @@ export default function OrbitalServices() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // DESIGN canvas is 640px wide — cards sit fully inside it.
-  // Card width 180px, dist 210: leftmost card edge = 320-210-12-90 = 8px (just inside)
-  // rightmost card edge = 320+210+12+90 = 632px (just inside 640px)
-  const DESIGN = 640
+  // DESIGN=780px gives plenty of breathing room:
+  //   globeR=155 → globe diameter=310px
+  //   dist=268 → card centres 268px from globe centre
+  //   gap between globe edge and nearest card edge = ~50px
+  //   left card left edge = 390-268-10-92 = 20px  (inside canvas)
+  //   right card right edge = 390+268+10+92 = 760px (inside canvas)
+  const DESIGN = 780
   const MAX    = Math.min(vw, DESIGN)
   const scale  = MAX / DESIGN
 
-  const CX     = DESIGN / 2   // 320
-  const CY     = DESIGN / 2   // 320
-  const globeR = 148
+  const CX     = DESIGN / 2   // 390
+  const CY     = DESIGN / 2   // 390
+  const globeR = 155
 
   const rings = [
-    { rx:268, ry:107, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
-    { rx:250, ry: 90, tilt: 14, dash:'4 6', op:0.22, sw:1   },
-    { rx:282, ry:124, tilt: -4, dash:'3 8', op:0.16, sw:1   },
-    { rx:180, ry:180, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
+    { rx:310, ry:124, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
+    { rx:290, ry:104, tilt: 14, dash:'4 6', op:0.22, sw:1   },
+    { rx:326, ry:142, tilt: -4, dash:'3 8', op:0.16, sw:1   },
+    { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
   ]
 
-  // dist=210, cw=180 → card occupies [CX±dist±cw/2] = [320±300] = [20..620] — fits in 640px
-  const dist = 210
-  const cw   = 180
-  const iconBox = 50
+  // dist=268, cw=185 → left card left edge=20px, right card right edge=760px — both inside 780px
+  const dist   = 268
+  const cw     = 185
+  const iconBox= 52
 
   const cardPos = {
-    top:    { x: CX,          y: CY - dist      },
-    left:   { x: CX - dist - 10, y: CY          },
-    right:  { x: CX + dist + 10, y: CY          },
-    bottom: { x: CX,          y: CY + dist      },
+    top:    { x: CX,           y: CY - dist      },
+    left:   { x: CX - dist - 10, y: CY           },
+    right:  { x: CX + dist + 10, y: CY           },
+    bottom: { x: CX,           y: CY + dist      },
   }
 
+  // With transformOrigin 'top left', scale shrinks from the top-left corner.
+  // We manually center by offsetting left by (vw - scaledWidth) / 2.
+  // This works correctly on every screen size including desktop.
+  const scaledW  = DESIGN * scale
+  const marginLeft = (vw - scaledW) / 2
+
   return (
-    <div className="relative flex items-center justify-center w-full py-4 select-none"
-      style={{ overflowX:'hidden' }}>
+    <div className="relative w-full py-4 select-none" style={{ overflowX:'hidden' }}>
 
       {/*
-        Outer wrapper rendered at DESIGN=640px, then scaled to fit screen.
-        transformOrigin 'top center' → only bottom grows extra space.
-        marginBottom collapses that extra space precisely.
+        Rendered at DESIGN=780px, scaled down via CSS transform.
+        transformOrigin 'top left' → predictable: top-left corner stays put.
+        marginLeft centers the scaled canvas in the viewport.
+        marginBottom collapses the blank space left by scaling.
       */}
       <div style={{
         width: DESIGN,
         height: DESIGN,
         transform: `scale(${scale})`,
-        transformOrigin: 'top center',
+        transformOrigin: 'top left',
+        marginLeft: marginLeft,
         marginBottom: -(DESIGN * (1 - scale)),
         position: 'relative',
         flexShrink: 0,
