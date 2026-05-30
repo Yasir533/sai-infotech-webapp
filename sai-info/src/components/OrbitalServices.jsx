@@ -1,5 +1,18 @@
-import React, { useState, useMemo } from 'react'
-import { FiCpu, FiCloud, FiShield, FiTool, FiX } from 'react-icons/fi'
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+import {
+  FiCpu,
+  FiCloud,
+  FiShield,
+  FiTool,
+  FiX,
+} from "react-icons/fi";
+
+import OrbitGlobe from "./OrbitGlobe";
+import FloatingParticles from "./FloatingParticles";
+
+import "../styles/orbital.css";
 
 const services = [
   {
@@ -56,256 +69,241 @@ const services = [
   },
 ]
 
-export default function OrbitalServices() {
+const badges = [
+  "10+ Years",
+  "100+ Clients",
+  "24/7 Support",
+  "Pan India",
+];
 
-  const [selected, setSelected] = useState(null)
+export default function OrbitalServices() {
+  const [selected, setSelected] = useState(null);
 
   const isMobile =
-    typeof window !== 'undefined' &&
-    window.innerWidth < 768
+    typeof window !== "undefined" &&
+    window.innerWidth < 768;
 
-  // MOBILE FIX ONLY
-  const radius = useMemo(
-    () => (isMobile ? 125 : 265),
-    [isMobile]
-  )
+  const SIZE = isMobile ? 420 : 850;
 
-  const SIZE = useMemo(
-    () => (isMobile ? 380 : 700),
-    [isMobile]
-  )
+  const CX = SIZE / 2;
+  const CY = SIZE / 2;
 
-  // MOBILE CENTERED / DESKTOP SAME
-  const CX = isMobile ? SIZE / 2 : SIZE / 2 + 40
-  const CY = SIZE / 2
+  const radius = isMobile ? 150 : 300;
+
+return (
+  <div className="relative flex justify-center items-center py-20 overflow-hidden">
+
+    <div className="orbit-background-glow" />
+
+    <div
+      className="relative"
+      style={{
+        width: SIZE,
+        height: SIZE,
+      }}
+    >
+
+<FloatingParticles
+  count={30}
+  width={SIZE}
+  height={SIZE}
+/>
+
+
+<svg
+  className="absolute inset-0 orbit-ring"
+  width={SIZE}
+  height={SIZE}
+>
+  {[120, 180, 240, 300, 360].map((r, i) => (
+    <circle
+      key={i}
+      cx={CX}
+      cy={CY}
+      r={isMobile ? r * 0.55 : r}
+      fill="none"
+      stroke="rgba(34,211,238,.12)"
+      strokeWidth="1"
+      strokeDasharray={i % 2 ? "10 12" : ""}
+    />
+  ))}
+</svg>
+
+<svg
+  className="absolute inset-0"
+  width={SIZE}
+  height={SIZE}
+>
+  
+  {services.map((service, index) => {
+    const angle =
+      (-90 + (360 / services.length) * index) *
+      (Math.PI / 180);
+
+    const x =
+      CX + Math.cos(angle) * radius;
+
+    const y =
+      CY + Math.sin(angle) * radius;
+
+    return (
+      <path
+        key={index}
+        d={`
+          M ${CX} ${CY}
+          Q ${(CX + x) / 2}
+          ${(CY + y) / 2 - 60}
+          ${x}
+          ${y}
+        `}
+        fill="none"
+        stroke="rgba(34,211,238,.18)"
+        strokeWidth="1.5"
+      />
+    );
+  })}
+</svg>
+
+<div
+  className="absolute"
+  style={{
+    left: CX,
+    top: CY,
+    transform:
+      "translate(-50%,-50%)",
+  }}
+>
+  <OrbitGlobe isMobile={isMobile} />
+</div>
+
+{badges.map((badge, i) => {
+  const angle =
+    (-45 + i * 90) *
+    (Math.PI / 180);
+
+  const x =
+    CX + Math.cos(angle) * (radius + 110);
+
+  const y =
+    CY + Math.sin(angle) * (radius + 110);
 
   return (
+    <motion.div
+      key={badge}
+      className="orbit-badge"
+      animate={{
+        y: [0, -8, 0],
+      }}
+      transition={{
+        duration: 4 + i,
+        repeat: Infinity,
+      }}
+      style={{
+        left: x,
+        top: y,
+      }}
+    >
+      {badge}
+    </motion.div>
+  );
+})}
 
-    <div className="relative flex items-center justify-center md:justify-end w-full overflow-hidden px-2 md:pr-24 py-10">
+{services.map((service, index) => {
+  const angle =
+    (-90 + (360 / services.length) * index) *
+    (Math.PI / 180);
 
-      <div
-        className="relative"
-        style={{
-          width: SIZE,
-          height: SIZE,
-          maxWidth: '100%',
-        }}
-      >
+  const x =
+    CX + Math.cos(angle) * radius;
 
-        {/* SVG Rings */}
-        <svg
-          className="absolute inset-0 pointer-events-none"
-          width={SIZE}
-          height={SIZE}
-          viewBox={`0 0 ${SIZE} ${SIZE}`}
-        >
+  const y =
+    CY + Math.sin(angle) * radius;
 
-          <circle
-            cx={CX}
-            cy={CY}
-            r={isMobile ? 92 : 195}
-            fill="none"
-            stroke="rgba(34,211,238,0.25)"
-            strokeWidth="1"
-          />
+  const Icon = service.icon;
 
-          <circle
-            cx={CX}
-            cy={CY}
-            r={isMobile ? 70 : 160}
-            fill="none"
-            stroke="rgba(34,211,238,0.15)"
-            strokeWidth="1"
-          />
-
-          {services.map((service, index) => {
-
-            const angle =
-              (-90 + (360 / services.length) * index) *
-              (Math.PI / 180)
-
-            const ex =
-              CX + Math.cos(angle) * radius
-
-            const ey =
-              CY + Math.sin(angle) * radius
-
-            return (
-
-              <g key={service.title}>
-
-                <line
-                  x1={ex}
-                  y1={ey}
-                  x2={ex}
-                  y2={ey}
-                  stroke="rgba(56,189,248,0.6)"
-                  strokeWidth="1"
-                />
-
-                <circle
-                  cx={ex}
-                  cy={ey}
-                  r="4"
-                  fill="#22d3ee"
-                />
-
-              </g>
-            )
-          })}
-
-        </svg>
-
-        {/* CENTER */}
+  return (
+    <motion.div
+      key={service.title}
+      className="absolute z-20"
+      style={{
+        left: x,
+        top: y,
+        transform:
+          "translate(-50%,-50%)",
+      }}
+      whileHover={{
+        scale: 1.08,
+      }}
+      onClick={() =>
+        setSelected(service)
+      }
+    >
+      <div className="service-card">
         <div
-          className="absolute z-10 rounded-full bg-[#06111f]/90 border border-cyan-400/30 flex flex-col items-center justify-center text-center shadow-[0_0_50px_rgba(0,255,255,0.15)]"
+          className="service-icon"
           style={{
-            width: isMobile ? 115 : 220,
-            height: isMobile ? 115 : 220,
-            left: CX,
-            top: CY,
-            transform: 'translate(-50%,-50%)',
+            background:
+              service.color,
           }}
         >
-
-          <h2 className="text-white text-xl md:text-4xl font-extrabold leading-none">
-            Our
-
-            <span className="block text-cyan-400 mt-1">
-              Services
-            </span>
-
-          </h2>
-
-          <div className="w-10 md:w-16 h-1 bg-cyan-400 rounded-full my-2 md:my-3" />
-
-          <p className="text-gray-300 text-[9px] md:text-sm max-w-[120px] md:max-w-[180px] leading-relaxed px-2">
-            Drop-off, Walk-in, On-site & Pickup.
-          </p>
-
+          <Icon />
         </div>
 
-        {/* SERVICE CARDS */}
-        {services.map((service, index) => {
+        <h3>{service.title}</h3>
 
-          const angle =
-            (-90 + (360 / services.length) * index) *
-            (Math.PI / 180)
-
-          const cx2 =
-            CX + Math.cos(angle) * radius
-
-          const cy2 =
-            CY + Math.sin(angle) * radius
-
-          const Icon = service.icon
-
-          return (
-
-            <div
-              key={service.title}
-              className="absolute z-20 cursor-pointer"
-              style={{
-                left: cx2,
-                top: cy2,
-                transform: 'translate(-50%,-50%)',
-              }}
-              onClick={() => setSelected(service)}
-            >
-
-              <div className="w-[92px] md:w-[170px] bg-[#081120]/90 border border-cyan-400/20 rounded-2xl p-3 md:p-5 backdrop-blur-xl shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-
-                <div
-                  className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-3"
-                  style={{
-                    background: service.color,
-                  }}
-                >
-                  <Icon className="text-white w-4 h-4 md:w-6 md:h-6" />
-                </div>
-
-                <h3 className="text-white text-[10px] md:text-lg font-bold leading-tight">
-                  {service.title}
-                </h3>
-
-              </div>
-
-            </div>
-          )
-        })}
-
+        <p>{service.desc}</p>
       </div>
+    </motion.div>
+  );
+})}
 
-      {/* MODAL */}
-      {selected && (
-
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+</div>
+<AnimatePresence>
+  {selected && (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={() => setSelected(null)}
+    >
+      <motion.div
+        className="relative bg-[#06111f] border border-cyan-400/30 rounded-2xl p-6 w-full max-w-md"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
           onClick={() => setSelected(null)}
         >
+          <FiX />
+        </button>
 
-          <div
-            className="relative bg-[#06111f] border border-cyan-400/30 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-[0_0_60px_rgba(0,255,255,0.2)]"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <h3 className="text-white text-xl font-bold mb-2">
+          {selected.title}
+        </h3>
 
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-white"
-              onClick={() => setSelected(null)}
+        <p className="text-cyan-400 mb-4">
+          {selected.desc}
+        </p>
+
+        <ul className="space-y-2">
+          {selected.details.map((item, i) => (
+            <li
+              key={i}
+              className="text-gray-300 text-sm"
             >
-              <FiX className="w-5 h-5" />
-            </button>
+              • {item}
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
-            <div className="flex items-center gap-4 mb-6">
-
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                style={{
-                  background: selected.color,
-                }}
-              >
-                <selected.icon className="text-white w-7 h-7" />
-              </div>
-
-              <div>
-                <h3 className="text-white text-xl font-bold">
-                  {selected.title}
-                </h3>
-
-                <p className="text-cyan-400 text-sm mt-1">
-                  {selected.desc}
-                </p>
-              </div>
-
-            </div>
-
-            <ul className="space-y-3">
-
-              {selected.details.map((item, i) => (
-
-                <li
-                  key={i}
-                  className="flex items-start gap-3"
-                >
-
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5" />
-
-                  <span className="text-gray-300 text-sm">
-                    {item}
-                  </span>
-
-                </li>
-
-              ))}
-
-            </ul>
-
-          </div>
-
-        </div>
-
-      )}
-
-    </div>
-  )
+</div>
+);
 }
