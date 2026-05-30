@@ -107,23 +107,18 @@ const SERVICES = [
   { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
 ]
 
-// FIX #2: All positions as top/left px on the 560px canvas.
-// translate(-50%,-50%) now correctly centres every badge.
-// Derivation: left = canvas_width * pct; top = canvas_height * pct
-//   "left:13%, top:18%"      → 560*0.13=73,   560*0.18=101
-//   "right:10%, top:12%"     → 560*0.90=504,  560*0.12=67   (right→left: 560-56=504)
-//   "left:8%,  bottom:20%"   → 560*0.08=45,   560*0.80=448  (bottom→top: 560-112=448)
-//   "right:10%, bottom:18%"  → 560*0.90=504,  560*0.82=459  (both converted)
+// Badge positions as top/left px on the DESIGN canvas (640px).
+// All use translate(-50%,-50%) to centre — no right/bottom anchors.
 const BADGES = [
-  { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 73,  top: 101 } },
-  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 504, top:  67 } },
-  { label:'ISO Certified', sub:'Process',      pos:{ left:  45, top: 448 } },
-  { label:'Pan India',     sub:'Service',      pos:{ left: 504, top: 459 } },
+  { label:'10+ Yrs',       sub:'Experience',   pos:{ left:  83, top: 115 } },
+  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 557, top:  77 } },
+  { label:'ISO Certified', sub:'Process',      pos:{ left:  51, top: 510 } },
+  { label:'Pan India',     sub:'Service',      pos:{ left: 557, top: 525 } },
 ]
 
 export default function OrbitalServices() {
   const [selected, setSelected] = useState(null)
-  const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 560)
+  const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 640)
 
   useEffect(() => {
     if (!document.getElementById('orbital-css')) {
@@ -138,49 +133,56 @@ export default function OrbitalServices() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  const DESIGN = 560
-  const MAX    = Math.min(vw, 560)
+  // DESIGN canvas is 640px wide — cards sit fully inside it.
+  // Card width 180px, dist 210: leftmost card edge = 320-210-12-90 = 8px (just inside)
+  // rightmost card edge = 320+210+12+90 = 632px (just inside 640px)
+  const DESIGN = 640
+  const MAX    = Math.min(vw, DESIGN)
   const scale  = MAX / DESIGN
 
-  const CX     = DESIGN / 2
-  const CY     = DESIGN / 2
-  const globeR = 144
+  const CX     = DESIGN / 2   // 320
+  const CY     = DESIGN / 2   // 320
+  const globeR = 148
 
   const rings = [
-    { rx:258, ry:103, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
-    { rx:240, ry: 87, tilt: 14, dash:'4 6', op:0.22, sw:1   },
-    { rx:272, ry:120, tilt: -4, dash:'3 8', op:0.16, sw:1   },
-    { rx:174, ry:174, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
+    { rx:268, ry:107, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
+    { rx:250, ry: 90, tilt: 14, dash:'4 6', op:0.22, sw:1   },
+    { rx:282, ry:124, tilt: -4, dash:'3 8', op:0.16, sw:1   },
+    { rx:180, ry:180, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
   ]
 
-  const dist = 244
+  // dist=210, cw=180 → card occupies [CX±dist±cw/2] = [320±300] = [20..620] — fits in 640px
+  const dist = 210
+  const cw   = 180
+  const iconBox = 50
+
   const cardPos = {
-    top:    { x: CX,             y: CY - dist     },
-    left:   { x: CX - dist - 12, y: CY            },
-    right:  { x: CX + dist + 12, y: CY            },
-    bottom: { x: CX,             y: CY + dist     },
+    top:    { x: CX,          y: CY - dist      },
+    left:   { x: CX - dist - 10, y: CY          },
+    right:  { x: CX + dist + 10, y: CY          },
+    bottom: { x: CX,          y: CY + dist      },
   }
 
-  const cw     = 192
-  const iconSz = 54
-  const iconBox= 54
-
   return (
-    <div className="relative flex items-center justify-center w-full overflow-hidden py-4 select-none">
+    <div className="relative flex items-center justify-center w-full py-4 select-none"
+      style={{ overflowX:'hidden' }}>
+
+      {/*
+        Outer wrapper rendered at DESIGN=640px, then scaled to fit screen.
+        transformOrigin 'top center' → only bottom grows extra space.
+        marginBottom collapses that extra space precisely.
+      */}
       <div style={{
         width: DESIGN,
         height: DESIGN,
         transform: `scale(${scale})`,
         transformOrigin: 'top center',
-        // FIX #1: With transformOrigin 'top center', scaling only grows/shrinks
-        // the bottom edge. The extra blank space below equals DESIGN*(1-scale).
-        // Pull subsequent content up by that amount to collapse the gap.
         marginBottom: -(DESIGN * (1 - scale)),
         position: 'relative',
         flexShrink: 0,
       }}>
 
-        {/* SVG: rings + connectors + anchors */}
+        {/* SVG: background glow + orbit rings + connector lines + anchor dots */}
         <svg className="absolute inset-0 pointer-events-none"
           width={DESIGN} height={DESIGN} viewBox={`0 0 ${DESIGN} ${DESIGN}`} overflow="visible">
           <defs>
@@ -189,7 +191,7 @@ export default function OrbitalServices() {
               <stop offset="100%" stopColor="rgba(96,165,250,0)"/>
             </radialGradient>
           </defs>
-          <circle cx={CX} cy={CY} r={globeR+74} fill="url(#glowBg)"/>
+          <circle cx={CX} cy={CY} r={globeR+80} fill="url(#glowBg)"/>
           {rings.map((r,i) => (
             <ellipse key={i} cx={CX} cy={CY} rx={r.rx} ry={r.ry}
               fill="none" stroke={`rgba(96,165,250,${r.op})`}
@@ -209,13 +211,14 @@ export default function OrbitalServices() {
         </svg>
 
         {/* Rotating Earth Globe */}
-        <div className="absolute z-10 rounded-full"
+        <div className="absolute z-10"
           style={{
             width: globeR*2, height: globeR*2,
             left: CX, top: CY,
             transform: 'translate(-50%,-50%)',
             animation: 'globeGlow 3.5s ease-in-out infinite',
-            borderRadius: '50%', overflow: 'hidden',
+            borderRadius: '50%',
+            overflow: 'hidden',
           }}>
           <RotatingEarth size={globeR*2}/>
           <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:20, pointerEvents:'none' }}>
@@ -239,33 +242,33 @@ export default function OrbitalServices() {
               <div style={{
                 background:'#fff',
                 border:'1px solid rgba(59,130,246,0.15)',
-                borderRadius:16,
-                padding:'13px 15px',
+                borderRadius:14,
+                padding:'11px 13px',
                 boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
-                display:'flex', alignItems:'center', gap:11,
+                display:'flex', alignItems:'center', gap:10,
                 transition:'transform 0.2s',
               }}
                 onMouseEnter={e => e.currentTarget.style.transform='scale(1.05)'}
                 onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
-                <div style={{ background:s.iconBg, borderRadius:12, width:iconBox, height:iconBox, minWidth:iconBox, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 16px ${s.color}55` }}>
-                  <Icon style={{ color:'#fff', width:iconSz*0.48, height:iconSz*0.48 }}/>
+                <div style={{ background:s.iconBg, borderRadius:10, width:iconBox, height:iconBox, minWidth:iconBox, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
+                  <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
-                <div>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:'0.88rem', lineHeight:1.25 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize:'0.66rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
+                <div style={{ minWidth:0 }}>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:'0.80rem', lineHeight:1.25 }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize:'0.62rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
           )
         })}
 
-        {/* Floating Badges — FIX #2 applied: top/left px, single translate(-50%,-50%) works for all */}
+        {/* Floating Badges — all top/left px, translate(-50%,-50%) centres all correctly */}
         {BADGES.map(b => (
           <div key={b.label} className="absolute z-30 pointer-events-none"
             style={{ left: b.pos.left, top: b.pos.top, transform:'translate(-50%,-50%)' }}>
-            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'6px 13px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite' }}>
-              <p style={{ color:'#2563eb', fontWeight:700, fontSize:'0.72rem', lineHeight:1.3 }}>{b.label}</p>
-              <p style={{ color:'#64748b', fontSize:'0.60rem', lineHeight:1.3 }}>{b.sub}</p>
+            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 11px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
+              <p style={{ color:'#2563eb', fontWeight:700, fontSize:'0.68rem', lineHeight:1.3 }}>{b.label}</p>
+              <p style={{ color:'#64748b', fontSize:'0.58rem', lineHeight:1.3 }}>{b.sub}</p>
             </div>
           </div>
         ))}
