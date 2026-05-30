@@ -2,14 +2,8 @@
 
 .globe-border {
   border: 1px solid rgba(34, 211, 238, 0.35);
-
   background:
-    radial-gradient(
-      circle at center,
-      rgba(3, 15, 30, 0.95),
-      rgba(1, 7, 18, 1)
-    );
-
+    radial-gradient(circle at center, rgba(3, 15, 30, 0.95), rgba(1, 7, 18, 1));
   box-shadow:
     0 0 25px rgba(34, 211, 238, 0.25),
     0 0 60px rgba(34, 211, 238, 0.15),
@@ -23,20 +17,50 @@
   filter: blur(10px);
 }
 
+.globe-planet-shadow {
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 18%),
+    radial-gradient(circle at 30% 30%, rgba(0, 200, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 55% 55%, rgba(2, 6, 23, 0.1), rgba(2, 6, 23, 0.85) 68%);
+  mix-blend-mode: screen;
+}
+
 /* Core Glow */
 
 .globe-core {
   background:
-    radial-gradient(
-      circle,
-      rgba(34,211,238,0.18),
-      transparent 70%
-    );
+    radial-gradient(circle, rgba(34, 211, 238, 0.18), transparent 70%);
 }
 
 .globe-map {
   filter: drop-shadow(0 0 16px rgba(0, 200, 255, 0.18));
   opacity: 0.9;
+}
+
+.globe-latlong {
+  background:
+    repeating-radial-gradient(circle at center, transparent 0 18px, rgba(0, 200, 255, 0.12) 18px 19px),
+    repeating-linear-gradient(0deg, transparent 0 18px, rgba(0, 102, 255, 0.12) 18px 19px);
+  opacity: 0.55;
+  filter: blur(0.2px);
+  mask-image: radial-gradient(circle at center, black 0 61%, transparent 72%);
+}
+
+.globe-latlong-alt {
+  background:
+    repeating-radial-gradient(circle at center, transparent 0 24px, rgba(255, 255, 255, 0.06) 24px 25px),
+    repeating-linear-gradient(90deg, transparent 0 24px, rgba(0, 200, 255, 0.08) 24px 25px);
+  opacity: 0.35;
+  mask-image: radial-gradient(circle at center, black 0 60%, transparent 70%);
+}
+
+.globe-glint {
+  width: 42%;
+  height: 42%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), rgba(0, 200, 255, 0.05) 35%, transparent 72%);
+  filter: blur(12px);
+  transform: translate(-18%, -18%);
 }
 
 /* Grid Effect */
@@ -47,25 +71,17 @@
       0deg,
       transparent,
       transparent 12px,
-      rgba(34,211,238,0.08) 13px
+      rgba(34, 211, 238, 0.08) 13px
     ),
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent 12px,
-      rgba(34,211,238,0.08) 13px
+      rgba(34, 211, 238, 0.08) 13px
     );
-
   border-radius: 999px;
 }
 
-/* Text Glow */
-
-.globe-border h2 {
-  text-shadow:
-    0 0 10px rgba(34,211,238,0.6),
-    0 0 20px rgba(34,211,238,0.3);
-}
 /* Floating Star Background */
 
 .orbit-star {
@@ -73,8 +89,8 @@
   border-radius: 999px;
   background: #22d3ee;
   box-shadow:
-    0 0 10px rgba(34,211,238,.8),
-    0 0 20px rgba(34,211,238,.4);
+    0 0 10px rgba(34, 211, 238, 0.8),
+    0 0 20px rgba(34, 211, 238, 0.4);
 }
 
 /* Particle Layer */
@@ -90,14 +106,8 @@
 .orbit-background-glow {
   position: absolute;
   inset: 0;
-
   background:
-    radial-gradient(
-      circle at center,
-      rgba(34,211,238,.08),
-      transparent 65%
-    );
-
+    radial-gradient(circle at center, rgba(34, 211, 238, 0.08), transparent 65%);
   filter: blur(30px);
 }
 
@@ -115,51 +125,52 @@
 }
 
 .service-card {
-  width: 210px;
-
+  width: 230px;
   padding: 20px;
-
   border-radius: 24px;
-
   backdrop-filter: blur(20px);
-
   background:
-    linear-gradient(
-      135deg,
-      rgba(8,17,32,.95),
-      rgba(18,40,80,.55)
-    );
-
-  border:
-    1px solid rgba(34,211,238,.15);
-
+    linear-gradient(135deg, rgba(8, 17, 32, 0.95), rgba(18, 40, 80, 0.55));
+  border: 1px solid rgba(34, 211, 238, 0.15);
   cursor: pointer;
-
-  transition: .35s;
-
-  box-shadow:
-    0 0 20px rgba(34,211,238,.08);
+  transition: 0.35s;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.08);
 }
 
 .service-card:hover {
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.25);
+}
+
+.service-node {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0;
   box-shadow:
-    0 0 40px rgba(34,211,238,.25);
+    0 0 20px rgba(34, 211, 238, 0.16),
+    inset 0 0 18px rgba(255, 255, 255, 0.08);
+}
+
+.service-node .service-icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 0;
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.18);
 }
 
 .service-icon {
   width: 55px;
   height: 55px;
-
   border-radius: 16px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: white;
-
   font-size: 24px;
-
   margin-bottom: 15px;
 }
 
@@ -176,63 +187,48 @@
 
 .orbit-badge {
   position: absolute;
-
-  transform:
-    translate(-50%, -50%);
-
-  padding:
-    10px 18px;
-
+  transform: translate(-50%, -50%);
+  padding: 10px 18px;
   border-radius: 999px;
-
-  background:
-    rgba(8,17,32,.9);
-
-  border:
-    1px solid rgba(34,211,238,.2);
-
-  color:
-    #22d3ee;
-
-  backdrop-filter:
-    blur(20px);
-
-  font-size:
-    13px;
+  background: rgba(8, 17, 32, 0.9);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: #22d3ee;
+  backdrop-filter: blur(20px);
+  font-size: 13px;
 }
 
-.hero-radial-glow{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-
-  background:
-  radial-gradient(
-    circle at 70% 40%,
-    rgba(0,255,255,.12),
-    transparent 45%
-  );
-
-  filter:blur(80px);
+.hero-radial-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 70% 40%, rgba(0, 255, 255, 0.12), transparent 45%);
+  filter: blur(80px);
 }
 
-.hero-grid{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   background-image:
-  linear-gradient(
-    rgba(255,255,255,.03) 1px,
-    transparent 1px
-  ),
-  linear-gradient(
-    90deg,
-    rgba(255,255,255,.03) 1px,
-    transparent 1px
-  );
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.15;
+}
 
-  background-size:60px 60px;
+@media (max-width: 767px) {
+  .service-node {
+    width: 64px;
+    height: 64px;
+  }
 
-  opacity:.15;
+  .service-node .service-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .orbit-badge {
+    font-size: 11px;
+    padding: 8px 14px;
+  }
 }

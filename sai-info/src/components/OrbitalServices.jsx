@@ -242,8 +242,7 @@ return (
         <div
           className="service-icon"
           style={{
-            background:
-              service.color,
+            background: service.color,
           }}
         >
           <Icon />
