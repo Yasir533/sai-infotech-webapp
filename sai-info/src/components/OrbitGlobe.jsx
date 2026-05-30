@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function OrbitGlobe({ isMobile = false }) {
   return (
     <div
-      className="absolute z-20"
+      className="relative z-20"
       style={{
         width: isMobile ? 140 : 280,
         height: isMobile ? 140 : 280,
