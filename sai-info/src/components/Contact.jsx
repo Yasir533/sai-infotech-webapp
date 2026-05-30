@@ -144,7 +144,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(11,116,209,0.06),transparent_45%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(11,116,209,0.04),transparent_45%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}
         <motion.div
@@ -174,7 +174,7 @@ export default function Contact() {
             {contactInfo.map((info, i) => (
               <div
                 key={i}
-                className="bg-white border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_40px_rgba(15,23,42,0.06)]"
+                className="bg-[#fbfcfe] border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)]"
               >
                 <div
                   className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}
@@ -253,7 +253,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_18px_50px_rgba(15,23,42,0.07)]"
+            className="bg-[#fbfcfe] border border-slate-200 rounded-3xl p-8 shadow-[0_18px_50px_rgba(15,23,42,0.06)]"
           >
             {submitted ? (
               <div className="text-center py-10">
@@ -279,7 +279,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Full Name"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Email */}
@@ -290,7 +290,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Email Address"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Phone */}
@@ -301,7 +301,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Phone Number"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Services (multi-select dropdown) */}
@@ -311,7 +311,7 @@ export default function Contact() {
                   <button
                     type="button"
                     onClick={() => setServicesOpen((s) => !s)}
-                    className="w-full text-left rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm flex items-center justify-between text-slate-700"
+                    className="w-full text-left rounded-2xl border border-slate-200 bg-[#f7f9fc] px-4 py-3 text-sm flex items-center justify-between text-slate-700"
                   >
                     <div className="flex flex-wrap gap-2">
                       {form.services.length === 0 ? (
@@ -338,7 +338,7 @@ export default function Contact() {
                   </button>
 
                   {servicesOpen && (
-                    <div className="absolute z-30 mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+                    <div className="absolute z-30 mt-2 w-full rounded-xl border border-slate-200 bg-[#fbfcfe] p-3 shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
                       <div className="max-h-56 overflow-auto">
                         {SERVICE_OPTIONS.map((service, index) => {
                           const checked = form.services.includes(service)
@@ -367,7 +367,7 @@ export default function Contact() {
                   rows="5"
                   placeholder="Your Message"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Button */}

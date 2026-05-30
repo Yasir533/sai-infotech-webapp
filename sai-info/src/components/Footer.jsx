@@ -32,10 +32,10 @@ export default function Footer() {
         position: 'relative',
         borderTop: '1px solid rgba(148,163,184,0.2)',
         overflow: 'hidden',
-        background: 'linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%)',
+        background: 'linear-gradient(180deg, #fbfcfe 0%, #f1f4f8 100%)',
       }}
     >
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(11,116,209,0.04), transparent 45%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(11,116,209,0.03), transparent 45%)' }} />
 
       <div style={{ position: 'relative', maxWidth: '1280px', margin: '0 auto', padding: '64px 24px 32px' }}>
 

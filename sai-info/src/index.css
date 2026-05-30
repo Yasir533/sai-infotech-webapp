@@ -16,14 +16,14 @@ html {
 
 /* ── Theme Variables ─────────────────────────────────────── */
 :root {
-  --bg-color: #f4f7fb;
-  --text-color: #0f172a;
-  --card-bg: rgba(255, 255, 255, 0.82);
-  --navbar-bg: rgba(248, 250, 252, 0.82);
-  --gradient-start: #0f5fff;
-  --gradient-end: #0b74d1;
-  --scrollbar-bg: #dbe4ef;
-  --scrollbar-thumb: #7997b8;
+  --bg-color: #f7f8fb;
+  --text-color: #172033;
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --navbar-bg: rgba(250, 251, 253, 0.84);
+  --gradient-start: #0d66d0;
+  --gradient-end: #2a7bcb;
+  --scrollbar-bg: #d9e1ea;
+  --scrollbar-thumb: #8b9bb0;
 }
 
 .dark {
@@ -70,10 +70,10 @@ h6 {
 /* ── Animated gradient background ───────────────────────── */
 .gradient-bg {
   background:
-    radial-gradient(circle at 18% 18%, rgba(29, 124, 255, 0.14), transparent 25%),
-    radial-gradient(circle at 84% 10%, rgba(0, 183, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.08), transparent 30%),
-    linear-gradient(180deg, #f7f9fc 0%, #edf3f9 100%);
+    radial-gradient(circle at 18% 18%, rgba(29, 124, 255, 0.08), transparent 25%),
+    radial-gradient(circle at 84% 10%, rgba(0, 183, 255, 0.07), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.05), transparent 30%),
+    linear-gradient(180deg, #fbfcfe 0%, #eef3f8 100%);
 }
 
 /* Light mode override */
@@ -84,15 +84,15 @@ html:not(.dark) .gradient-bg {
 
 /* ── Glass card ──────────────────────────────────────────── */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.14);
 }
 
 html:not(.dark) .glass {
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 /* ── Glow effects ────────────────────────────────────────── */
@@ -283,10 +283,10 @@ html:not(.dark) .contact-input:focus {
   z-index: -3;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 20%, rgba(29, 124, 255, 0.08), transparent 22%),
-    radial-gradient(circle at 80% 15%, rgba(0, 183, 255, 0.08), transparent 24%),
-    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.04), transparent 28%),
-    linear-gradient(180deg, #f7f9fc 0%, #edf3f9 100%);
+    radial-gradient(circle at 15% 20%, rgba(29, 124, 255, 0.05), transparent 22%),
+    radial-gradient(circle at 80% 15%, rgba(0, 183, 255, 0.05), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.03), transparent 28%),
+    linear-gradient(180deg, #fbfcfe 0%, #eef3f8 100%);
 }
 
 /* Dark mode overlay — deep tint so light text pops over the video */
@@ -296,7 +296,7 @@ html:not(.dark) .contact-input:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.22), rgba(237, 243, 249, 0.72));
+  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.15), rgba(237, 243, 249, 0.58));
   z-index: -2;
   pointer-events: none;
   transition: background 0.3s ease;
@@ -307,7 +307,7 @@ html:not(.dark) .contact-input:focus {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.22;
+  opacity: 0.16;
   background-image:
     radial-gradient(rgba(15,23,42,0.28) 1px, transparent 1px),
     radial-gradient(rgba(11,116,209,0.30) 1px, transparent 1px);
