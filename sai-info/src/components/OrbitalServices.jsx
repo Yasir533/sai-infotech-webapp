@@ -238,11 +238,7 @@ return (
         setSelected(service)
       }
     >
-      <div
-        className="service-card service-node"
-        aria-label={service.title}
-        title={service.title}
-      >
+      <div className="service-card">
         <div
           className="service-icon"
           style={{
@@ -251,6 +247,10 @@ return (
         >
           <Icon />
         </div>
+
+        <h3>{service.title}</h3>
+
+        <p>{service.desc}</p>
       </div>
     </motion.div>
   );

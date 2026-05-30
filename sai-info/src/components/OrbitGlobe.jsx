@@ -82,8 +82,40 @@ export default function OrbitGlobe({ isMobile = false }) {
           aria-hidden="true"
         />
 
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="globe-glint" />
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+          <motion.h2
+            animate={{ opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="text-white font-extrabold tracking-wide"
+            style={{ fontSize: isMobile ? "18px" : "34px" }}
+          >
+            OUR
+          </motion.h2>
+
+          <motion.h2
+            animate={{ opacity: [1, 0.8, 1] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="text-cyan-400 font-extrabold tracking-wide"
+            style={{ fontSize: isMobile ? "20px" : "38px" }}
+          >
+            SERVICES
+          </motion.h2>
+
+          <div className="w-16 h-[2px] bg-cyan-400 rounded-full mt-2 mb-3" />
+
+          <p
+            className="text-gray-300"
+            style={{ fontSize: isMobile ? "10px" : "13px" }}
+          >
+            Smart IT Solutions
+          </p>
+
+          <p
+            className="text-gray-400 mt-1"
+            style={{ fontSize: isMobile ? "8px" : "11px" }}
+          >
+            Walk-In • On-Site • Pickup
+          </p>
         </div>
       </div>
     </div>
