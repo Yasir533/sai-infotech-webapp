@@ -95,7 +95,7 @@ export default function Navbar() {
             <div className="leading-none">
               <div className="text-slate-900 text-base sm:text-lg font-extrabold tracking-[0.16em]">
                 SAI
-                <span className="text-[#2f6fbf]"> INFOTECH</span>
+                <span className="text-[#345f9a]"> INFOTECH</span>
               </div>
               <div className="text-[10px] sm:text-[11px] text-slate-500 tracking-[0.32em] uppercase mt-1">
                 Technology Services
@@ -115,7 +115,7 @@ export default function Navbar() {
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   active === link.href
-                      ? 'text-white bg-[#2f6fbf] shadow-[0_0_18px_rgba(47,111,191,0.18)]'
+                      ? 'text-white bg-[#345f9a] shadow-[0_0_16px_rgba(52,95,154,0.16)]'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 }`}
               >
@@ -127,7 +127,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#2f6fbf] hover:bg-[#255c9d] shadow-[0_8px_20px_rgba(47,111,191,0.18)] transition-all duration-300"
+              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#345f9a] hover:bg-[#2f568d] shadow-[0_8px_18px_rgba(52,95,154,0.16)] transition-all duration-300"
             >
               <span>Get Service</span>
             </a>
@@ -175,7 +175,7 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`px-4 py-3 rounded-xl font-medium transition-all ${
                     active === link.href
-                        ? 'text-[#2f6fbf] bg-[#2f6fbf]/10'
+                        ? 'text-[#345f9a] bg-[#345f9a]/10'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                   }`}
                 >
@@ -187,7 +187,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#2f6fbf] hover:bg-[#255c9d] shadow-[0_8px_20px_rgba(47,111,191,0.18)]"
+                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#345f9a] hover:bg-[#2f568d] shadow-[0_8px_18px_rgba(52,95,154,0.16)]"
               >
                 <span>Get Service</span>
               </a>
