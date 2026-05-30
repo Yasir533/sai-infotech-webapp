@@ -3,7 +3,7 @@
 .globe-border {
   border: 1px solid rgba(11, 116, 209, 0.18);
   background:
-    radial-gradient(circle at center, rgba(255, 255, 255, 0.98), rgba(241, 246, 251, 1));
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.99), rgba(244, 248, 252, 1));
   box-shadow:
     0 16px 40px rgba(15, 23, 42, 0.08),
     0 0 40px rgba(11, 116, 209, 0.08),
@@ -12,15 +12,15 @@
 
 .globe-halo {
   background:
-    radial-gradient(circle at 50% 50%, rgba(11, 116, 209, 0.16), transparent 55%),
-    radial-gradient(circle at 30% 30%, rgba(0, 183, 255, 0.08), transparent 35%);
-  filter: blur(12px);
+    radial-gradient(circle at 50% 50%, rgba(11, 116, 209, 0.11), transparent 58%),
+    radial-gradient(circle at 30% 30%, rgba(0, 183, 255, 0.05), transparent 35%);
+  filter: blur(14px);
 }
 
 .globe-planet-shadow {
   background:
     radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.9), transparent 18%),
-    radial-gradient(circle at 30% 30%, rgba(11, 116, 209, 0.12), transparent 28%),
+    radial-gradient(circle at 30% 30%, rgba(11, 116, 209, 0.08), transparent 28%),
     radial-gradient(circle at 55% 55%, rgba(203, 213, 225, 0.08), rgba(226, 232, 240, 0.9) 68%);
   mix-blend-mode: normal;
 }
@@ -29,11 +29,11 @@
 
 .globe-core {
   background:
-    radial-gradient(circle, rgba(11, 116, 209, 0.12), transparent 70%);
+    radial-gradient(circle, rgba(11, 116, 209, 0.08), transparent 72%);
 }
 
 .globe-map {
-  filter: drop-shadow(0 0 12px rgba(11, 116, 209, 0.16));
+  filter: drop-shadow(0 0 10px rgba(11, 116, 209, 0.12));
   opacity: 0.88;
 }
 
@@ -107,8 +107,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at center, rgba(11, 116, 209, 0.05), transparent 65%);
-  filter: blur(34px);
+    radial-gradient(circle at center, rgba(11, 116, 209, 0.03), transparent 68%);
+  filter: blur(42px);
 }
 
 .orbit-ring {
@@ -130,15 +130,15 @@
   border-radius: 24px;
   backdrop-filter: blur(20px);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(245, 248, 252, 0.92));
-  border: 1px solid rgba(148, 163, 184, 0.2);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 253, 0.95));
+  border: 1px solid rgba(148, 163, 184, 0.16);
   cursor: pointer;
   transition: 0.35s;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
 }
 
 .service-card:hover {
-  box-shadow: 0 16px 36px rgba(11, 116, 209, 0.14);
+  box-shadow: 0 16px 36px rgba(11, 116, 209, 0.1);
 }
 
 .service-node {
