@@ -25,14 +25,14 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.05em]"
+                className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.04em]"
               >
                 <span className="text-white">SAI </span>
                 <span
                   className="text-transparent bg-clip-text"
                   style={{
                     backgroundImage:
-                      'linear-gradient(135deg, #00c8ff, #0066ff)',
+                      'linear-gradient(135deg, #0b74d1, #1d7cff)',
                   }}
                 >
                   INFOTECH
@@ -56,7 +56,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-xl font-semibold mb-4"
               >
-                <span className="text-cyan-300 tracking-wide uppercase">
+                <span className="text-[#0b74d1] dark:text-cyan-300 tracking-wide uppercase">
                   PLC &amp; Automation Systems
                 </span>
               </motion.div>
@@ -66,7 +66,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
+                className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
               >
                 Premium IT services in Bangalore since 2019. We deliver IT / ITeS,
                 security, cloud, automation, and managed technology services for
@@ -83,7 +83,7 @@ export default function Hero() {
 
                 <a
                   href="#about"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
+                  className="px-7 py-3 rounded-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300"
                   style={{
                     backdropFilter: 'blur(10px)',
                   }}
@@ -94,7 +94,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_24px_rgba(0,102,255,0.35)] transition-all duration-300"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0b74d1] hover:bg-[#095fbd] shadow-[0_0_24px_rgba(11,116,209,0.24)] transition-all duration-300"
                   style={{
                     backdropFilter: 'blur(10px)',
                   }}
