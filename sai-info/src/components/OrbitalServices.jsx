@@ -140,12 +140,6 @@ function EarthStrip({ W, H }) {
           stroke="rgba(255,255,255,0.14)" strokeWidth="0.6"/>
       ))}
 
-      {/* Ice caps at poles */}
-      <rect x={0} y={0} width={W} height={H * 0.055}
-        fill="rgba(220,235,255,0.55)"/>
-      <rect x={0} y={H * 0.945} width={W} height={H * 0.055}
-        fill="rgba(220,235,255,0.45)"/>
-
       {/* Subtle cloud wisps */}
       <ellipse cx={W*0.22} cy={H*0.28} rx={W*0.10} ry={H*0.025}
         fill="rgba(255,255,255,0.08)" transform={`rotate(-8,${W*0.22},${H*0.28})`}/>
@@ -182,6 +176,13 @@ function RotatingEarth({ size }) {
       <div style={{
         position:'absolute', inset:0, borderRadius:'50%',
         background:'radial-gradient(ellipse at 32% 35%, rgba(255,255,255,0.13) 0%, transparent 55%), radial-gradient(ellipse at 78% 60%, rgba(0,0,0,0.45) 0%, transparent 55%)',
+        pointerEvents:'none',
+      }}/>
+
+      {/* Polar darkening — hides stretched distortion at top & bottom */}
+      <div style={{
+        position:'absolute', inset:0, borderRadius:'50%',
+        background:'linear-gradient(to bottom, rgba(5,20,50,0.85) 0%, rgba(5,20,50,0.45) 15%, transparent 30%, transparent 70%, rgba(5,20,50,0.45) 85%, rgba(5,20,50,0.85) 100%)',
         pointerEvents:'none',
       }}/>
 
