@@ -1,0 +1,90 @@
+/* Globe Border */
+
+.globe-border {
+  border: 1px solid rgba(34, 211, 238, 0.35);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(3, 15, 30, 0.95),
+      rgba(1, 7, 18, 1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(34, 211, 238, 0.25),
+    0 0 60px rgba(34, 211, 238, 0.15),
+    inset 0 0 40px rgba(34, 211, 238, 0.08);
+}
+
+/* Core Glow */
+
+.globe-core {
+  background:
+    radial-gradient(
+      circle,
+      rgba(34,211,238,0.12),
+      transparent 70%
+    );
+}
+
+/* Grid Effect */
+
+.globe-grid {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 12px,
+      rgba(34,211,238,0.08) 13px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 12px,
+      rgba(34,211,238,0.08) 13px
+    );
+
+  border-radius: 999px;
+}
+
+/* Text Glow */
+
+.globe-border h2 {
+  text-shadow:
+    0 0 10px rgba(34,211,238,0.6),
+    0 0 20px rgba(34,211,238,0.3);
+}
+/* Floating Star Background */
+
+.orbit-star {
+  position: absolute;
+  border-radius: 999px;
+  background: #22d3ee;
+  box-shadow:
+    0 0 10px rgba(34,211,238,.8),
+    0 0 20px rgba(34,211,238,.4);
+}
+
+/* Particle Layer */
+
+.particle-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+/* Soft Background Glow */
+
+.orbit-background-glow {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(34,211,238,.08),
+      transparent 65%
+    );
+
+  filter: blur(30px);
+}
