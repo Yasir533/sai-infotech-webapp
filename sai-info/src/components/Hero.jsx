@@ -50,12 +50,14 @@ export default function Hero() {
         id="home"
         className="relative min-h-screen flex items-center overflow-hidden pt-24 lg:pt-28"
       >
+        <div className="hero-radial-glow" />
+        <div className="hero-grid" />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
 
-          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
             {/* LEFT CONTENT */}
-            <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-5/12 flex-shrink-0">
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-[38%] flex-shrink-0">
 
               {/* MAIN TITLE */}
               <motion.h1
@@ -157,11 +159,21 @@ export default function Hero() {
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-7/12 flex-shrink-0 flex items-center justify-center"
+              className="w-full lg:w-[62%] flex-shrink-0 flex items-center justify-center"
             >
-              <div className="w-full overflow-visible flex items-center justify-center">
-                <OrbitalServices />
-              </div>
+              <div
+                className="
+                w-full
+                flex
+                items-center
+                justify-center
+                overflow-visible
+                scale-90
+                xl:scale-100
+                "
+              >
+  <OrbitalServices />
+</div>
             </motion.div>
 
           </div>
