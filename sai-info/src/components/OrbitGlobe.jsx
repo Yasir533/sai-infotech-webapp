@@ -82,12 +82,12 @@ export default function OrbitGlobe({ isMobile = false }) {
           aria-hidden="true"
         />
 
-        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 gap-1">
           <motion.h2
             animate={{ opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 3, repeat: Infinity }}
-            className="text-white font-extrabold tracking-wide"
-            style={{ fontSize: isMobile ? "18px" : "34px" }}
+            className="text-white font-extrabold tracking-wide leading-none"
+            style={{ fontSize: isMobile ? "15px" : "26px" }}
           >
             OUR
           </motion.h2>
@@ -95,24 +95,24 @@ export default function OrbitGlobe({ isMobile = false }) {
           <motion.h2
             animate={{ opacity: [1, 0.8, 1] }}
             transition={{ duration: 3, repeat: Infinity }}
-            className="text-cyan-400 font-extrabold tracking-wide"
-            style={{ fontSize: isMobile ? "20px" : "38px" }}
+            className="text-cyan-400 font-extrabold tracking-wide leading-none"
+            style={{ fontSize: isMobile ? "16px" : "28px" }}
           >
             SERVICES
           </motion.h2>
 
-          <div className="w-16 h-[2px] bg-cyan-400 rounded-full mt-2 mb-3" />
+          <div className="w-14 h-[2px] bg-cyan-400 rounded-full my-2" />
 
           <p
-            className="text-gray-300"
-            style={{ fontSize: isMobile ? "10px" : "13px" }}
+            className="text-gray-300 leading-tight"
+            style={{ fontSize: isMobile ? "8px" : "11px" }}
           >
             Smart IT Solutions
           </p>
 
           <p
-            className="text-gray-400 mt-1"
-            style={{ fontSize: isMobile ? "8px" : "11px" }}
+            className="text-gray-400 leading-tight"
+            style={{ fontSize: isMobile ? "7px" : "10px" }}
           >
             Walk-In • On-Site • Pickup
           </p>
