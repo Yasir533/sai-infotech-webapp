@@ -1,13 +1,208 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FiCpu, FiTool, FiCloud, FiShield, FiX } from 'react-icons/fi'
 
+/* ─────────────────────────────────────────────────────────────
+   CSS — pure CSS rotation, zero JS animation → smooth on 4G
+───────────────────────────────────────────────────────────── */
+const CSS = `
+@keyframes earthRotate {
+  from { transform: translateX(0) }
+  to   { transform: translateX(-50%) }
+}
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 2px 12px rgba(59,130,246,0.14); }
+  50%      { box-shadow: 0 2px 20px rgba(59,130,246,0.32); }
+}
+@keyframes globeGlow {
+  0%,100% { box-shadow: 0 0 44px 10px rgba(96,165,250,0.24), 0 0 0 3px rgba(96,165,250,0.32); }
+  50%      { box-shadow: 0 0 80px 22px rgba(96,165,250,0.38), 0 0 0 3px rgba(96,165,250,0.50); }
+}
+.earth-strip {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  animation: earthRotate 32s linear infinite;
+  will-change: transform;
+}
+.card-hover {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.card-hover:hover {
+  transform: translate(-50%,-50%) scale(1.06);
+}
+`
+
+/* ─────────────────────────────────────────────────────────────
+   EarthStrip — one full 360° equirectangular map as SVG
+   We render it twice side-by-side so the scroll loops seamlessly.
+   The globe container clips it to a circle.
+───────────────────────────────────────────────────────────── */
+function EarthStrip({ W, H }) {
+  // W = globe diameter, H = globe diameter
+  // We draw an equirectangular map: x = lon mapped to [0,W], y = lat mapped to [0,H]
+  // lon -180→180  maps to x 0→W
+  // lat  90→-90  maps to y 0→H
+
+  const ll = (lat, lon) => ({
+    x: ((lon + 180) / 360) * W,
+    y: ((90 - lat) / 180) * H,
+  })
+
+  const poly = (pts) => pts.map(([la, lo]) => { const p = ll(la, lo); return `${p.x.toFixed(1)},${p.y.toFixed(1)}` }).join(' ')
+
+  // Continent polygons in lat/lon
+  const continents = [
+    // EUROPE (western + central)
+    [[71,28],[70,18],[65,14],[58,5],[55,8],[52,4],[50,2],[48,2],[43,-9],[36,5],[36,14],[38,16],[42,20],[44,28],[46,30],[48,38],[54,38],[60,30],[65,28],[68,22],[71,28]],
+    // SCANDINAVIA
+    [[58,5],[62,5],[65,14],[70,18],[71,28],[69,30],[65,28],[60,25],[58,28],[55,22],[54,8],[58,5]],
+    // AFRICA
+    [[37,10],[36,14],[30,32],[22,36],[10,42],[4,42],[-4,40],[-18,37],[-26,33],[-34,26],[-34,18],[-28,16],[-18,13],[-10,15],[4,-5],[-5,-13],[5,-5],[15,0],[20,17],[30,32],[37,10]],
+    // ASIA MAIN
+    [[10,70],[15,80],[22,88],[28,96],[22,110],[10,110],[10,105],[0,103],[-5,105],[-8,120],[-8,140],[10,140],[20,121],[25,122],[35,121],[38,121],[42,130],[50,142],[55,135],[60,142],[65,142],[70,130],[72,110],[70,82],[65,60],[55,52],[45,40],[38,26],[38,36],[34,42],[25,55],[15,52],[10,65],[10,70]],
+    // INDIA peninsula
+    [[23,68],[25,74],[20,73],[15,74],[10,78],[8,77],[8,80],[10,80],[8,77],[8,68],[10,66],[15,73],[18,73],[22,70],[23,68]],
+    // N AMERICA
+    [[15,-88],[20,-88],[25,-80],[35,-76],[45,-66],[55,-60],[65,-64],[70,-80],[72,-90],[70,-130],[58,-136],[50,-125],[42,-124],[38,-122],[35,-120],[30,-116],[22,-105],[17,-100],[15,-88]],
+    // CENTRAL AMERICA
+    [[15,-88],[17,-90],[10,-84],[8,-77],[10,-76],[15,-88]],
+    // S AMERICA
+    [[10,-63],[5,-53],[0,-50],[-5,-35],[-15,-39],[-25,-48],[- 40,-62],[-55,-65],[-52,-70],[-38,-62],[-25,-44],[-5,-35],[10,-63]],
+    // AUSTRALIA
+    [[-15,130],[-14,136],[-12,136],[-12,142],[-18,148],[-25,152],[-38,146],[-38,140],[-30,114],[-22,113],[-18,122],[-15,130]],
+    // GREENLAND
+    [[60,-45],[65,-52],[70,-52],[76,-68],[82,-40],[78,-18],[72,-22],[65,-36],[60,-45]],
+    // JAPAN
+    [[32,130],[34,135],[36,138],[35,140],[34,138],[32,132],[32,130]],
+    // UK + IRELAND
+    [[50,-5],[52,-4],[54,-3],[57,-2],[58,-4],[58,-3],[57,0],[54,0],[52,0],[50,-5]],
+    // MADAGASCAR
+    [[-13,49],[-18,44],[-25,44],[-26,48],[-18,50],[-13,49]],
+    // BORNEO
+    [[0,108],[4,114],[7,116],[4,118],[0,116],[-4,114],[0,108]],
+    // SUMATRA
+    [[5,96],[2,99],[-4,105],[-6,106],[-3,104],[0,102],[5,96]],
+    // NEW ZEALAND (N island)
+    [[-36,175],[-38,176],[-41,175],[-38,174],[-36,175]],
+    // PHILIPPINES rough
+    [[10,118],[12,122],[16,122],[18,122],[16,120],[12,120],[10,118]],
+    // CUBA
+    [[20,-75],[22,-80],[23,-82],[20,-80],[20,-75]],
+    // ICELAND
+    [[63,-24],[65,-14],[66,-18],[64,-22],[63,-24]],
+  ]
+
+  // Grid lines every 30°
+  const latGrid = [-60,-30,0,30,60]
+  const lonGrid = [-150,-120,-90,-60,-30,0,30,60,90,120,150]
+
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display:'block', flexShrink:0 }}>
+      <defs>
+        <linearGradient id="oceanH" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#0f4c8a"/>
+          <stop offset="30%"  stopColor="#1558a0"/>
+          <stop offset="70%"  stopColor="#0d3d6e"/>
+          <stop offset="100%" stopColor="#0a2d52"/>
+        </linearGradient>
+        <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#6aaa4a"/>
+          <stop offset="60%"  stopColor="#4e8c32"/>
+          <stop offset="100%" stopColor="#3a6b24"/>
+        </linearGradient>
+      </defs>
+
+      {/* Ocean */}
+      <rect width={W} height={H} fill="url(#oceanH)"/>
+
+      {/* Grid lines */}
+      {latGrid.map(la => {
+        const y = ((90 - la) / 180) * H
+        return <line key={`la${la}`} x1={0} y1={y} x2={W} y2={y}
+          stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
+      })}
+      {lonGrid.map(lo => {
+        const x = ((lo + 180) / 360) * W
+        return <line key={`lo${lo}`} x1={x} y1={0} x2={x} y2={H}
+          stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
+      })}
+
+      {/* Equator slightly brighter */}
+      <line x1={0} y1={H/2} x2={W} y2={H/2}
+        stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
+
+      {/* Landmasses */}
+      {continents.map((pts, i) => (
+        <polygon key={i} points={poly(pts)}
+          fill="url(#landG)"
+          stroke="rgba(255,255,255,0.14)" strokeWidth="0.6"/>
+      ))}
+
+      {/* Ice caps at poles */}
+      <rect x={0} y={0} width={W} height={H * 0.055}
+        fill="rgba(220,235,255,0.55)"/>
+      <rect x={0} y={H * 0.945} width={W} height={H * 0.055}
+        fill="rgba(220,235,255,0.45)"/>
+
+      {/* Subtle cloud wisps */}
+      <ellipse cx={W*0.22} cy={H*0.28} rx={W*0.10} ry={H*0.025}
+        fill="rgba(255,255,255,0.08)" transform={`rotate(-8,${W*0.22},${H*0.28})`}/>
+      <ellipse cx={W*0.60} cy={H*0.38} rx={W*0.12} ry={H*0.022}
+        fill="rgba(255,255,255,0.07)" transform={`rotate(5,${W*0.60},${H*0.38})`}/>
+      <ellipse cx={W*0.38} cy={H*0.62} rx={W*0.09} ry={H*0.020}
+        fill="rgba(255,255,255,0.06)" transform={`rotate(-4,${W*0.38},${H*0.62})`}/>
+      <ellipse cx={W*0.80} cy={H*0.55} rx={W*0.08} ry={H*0.018}
+        fill="rgba(255,255,255,0.07)" transform={`rotate(10,${W*0.80},${H*0.55})`}/>
+    </svg>
+  )
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RotatingEarth — clips the scrolling strip to a circle
+   and layers atmosphere + specular highlight on top
+───────────────────────────────────────────────────────────── */
+function RotatingEarth({ size }) {
+  const D = size
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      borderRadius: '50%',
+      overflow: 'hidden',
+      background: '#0a2d52',
+    }}>
+      {/* Scrolling map strip — duplicated for seamless loop */}
+      <div className="earth-strip">
+        <EarthStrip W={D} H={D}/>
+        <EarthStrip W={D} H={D}/>
+      </div>
+
+      {/* Sphere shading: dark on right/edges (terminator effect) */}
+      <div style={{
+        position:'absolute', inset:0, borderRadius:'50%',
+        background:'radial-gradient(ellipse at 32% 35%, rgba(255,255,255,0.13) 0%, transparent 55%), radial-gradient(ellipse at 78% 60%, rgba(0,0,0,0.45) 0%, transparent 55%)',
+        pointerEvents:'none',
+      }}/>
+
+      {/* Atmosphere rim */}
+      <div style={{
+        position:'absolute', inset:0, borderRadius:'50%',
+        background:'radial-gradient(ellipse at 50% 50%, transparent 72%, rgba(80,160,255,0.32) 88%, rgba(40,120,255,0.60) 100%)',
+        pointerEvents:'none',
+      }}/>
+    </div>
+  )
+}
+
+/* ── Data ──────────────────────────────────────────────────── */
 const SERVICES = [
   {
     id: 'repair',
     title: 'Repair & Recovery',
     subtitle: 'Fast & Reliable Support',
     icon: FiCpu,
-    color: '#3b82f6',
+    color: '#2563eb',
     iconBg: 'linear-gradient(135deg,#1e3a8a,#2563eb)',
     position: 'top',
     details: ['Chip-level PCB repair','Data recovery from HDD/SSD','Motherboard fault detection','GPU & CPU reballing','On-site & walk-in service'],
@@ -17,7 +212,7 @@ const SERVICES = [
     title: 'Maintenance & Automation',
     subtitle: 'Smart Automation Solutions',
     icon: FiTool,
-    color: '#22c55e',
+    color: '#16a34a',
     iconBg: 'linear-gradient(135deg,#14532d,#16a34a)',
     position: 'left',
     details: ['Annual maintenance contracts','PLC & automation systems','Preventive maintenance','Industrial control systems','SCADA integration'],
@@ -27,7 +222,7 @@ const SERVICES = [
     title: 'Network & Cloud',
     subtitle: 'Secure & Scalable Networks',
     icon: FiCloud,
-    color: '#38bdf8',
+    color: '#0284c7',
     iconBg: 'linear-gradient(135deg,#0c4a6e,#0284c7)',
     position: 'right',
     details: ['LAN/WAN infrastructure','Cloud migration (AWS/Azure/GCP)','Enterprise WiFi deployment','Firewall & VPN setup','Network monitoring'],
@@ -37,7 +232,7 @@ const SERVICES = [
     title: 'Security & AV',
     subtitle: 'Advanced Protection Always On',
     icon: FiShield,
-    color: '#22c55e',
+    color: '#16a34a',
     iconBg: 'linear-gradient(135deg,#14532d,#16a34a)',
     position: 'bottom',
     details: ['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'],
@@ -45,282 +240,172 @@ const SERVICES = [
 ]
 
 const BADGES = [
-  { label: '10+ Yrs',      sub: 'Experience',   pos: { left: '17%', top: '21%' } },
-  { label: 'Trusted by',   sub: '100+ Clients', pos: { left: '73%', top: '15%' } },
-  { label: 'ISO Certified',sub: 'Process',      pos: { left: '13%', top: '74%' } },
-  { label: 'Pan India',    sub: 'Service',      pos: { left: '73%', top: '75%' } },
+  { label: '10+ Yrs',       sub: 'Experience',   pos: { left:'15%',  top:'20%'    } },
+  { label: 'Trusted by',    sub: '100+ Clients', pos: { right:'12%', top:'14%'    } },
+  { label: 'ISO Certified', sub: 'Process',      pos: { left:'10%',  bottom:'22%' } },
+  { label: 'Pan India',     sub: 'Service',      pos: { right:'12%', bottom:'20%' } },
 ]
 
-/* ── Single shared RAF loop for all dots ── */
-function useOrbitDots(dots, CX, CY) {
-  const refs = useRef([])
-  useEffect(() => {
-    let raf, t0 = null
-    const step = (ts) => {
-      if (!t0) t0 = ts
-      const elapsed = (ts - t0) / 1000
-      dots.forEach(({ rx, ry, duration, startAngle, tiltDeg = 0 }, i) => {
-        const el = refs.current[i]
-        if (!el) return
-        const deg = ((startAngle + (elapsed / duration) * 360) % 360)
-        const rad = deg * Math.PI / 180
-        const tr  = tiltDeg * Math.PI / 180
-        const x0  = Math.cos(rad) * rx
-        const y0  = Math.sin(rad) * ry
-        el.setAttribute('cx', CX + x0 * Math.cos(tr) - y0 * Math.sin(tr))
-        el.setAttribute('cy', CY + x0 * Math.sin(tr) + y0 * Math.cos(tr))
-      })
-      raf = requestAnimationFrame(step)
-    }
-    raf = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(raf)
-  }, [dots, CX, CY])
-  return refs
-}
-
-/* ── Realistic SVG globe ── */
-function GlobeGraphic({ size }) {
-  const R  = size / 2
-  const cx = R, cy = R
-  const lats = [-65, -40, -15, 15, 40, 65]
-  const lons = 10
-
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
-      className="absolute inset-0 pointer-events-none" style={{ borderRadius: '50%' }}>
-      <defs>
-        {/* Deep ocean gradient */}
-        <radialGradient id="ocean" cx="38%" cy="32%" r="68%">
-          <stop offset="0%"   stopColor="#f8fbff" />
-          <stop offset="45%"  stopColor="#dbeafe" />
-          <stop offset="100%" stopColor="#bfd9f6" />
-        </radialGradient>
-        {/* Specular highlight */}
-        <radialGradient id="spec" cx="30%" cy="25%" r="40%">
-          <stop offset="0%"   stopColor="rgba(255,255,255,0.85)" />
-          <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-        </radialGradient>
-        {/* Atmosphere glow */}
-        <radialGradient id="atm" cx="50%" cy="50%" r="50%">
-          <stop offset="85%"  stopColor="rgba(0,0,0,0)" />
-          <stop offset="100%" stopColor="rgba(11,116,209,0.18)" />
-        </radialGradient>
-        <clipPath id="sClip"><circle cx={cx} cy={cy} r={R - 1} /></clipPath>
-      </defs>
-
-      {/* Ocean */}
-      <circle cx={cx} cy={cy} r={R - 1} fill="url(#ocean)" />
-
-      <g clipPath="url(#sClip)">
-        {/* Latitude lines — ellipses that flatten toward poles */}
-        {lats.map(lat => {
-          const φ   = lat * Math.PI / 180
-          const ry2 = Math.abs(Math.cos(φ)) * R * 0.22
-          const yc  = cy + Math.sin(φ) * (R * 0.97)
-          return <ellipse key={lat} cx={cx} cy={yc} rx={R * 0.97} ry={ry2}
-            fill="none" stroke="rgba(11,116,209,0.26)" strokeWidth="0.65" />
-        })}
-        {/* Equator brighter */}
-        <ellipse cx={cx} cy={cy} rx={R * 0.97} ry={R * 0.22}
-          fill="none" stroke="rgba(11,116,209,0.45)" strokeWidth="1.1" />
-
-        {/* Longitude lines — thin vertical ellipses rotated */}
-        {Array.from({ length: lons }).map((_, i) => (
-          <ellipse key={i} cx={cx} cy={cy} rx={R * 0.22} ry={R * 0.97}
-            fill="none" stroke="rgba(11,116,209,0.18)" strokeWidth="0.6"
-            transform={`rotate(${i * (180 / lons)},${cx},${cy})`} />
-        ))}
-
-        {/* ── Continent silhouettes (approximate) ── */}
-        {/* N. America */}
-        <path d={`M${cx*0.52},${cy*0.52} c-10,-8 -18,2 -14,18 c4,16 18,22 28,14 c8,-6 8,-20 -14,-32z`}
-          fill="rgba(11,116,209,0.10)" stroke="rgba(11,116,209,0.35)" strokeWidth="0.7" />
-        {/* S. America */}
-        <ellipse cx={cx*0.58} cy={cy*1.18} rx={R*0.10} ry={R*0.17}
-          fill="rgba(11,116,209,0.10)" stroke="rgba(11,116,209,0.32)" strokeWidth="0.7" />
-        {/* Europe */}
-        <ellipse cx={cx*1.02} cy={cy*0.70} rx={R*0.09} ry={R*0.10}
-          fill="rgba(11,116,209,0.10)" stroke="rgba(11,116,209,0.32)" strokeWidth="0.7" />
-        {/* Africa */}
-        <ellipse cx={cx*1.05} cy={cy*1.05} rx={R*0.10} ry={R*0.18}
-          fill="rgba(11,116,209,0.10)" stroke="rgba(11,116,209,0.30)" strokeWidth="0.7" />
-        {/* Asia (large) */}
-        <path d={`M${cx*1.15},${cy*0.52} c20,-4 40,4 42,18 c2,14 -10,22 -28,20 c-18,-2 -36,-12 -34,-26 c2,-8 12,-10 20,-12z`}
-          fill="rgba(11,116,209,0.10)" stroke="rgba(11,116,209,0.34)" strokeWidth="0.7" />
-        {/* Australia */}
-        <ellipse cx={cx*1.38} cy={cy*1.22} rx={R*0.10} ry={R*0.08}
-          fill="rgba(11,116,209,0.08)" stroke="rgba(11,116,209,0.28)" strokeWidth="0.7" />
-
-        {/* Specular highlight — makes it look 3-D */}
-        <circle cx={cx} cy={cy} r={R - 1} fill="url(#spec)" />
-      </g>
-
-      {/* Atmosphere rim */}
-      <circle cx={cx} cy={cy} r={R - 1} fill="url(#atm)" />
-      <circle cx={cx} cy={cy} r={R - 1.5}
-        fill="none" stroke="rgba(11,116,209,0.34)" strokeWidth="2" />
-    </svg>
-  )
-}
-
+/* ── Main component ────────────────────────────────────────── */
 export default function OrbitalServices() {
-  const [selected, setSelected]   = useState(null)
-  const [isMobile, setIsMobile]   = useState(false)
+  const [selected, setSelected] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    if (!document.getElementById('orbital-css')) {
+      const el = document.createElement('style')
+      el.id = 'orbital-css'
+      el.textContent = CSS
+      document.head.appendChild(el)
+    }
     const check = () => setIsMobile(window.innerWidth < 768)
     check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  /* ── Sizes — slightly smaller than before ── */
-  const S      = isMobile ? 310 : 560   // was 340 / 620
+  const S      = isMobile ? 320 : 560
   const CX     = S / 2
   const CY     = S / 2
-  const globeR = isMobile ? 80  : 140   // was 88 / 155
+  const globeR = isMobile ? 82 : 144
 
-  const rings = isMobile
-    ? [
-        { rx:138, ry:55,  tilt:-18, dash:'6 5', op:0.35 },
-        { rx:125, ry:46,  tilt: 14, dash:'4 6', op:0.22 },
-        { rx:148, ry:64,  tilt: -4, dash:'3 8', op:0.16 },
-        { rx: 94, ry:94,  tilt:  0, dash:'5 5', op:0.20 },
-        { rx:114, ry:114, tilt:  0, dash:'3 7', op:0.12 },
-      ]
-    : [
-        { rx:255, ry:102, tilt:-18, dash:'6 5', op:0.35 },
-        { rx:238, ry: 86, tilt: 14, dash:'4 6', op:0.22 },
-        { rx:270, ry:118, tilt: -4, dash:'3 8', op:0.16 },
-        { rx:172, ry:172, tilt:  0, dash:'5 5', op:0.20 },
-        { rx:194, ry:194, tilt:  0, dash:'3 7', op:0.12 },
-      ]
+  const rings = isMobile ? [
+    { rx:140, ry:55,  tilt:-18, dash:'6 5',  op:0.35, sw:1.5 },
+    { rx:126, ry:45,  tilt: 14, dash:'4 6',  op:0.22, sw:1   },
+    { rx:150, ry:64,  tilt: -4, dash:'3 8',  op:0.16, sw:1   },
+    { rx: 96, ry:96,  tilt:  0, dash:'5 5',  op:0.20, sw:1.2 },
+  ] : [
+    { rx:258, ry:103, tilt:-18, dash:'6 5',  op:0.35, sw:1.5 },
+    { rx:240, ry: 87, tilt: 14, dash:'4 6',  op:0.22, sw:1   },
+    { rx:272, ry:120, tilt: -4, dash:'3 8',  op:0.16, sw:1   },
+    { rx:174, ry:174, tilt:  0, dash:'5 5',  op:0.20, sw:1.2 },
+  ]
 
-  const dist = isMobile ? 132 : 242
-  const cards = {
-    top:    { x: CX,                y: CY - dist },
-    left:   { x: CX - dist - (isMobile ? 6 : 14), y: CY },
-    right:  { x: CX + dist + (isMobile ? 6 : 14), y: CY },
-    bottom: { x: CX,                y: CY + dist },
+  const dist = isMobile ? 134 : 244
+  const cardPos = {
+    top:    { x: CX,                          y: CY - dist },
+    left:   { x: CX - dist - (isMobile?4:12), y: CY        },
+    right:  { x: CX + dist + (isMobile?4:12), y: CY        },
+    bottom: { x: CX,                          y: CY + dist },
   }
 
-  /* single RAF loop — all 5 dots */
-  const dotDefs = [
-    { rx: rings[0].rx, ry: rings[0].ry, duration:11, startAngle: 30,  tiltDeg: rings[0].tilt },
-    { rx: rings[1].rx, ry: rings[1].ry, duration:15, startAngle:150,  tiltDeg: rings[1].tilt },
-    { rx: rings[2].rx, ry: rings[2].ry, duration:19, startAngle:270,  tiltDeg: rings[2].tilt },
-    { rx: rings[3].rx, ry: rings[3].ry, duration: 8, startAngle: 80,  tiltDeg: 0 },
-    { rx: rings[0].rx, ry: rings[0].ry, duration:11, startAngle:210,  tiltDeg: rings[0].tilt },
-  ]
-  const dotRefs = useOrbitDots(dotDefs, CX, CY)
-
   return (
-    <div className="relative flex items-center justify-center w-full overflow-hidden py-2 select-none">
-      {/* constrain width so it never bleeds off-screen */}
-      <div className="relative mx-auto" style={{ width: S, height: S, maxWidth: '100%' }}>
+    <div className="relative flex items-center justify-center w-full overflow-hidden py-4 select-none">
+      <div className="relative mx-auto" style={{ width: S, height: S, maxWidth:'100%' }}>
 
-        {/* ── SVG: rings + connectors + dots ── */}
+        {/* ── SVG: rings + connectors + anchor dots (no moving dots) ── */}
         <svg className="absolute inset-0 pointer-events-none"
           width={S} height={S} viewBox={`0 0 ${S} ${S}`} overflow="visible">
           <defs>
-            <radialGradient id="glowRing" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stopColor="rgba(34,211,238,0.25)" />
-              <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+            <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stopColor="rgba(96,165,250,0.18)"/>
+              <stop offset="100%" stopColor="rgba(96,165,250,0)"/>
             </radialGradient>
           </defs>
 
-          {/* Soft glow behind globe */}
-          <circle cx={CX} cy={CY} r={globeR + (isMobile ? 36 : 64)} fill="url(#glowRing)" />
+          {/* Halo glow */}
+          <circle cx={CX} cy={CY} r={globeR + (isMobile?42:74)} fill="url(#glowBg)"/>
 
-          {/* Orbit rings */}
+          {/* Orbit rings — static decorative */}
           {rings.map((r, i) => (
             <ellipse key={i} cx={CX} cy={CY} rx={r.rx} ry={r.ry}
               fill="none"
-              stroke={`rgba(34,211,238,${r.op})`}
-              strokeWidth={i < 2 ? '1.5' : '1'}
+              stroke={`rgba(96,165,250,${r.op})`}
+              strokeWidth={r.sw}
               strokeDasharray={r.dash}
-              transform={`rotate(${r.tilt},${CX},${CY})`} />
+              transform={`rotate(${r.tilt},${CX},${CY})`}/>
           ))}
 
           {/* Connector lines */}
           {SERVICES.map(s => {
-            const p = cards[s.position]
+            const p = cardPos[s.position]
             return <line key={s.id} x1={CX} y1={CY} x2={p.x} y2={p.y}
-              stroke="rgba(34,211,238,0.13)" strokeWidth="1" strokeDasharray="4 4" />
+              stroke="rgba(96,165,250,0.16)" strokeWidth="1" strokeDasharray="5 5"/>
           })}
 
-          {/* Animated dots — one circle element each, moved by shared RAF */}
-          {dotDefs.map((_, i) => (
-            <circle key={i} ref={el => dotRefs.current[i] = el} r="5" cx={CX} cy={CY}
-              fill="#22d3ee"
-              style={{ filter: 'drop-shadow(0 0 5px #22d3ee) drop-shadow(0 0 10px #06b6d4)' }} />
-          ))}
-
-          {/* Small anchor dots at card positions */}
+          {/* Card anchor dots */}
           {SERVICES.map(s => {
-            const p = cards[s.position]
-            return <circle key={s.id+'-a'} cx={p.x} cy={p.y} r="3"
-              fill={s.color} style={{ filter: `drop-shadow(0 0 4px ${s.color})` }} />
+            const p = cardPos[s.position]
+            return <circle key={s.id+'-a'} cx={p.x} cy={p.y} r="4"
+              fill={s.color} style={{ filter:`drop-shadow(0 0 5px ${s.color})` }}/>
           })}
         </svg>
 
-        {/* ── GLOBE ── */}
-        <div className="absolute z-10 rounded-full overflow-hidden"
+        {/* ── ROTATING EARTH ── */}
+        <div className="absolute z-10 rounded-full"
           style={{
             width: globeR * 2, height: globeR * 2,
             left: CX, top: CY,
             transform: 'translate(-50%,-50%)',
-            boxShadow: `0 14px 34px rgba(15,23,42,0.08), 0 0 72px rgba(11,116,209,0.12)`,
+            animation: 'globeGlow 3.5s ease-in-out infinite',
+            borderRadius: '50%',
+            overflow: 'hidden',
           }}>
-          <GlobeGraphic size={globeR * 2} />
+          <RotatingEarth size={globeR * 2}/>
 
-          {/* Text */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-            <span className="text-slate-900 font-extrabold drop-shadow-sm"
-              style={{ fontSize: isMobile ? '0.95rem' : '1.55rem', lineHeight: 1.1 }}>Our</span>
-            <span className="text-[#0b74d1] font-extrabold drop-shadow-sm"
-              style={{ fontSize: isMobile ? '1.05rem' : '1.7rem',  lineHeight: 1.1 }}>Services</span>
-            <div className="bg-[#0b74d1] rounded-full my-1"
-              style={{ width: isMobile ? 26 : 46, height: 2.5 }} />
-            <span className="text-slate-500 text-center leading-snug px-2"
-              style={{ fontSize: isMobile ? '0.44rem' : '0.62rem', maxWidth: isMobile ? 80 : 135 }}>
-              Drop-off, Walk-in,<br />On-site & Pickup.
+          {/* Text overlay — on top of the rotating globe */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-20"
+            style={{ pointerEvents:'none' }}>
+            <span style={{
+              color:'#fff', fontWeight:800,
+              fontSize: isMobile ? '0.95rem' : '1.5rem',
+              lineHeight:1.1,
+              textShadow:'0 2px 14px rgba(0,0,0,0.85)',
+            }}>Our</span>
+            <span style={{
+              color:'#7dd3fc', fontWeight:800,
+              fontSize: isMobile ? '1.05rem' : '1.65rem',
+              lineHeight:1.1,
+              textShadow:'0 2px 14px rgba(0,0,0,0.85)',
+            }}>Services</span>
+            <div style={{
+              width: isMobile ? 28 : 48, height: 2.5,
+              background:'#38bdf8', borderRadius:9999, margin:'4px 0',
+            }}/>
+            <span style={{
+              color:'rgba(255,255,255,0.85)',
+              fontSize: isMobile ? '0.44rem' : '0.60rem',
+              textAlign:'center', lineHeight:1.4,
+              maxWidth: isMobile ? 82 : 140,
+              textShadow:'0 1px 8px rgba(0,0,0,0.9)',
+              padding:'0 6px',
+            }}>
+              Drop-off, Walk-in,<br/>On-site & Pickup.
             </span>
           </div>
         </div>
 
         {/* ── SERVICE CARDS ── */}
         {SERVICES.map(s => {
-          const pos  = cards[s.position]
+          const pos  = cardPos[s.position]
           const Icon = s.icon
-          const cw   = isMobile ? 100 : 185
+          const cw   = isMobile ? 106 : 192
           return (
-            <div key={s.id} className="absolute z-20 cursor-pointer"
-              style={{ left: pos.x, top: pos.y, transform: 'translate(-50%,-50%)', width: cw }}
+            <div key={s.id}
+              className="absolute z-20 cursor-pointer card-hover"
+              style={{ left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:cw }}
               onClick={() => setSelected(s)}>
-              <div className="rounded-xl flex items-center gap-2 transition-transform duration-200 hover:scale-105"
-                style={{
-                  background: 'rgba(255,255,255,0.94)',
-                  border: '1px solid rgba(148,163,184,0.22)',
-                  padding: isMobile ? '6px 8px' : '11px 13px',
-                  boxShadow: '0 12px 28px rgba(15,23,42,0.08)',
-                  backdropFilter: 'blur(12px)',
+              <div style={{
+                background:'#ffffff',
+                border:'1px solid rgba(59,130,246,0.15)',
+                borderRadius: isMobile ? 10 : 16,
+                padding: isMobile ? '7px 9px' : '13px 15px',
+                boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                display:'flex', alignItems:'center', gap: isMobile ? 7 : 11,
+              }}>
+                <div style={{
+                  background: s.iconBg,
+                  borderRadius: isMobile ? 8 : 12,
+                  width: isMobile ? 34 : 54, height: isMobile ? 34 : 54,
+                  minWidth: isMobile ? 34 : 54,
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  boxShadow:`0 0 16px ${s.color}55`,
                 }}>
-                <div className="rounded-xl flex-shrink-0 flex items-center justify-center"
-                  style={{
-                    background: s.iconBg,
-                    width:    isMobile ? 33 : 52,
-                    height:   isMobile ? 33 : 52,
-                    minWidth: isMobile ? 33 : 52,
-                    boxShadow: `0 10px 20px ${s.color}20`,
-                  }}>
-                  <Icon style={{ color:'#fff', width: isMobile ? 15 : 24, height: isMobile ? 15 : 24 }} />
+                  <Icon style={{ color:'#fff', width: isMobile?16:26, height: isMobile?16:26 }}/>
                 </div>
                 <div>
-                  <p className="text-slate-900 font-bold leading-tight"
-                    style={{ fontSize: isMobile ? '0.58rem' : '0.88rem' }}>{s.title}</p>
-                  <p style={{ color: '#64748b', fontSize: isMobile ? '0.48rem' : '0.68rem', marginTop:2 }}>
-                    {s.subtitle}</p>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize: isMobile?'0.58rem':'0.88rem', lineHeight:1.25 }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize: isMobile?'0.46rem':'0.66rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -330,19 +415,17 @@ export default function OrbitalServices() {
         {/* ── FLOATING BADGES ── */}
         {BADGES.map(b => (
           <div key={b.label} className="absolute z-30 pointer-events-none"
-            style={{ ...b.pos, transform: 'translate(-50%,-50%)' }}>
-            <div className="rounded-lg text-center"
-              style={{
-                background: 'rgba(255,255,255,0.92)',
-                border: '1px solid rgba(148,163,184,0.22)',
-                padding: isMobile ? '3px 7px' : '5px 11px',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 10px 22px rgba(15,23,42,0.06)',
-              }}>
-              <p className="font-bold text-[#0b74d1]"
-                style={{ fontSize: isMobile ? '0.52rem' : '0.72rem', lineHeight:1.25 }}>{b.label}</p>
-              <p className="text-slate-500"
-                style={{ fontSize: isMobile ? '0.44rem' : '0.62rem', lineHeight:1.25 }}>{b.sub}</p>
+            style={{ ...b.pos, transform:'translate(-50%,-50%)' }}>
+            <div style={{
+              background:'#ffffff',
+              border:'1px solid rgba(59,130,246,0.22)',
+              borderRadius: isMobile ? 8 : 10,
+              padding: isMobile ? '4px 8px' : '6px 13px',
+              textAlign:'center',
+              animation:'badgePulse 3s ease-in-out infinite',
+            }}>
+              <p style={{ color:'#2563eb', fontWeight:700, fontSize: isMobile?'0.52rem':'0.72rem', lineHeight:1.3 }}>{b.label}</p>
+              <p style={{ color:'#64748b', fontSize: isMobile?'0.44rem':'0.60rem', lineHeight:1.3 }}>{b.sub}</p>
             </div>
           </div>
         ))}
@@ -350,30 +433,37 @@ export default function OrbitalServices() {
 
       {/* ── MODAL ── */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
           onClick={() => setSelected(null)}>
           <div className="relative rounded-2xl p-6 md:p-8 w-full max-w-md"
-            style={{ background:'#ffffff', border:'1px solid rgba(148,163,184,0.22)', boxShadow:'0 20px 50px rgba(15,23,42,0.14)' }}
+            style={{
+              background:'#fff',
+              border:`1.5px solid ${selected.color}33`,
+              boxShadow:`0 8px 48px ${selected.color}22, 0 2px 16px rgba(0,0,0,0.10)`,
+            }}
             onClick={e => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"
               onClick={() => setSelected(null)}>
-              <FiX style={{ width:20, height:20 }} />
+              <FiX style={{ width:20, height:20 }}/>
             </button>
             <div className="flex items-center gap-4 mb-6">
-              <div className="rounded-2xl flex items-center justify-center"
-                style={{ background:selected.iconBg, width:56, height:56, boxShadow:`0 0 20px ${selected.color}66` }}>
-                <selected.icon style={{ color:'#fff', width:28, height:28 }} />
+              <div style={{
+                background: selected.iconBg, borderRadius:14, width:56, height:56,
+                display:'flex', alignItems:'center', justifyContent:'center',
+                boxShadow:`0 0 22px ${selected.color}55`,
+              }}>
+                <selected.icon style={{ color:'#fff', width:28, height:28 }}/>
               </div>
               <div>
-                <h3 className="text-slate-900 text-xl font-bold">{selected.title}</h3>
-                <p style={{ color:'#0b74d1' }} className="text-sm mt-1">{selected.subtitle}</p>
+                <h3 style={{ color:'#0f172a', fontSize:'1.2rem', fontWeight:700 }}>{selected.title}</h3>
+                <p style={{ color:selected.color, fontSize:'0.85rem', marginTop:3 }}>{selected.subtitle}</p>
               </div>
             </div>
-            <ul className="space-y-3">
+            <ul style={{ display:'flex', flexDirection:'column', gap:10 }}>
               {selected.details.map((item,i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background:selected.color }} />
-                  <span className="text-slate-600 text-sm">{item}</span>
+                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+                  <div style={{ width:7, height:7, borderRadius:'50%', marginTop:5, flexShrink:0, background:selected.color }}/>
+                  <span style={{ color:'#334155', fontSize:'0.9rem' }}>{item}</span>
                 </li>
               ))}
             </ul>
