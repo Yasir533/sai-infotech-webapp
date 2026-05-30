@@ -283,10 +283,10 @@ html:not(.dark) .contact-input:focus {
   z-index: -3;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 20%, rgba(29, 124, 255, 0.12), transparent 22%),
-    radial-gradient(circle at 80% 15%, rgba(0, 183, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.06), transparent 28%),
-    linear-gradient(180deg, #06111f 0%, #081626 100%);
+    radial-gradient(circle at 15% 20%, rgba(29, 124, 255, 0.08), transparent 22%),
+    radial-gradient(circle at 80% 15%, rgba(0, 183, 255, 0.08), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(15, 95, 255, 0.04), transparent 28%),
+    linear-gradient(180deg, #f7f9fc 0%, #edf3f9 100%);
 }
 
 /* Dark mode overlay — deep tint so light text pops over the video */
@@ -296,7 +296,7 @@ html:not(.dark) .contact-input:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at center, rgba(6, 17, 31, 0.08), rgba(6, 17, 31, 0.52));
+  background: radial-gradient(circle at center, rgba(248, 250, 252, 0.22), rgba(237, 243, 249, 0.72));
   z-index: -2;
   pointer-events: none;
   transition: background 0.3s ease;
@@ -307,10 +307,10 @@ html:not(.dark) .contact-input:focus {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.22;
   background-image:
-    radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
-    radial-gradient(rgba(0,200,255,0.8) 1px, transparent 1px);
+    radial-gradient(rgba(15,23,42,0.28) 1px, transparent 1px),
+    radial-gradient(rgba(11,116,209,0.30) 1px, transparent 1px);
   background-size: 90px 90px, 140px 140px;
   background-position: 0 0, 40px 50px;
   animation: starsDrift 80s linear infinite;
