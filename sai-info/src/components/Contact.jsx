@@ -34,7 +34,7 @@ const contactInfo = [
   {
     icon: FiPhone,
     title: 'Phone',
-    lines: ['+91 99459 81999','+91 83103 38544','+91 76769 52139'],
+    lines: ['+91 83 10 33 85 44','+91 76 76 95 21 39'],
     color: 'from-emerald-600 to-emerald-400',
   },
   {

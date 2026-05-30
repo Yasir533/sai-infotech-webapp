@@ -114,7 +114,7 @@ export default function Footer() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <FiPhone style={{ color: '#60a5fa', flexShrink: 0, marginTop: '2px' }} size={15} />
                 <div>
-                  {['+91 99459 81999', '+91 83103 38544', '+91 76769 52139 (Office)'].map((num, i) => (
+                  {['+91 83 10 33 85 44', '+91 76 76 95 21 39'].map((num, i) => (
                     <a key={i} href={`tel:${num.replace(/\s/g,'')}`} style={{ ...linkStyle, display: 'block', marginBottom: '4px' }}
                       onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
                       onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
@@ -125,10 +125,10 @@ export default function Footer() {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <FiMail style={{ color: '#60a5fa', flexShrink: 0 }} size={15} />
-                <a href="mailto:mahaling.saiservices@gmail.com" style={linkStyle}
+                <a href="mailto:ssmb@sais.in" style={linkStyle}
                   onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
                   onMouseLeave={e => e.currentTarget.style.color = '#ffffff'}
-                >mahaling.saiservices@gmail.com</a>
+                >ssmb@sais.in</a>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

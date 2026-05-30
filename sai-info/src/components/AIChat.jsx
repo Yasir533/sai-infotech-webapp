@@ -65,7 +65,7 @@ export default function AIChat() {
         {
           sender: "bot",
           text:
-            "Unable to connect to server.\n\nPlease contact:\n📞 83103 38544\n📞 99459 81999\n☎ Office: 76769 52139",
+            "Unable to connect to server.\n\nPlease contact:\n📞 83 10 33 85 44\n☎ Office: 76 76 95 21 39",
         },
       ]);
     }

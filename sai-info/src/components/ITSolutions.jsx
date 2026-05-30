@@ -87,10 +87,10 @@ export default function ITSolutions() {
                 <span>Contact Our Team</span>
               </a>
               <a
-                href="tel:+919945981999"
+                href="tel:+918310338544"
                 className="px-8 py-4 rounded-2xl font-semibold glass border border-white/10 text-white hover:border-blue-500/40 transition-all text-base"
               >
-                +91 99459 81999
+                +91 83 10 33 85 44
               </a>
             </div>
           </div>
