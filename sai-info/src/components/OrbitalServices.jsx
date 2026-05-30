@@ -167,40 +167,29 @@ return (
 <div
   className="absolute"
   style={{
-    left: CX,
-    top: CY,
-    transform:
-      "translate(-50%,-50%)",
+    left: '50%',
+    top: '50%',
+    transform: "translate(-50%,-50%)",
   }}
 >
   <OrbitGlobe isMobile={isMobile} />
 </div>
 
 {badges.map((badge, i) => {
-  const angle =
-    (-45 + i * 90) *
-    (Math.PI / 180);
+  const angle = (-45 + i * 90) * (Math.PI / 180);
 
-  const x =
-    CX + Math.cos(angle) * (radius + 110);
-
-  const y =
-    CY + Math.sin(angle) * (radius + 110);
+  const dx = Math.cos(angle) * (radius + 110);
+  const dy = Math.sin(angle) * (radius + 110);
 
   return (
-        <motion.div
-          key={badge}
-          className="orbit-badge"
-      animate={{
-        y: [0, -8, 0],
-      }}
-      transition={{
-        duration: 4 + i,
-        repeat: Infinity,
-      }}
+    <motion.div
+      key={badge}
+      className="orbit-badge"
+      animate={{ y: [0, -8, 0] }}
+      transition={{ duration: 4 + i, repeat: Infinity }}
       style={{
-        left: x,
-        top: y,
+        left: `calc(50% + ${dx}px)`,
+        top: `calc(50% + ${dy}px)`,
       }}
     >
       {badge}
@@ -209,15 +198,10 @@ return (
 })}
 
 {services.map((service, index) => {
-  const angle =
-    (-90 + (360 / services.length) * index) *
-    (Math.PI / 180);
+  const angle = (-90 + (360 / services.length) * index) * (Math.PI / 180);
 
-  const x =
-    CX + Math.cos(angle) * radius;
-
-  const y =
-    CY + Math.sin(angle) * radius;
+  const dx = Math.cos(angle) * radius;
+  const dy = Math.sin(angle) * radius;
 
   const Icon = service.icon;
 
@@ -226,25 +210,15 @@ return (
       key={service.title}
       className="absolute z-20"
       style={{
-        left: x,
-        top: y,
-        transform:
-          "translate(-50%,-50%)",
+        left: `calc(50% + ${dx}px)`,
+        top: `calc(50% + ${dy}px)`,
+        transform: "translate(-50%,-50%)",
       }}
-      whileHover={{
-        scale: 1.08,
-      }}
-      onClick={() =>
-        setSelected(service)
-      }
+      whileHover={{ scale: 1.08 }}
+      onClick={() => setSelected(service)}
     >
       <div className="service-card">
-        <div
-          className="service-icon"
-          style={{
-            background: service.color,
-          }}
-        >
+        <div className="service-icon" style={{ background: service.color }}>
           <Icon />
         </div>
 
