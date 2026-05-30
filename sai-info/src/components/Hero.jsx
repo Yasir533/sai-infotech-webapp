@@ -64,12 +64,12 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.05 }}
                 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.05em]"
               >
-                <span className="text-white">SAI </span>
+                <span className="text-slate-900">SAI </span>
                 <span
                   className="text-transparent bg-clip-text"
                   style={{
                     backgroundImage:
-                      'linear-gradient(135deg, #00c8ff, #0066ff)',
+                      'linear-gradient(135deg, #0b74d1, #1d7cff)',
                   }}
                 >
                   INFOTECH
@@ -81,7 +81,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed whitespace-nowrap"
+                className="text-sm sm:text-xl font-bold text-slate-700 mb-2 text-center lg:text-left leading-relaxed whitespace-nowrap"
               >
                 IT / ITeS / Technology Services & Managed Services
               </motion.h2>
@@ -93,7 +93,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-lg font-semibold mb-5 h-7"
               >
-                <span className="text-cyan-300 tracking-wide uppercase">
+                <span className="text-[#0b74d1] tracking-wide uppercase">
                   PLC &amp; Automation Systems
                 </span>
               </motion.div>
@@ -103,7 +103,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
+                className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
               >
                 Premium IT services in Bangalore since 2019.
                 We specialize in enterprise-grade technology solutions,
@@ -122,10 +122,8 @@ export default function Hero() {
 
                 <a
                   href="#about"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
+                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-300 shadow-sm"
                   style={{
-                    background: 'rgba(30,40,70,0.85)',
-                    border: '1px solid rgba(255,255,255,0.15)',
                     backdropFilter: 'blur(8px)',
                   }}
                 >
@@ -135,10 +133,8 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_24px_rgba(0,102,255,0.35)] transition-all duration-300"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0b74d1] hover:bg-[#095fbd] shadow-[0_10px_24px_rgba(11,116,209,0.22)] transition-all duration-300"
                   style={{
-                    background: 'rgba(30,40,70,0.85)',
-                    border: '1px solid rgba(255,255,255,0.15)',
                     backdropFilter: 'blur(8px)',
                   }}
                 >

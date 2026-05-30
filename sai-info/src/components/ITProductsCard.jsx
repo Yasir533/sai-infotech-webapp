@@ -12,23 +12,23 @@ export default function ITProductsCard() {
         max-w-[420px]
         rounded-[20px]
         overflow-hidden
-        border border-cyan-400/30
-        bg-[#051224]/90
+        border border-slate-200
+        bg-white
         backdrop-blur-2xl
         px-5
         py-5
-        text-white
+        text-slate-900
         transition-all
         duration-300
-        hover:border-cyan-300
-        hover:shadow-[0_0_40px_rgba(0,217,255,0.22)]
+        hover:border-[#0b74d1]/25
+        hover:shadow-[0_16px_40px_rgba(15,23,42,0.08)]
       "
     >
       {/* Outer Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,217,255,0.12),transparent_35%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,116,209,0.08),transparent_35%)] pointer-events-none" />
 
       {/* Inner Border Glow */}
-      <div className="absolute inset-[1px] rounded-[20px] border border-cyan-400/10 pointer-events-none" />
+      <div className="absolute inset-[1px] rounded-[20px] border border-slate-200 pointer-events-none" />
 
       {/* TOP CONTENT */}
       <div className="relative z-10 flex flex-col gap-3">
@@ -45,21 +45,21 @@ export default function ITProductsCard() {
               items-center
               justify-center
               bg-cyan-400/10
-              border border-cyan-400/20
-              shadow-[0_0_25px_rgba(0,217,255,0.12)]
+              border border-[#0b74d1]/15
+              shadow-[0_10px_24px_rgba(15,23,42,0.06)]
             "
           >
-            <FiShoppingCart className="text-[22px] text-cyan-300" />
+            <FiShoppingCart className="text-[22px] text-[#0b74d1]" />
           </div>
 
-          <h2 className="text-[22px] sm:text-[24px] leading-none font-black text-cyan-300 tracking-[-1px]">
+          <h2 className="text-[22px] sm:text-[24px] leading-none font-black text-slate-900 tracking-[-1px]">
             IT Products
           </h2>
 
         </div>
 
         {/* DESCRIPTION */}
-        <p className="text-[10px] leading-[1.3] text-white/75 font-medium">
+        <p className="text-[10px] leading-[1.3] text-slate-600 font-medium">
           Wide range of quality IT products. Checked, good condition and
           affordably priced for business procurement.
         </p>
@@ -74,7 +74,7 @@ export default function ITProductsCard() {
             w-full
             h-[40px]
             rounded-[12px]
-            bg-[#0066ff]
+            bg-[#0b74d1]
             text-white
             text-[13px]
             font-bold
@@ -86,7 +86,7 @@ export default function ITProductsCard() {
             transition-all
             duration-300
             hover:scale-[1.01]
-            hover:shadow-[0_0_35px_rgba(59,130,246,0.35)]
+            hover:shadow-[0_12px_28px_rgba(11,116,209,0.24)]
           "
         >
           View Products
@@ -102,17 +102,17 @@ export default function ITProductsCard() {
       {/* FEATURES */}
       <div className="relative z-10 mt-4 flex items-center justify-between gap-3 flex-wrap">
 
-        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Quality Checked</span>
         </div>
 
-        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Good Condition</span>
         </div>
 
-        <div className="flex items-center gap-1 text-cyan-300 text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Affordable Price</span>
         </div>

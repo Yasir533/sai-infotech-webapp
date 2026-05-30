@@ -86,18 +86,18 @@ export default function Navbar() {
             <img
               src={logoIcon}
               alt="SAI INFOTECH"
-              className="h-11 w-11 sm:h-12 sm:w-12 rounded-full object-cover ring-1 ring-cyan-400/35 shadow-[0_0_25px_rgba(0,200,255,0.35)] transition-transform duration-300 group-hover:scale-105"
+              className="h-11 w-11 sm:h-12 sm:w-12 rounded-full object-cover ring-1 ring-[#0b74d1]/20 shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-transform duration-300 group-hover:scale-105"
               style={{
-                background: 'rgba(255,255,255,0.03)',
+                background: 'rgba(255,255,255,0.92)',
               }}
             />
 
             <div className="leading-none">
-              <div className="text-slate-900 dark:text-white text-base sm:text-lg font-extrabold tracking-[0.16em]">
+              <div className="text-slate-900 text-base sm:text-lg font-extrabold tracking-[0.16em]">
                 SAI
-                <span className="text-[#0b74d1] dark:text-cyan-400"> INFOTECH</span>
+                <span className="text-[#0b74d1]"> INFOTECH</span>
               </div>
-              <div className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 tracking-[0.32em] uppercase mt-1">
+              <div className="text-[10px] sm:text-[11px] text-slate-500 tracking-[0.32em] uppercase mt-1">
                 Technology Services
               </div>
             </div>
@@ -115,8 +115,8 @@ export default function Navbar() {
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   active === link.href
-                    ? 'text-white bg-[#0b74d1] shadow-[0_0_20px_rgba(11,116,209,0.28)]'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/5'
+                    ? 'text-white bg-[#0b74d1] shadow-[0_0_20px_rgba(11,116,209,0.24)]'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                 }`}
               >
                 {link.label}
@@ -138,6 +138,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden p-2 rounded-lg nav-glass text-slate-300 hover:text-white"
+            className="lg:hidden p-2 rounded-lg nav-glass text-slate-600 hover:text-slate-900"
           >
 
             {menuOpen ? (
@@ -176,7 +177,7 @@ export default function Navbar() {
                   className={`px-4 py-3 rounded-xl font-medium transition-all ${
                     active === link.href
                         ? 'text-[#0b74d1] bg-[#0b74d1]/10'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/5'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                   }`}
                 >
                   {link.label}
