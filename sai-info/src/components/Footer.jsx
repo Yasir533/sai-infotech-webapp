@@ -32,10 +32,10 @@ export default function Footer() {
         position: 'relative',
         borderTop: '1px solid rgba(148,163,184,0.2)',
         overflow: 'hidden',
-        background: 'linear-gradient(180deg, #fbfcfe 0%, #f1f4f8 100%)',
+        background: 'linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%)',
       }}
     >
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(11,116,209,0.03), transparent 45%)' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at top, rgba(47,111,191,0.025), transparent 45%)' }} />
 
       <div style={{ position: 'relative', maxWidth: '1280px', margin: '0 auto', padding: '64px 24px 32px' }}>
 
@@ -53,7 +53,7 @@ export default function Footer() {
                   width: 'auto',
                   objectFit: 'contain',
                   maxWidth: '260px',
-                  filter: 'drop-shadow(0 8px 24px rgba(15,23,42,0.12))'
+                  filter: 'drop-shadow(0 8px 20px rgba(15,23,42,0.10))'
                 }}
               />
             </a>
@@ -66,10 +66,10 @@ export default function Footer() {
               {quickLinks.map((link, i) => (
                 <li key={i}>
                   <a href={link.href} style={linkStyle}
-                    onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                    onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                     onMouseLeave={e => e.currentTarget.style.color = '#334155'}
                   >
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0b74d1', flexShrink: 0 }} />
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
                     {link.label}
                   </a>
                 </li>
@@ -84,10 +84,10 @@ export default function Footer() {
               {serviceLinks.map((link, i) => (
                 <li key={i}>
                   <a href={link.href} style={linkStyle}
-                    onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                    onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                     onMouseLeave={e => e.currentTarget.style.color = '#334155'}
                   >
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0b74d1', flexShrink: 0 }} />
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
                     {link.label}
                   </a>
                 </li>
@@ -101,7 +101,7 @@ export default function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <FiMapPin style={{ color: '#0b74d1', flexShrink: 0, marginTop: '2px' }} size={15} />
+                <FiMapPin style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
                 <p style={{ color: '#334155', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>
                   #9, 1st Main, Ground Floor, Vijay Rangamma Layout,<br />
                   Basavanagudi, Bangalore-560004
@@ -109,11 +109,11 @@ export default function Footer() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <FiPhone style={{ color: '#0b74d1', flexShrink: 0, marginTop: '2px' }} size={15} />
+                <FiPhone style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
                 <div>
                   {['+91 83 10 33 85 44', '+91 76 76 95 21 39'].map((num, i) => (
                     <a key={i} href={`tel:${num.replace(/\s/g,'')}`} style={{ ...linkStyle, display: 'block', marginBottom: '4px' }}
-                      onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                      onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                       onMouseLeave={e => e.currentTarget.style.color = '#334155'}
                     >{num}</a>
                   ))}
@@ -121,17 +121,17 @@ export default function Footer() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <FiMail style={{ color: '#0b74d1', flexShrink: 0 }} size={15} />
+                <FiMail style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
                 <a href="mailto:ssmb@sais.in" style={linkStyle}
-                  onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                  onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                   onMouseLeave={e => e.currentTarget.style.color = '#334155'}
                 >ssmb@sais.in</a>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <FaLinkedinIn style={{ color: '#0b74d1', flexShrink: 0 }} size={15} />
+                <FaLinkedinIn style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={linkStyle}
-                  onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                  onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                   onMouseLeave={e => e.currentTarget.style.color = '#334155'}
                 >linkedin.com</a>
               </div>
@@ -151,7 +151,7 @@ export default function Footer() {
           <div style={{ display: 'flex', gap: '24px' }}>
             {['Privacy Policy', 'Terms of Service', 'Sitemap'].map((label, i) => (
               <a key={i} href="#" style={{ color: '#475569', fontSize: '14px', textDecoration: 'none' }}
-                onMouseEnter={e => e.currentTarget.style.color = '#0b74d1'}
+                onMouseEnter={e => e.currentTarget.style.color = '#2f6fbf'}
                 onMouseLeave={e => e.currentTarget.style.color = '#475569'}
               >{label}</a>
             ))}

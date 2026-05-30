@@ -10,12 +10,12 @@ const CSS = `
   to   { transform: translateX(-50%) }
 }
 @keyframes badgePulse {
-  0%,100% { box-shadow: 0 2px 12px rgba(59,130,246,0.14); }
-  50%      { box-shadow: 0 2px 20px rgba(59,130,246,0.32); }
+  0%,100% { box-shadow: 0 2px 10px rgba(47,111,191,0.10); }
+  50%      { box-shadow: 0 2px 16px rgba(47,111,191,0.22); }
 }
 @keyframes globeGlow {
-  0%,100% { box-shadow: 0 0 44px 10px rgba(96,165,250,0.24), 0 0 0 3px rgba(96,165,250,0.32); }
-  50%      { box-shadow: 0 0 80px 22px rgba(96,165,250,0.38), 0 0 0 3px rgba(96,165,250,0.50); }
+  0%,100% { box-shadow: 0 0 36px 8px rgba(47,111,191,0.16), 0 0 0 3px rgba(47,111,191,0.22); }
+  50%      { box-shadow: 0 0 60px 16px rgba(47,111,191,0.24), 0 0 0 3px rgba(47,111,191,0.34); }
 }
 .earth-strip {
   display: flex;
@@ -102,15 +102,15 @@ function EarthStrip({ W, H }) {
       style={{ display:'block', flexShrink:0 }}>
       <defs>
         <linearGradient id="oceanH" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#0f4c8a"/>
-          <stop offset="30%"  stopColor="#1558a0"/>
-          <stop offset="70%"  stopColor="#0d3d6e"/>
-          <stop offset="100%" stopColor="#0a2d52"/>
+          <stop offset="0%"   stopColor="#f7fafc"/>
+          <stop offset="30%"  stopColor="#e2ebf7"/>
+          <stop offset="70%"  stopColor="#cfddf0"/>
+          <stop offset="100%" stopColor="#b9cbe3"/>
         </linearGradient>
         <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#6aaa4a"/>
-          <stop offset="60%"  stopColor="#4e8c32"/>
-          <stop offset="100%" stopColor="#3a6b24"/>
+          <stop offset="0%"   stopColor="#2f6fbf"/>
+          <stop offset="60%"  stopColor="#255c9d"/>
+          <stop offset="100%" stopColor="#1e4f86"/>
         </linearGradient>
       </defs>
 
@@ -121,34 +121,34 @@ function EarthStrip({ W, H }) {
       {latGrid.map(la => {
         const y = ((90 - la) / 180) * H
         return <line key={`la${la}`} x1={0} y1={y} x2={W} y2={y}
-          stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
+          stroke="rgba(47,111,191,0.10)" strokeWidth="0.8"/>
       })}
       {lonGrid.map(lo => {
         const x = ((lo + 180) / 360) * W
         return <line key={`lo${lo}`} x1={x} y1={0} x2={x} y2={H}
-          stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
+          stroke="rgba(47,111,191,0.10)" strokeWidth="0.8"/>
       })}
 
       {/* Equator slightly brighter */}
       <line x1={0} y1={H/2} x2={W} y2={H/2}
-        stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
+        stroke="rgba(47,111,191,0.14)" strokeWidth="1"/>
 
       {/* Landmasses */}
       {continents.map((pts, i) => (
         <polygon key={i} points={poly(pts)}
           fill="url(#landG)"
-          stroke="rgba(255,255,255,0.14)" strokeWidth="0.6"/>
+          stroke="rgba(255,255,255,0.18)" strokeWidth="0.6"/>
       ))}
 
       {/* Subtle cloud wisps */}
       <ellipse cx={W*0.22} cy={H*0.28} rx={W*0.10} ry={H*0.025}
-        fill="rgba(255,255,255,0.08)" transform={`rotate(-8,${W*0.22},${H*0.28})`}/>
+        fill="rgba(255,255,255,0.06)" transform={`rotate(-8,${W*0.22},${H*0.28})`}/>
       <ellipse cx={W*0.60} cy={H*0.38} rx={W*0.12} ry={H*0.022}
-        fill="rgba(255,255,255,0.07)" transform={`rotate(5,${W*0.60},${H*0.38})`}/>
+        fill="rgba(255,255,255,0.05)" transform={`rotate(5,${W*0.60},${H*0.38})`}/>
       <ellipse cx={W*0.38} cy={H*0.62} rx={W*0.09} ry={H*0.020}
-        fill="rgba(255,255,255,0.06)" transform={`rotate(-4,${W*0.38},${H*0.62})`}/>
+        fill="rgba(255,255,255,0.04)" transform={`rotate(-4,${W*0.38},${H*0.62})`}/>
       <ellipse cx={W*0.80} cy={H*0.55} rx={W*0.08} ry={H*0.018}
-        fill="rgba(255,255,255,0.07)" transform={`rotate(10,${W*0.80},${H*0.55})`}/>
+        fill="rgba(255,255,255,0.05)" transform={`rotate(10,${W*0.80},${H*0.55})`}/>
     </svg>
   )
 }
@@ -164,7 +164,7 @@ function RotatingEarth({ size }) {
       position: 'absolute', inset: 0,
       borderRadius: '50%',
       overflow: 'hidden',
-      background: '#0a2d52',
+      background: '#f6f8fb',
     }}>
       {/* Scrolling map strip — duplicated for seamless loop */}
       <div className="earth-strip">
@@ -175,21 +175,21 @@ function RotatingEarth({ size }) {
       {/* Sphere shading: dark on right/edges (terminator effect) */}
       <div style={{
         position:'absolute', inset:0, borderRadius:'50%',
-        background:'radial-gradient(ellipse at 32% 35%, rgba(255,255,255,0.13) 0%, transparent 55%), radial-gradient(ellipse at 78% 60%, rgba(0,0,0,0.45) 0%, transparent 55%)',
+        background:'radial-gradient(ellipse at 32% 35%, rgba(255,255,255,0.22) 0%, transparent 55%), radial-gradient(ellipse at 78% 60%, rgba(15,23,42,0.16) 0%, transparent 55%)',
         pointerEvents:'none',
       }}/>
 
       {/* Polar darkening — hides stretched distortion at top & bottom */}
       <div style={{
         position:'absolute', inset:0, borderRadius:'50%',
-        background:'linear-gradient(to bottom, rgba(5,20,50,0.85) 0%, rgba(5,20,50,0.45) 15%, transparent 30%, transparent 70%, rgba(5,20,50,0.45) 85%, rgba(5,20,50,0.85) 100%)',
+        background:'linear-gradient(to bottom, rgba(13,23,36,0.60) 0%, rgba(13,23,36,0.26) 15%, transparent 30%, transparent 70%, rgba(13,23,36,0.26) 85%, rgba(13,23,36,0.60) 100%)',
         pointerEvents:'none',
       }}/>
 
       {/* Atmosphere rim */}
       <div style={{
         position:'absolute', inset:0, borderRadius:'50%',
-        background:'radial-gradient(ellipse at 50% 50%, transparent 72%, rgba(80,160,255,0.32) 88%, rgba(40,120,255,0.60) 100%)',
+        background:'radial-gradient(ellipse at 50% 50%, transparent 72%, rgba(47,111,191,0.16) 88%, rgba(47,111,191,0.32) 100%)',
         pointerEvents:'none',
       }}/>
     </div>
@@ -203,8 +203,8 @@ const SERVICES = [
     title: 'Repair & Recovery',
     subtitle: 'Fast & Reliable Support',
     icon: FiCpu,
-    color: '#2563eb',
-    iconBg: 'linear-gradient(135deg,#1e3a8a,#2563eb)',
+    color: '#2f6fbf',
+    iconBg: 'linear-gradient(135deg,#1e5fb8,#2f6fbf)',
     position: 'top',
     details: ['Chip-level PCB repair','Data recovery from HDD/SSD','Motherboard fault detection','GPU & CPU reballing','On-site & walk-in service'],
   },
@@ -213,8 +213,8 @@ const SERVICES = [
     title: 'Maintenance & Automation',
     subtitle: 'Smart Automation Solutions',
     icon: FiTool,
-    color: '#16a34a',
-    iconBg: 'linear-gradient(135deg,#14532d,#16a34a)',
+    color: '#2d5f9b',
+    iconBg: 'linear-gradient(135deg,#255c9d,#2d5f9b)',
     position: 'left',
     details: ['Annual maintenance contracts','PLC & automation systems','Preventive maintenance','Industrial control systems','SCADA integration'],
   },
@@ -223,8 +223,8 @@ const SERVICES = [
     title: 'Network & Cloud',
     subtitle: 'Secure & Scalable Networks',
     icon: FiCloud,
-    color: '#0284c7',
-    iconBg: 'linear-gradient(135deg,#0c4a6e,#0284c7)',
+    color: '#3b82c4',
+    iconBg: 'linear-gradient(135deg,#1e5fb8,#3b82c4)',
     position: 'right',
     details: ['LAN/WAN infrastructure','Cloud migration (AWS/Azure/GCP)','Enterprise WiFi deployment','Firewall & VPN setup','Network monitoring'],
   },
@@ -233,8 +233,8 @@ const SERVICES = [
     title: 'Security & AV',
     subtitle: 'Advanced Protection Always On',
     icon: FiShield,
-    color: '#16a34a',
-    iconBg: 'linear-gradient(135deg,#14532d,#16a34a)',
+    color: '#2d5f9b',
+    iconBg: 'linear-gradient(135deg,#255c9d,#2d5f9b)',
     position: 'bottom',
     details: ['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'],
   },
@@ -299,8 +299,8 @@ export default function OrbitalServices() {
           width={S} height={S} viewBox={`0 0 ${S} ${S}`} overflow="visible">
           <defs>
             <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stopColor="rgba(96,165,250,0.18)"/>
-              <stop offset="100%" stopColor="rgba(96,165,250,0)"/>
+              <stop offset="0%"   stopColor="rgba(47,111,191,0.14)"/>
+              <stop offset="100%" stopColor="rgba(47,111,191,0)"/>
             </radialGradient>
           </defs>
 
@@ -311,7 +311,7 @@ export default function OrbitalServices() {
           {rings.map((r, i) => (
             <ellipse key={i} cx={CX} cy={CY} rx={r.rx} ry={r.ry}
               fill="none"
-              stroke={`rgba(96,165,250,${r.op})`}
+              stroke={`rgba(47,111,191,${r.op})`}
               strokeWidth={r.sw}
               strokeDasharray={r.dash}
               transform={`rotate(${r.tilt},${CX},${CY})`}/>
@@ -321,14 +321,14 @@ export default function OrbitalServices() {
           {SERVICES.map(s => {
             const p = cardPos[s.position]
             return <line key={s.id} x1={CX} y1={CY} x2={p.x} y2={p.y}
-              stroke="rgba(96,165,250,0.16)" strokeWidth="1" strokeDasharray="5 5"/>
+              stroke="rgba(47,111,191,0.12)" strokeWidth="1" strokeDasharray="5 5"/>
           })}
 
           {/* Card anchor dots */}
           {SERVICES.map(s => {
             const p = cardPos[s.position]
             return <circle key={s.id+'-a'} cx={p.x} cy={p.y} r="4"
-              fill={s.color} style={{ filter:`drop-shadow(0 0 5px ${s.color})` }}/>
+              fill={s.color} style={{ filter:`drop-shadow(0 0 4px ${s.color})` }}/>
           })}
         </svg>
 
@@ -387,11 +387,11 @@ export default function OrbitalServices() {
               style={{ left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:cw }}
               onClick={() => setSelected(s)}>
               <div style={{
-                background:'#ffffff',
-                border:'1px solid rgba(59,130,246,0.15)',
+                background:'#fbfcfe',
+                border:'1px solid rgba(47,111,191,0.12)',
                 borderRadius: isMobile ? 10 : 16,
                 padding: isMobile ? '7px 9px' : '13px 15px',
-                boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                boxShadow:'0 4px 20px rgba(47,111,191,0.10), 0 1px 4px rgba(15,23,42,0.06)',
                 display:'flex', alignItems:'center', gap: isMobile ? 7 : 11,
               }}>
                 <div style={{
@@ -400,13 +400,13 @@ export default function OrbitalServices() {
                   width: isMobile ? 34 : 54, height: isMobile ? 34 : 54,
                   minWidth: isMobile ? 34 : 54,
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  boxShadow:`0 0 16px ${s.color}55`,
+                  boxShadow:`0 0 12px ${s.color}44`,
                 }}>
                   <Icon style={{ color:'#fff', width: isMobile?16:26, height: isMobile?16:26 }}/>
                 </div>
                 <div>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize: isMobile?'0.58rem':'0.88rem', lineHeight:1.25 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize: isMobile?'0.46rem':'0.66rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
+                  <p style={{ color:'#1f2937', fontWeight:700, fontSize: isMobile?'0.58rem':'0.88rem', lineHeight:1.25 }}>{s.title}</p>
+                  <p style={{ color:'#64748b', fontSize: isMobile?'0.46rem':'0.66rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -417,15 +417,15 @@ export default function OrbitalServices() {
         {BADGES.map(b => (
           <div key={b.label} className="absolute z-30 pointer-events-none"
             style={{ ...b.pos, transform:'translate(-50%,-50%)' }}>
-            <div style={{
-              background:'#ffffff',
-              border:'1px solid rgba(59,130,246,0.22)',
+              <div style={{
+              background:'#fbfcfe',
+              border:'1px solid rgba(47,111,191,0.16)',
               borderRadius: isMobile ? 8 : 10,
               padding: isMobile ? '4px 8px' : '6px 13px',
               textAlign:'center',
               animation:'badgePulse 3s ease-in-out infinite',
             }}>
-              <p style={{ color:'#2563eb', fontWeight:700, fontSize: isMobile?'0.52rem':'0.72rem', lineHeight:1.3 }}>{b.label}</p>
+              <p style={{ color:'#2f6fbf', fontWeight:700, fontSize: isMobile?'0.52rem':'0.72rem', lineHeight:1.3 }}>{b.label}</p>
               <p style={{ color:'#64748b', fontSize: isMobile?'0.44rem':'0.60rem', lineHeight:1.3 }}>{b.sub}</p>
             </div>
           </div>
@@ -438,12 +438,12 @@ export default function OrbitalServices() {
           onClick={() => setSelected(null)}>
           <div className="relative rounded-2xl p-6 md:p-8 w-full max-w-md"
             style={{
-              background:'#fff',
-              border:`1.5px solid ${selected.color}33`,
-              boxShadow:`0 8px 48px ${selected.color}22, 0 2px 16px rgba(0,0,0,0.10)`,
+              background:'#fbfcfe',
+              border:`1.5px solid ${selected.color}26`,
+              boxShadow:`0 8px 40px ${selected.color}18, 0 2px 16px rgba(15,23,42,0.08)`,
             }}
             onClick={e => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-slate-900"
               onClick={() => setSelected(null)}>
               <FiX style={{ width:20, height:20 }}/>
             </button>
@@ -456,15 +456,15 @@ export default function OrbitalServices() {
                 <selected.icon style={{ color:'#fff', width:28, height:28 }}/>
               </div>
               <div>
-                <h3 style={{ color:'#0f172a', fontSize:'1.2rem', fontWeight:700 }}>{selected.title}</h3>
-                <p style={{ color:selected.color, fontSize:'0.85rem', marginTop:3 }}>{selected.subtitle}</p>
+                <h3 style={{ color:'#1f2937', fontSize:'1.2rem', fontWeight:700 }}>{selected.title}</h3>
+                <p style={{ color:'#2f6fbf', fontSize:'0.85rem', marginTop:3 }}>{selected.subtitle}</p>
               </div>
             </div>
             <ul style={{ display:'flex', flexDirection:'column', gap:10 }}>
               {selected.details.map((item,i) => (
                 <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
                   <div style={{ width:7, height:7, borderRadius:'50%', marginTop:5, flexShrink:0, background:selected.color }}/>
-                  <span style={{ color:'#334155', fontSize:'0.9rem' }}>{item}</span>
+                  <span style={{ color:'#475569', fontSize:'0.9rem' }}>{item}</span>
                 </li>
               ))}
             </ul>

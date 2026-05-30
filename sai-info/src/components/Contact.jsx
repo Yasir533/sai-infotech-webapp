@@ -154,12 +154,12 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-[#0b74d1] text-sm font-semibold uppercase tracking-[0.28em]">
+          <span className="text-[#2f6fbf] text-sm font-semibold uppercase tracking-[0.28em]">
             Get In Touch
           </span>
 
           <h2 className="text-5xl font-black text-slate-900 mt-4">
-            Contact <span className="text-[#0b74d1]">Us</span>
+            Contact <span className="text-[#2f6fbf]">Us</span>
           </h2>
         </motion.div>
 
@@ -174,11 +174,9 @@ export default function Contact() {
             {contactInfo.map((info, i) => (
               <div
                 key={i}
-                className="bg-[#fbfcfe] border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_40px_rgba(15,23,42,0.05)]"
+                className="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)]"
               >
-                <div
-                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}
-                >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-800 to-[#2f6fbf] flex items-center justify-center">
                   {iconImageByTitle[info.title] ? (
                     <>
                       <img
@@ -237,7 +235,7 @@ export default function Contact() {
                         href="https://maps.app.goo.gl/nr6kvoQtCdyEo42k7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block rounded-lg bg-[#0b74d1] border border-[#0b74d1] px-3 py-2 text-sm text-white hover:bg-[#095fbd]"
+                        className="inline-block rounded-lg bg-[#2f6fbf] border border-[#2f6fbf] px-3 py-2 text-sm text-white hover:bg-[#255c9d]"
                       >
                         View Map
                       </a>
@@ -253,7 +251,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="bg-[#fbfcfe] border border-slate-200 rounded-3xl p-8 shadow-[0_18px_50px_rgba(15,23,42,0.06)]"
+            className="bg-[#f8fafc] border border-slate-200 rounded-3xl p-8 shadow-[0_18px_42px_rgba(15,23,42,0.06)]"
           >
             {submitted ? (
               <div className="text-center py-10">
@@ -279,7 +277,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Full Name"
                   required
-                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2f6fbf]"
                 />
 
                 {/* Email */}
@@ -290,7 +288,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Email Address"
                   required
-                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2f6fbf]"
                 />
 
                 {/* Phone */}
@@ -301,7 +299,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Phone Number"
                   required
-                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2f6fbf]"
                 />
 
                 {/* Services (multi-select dropdown) */}
@@ -320,7 +318,7 @@ export default function Contact() {
                         form.services.map((s, i) => (
                           <span
                             key={i}
-                            className="px-3 py-1 rounded-full bg-[#0b74d1]/10 text-xs text-[#0b74d1]"
+                            className="px-3 py-1 rounded-full bg-[#2f6fbf]/10 text-xs text-[#2f6fbf]"
                           >
                             {s}
                           </span>
@@ -348,7 +346,7 @@ export default function Contact() {
                                 type="checkbox"
                                 checked={checked}
                                 onChange={() => toggleService(service)}
-                                className="h-4 w-4 text-[#0b74d1]"
+                                className="h-4 w-4 text-[#2f6fbf]"
                               />
                               <span className="text-sm text-slate-700">{service}</span>
                             </label>
@@ -367,14 +365,14 @@ export default function Contact() {
                   rows="5"
                   placeholder="Your Message"
                   required
-                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:border-[#0b74d1]"
+                  className="w-full bg-[#f7f9fc] border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:border-[#2f6fbf]"
                 />
 
                 {/* Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#0b74d1] hover:bg-[#095fbd] rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2 shadow-[0_12px_28px_rgba(11,116,209,0.22)]"
+                  className="w-full bg-[#2f6fbf] hover:bg-[#255c9d] rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2 shadow-[0_10px_22px_rgba(47,111,191,0.18)]"
                 >
                   {loading ? (
                     'Sending...'
