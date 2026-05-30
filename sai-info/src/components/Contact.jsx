@@ -144,7 +144,8 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 relative">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(11,116,209,0.06),transparent_45%)] pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}
         <motion.div
           ref={ref}
@@ -153,12 +154,12 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-blue-400 text-sm font-semibold uppercase tracking-widest">
+          <span className="text-[#0b74d1] text-sm font-semibold uppercase tracking-[0.28em]">
             Get In Touch
           </span>
 
-          <h2 className="text-5xl font-black text-white mt-4">
-            Contact <span className="text-blue-400">Us</span>
+          <h2 className="text-5xl font-black text-slate-900 mt-4">
+            Contact <span className="text-[#0b74d1]">Us</span>
           </h2>
         </motion.div>
 
@@ -173,7 +174,7 @@ export default function Contact() {
             {contactInfo.map((info, i) => (
               <div
                 key={i}
-                className="bg-slate-900 border border-slate-700 rounded-2xl p-6 flex gap-4"
+                className="bg-white border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_40px_rgba(15,23,42,0.06)]"
               >
                 <div
                   className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}
@@ -198,7 +199,7 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <h3 className="text-white text-lg font-bold mb-2">
+                  <h3 className="text-slate-900 text-lg font-bold mb-2">
                     {info.title}
                   </h3>
 
@@ -206,7 +207,7 @@ export default function Contact() {
                     if (info.title === 'Phone') {
                       const tel = String(line).replace(/[^0-9+]/g, '');
                       return (
-                        <p key={index} className="text-slate-300 text-sm">
+                        <p key={index} className="text-slate-600 text-sm">
                           <a href={`tel:${tel}`} className="hover:underline">
                             {line}
                           </a>
@@ -216,7 +217,7 @@ export default function Contact() {
 
                     if (info.title === 'Email') {
                       return (
-                        <p key={index} className="text-slate-300 text-sm">
+                        <p key={index} className="text-slate-600 text-sm">
                           <a href={`mailto:${line}`} className="hover:underline">
                             {line}
                           </a>
@@ -225,7 +226,7 @@ export default function Contact() {
                     }
 
                     return (
-                      <p key={index} className="text-slate-300 text-sm">
+                      <p key={index} className="text-slate-600 text-sm">
                         {line}
                       </p>
                     );
@@ -236,7 +237,7 @@ export default function Contact() {
                         href="https://maps.app.goo.gl/nr6kvoQtCdyEo42k7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-slate-200 hover:bg-slate-700"
+                        className="inline-block rounded-lg bg-[#0b74d1] border border-[#0b74d1] px-3 py-2 text-sm text-white hover:bg-[#095fbd]"
                       >
                         View Map
                       </a>
@@ -252,19 +253,19 @@ export default function Contact() {
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="bg-slate-900 border border-slate-700 rounded-3xl p-8"
+            className="bg-white border border-slate-200 rounded-3xl p-8 shadow-[0_18px_50px_rgba(15,23,42,0.07)]"
           >
             {submitted ? (
               <div className="text-center py-10">
-                <div className="w-20 h-20 rounded-full bg-green-500 flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-6 shadow-[0_10px_24px_rgba(16,185,129,0.2)]">
                   <FiCheck className="text-white" size={36} />
                 </div>
 
-                <h3 className="text-3xl font-bold text-white mb-4">
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">
                   Message Sent Successfully
                 </h3>
 
-                <p className="text-slate-300">
+                <p className="text-slate-600">
                   Our team will contact you shortly.
                 </p>
               </div>
@@ -278,7 +279,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Full Name"
                   required
-                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Email */}
@@ -289,7 +290,7 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Email Address"
                   required
-                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Phone */}
@@ -300,17 +301,17 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Phone Number"
                   required
-                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Services (multi-select dropdown) */}
                 <div ref={servicesRef} className="relative">
-                  <h3 className="text-white font-semibold mb-3">Select Services</h3>
+                  <h3 className="text-slate-900 font-semibold mb-3">Select Services</h3>
 
                   <button
                     type="button"
                     onClick={() => setServicesOpen((s) => !s)}
-                    className="w-full text-left rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm flex items-center justify-between"
+                    className="w-full text-left rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm flex items-center justify-between text-slate-700"
                   >
                     <div className="flex flex-wrap gap-2">
                       {form.services.length === 0 ? (
@@ -319,7 +320,7 @@ export default function Contact() {
                         form.services.map((s, i) => (
                           <span
                             key={i}
-                            className="px-3 py-1 rounded-full bg-slate-700 text-xs text-white"
+                            className="px-3 py-1 rounded-full bg-[#0b74d1]/10 text-xs text-[#0b74d1]"
                           >
                             {s}
                           </span>
@@ -328,7 +329,7 @@ export default function Contact() {
                     </div>
 
                     <svg
-                      className={`w-4 h-4 ml-3 text-slate-300 transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 ml-3 text-slate-500 transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
                       viewBox="0 0 20 20"
                       fill="none"
                     >
@@ -337,19 +338,19 @@ export default function Contact() {
                   </button>
 
                   {servicesOpen && (
-                    <div className="absolute z-30 mt-2 w-full rounded-xl border border-slate-700 bg-slate-900 p-3 shadow-lg">
+                    <div className="absolute z-30 mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
                       <div className="max-h-56 overflow-auto">
                         {SERVICE_OPTIONS.map((service, index) => {
                           const checked = form.services.includes(service)
                           return (
-                            <label key={index} className="flex items-center gap-3 p-2 rounded hover:bg-slate-800 cursor-pointer">
+                            <label key={index} className="flex items-center gap-3 p-2 rounded hover:bg-slate-50 cursor-pointer">
                               <input
                                 type="checkbox"
                                 checked={checked}
                                 onChange={() => toggleService(service)}
-                                className="h-4 w-4 text-blue-600"
+                                className="h-4 w-4 text-[#0b74d1]"
                               />
-                              <span className="text-sm text-slate-200">{service}</span>
+                              <span className="text-sm text-slate-700">{service}</span>
                             </label>
                           )
                         })}
@@ -366,14 +367,14 @@ export default function Contact() {
                   rows="5"
                   placeholder="Your Message"
                   required
-                  className="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-3 text-white resize-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:border-[#0b74d1]"
                 />
 
                 {/* Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2"
+                  className="w-full bg-[#0b74d1] hover:bg-[#095fbd] rounded-xl py-4 text-white font-semibold flex items-center justify-center gap-2 shadow-[0_12px_28px_rgba(11,116,209,0.22)]"
                 >
                   {loading ? (
                     'Sending...'
