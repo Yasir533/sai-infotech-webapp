@@ -238,20 +238,19 @@ return (
         setSelected(service)
       }
     >
-      <div className="service-card">
+      <div
+        className="service-card service-node"
+        aria-label={service.title}
+        title={service.title}
+      >
         <div
           className="service-icon"
           style={{
-            background:
-              service.color,
+            background: service.color,
           }}
         >
           <Icon />
         </div>
-
-        <h3>{service.title}</h3>
-
-        <p>{service.desc}</p>
       </div>
     </motion.div>
   );
