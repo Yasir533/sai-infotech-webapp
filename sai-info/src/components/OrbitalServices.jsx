@@ -66,12 +66,12 @@ export default function OrbitalServices() {
 
   // MOBILE FIX ONLY
   const radius = useMemo(
-    () => (isMobile ? 118 : 230),
+    () => (isMobile ? 125 : 265),
     [isMobile]
   )
 
   const SIZE = useMemo(
-    () => (isMobile ? 340 : 620),
+    () => (isMobile ? 380 : 700),
     [isMobile]
   )
 
@@ -103,7 +103,7 @@ export default function OrbitalServices() {
           <circle
             cx={CX}
             cy={CY}
-            r={isMobile ? 118 : 220}
+            r={isMobile ? 92 : 195}
             fill="none"
             stroke="rgba(34,211,238,0.25)"
             strokeWidth="1"
@@ -112,7 +112,7 @@ export default function OrbitalServices() {
           <circle
             cx={CX}
             cy={CY}
-            r={isMobile ? 95 : 190}
+            r={isMobile ? 70 : 160}
             fill="none"
             stroke="rgba(34,211,238,0.15)"
             strokeWidth="1"
@@ -160,15 +160,15 @@ export default function OrbitalServices() {
         <div
           className="absolute z-10 rounded-full bg-[#06111f]/90 border border-cyan-400/30 flex flex-col items-center justify-center text-center shadow-[0_0_50px_rgba(0,255,255,0.15)]"
           style={{
-            width: isMobile ? 145 : 300,
-            height: isMobile ? 145 : 300,
+            width: isMobile ? 115 : 220,
+            height: isMobile ? 115 : 220,
             left: CX,
             top: CY,
             transform: 'translate(-50%,-50%)',
           }}
         >
 
-          <h2 className="text-white text-2xl md:text-5xl font-extrabold leading-none">
+          <h2 className="text-white text-xl md:text-4xl font-extrabold leading-none">
             Our
 
             <span className="block text-cyan-400 mt-1">
@@ -177,9 +177,9 @@ export default function OrbitalServices() {
 
           </h2>
 
-          <div className="w-12 md:w-20 h-1 bg-cyan-400 rounded-full my-3" />
+          <div className="w-10 md:w-16 h-1 bg-cyan-400 rounded-full my-2 md:my-3" />
 
-          <p className="text-gray-300 text-[10px] md:text-sm max-w-[150px] md:max-w-[200px] leading-relaxed px-2">
+          <p className="text-gray-300 text-[9px] md:text-sm max-w-[120px] md:max-w-[180px] leading-relaxed px-2">
             Drop-off, Walk-in, On-site & Pickup.
           </p>
 
@@ -213,18 +213,18 @@ export default function OrbitalServices() {
               onClick={() => setSelected(service)}
             >
 
-              <div className="w-[58px] md:w-[105px] bg-[#081120]/90 border border-cyan-400/20 rounded-xl p-2 backdrop-blur-xl shadow-[0_0_15px_rgba(0,255,255,0.08)]">
+              <div className="w-[92px] md:w-[170px] bg-[#081120]/90 border border-cyan-400/20 rounded-2xl p-3 md:p-5 backdrop-blur-xl shadow-[0_0_20px_rgba(0,255,255,0.1)]">
 
                 <div
-                  className="w-5 h-5 rounded-md flex items-center justify-center mb-1"
+                  className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-3"
                   style={{
                     background: service.color,
                   }}
                 >
-                  <Icon className="text-white w-3 h-3" />
+                  <Icon className="text-white w-4 h-4 md:w-6 md:h-6" />
                 </div>
 
-                <h3 className="text-white text-[7px] md:text-[13px] font-bold leading-tight">
+                <h3 className="text-white text-[10px] md:text-lg font-bold leading-tight">
                   {service.title}
                 </h3>
 
