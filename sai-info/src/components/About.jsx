@@ -1,94 +1,34 @@
-import React, { useRef, useState } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-
-import {
-  FiAward,
-  FiCheckCircle,
-  FiX,
-} from 'react-icons/fi'
-
-const highlights = [
-  {
-    icon: '/icons/icons8-experience-50.png',
-    label: 'Experience',
-    value: '25+ Years',
-  },
-  {
-    icon: '/icons/icons8-tick-50.png',
-    label: 'Success Rate',
-    value: '100%',
-  },
-  {
-    icon: '/icons/icons8-happy-50.png',
-    label: 'Happy Clients',
-    value: '100+',
-  },
-  {
-    icon: '/icons/icons8-certified-50.png',
-    label: 'Quality',
-    value: 'ISO Certified',
-  },
-]
+import React, { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { FiAward, FiCheckCircle, FiShield } from 'react-icons/fi'
 
 const mvvSections = [
   {
     icon: '/icons/icons8-mission-50.png',
     title: 'Our Mission',
     color: 'from-blue-600 to-blue-400',
-    glow: 'rgba(37,99,235,0.18)',
-    points: [
-      'Deliver innovative, reliable IT solutions to every client',
-      'Maintain excellence and trust in every engagement',
-      'Stay ahead with cutting-edge technology adoption',
-    ],
+    desc: 'Deliver reliable and innovative IT solutions that empower businesses to grow and succeed.',
   },
   {
     icon: '/icons/icons8-vision-24.png',
     title: 'Our Vision',
     color: 'from-cyan-600 to-cyan-400',
-    glow: 'rgba(6,182,212,0.18)',
-    points: [
-      "Be Bangalore's most trusted IT service provider",
-      'Build lasting partnerships through quality and integrity',
-      'Continuously innovate to lead in a fast-changing industry',
-    ],
+    desc: 'To be a trusted leader in IT services, known for excellence, innovation, and integrity.',
   },
   {
     icon: '/icons/icons8-values-50.png',
     title: 'Our Values',
     color: 'from-indigo-600 to-violet-400',
-    glow: 'rgba(99,102,241,0.18)',
-    points: [
-      'Honesty — Transparent in every interaction',
-      'Teamwork — Collaborative approach to solutions',
-      'Efficiency — Smart solutions that save time & cost',
-    ],
+    desc: 'Integrity, innovation, customer focus, and commitment to excellence drive everything we do.',
   },
 ]
 
-const serviceModes = [
-  { label: 'Drop-off', desc: 'Walk in anytime' },
-  { label: 'Walk-in', desc: 'No appointment needed' },
-  { label: 'On-site', desc: 'We come to you' },
-  { label: 'Pickup', desc: 'Doorstep collection' },
-]
-
 export default function About() {
-
   const ref = useRef(null)
-
-  const inView = useInView(ref, {
-    once: true,
-    margin: '-100px',
-  })
-
-  // ✅ FIXED: Use click-only state, no hover timeout logic
-  const [activeMVV, setActiveMVV] = useState(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
-
     <section id="about" className="section-pad relative">
-
       <div className="absolute inset-0 dot-pattern opacity-20" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -101,29 +41,19 @@ export default function About() {
           transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-
-          <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">
-            About Us
-          </p>
-
+          <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">About Us</p>
           <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
             Trusted IT Solutions for
-            <span className="text-gradient block">
-              Modern Businesses
-            </span>
+            <span className="text-gradient block">Modern Businesses</span>
           </h2>
-
           <p className="max-w-3xl mx-auto text-slate-400 text-lg leading-relaxed">
-            We provide end-to-end IT infrastructure, networking,
-            surveillance, cloud, and enterprise solutions with
-            25+ years of trusted expertise.
+            We provide end-to-end IT infrastructure, networking, surveillance, cloud, and enterprise solutions with 25+ years of trusted expertise.
           </p>
-
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
 
-          {/* Left */}
+          {/* ── LEFT COLUMN ── */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -131,97 +61,72 @@ export default function About() {
             className="space-y-8"
           >
 
+            {/* Why Choose Us */}
             <div className="glass rounded-3xl p-8 border border-white/10">
-
-              <div className="flex items-center gap-3 mb-5">
-
+              <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
                   <FiAward className="text-blue-400 text-xl" />
                 </div>
-
                 <div>
-                  <h3 className="text-white text-2xl font-bold">
-                    Why Choose Us
-                  </h3>
-
-                  <p className="text-slate-400 text-sm">
-                    Excellence in every solution
-                  </p>
+                  <h3 className="text-white text-2xl font-bold">Why Choose Us</h3>
+                  <p className="text-slate-400 text-sm">Excellence in every solution</p>
                 </div>
-
               </div>
 
               <div className="space-y-4">
-
                 {[
                   'Certified & experienced technical team',
                   'Advanced infrastructure & tools',
                   'Enterprise-grade service quality',
                   'Fast response & support',
+                  'Client satisfaction is our priority',
                 ].map((point, i) => (
-
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: -20 }}
                     animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.2 + i * 0.1,
-                    }}
+                    transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
                     className="flex items-center gap-3"
                   >
-
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                       <FiCheckCircle className="text-blue-400 text-sm" />
                     </div>
-
-                    <span className="text-slate-300">
-                      {point}
-                    </span>
-
+                    <span className="text-slate-300">{point}</span>
                   </motion.div>
-
                 ))}
-
               </div>
-
             </div>
 
-            {/* Service Modes */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Mission Vision Values */}
+            <div className="glass rounded-3xl p-6 border border-white/10">
+              <p className="text-blue-400 text-xs font-semibold tracking-widest uppercase mb-1">What Drives Us</p>
+              <h4 className="text-white font-bold text-xl mb-6">
+                Mission, Vision & <span className="text-gradient">Values</span>
+              </h4>
 
-              {serviceModes.map((mode, i) => (
-
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.4 + i * 0.1,
-                  }}
-                  className="glass rounded-2xl p-4 border border-white/10"
-                >
-
-                  <div className="w-2 h-2 rounded-full bg-blue-400 mb-3" />
-
-                  <h4 className="text-white font-semibold">
-                    {mode.label}
-                  </h4>
-
-                  <p className="text-slate-500 text-sm">
-                    {mode.desc}
-                  </p>
-
-                </motion.div>
-
-              ))}
-
+              <div className="grid grid-cols-3 gap-4">
+                {mvvSections.map((sec, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                    className="glass rounded-2xl p-4 border border-white/10 flex flex-col items-center text-center gap-3"
+                  >
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center shadow-lg`}>
+                      <img src={sec.icon} alt={sec.title} className="w-7 h-7 object-contain brightness-0 invert" />
+                    </div>
+                    <h5 className="text-white font-bold text-sm">{sec.title}</h5>
+                    <div className={`w-8 h-0.5 bg-gradient-to-r ${sec.color} rounded-full`} />
+                    <p className="text-slate-400 text-xs leading-relaxed">{sec.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
           </motion.div>
 
-          {/* Right */}
+          {/* ── RIGHT COLUMN ── */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -229,198 +134,69 @@ export default function About() {
             className="space-y-6"
           >
 
-            {/* Highlights */}
-            <div className="grid grid-cols-2 gap-6">
-
-              {highlights.map((item, i) => (
-
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.5 + i * 0.1,
-                  }}
-                  className="glass rounded-3xl p-6 border border-white/10 text-center"
-                >
-
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
-
-                    <img
-                      src={item.icon}
-                      alt={item.label}
-                      className="w-6 h-6 object-contain"
-                    />
-
-                  </div>
-
-                  <div className="text-2xl font-black text-gradient mb-1">
-                    {item.value}
-                  </div>
-
-                  <div className="text-slate-500 text-sm">
-                    {item.label}
-                  </div>
-
-                </motion.div>
-
-              ))}
-
-            </div>
-
-            {/* Mission Vision Values */}
-            <div className="glass rounded-3xl p-6 border border-white/10">
-
-              <p className="text-blue-400 text-xs font-semibold tracking-widest uppercase mb-1">
-                What Drives Us
-              </p>
-
-              <h4 className="text-white font-bold text-lg mb-4">
-                Mission, Vision &{' '}
-                <span className="text-gradient">
-                  Values
-                </span>
-              </h4>
-
-              <div className="flex justify-around">
-
-                {mvvSections.map((sec, i) => (
-
-                  // ✅ FIXED: onClick only — removed onMouseEnter and onMouseLeave entirely
-                  <button
-                    key={i}
-                    onClick={() => setActiveMVV(sec)}
-                    className="flex flex-col items-center gap-2 group cursor-pointer"
-                  >
-
-                    <div
-                      className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center shadow-lg `}
-                    >
-
-                      <img
-                        src={sec.icon}
-                        alt={sec.title}
-                        className="w-7 h-7 object-contain brightness-0 invert"
-                      />
-
-                    </div>
-
-                    <span className="text-slate-400 text-xs font-semibold ">
-                      {sec.title}
-                    </span>
-
-                  </button>
-
-                ))}
-
+            {/* Quality Assurance Card */}
+            <div className="glass rounded-3xl p-8 border border-white/10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+                  <FiShield className="text-blue-400 text-xl" />
+                </div>
+                <div>
+                  <h3 className="text-white text-2xl font-bold">Quality Assurance</h3>
+                  <p className="text-slate-400 text-sm">Committed to the highest standards</p>
+                </div>
               </div>
 
+              {/* ISO Badge */}
+              <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
+                <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
+                  {/* Glowing ring */}
+                  <div className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-70"
+                    style={{ boxShadow: '0 0 20px rgba(6,182,212,0.6), 0 0 40px rgba(6,182,212,0.3)' }} />
+                  <div className="text-center">
+                    <p className="text-cyan-400 text-[9px] font-bold tracking-widest uppercase">Certified</p>
+                    <p className="text-white text-lg font-black leading-none">ISO</p>
+                    <p className="text-white text-[10px] font-bold">9001:2015</p>
+                    <div className="flex justify-center mt-1">
+                      <FiCheckCircle className="text-cyan-400" size={14} />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
+                  <p className="text-blue-400 text-xl font-bold">Certified</p>
+                  <p className="text-slate-400 text-sm mt-1">Quality Management System</p>
+                </div>
+              </div>
+
+              {/* Divider with dot */}
+              <div className="relative flex items-center mb-6">
+                <div className="flex-1 h-px bg-white/10" />
+                <div className="w-2 h-2 rounded-full bg-blue-400 mx-3" />
+                <div className="flex-1 h-px bg-white/10" />
+              </div>
+
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                SAI INFOTECH is officially certified under the{' '}
+                <span className="text-blue-400 font-semibold">ISO 9001:2015 Quality Management System</span>,
+                reflecting our commitment to consistent, world-class IT service delivery.
+              </p>
+
+              {/* Divider with dot */}
+              <div className="relative flex items-center mb-6">
+                <div className="flex-1 h-px bg-white/10" />
+                <div className="w-2 h-2 rounded-full bg-blue-400 mx-3" />
+                <div className="flex-1 h-px bg-white/10" />
+              </div>
+
+              <p className="text-slate-300 text-sm leading-relaxed">
+                This international certification confirms that SAI INFOTECH meets rigorous quality management standards — ensuring every client receives reliable, high-quality computer hardware services backed by a globally recognised quality framework.
+              </p>
             </div>
 
           </motion.div>
 
         </div>
-
       </div>
-
-      {/* Modal — ✅ FIXED: Only opens on click, closes on X button or backdrop click */}
-      <AnimatePresence>
-
-        {activeMVV && (
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            // ✅ Click backdrop to close
-            onClick={() => setActiveMVV(null)}
-          >
-
-            <motion.div
-              initial={{
-                opacity: 0,
-                scale: 0.9,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.9,
-                y: 20,
-              }}
-              transition={{ duration: 0.25 }}
-              className="relative bg-[#06111f] border border-white/10 rounded-2xl p-8 w-[400px] max-w-[90vw]"
-              style={{
-                boxShadow: `0 0 40px ${activeMVV.glow}`,
-              }}
-              // ✅ Prevent backdrop click from firing when clicking inside modal
-              onClick={(e) => e.stopPropagation()}
-            >
-
-              <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-                onClick={() => setActiveMVV(null)}
-              >
-                <FiX size={20} />
-              </button>
-
-              <div
-                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${activeMVV.color} flex items-center justify-center mb-5 shadow-lg`}
-              >
-
-                <img
-                  src={activeMVV.icon}
-                  alt={activeMVV.title}
-                  className="w-8 h-8 object-contain brightness-0 invert"
-                />
-
-              </div>
-
-              <h3 className="text-2xl font-bold text-white mb-5">
-                {activeMVV.title}
-              </h3>
-
-              <div
-                className={`w-full h-px bg-gradient-to-r ${activeMVV.color} opacity-30 mb-5`}
-              />
-
-              <ul className="space-y-3">
-
-                {activeMVV.points.map((point, j) => (
-
-                  <li
-                    key={j}
-                    className="flex items-start gap-3"
-                  >
-
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full bg-gradient-to-br ${activeMVV.color} mt-2 flex-shrink-0`}
-                    />
-
-                    <span className="text-slate-300 text-sm">
-                      {point}
-                    </span>
-
-                  </li>
-
-                ))}
-
-              </ul>
-
-            </motion.div>
-
-          </motion.div>
-
-        )}
-
-      </AnimatePresence>
-
     </section>
   )
 }
