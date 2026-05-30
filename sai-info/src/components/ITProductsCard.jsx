@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";
 
 export default function ITProductsCard() {
   return (
@@ -7,14 +8,15 @@ export default function ITProductsCard() {
       className="
         relative
         block
-        w-[350px]
+        w-full
+        max-w-[420px]
         rounded-[20px]
         overflow-hidden
         border border-cyan-400/30
         bg-[#051224]/90
         backdrop-blur-2xl
-        px-4
-        py-4
+        px-5
+        py-5
         text-white
         transition-all
         duration-300
@@ -37,8 +39,8 @@ export default function ITProductsCard() {
           <div
             className="
               min-w-[48px]
-              h-[48px]
-              rounded-[12px]
+              h-[52px]
+              rounded-[16px]
               flex
               items-center
               justify-center
@@ -47,12 +49,10 @@ export default function ITProductsCard() {
               shadow-[0_0_25px_rgba(0,217,255,0.12)]
             "
           >
-            <span className="text-[22px] text-cyan-300">
-              🛒
-            </span>
+            <FiShoppingCart className="text-[22px] text-cyan-300" />
           </div>
 
-          <h2 className="text-[24px] leading-none font-black text-cyan-300 tracking-[-1px]">
+          <h2 className="text-[22px] sm:text-[24px] leading-none font-black text-cyan-300 tracking-[-1px]">
             IT Products
           </h2>
 
@@ -60,8 +60,8 @@ export default function ITProductsCard() {
 
         {/* DESCRIPTION */}
         <p className="text-[10px] leading-[1.3] text-white/75 font-medium">
-          Wide range of quality IT products. Checked, good condition &
-          affordable.
+          Wide range of quality IT products. Checked, good condition and
+          affordably priced for business procurement.
         </p>
 
       </div>
@@ -74,9 +74,7 @@ export default function ITProductsCard() {
             w-full
             h-[40px]
             rounded-[12px]
-            bg-gradient-to-r
-            from-sky-400
-            to-blue-600
+            bg-[#0066ff]
             text-white
             text-[13px]
             font-bold

@@ -27,7 +27,7 @@ import AdminReset from "./pages/AdminReset"
 function HomePage() {
 
   return (
-    <div className="gradient-bg min-h-screen">
+    <div className="relative min-h-screen bg-[#050a18] text-white overflow-hidden">
       <VideoBackground />
 
       <Navbar />

@@ -124,7 +124,7 @@ return (
       fill="none"
       stroke="rgba(34,211,238,.12)"
       strokeWidth="1"
-      strokeDasharray={i % 2 ? "10 12" : ""}
+      strokeDasharray={i % 2 ? '10 12' : ''}
     />
   ))}
 </svg>
@@ -188,9 +188,9 @@ return (
     CY + Math.sin(angle) * (radius + 110);
 
   return (
-    <motion.div
-      key={badge}
-      className="orbit-badge"
+        <motion.div
+          key={badge}
+          className="orbit-badge"
       animate={{
         y: [0, -8, 0],
       }}
