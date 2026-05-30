@@ -63,11 +63,6 @@ const upload = multer({ storage });
 
 const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "nodemailer";
 
-console.log("EMAIL_PROVIDER:", EMAIL_PROVIDER);
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
-console.log("EMAIL_PASS length:", (process.env.EMAIL_PASS || "").length);
-
 let transporter = null;
 
 // NODEMAILER (Gmail)
@@ -97,8 +92,6 @@ if (EMAIL_PROVIDER === "nodemailer" || EMAIL_PROVIDER === "smtp") {
   transporter.verify((error) => {
     if (error) {
       console.log("EMAIL ERROR FULL:", error);
-      console.log("EMAIL ERROR CODE:", error.code);
-      console.log("EMAIL ERROR MESSAGE:", error.message);
     } else {
       console.log("Email Server Ready ✓");
     }
@@ -108,11 +101,6 @@ if (EMAIL_PROVIDER === "nodemailer" || EMAIL_PROVIDER === "smtp") {
 // ─── SEND EMAIL FUNCTION ────────────────────────────────────
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
-
-  console.log("SEND EMAIL CALLED");
-  console.log("EMAIL_PROVIDER:", EMAIL_PROVIDER);
-  console.log("TO:", to);
-  console.log("TRANSPORTER EXISTS:", !!transporter);
 
   if (EMAIL_PROVIDER === "resend") {
 
@@ -159,8 +147,6 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
   if (!transporter) {
     throw new Error("Email transporter is not initialized. Check EMAIL_USER and EMAIL_PASS in your .env");
   }
-
-  console.log("SENDING VIA NODEMAILER...");
 
   return transporter.sendMail({
     from: `"SAI INFOTECH" <${process.env.EMAIL_USER}>`,
@@ -578,6 +564,7 @@ app.post("/api/contact", async (req, res) => {
     await newContact.save();
 
     console.log("CONTACT SAVED ID:", newContact._id);
+
     console.log("CONTACT MAIL SEND START");
 
     const [adminMailResult, customerMailResult] = await Promise.allSettled([
@@ -587,11 +574,23 @@ app.post("/api/contact", async (req, res) => {
         subject: "New Customer Enquiry - SAI INFOTECH",
         html: `
           <h2>New Customer Enquiry</h2>
+
           <p><strong>Name:</strong> ${name}</p>
+
           <p><strong>Email:</strong> ${email}</p>
+
           <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
+
+          <p><strong>Services:</strong>
+            ${
+              Array.isArray(services)
+                ? services.join(", ")
+                : services
+            }
+          </p>
+
           <p><strong>Message:</strong></p>
+
           <p>${message}</p>
         `,
       }),
@@ -600,27 +599,49 @@ app.post("/api/contact", async (req, res) => {
         subject: "Thank You for Contacting SAI INFOTECH",
         html: `
           <div style="font-family: Arial; padding:20px;">
-            <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
+
+            <h2 style="color:#2563eb;">
+              Thank You for Contacting SAI INFOTECH
+            </h2>
+
             <p>Dear ${name},</p>
+
             <p>Your enquiry has been received successfully.</p>
+
             <p>Our technical team will contact you shortly.</p>
+
             <p><strong>Selected Services:</strong></p>
-            <p>${Array.isArray(services) ? services.join(", ") : services}</p>
+
+            <p>
+              ${
+                Array.isArray(services)
+                  ? services.join(", ")
+                  : services
+              }
+            </p>
+
             <br/>
-            <p>Regards,<br/>SAI INFOTECH</p>
+
+            <p>
+              Regards,<br/>
+              SAI INFOTECH
+            </p>
+
           </div>
         `,
       }),
     ]);
 
     if (adminMailResult.status === "fulfilled") {
-      console.log("ADMIN MAIL SENT ✓");
+      console.log("ADMIN MAIL SENT");
+      console.log("ADMIN MAIL RESPONSE:", adminMailResult.value);
     } else {
       console.log("CONTACT ADMIN MAIL ERROR:", adminMailResult.reason);
     }
 
     if (customerMailResult.status === "fulfilled") {
-      console.log("CUSTOMER MAIL SENT ✓");
+      console.log("CUSTOMER MAIL SENT");
+      console.log("CUSTOMER MAIL RESPONSE:", customerMailResult.value);
     } else {
       console.log("CONTACT CUSTOMER MAIL ERROR:", customerMailResult.reason);
     }
@@ -633,7 +654,9 @@ app.post("/api/contact", async (req, res) => {
     });
 
   } catch (error) {
+
     console.log("FULL ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -674,9 +697,13 @@ app.put("/api/enquiries/:id", async (req, res) => {
 // ─── CHATBOT ────────────────────────────────────────────────
 app.post("/api/chat", async (req, res) => {
   try {
+
     const { message } = req.body;
+
     console.log("/api/chat received:", message);
+
     const msg = (message ?? "").toString().toLowerCase();
+
     let reply = "";
 
     if (msg.includes("services") || msg.includes("service")) {
@@ -696,7 +723,7 @@ app.post("/api/chat", async (req, res) => {
     } else if (msg.includes("wind") || msg.includes("energy")) {
       reply = "We provide Wind Energy Control solutions including industrial monitoring systems, control panels, and support systems.";
     } else if (msg.includes("contact") || msg.includes("phone") || msg.includes("number")) {
-      reply = "You can contact SAI INFOTECH at:\n\n☎ Office: +91 76769 52139";
+      reply = "You can contact SAI INFOTECH at:\n\n📞 +91 83 10 33 85 44\n☎ Office: +91 76 76 95 21 39";
     } else if (msg.includes("location") || msg.includes("address")) {
       reply = "Please contact SAI INFOTECH directly for office location and business assistance.";
     } else if (msg.includes("about") || msg.includes("company")) {
@@ -708,6 +735,7 @@ app.post("/api/chat", async (req, res) => {
     }
 
     res.json({ success: true, reply });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Server Error" });
@@ -718,11 +746,13 @@ app.post("/api/chat", async (req, res) => {
 app.get('/api/products', async (req, res) => {
   try {
     const productsPath = path.join(__dirname, 'products.json');
+
     if (fs.existsSync(productsPath)) {
       const raw = fs.readFileSync(productsPath, 'utf8');
       const products = JSON.parse(raw);
       return res.json(products);
     }
+
     res.json([]);
   } catch (error) {
     console.log('Products API error', error);
@@ -733,10 +763,13 @@ app.get('/api/products', async (req, res) => {
 app.post('/api/products', upload.array('images', 10), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
+
     if (!name || !req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
+
     const images = req.files.map((file) => `/uploads/${file.filename}`);
+
     const newProduct = {
       _id: Date.now().toString(),
       name,
@@ -746,15 +779,23 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       image: images[0],
       images,
     };
+
     const productsPath = path.join(__dirname, 'products.json');
     let products = [];
+
     if (fs.existsSync(productsPath)) {
       const raw = fs.readFileSync(productsPath, 'utf8');
       products = JSON.parse(raw);
     }
+
     products.push(newProduct);
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
-    res.status(201).json({ success: true, message: 'Product uploaded successfully', product: newProduct });
+
+    res.status(201).json({
+      success: true,
+      message: 'Product uploaded successfully',
+      product: newProduct,
+    });
   } catch (error) {
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
@@ -762,6 +803,7 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
       }
       return res.status(400).json({ message: error.message });
     }
+
     console.log('Product upload error', error);
     res.status(500).json({ message: 'Error uploading product' });
   }
@@ -770,20 +812,29 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
 app.delete('/api/products/:id', async (req, res) => {
   try {
     const productsPath = path.join(__dirname, 'products.json');
+
     if (!fs.existsSync(productsPath)) {
       return res.status(404).json({ message: 'Products list not found' });
     }
+
     const raw = fs.readFileSync(productsPath, 'utf8');
     const products = JSON.parse(raw);
+
     const productIndex = products.findIndex((p) => p._id === req.params.id);
+
     if (productIndex === -1) {
       return res.status(404).json({ message: 'Product not found' });
     }
+
     const [deletedProduct] = products.splice(productIndex, 1);
     fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+
     const imageUrls = Array.isArray(deletedProduct?.images)
       ? deletedProduct.images
-      : deletedProduct?.image ? [deletedProduct.image] : [];
+      : deletedProduct?.image
+        ? [deletedProduct.image]
+        : [];
+
     imageUrls.forEach((imageUrl) => {
       if (imageUrl && imageUrl.includes('/uploads/')) {
         const filename = imageUrl.split('/uploads/')[1];
@@ -793,6 +844,7 @@ app.delete('/api/products/:id', async (req, res) => {
         }
       }
     });
+
     res.json({ success: true, message: 'Product deleted successfully' });
   } catch (error) {
     console.log('Product delete error', error);
