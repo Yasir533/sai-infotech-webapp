@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import {
@@ -83,12 +83,27 @@ export default function OrbitalServices() {
     typeof window !== "undefined" &&
     window.innerWidth < 768;
 
-  const SIZE = isMobile ? 420 : 850;
+  // make the entire orbit smaller
+  const SIZE = isMobile ? 320 : 520;
 
   const CX = SIZE / 2;
   const CY = SIZE / 2;
 
-  const radius = isMobile ? 150 : 300;
+  // reduce orbit radius to match smaller SIZE
+  const radius = isMobile ? 110 : 200;
+
+  // lock body scroll when a service detail modal is open to avoid layout shift
+  useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selected]);
 
 return (
   <div className="relative flex justify-center items-center py-20 overflow-hidden">
@@ -214,7 +229,6 @@ return (
         top: `calc(50% + ${dy}px)`,
         transform: "translate(-50%,-50%)",
       }}
-      whileHover={{ scale: 1.08 }}
       onClick={() => setSelected(service)}
     >
       <div className="service-card">
