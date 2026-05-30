@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Exo+2:wght@600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,34 +16,43 @@ html {
 
 /* ── Theme Variables ─────────────────────────────────────── */
 :root {
-  --bg-color: #ffffff;
-  --text-color: #0a0f1e;
+  --bg-color: #050a18;
+  --text-color: #e2e8f0;
   --card-bg: rgba(0, 0, 0, 0.04);
-  --navbar-bg: rgba(255, 255, 255, 0.8);
-  --gradient-start: #4f46e5;
-  --gradient-end: #9333ea;
-  --scrollbar-bg: #e5e7eb;
-  --scrollbar-thumb: #9ca3af;
+  --navbar-bg: rgba(5, 10, 24, 0.72);
+  --gradient-start: #00c8ff;
+  --gradient-end: #0066ff;
+  --scrollbar-bg: #0f172a;
+  --scrollbar-thumb: #1d4ed8;
 }
 
 .dark {
-  --bg-color: #0a0f1e;
+  --bg-color: #050a18;
   --text-color: #e2e8f0;
   --card-bg: rgba(255, 255, 255, 0.04);
-  --navbar-bg: rgba(0, 0, 0, 0.8);
-  --gradient-start: #9333ea;
-  --gradient-end: #4f46e5;
-  --scrollbar-bg: #1e293b;
-  --scrollbar-thumb: #64748b;
+  --navbar-bg: rgba(5, 10, 24, 0.72);
+  --gradient-start: #00c8ff;
+  --gradient-end: #0066ff;
+  --scrollbar-bg: #0f172a;
+  --scrollbar-thumb: #1d4ed8;
 }
 
 /* ── Base ────────────────────────────────────────────────── */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
   overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Exo 2', sans-serif;
 }
 
 /* ── Scrollbar ───────────────────────────────────────────── */
@@ -58,7 +69,10 @@ body {
 
 /* ── Animated gradient background ───────────────────────── */
 .gradient-bg {
-  background: transparent;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 200, 255, 0.08), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(0, 102, 255, 0.12), transparent 24%),
+    linear-gradient(180deg, #050a18 0%, #070d1d 100%);
 }
 
 /* Light mode override */
@@ -91,7 +105,7 @@ html:not(.dark) .glass {
 
 /* ── Text gradient ───────────────────────────────────────── */
 .text-gradient {
-  background: linear-gradient(135deg, #60a5fa, #06b6d4, #818cf8);
+  background: linear-gradient(135deg, #00c8ff, #0066ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -145,7 +159,7 @@ html:not(.dark) .glass {
 
 /* ── Button gradient ─────────────────────────────────────── */
 .btn-primary {
-  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  background: linear-gradient(135deg, #0066ff, #00c8ff);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -155,7 +169,7 @@ html:not(.dark) .glass {
   position: absolute;
   top: 0; left: -100%;
   width: 100%; height: 100%;
-  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  background: linear-gradient(135deg, #00c8ff, #0066ff);
   transition: left 0.4s ease;
 }
 .btn-primary:hover::before {
@@ -254,11 +268,13 @@ html:not(.dark) .contact-input:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
-  object-position: center center;
-  z-index: -2;
+  z-index: -3;
   pointer-events: none;
-  opacity: 1;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(0, 200, 255, 0.14), transparent 22%),
+    radial-gradient(circle at 80% 15%, rgba(0, 102, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(0, 200, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #050a18 0%, #060b19 100%);
 }
 
 /* Dark mode overlay — deep tint so light text pops over the video */
@@ -268,10 +284,36 @@ html:not(.dark) .contact-input:focus {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(5, 10, 25, 0.75);
-  z-index: -1;
+  background: radial-gradient(circle at center, rgba(5, 10, 24, 0.1), rgba(5, 10, 24, 0.55));
+  z-index: -2;
   pointer-events: none;
   transition: background 0.3s ease;
+}
+
+.video-stars {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+    radial-gradient(rgba(0,200,255,0.8) 1px, transparent 1px);
+  background-size: 90px 90px, 140px 140px;
+  background-position: 0 0, 40px 50px;
+  animation: starsDrift 80s linear infinite;
+}
+
+@keyframes starsDrift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-120px); }
+}
+
+.nav-glass {
+  background: rgba(5, 10, 24, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Light mode overlay — near-opaque white wash so dark text is fully legible

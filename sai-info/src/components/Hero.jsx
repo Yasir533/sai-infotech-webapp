@@ -1,49 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi'
 import OrbitalServices from './OrbitalServices'
 import ITProductsCard from './ITProductsCard'
 
-const typingPhrases = [
-  'Component Level Refurbishing',
-  'AV Solutions',
-  'Surveillance / CCTV',
-  'Managed Services',
-  'IT / ITeS Lifecycle Management',
-  'E-Waste Management',
-  'Wind Energy Controls',
-  'PLC & Automation Systems',
-]
-
 export default function Hero() {
-  const [currentPhrase, setCurrentPhrase] = useState(0)
-  const [displayText, setDisplayText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    const phrase = typingPhrases[currentPhrase]
-    let timeout
-
-    if (!isDeleting && displayText === phrase) {
-      timeout = setTimeout(() => setIsDeleting(true), 1800)
-    } else if (isDeleting && displayText === '') {
-      setIsDeleting(false)
-      setCurrentPhrase((p) => (p + 1) % typingPhrases.length)
-    } else {
-      const speed = isDeleting ? 50 : 80
-
-      timeout = setTimeout(() => {
-        setDisplayText(
-          isDeleting
-            ? phrase.slice(0, displayText.length - 1)
-            : phrase.slice(0, displayText.length + 1)
-        )
-      }, speed)
-    }
-
-    return () => clearTimeout(timeout)
-  }, [displayText, isDeleting, currentPhrase])
-
   return (
     <>
       <section
@@ -64,10 +25,18 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-3 whitespace-nowrap"
+                className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.05em]"
               >
                 <span className="text-white">SAI </span>
-                <span className="text-gradient">INFOTECH</span>
+                <span
+                  className="text-transparent bg-clip-text"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(135deg, #00c8ff, #0066ff)',
+                  }}
+                >
+                  INFOTECH
+                </span>
               </motion.h1>
 
               {/* SUBTITLE */}
@@ -75,20 +44,21 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-sm sm:text-xl font-bold text-white mb-2 text-center lg:text-left leading-relaxed whitespace-nowrap"
+                className="text-sm sm:text-lg lg:text-xl font-bold text-slate-100 mb-3 text-center lg:text-left leading-relaxed"
               >
                 IT / ITeS / Technology Services & Managed Services
               </motion.h2>
 
-              {/* TYPING TEXT */}
+              {/* TAGLINE */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-base sm:text-lg font-semibold mb-5 h-7"
+                className="text-base sm:text-xl font-semibold mb-4"
               >
-                <span className="text-cyan-400">{displayText}</span>
-                <span className="text-cyan-400 typing-cursor" />
+                <span className="text-cyan-300 tracking-wide uppercase">
+                  PLC &amp; Automation Systems
+                </span>
               </motion.div>
 
               {/* DESCRIPTION */}
@@ -96,13 +66,11 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-md"
+                className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
               >
-                Premium IT services in Bangalore since 2019.
-                We specialize in enterprise-grade technology solutions,
-                managed IT services, component-level refurbishing,
-                automation systems, surveillance infrastructure,
-                and end-to-end IT lifecycle management.
+                Premium IT services in Bangalore since 2019. We deliver IT / ITeS,
+                security, cloud, automation, and managed technology services for
+                businesses that need dependable support and fast response.
               </motion.p>
 
               {/* BUTTONS */}
@@ -115,11 +83,9 @@ export default function Hero() {
 
                 <a
                   href="#about"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
                   style={{
-                    background: 'rgba(30,40,70,0.85)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    backdropFilter: 'blur(8px)',
+                    backdropFilter: 'blur(10px)',
                   }}
                 >
                   <span>About Us</span>
@@ -128,11 +94,9 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_24px_rgba(0,102,255,0.35)] transition-all duration-300"
                   style={{
-                    background: 'rgba(30,40,70,0.85)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    backdropFilter: 'blur(8px)',
+                    backdropFilter: 'blur(10px)',
                   }}
                 >
                   <span>Contact Us</span>

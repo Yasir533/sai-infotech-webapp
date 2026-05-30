@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
-import logoImg from '../assets/logo.png'
+import logoIcon from '../assets/logo-icon-sm.png'
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -68,7 +68,7 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'glass shadow-lg shadow-black/30 py-2'
+          ? 'nav-glass shadow-lg shadow-black/30 py-2'
           : 'py-3'
       }`}
     >
@@ -81,23 +81,27 @@ export default function Navbar() {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center group flex-shrink-0"
+            className="flex items-center gap-3 group flex-shrink-0"
           >
 
             <img
-              src={logoImg}
+              src={logoIcon}
               alt="SAI INFOTECH"
-              className={`w-auto object-contain transition-all duration-300 group-hover:opacity-90 group-hover:scale-105 ${
-                scrolled
-                  ? 'h-12 sm:h-14'
-                  : 'h-14 sm:h-16 lg:h-20'
-              }`}
+              className="h-11 w-11 sm:h-12 sm:w-12 rounded-full object-cover ring-1 ring-cyan-400/35 shadow-[0_0_25px_rgba(0,200,255,0.35)] transition-transform duration-300 group-hover:scale-105"
               style={{
-                maxWidth: '260px',
-                filter:
-                  'drop-shadow(0 0 10px rgba(6,182,212,0.5)) drop-shadow(0 0 4px rgba(37,99,235,0.4))',
+                background: 'rgba(255,255,255,0.03)',
               }}
             />
+
+            <div className="leading-none">
+              <div className="text-white text-base sm:text-lg font-extrabold tracking-[0.18em]">
+                SAI
+                <span className="text-cyan-400"> INFOTECH</span>
+              </div>
+              <div className="text-[10px] sm:text-[11px] text-slate-400 tracking-[0.35em] uppercase mt-1">
+                Technology Services
+              </div>
+            </div>
 
           </a>
 
@@ -110,9 +114,9 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   active === link.href
-                    ? 'text-blue-400 bg-blue-500/10'
+                    ? 'text-white bg-[#0066ff] shadow-[0_0_20px_rgba(0,102,255,0.35)]'
                     : 'text-slate-300 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -124,7 +128,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-3 btn-primary px-5 py-2 rounded-xl text-sm font-semibold text-white"
+              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_28px_rgba(0,102,255,0.35)] transition-all duration-300"
             >
               <span>Get Service</span>
             </a>
@@ -134,7 +138,7 @@ export default function Navbar() {
           {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="lg:hidden p-2 rounded-lg glass text-slate-300 hover:text-white"
+            className="lg:hidden p-2 rounded-lg nav-glass text-slate-300 hover:text-white"
           >
 
             {menuOpen ? (
@@ -159,7 +163,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden glass mt-2 mx-4 rounded-2xl overflow-hidden"
+            className="lg:hidden nav-glass mt-2 mx-4 rounded-2xl overflow-hidden"
           >
 
             <div className="p-4 flex flex-col gap-1">
@@ -184,7 +188,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="mt-2 btn-primary px-4 py-3 rounded-xl text-center font-semibold text-white"
+                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_22px_rgba(0,102,255,0.3)]"
               >
                 <span>Get Service</span>
               </a>
