@@ -13,7 +13,7 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Clients from './components/Clients'
 import Ratings from './components/Ratings'
-import Certificate from './components/Certificate'
+
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FloatingButtons from './components/FloatingButtons'
@@ -27,7 +27,7 @@ import AdminReset from "./pages/AdminReset"
 function HomePage() {
 
   return (
-    <div className="relative min-h-screen bg-[#050a18] text-white overflow-hidden">
+    <div className="gradient-bg min-h-screen">
       <VideoBackground />
 
       <Navbar />
@@ -36,6 +36,7 @@ function HomePage() {
         <Hero />
         <About />
         <section id="clients" className="section-pad relative overflow-hidden">
+          <div id="testimonials" />
           <div className="absolute inset-0 grid-pattern opacity-15" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -44,7 +45,7 @@ function HomePage() {
             </div>
           </div>
         </section>
-        <Certificate />
+
         <Contact />
       </main>
 
