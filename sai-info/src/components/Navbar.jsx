@@ -93,11 +93,11 @@ export default function Navbar() {
             />
 
             <div className="leading-none">
-              <div className="text-white text-base sm:text-lg font-extrabold tracking-[0.18em]">
+              <div className="text-slate-900 dark:text-white text-base sm:text-lg font-extrabold tracking-[0.16em]">
                 SAI
-                <span className="text-cyan-400"> INFOTECH</span>
+                <span className="text-[#0b74d1] dark:text-cyan-400"> INFOTECH</span>
               </div>
-              <div className="text-[10px] sm:text-[11px] text-slate-400 tracking-[0.35em] uppercase mt-1">
+              <div className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 tracking-[0.32em] uppercase mt-1">
                 Technology Services
               </div>
             </div>
@@ -115,8 +115,8 @@ export default function Navbar() {
                 onClick={(e) => handleNavClick(e, link.href)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   active === link.href
-                    ? 'text-white bg-[#0066ff] shadow-[0_0_20px_rgba(0,102,255,0.35)]'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    ? 'text-white bg-[#0b74d1] shadow-[0_0_20px_rgba(11,116,209,0.28)]'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/5'
                 }`}
               >
                 {link.label}
@@ -127,7 +127,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_28px_rgba(0,102,255,0.35)] transition-all duration-300"
+              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#0b74d1] hover:bg-[#095fbd] shadow-[0_0_24px_rgba(11,116,209,0.24)] transition-all duration-300"
             >
               <span>Get Service</span>
             </a>
@@ -175,8 +175,8 @@ export default function Navbar() {
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`px-4 py-3 rounded-xl font-medium transition-all ${
                     active === link.href
-                      ? 'text-blue-400 bg-blue-500/10'
-                      : 'text-slate-300 hover:text-white hover:bg-white/5'
+                        ? 'text-[#0b74d1] bg-[#0b74d1]/10'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-white/5'
                   }`}
                 >
                   {link.label}
@@ -187,7 +187,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#0066ff] hover:bg-[#0b73ff] shadow-[0_0_22px_rgba(0,102,255,0.3)]"
+                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#0b74d1] hover:bg-[#095fbd] shadow-[0_0_22px_rgba(11,116,209,0.24)]"
               >
                 <span>Get Service</span>
               </a>
