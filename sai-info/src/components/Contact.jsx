@@ -24,7 +24,7 @@ const SERVICE_OPTIONS = [
 const contactInfo = [
   {
     icon: FiMapPin,
-    title: 'Regd. Office',
+    title: 'Regd. & Corp. Office',
     lines: [
       '#9, 1st Main, Ground Floor, Vijay Rangamma Layout',
       'Basavanagudi, Bangalore-560004',
@@ -46,7 +46,7 @@ const contactInfo = [
 ]
 
 const iconImageByTitle = {
-  'Regd. Office': '/icons/icons8-location-pin-24.png',
+  'Regd. & Corp. Office': '/icons/icons8-location-pin-24.png',
   Phone: '/icons/icons8-online-support-50.png',
   Email: '/icons/icons8-mail-24.png',
 }
@@ -230,7 +230,7 @@ export default function Contact() {
                       </p>
                     );
                   })}
-                  {info.title === 'Regd. Office' && (
+                  {info.title === 'Regd. & Corp. Office' && (
                     <div className="mt-3">
                       <a
                         href="https://maps.app.goo.gl/nr6kvoQtCdyEo42k7"
