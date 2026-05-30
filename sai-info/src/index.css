@@ -202,6 +202,17 @@ html:not(.dark) .glass {
   animation-play-state: paused;
 }
 
+@keyframes scrollUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.animate-scroll-up {
+  animation: scrollUp 18s linear infinite;
+}
+.animate-scroll-up:hover {
+  animation-play-state: paused;
+}
+
 /* ── Light mode text overrides ───────────────────────────── */
 /* In light mode, text stays dark — readable against the near-white video overlay */
 html:not(.dark) .text-white {

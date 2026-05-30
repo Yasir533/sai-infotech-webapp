@@ -35,8 +35,15 @@ function HomePage() {
       <main>
         <Hero />
         <About />
-        <Clients />
-        <Ratings />
+        <section id="clients" className="section-pad relative overflow-hidden">
+          <div className="absolute inset-0 grid-pattern opacity-15" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              <Clients />
+              <Ratings />
+            </div>
+          </div>
+        </section>
         <Certificate />
         <Contact />
       </main>
