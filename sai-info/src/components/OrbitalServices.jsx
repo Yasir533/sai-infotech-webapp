@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { FiCpu, FiTool, FiCloud, FiShield, FiX } from 'react-icons/fi'
 
 const SERVICES = [
@@ -45,122 +45,127 @@ const SERVICES = [
 ]
 
 const BADGES = [
-  { label: '10+ Yrs',     sub: 'Experience',    pos: { left: '16%', top: '20%' } },
-  { label: 'Trusted by',  sub: '100+ Clients',  pos: { left: '72%', top: '14%' } },
-  { label: 'ISO Certified', sub: 'Process',     pos: { left: '12%', top: '73%' } },
-  { label: 'Pan India',   sub: 'Service',       pos: { left: '72%', top: '74%' } },
+  { label: '10+ Yrs',      sub: 'Experience',   pos: { left: '17%', top: '21%' } },
+  { label: 'Trusted by',   sub: '100+ Clients', pos: { left: '73%', top: '15%' } },
+  { label: 'ISO Certified',sub: 'Process',      pos: { left: '13%', top: '74%' } },
+  { label: 'Pan India',    sub: 'Service',      pos: { left: '73%', top: '75%' } },
 ]
 
-function AnimatedDot({ rx, ry, cx, cy, duration, startAngle, tiltDeg = 0 }) {
-  const ref = useRef(null)
+/* ── Single shared RAF loop for all dots ── */
+function useOrbitDots(dots, CX, CY) {
+  const refs = useRef([])
   useEffect(() => {
     let raf, t0 = null
     const step = (ts) => {
       if (!t0) t0 = ts
-      const deg = ((startAngle + ((ts - t0) / 1000 / duration) * 360) % 360)
-      const rad = deg * Math.PI / 180
-      const tr = tiltDeg * Math.PI / 180
-      const x0 = Math.cos(rad) * rx
-      const y0 = Math.sin(rad) * ry
-      const x = cx + x0 * Math.cos(tr) - y0 * Math.sin(tr)
-      const y = cy + x0 * Math.sin(tr) + y0 * Math.cos(tr)
-      if (ref.current) { ref.current.setAttribute('cx', x); ref.current.setAttribute('cy', y) }
+      const elapsed = (ts - t0) / 1000
+      dots.forEach(({ rx, ry, duration, startAngle, tiltDeg = 0 }, i) => {
+        const el = refs.current[i]
+        if (!el) return
+        const deg = ((startAngle + (elapsed / duration) * 360) % 360)
+        const rad = deg * Math.PI / 180
+        const tr  = tiltDeg * Math.PI / 180
+        const x0  = Math.cos(rad) * rx
+        const y0  = Math.sin(rad) * ry
+        el.setAttribute('cx', CX + x0 * Math.cos(tr) - y0 * Math.sin(tr))
+        el.setAttribute('cy', CY + x0 * Math.sin(tr) + y0 * Math.cos(tr))
+      })
       raf = requestAnimationFrame(step)
     }
     raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
-  }, [rx, ry, cx, cy, duration, startAngle, tiltDeg])
-  return <circle ref={ref} r="5" fill="#22d3ee"
-    style={{ filter: 'drop-shadow(0 0 6px #22d3ee) drop-shadow(0 0 12px #06b6d4)' }} />
+  }, [dots, CX, CY])
+  return refs
 }
 
-// Real globe SVG — sphere with curved lat/lon lines + continent blobs
+/* ── Realistic SVG globe ── */
 function GlobeGraphic({ size }) {
-  const R = size / 2
+  const R  = size / 2
   const cx = R, cy = R
-  // latitude lines (curved arcs projected onto sphere)
-  const latLines = [-60, -30, 0, 30, 60]
-  const lonCount = 9 // longitude lines
+  const lats = [-65, -40, -15, 15, 40, 65]
+  const lons = 10
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
       className="absolute inset-0 pointer-events-none" style={{ borderRadius: '50%' }}>
       <defs>
-        <radialGradient id="sphereGrad" cx="38%" cy="32%" r="65%">
-          <stop offset="0%"   stopColor="#0d3060" />
-          <stop offset="45%"  stopColor="#071a38" />
+        {/* Deep ocean gradient */}
+        <radialGradient id="ocean" cx="38%" cy="32%" r="68%">
+          <stop offset="0%"   stopColor="#0a2d5e" />
+          <stop offset="40%"  stopColor="#061a38" />
           <stop offset="100%" stopColor="#020c1b" />
         </radialGradient>
-        <radialGradient id="specular" cx="32%" cy="28%" r="45%">
-          <stop offset="0%"   stopColor="rgba(100,200,255,0.18)" />
+        {/* Specular highlight */}
+        <radialGradient id="spec" cx="30%" cy="25%" r="40%">
+          <stop offset="0%"   stopColor="rgba(120,210,255,0.22)" />
           <stop offset="100%" stopColor="rgba(0,0,0,0)" />
         </radialGradient>
-        <clipPath id="sphereClip">
-          <circle cx={cx} cy={cy} r={R - 1} />
-        </clipPath>
+        {/* Atmosphere glow */}
+        <radialGradient id="atm" cx="50%" cy="50%" r="50%">
+          <stop offset="85%"  stopColor="rgba(0,0,0,0)" />
+          <stop offset="100%" stopColor="rgba(34,211,238,0.30)" />
+        </radialGradient>
+        <clipPath id="sClip"><circle cx={cx} cy={cy} r={R - 1} /></clipPath>
       </defs>
 
-      {/* Ocean base */}
-      <circle cx={cx} cy={cy} r={R - 1} fill="url(#sphereGrad)" />
+      {/* Ocean */}
+      <circle cx={cx} cy={cy} r={R - 1} fill="url(#ocean)" />
 
-      <g clipPath="url(#sphereClip)">
-        {/* Latitude lines — ellipses flattened by cos(lat) */}
-        {latLines.map(lat => {
-          const latRad = lat * Math.PI / 180
-          const ry2 = Math.abs(Math.cos(latRad)) * R * 0.18
-          const yPos = cy + Math.sin(latRad) * (R - 2)
-          return ry2 > 1 ? (
-            <ellipse key={lat} cx={cx} cy={yPos} rx={R - 2} ry={ry2}
-              fill="none" stroke="rgba(34,211,238,0.35)" strokeWidth="0.7" />
-          ) : null
+      <g clipPath="url(#sClip)">
+        {/* Latitude lines — ellipses that flatten toward poles */}
+        {lats.map(lat => {
+          const φ   = lat * Math.PI / 180
+          const ry2 = Math.abs(Math.cos(φ)) * R * 0.22
+          const yc  = cy + Math.sin(φ) * (R * 0.97)
+          return <ellipse key={lat} cx={cx} cy={yc} rx={R * 0.97} ry={ry2}
+            fill="none" stroke="rgba(34,211,238,0.32)" strokeWidth="0.65" />
         })}
-        {/* Equator slightly brighter */}
-        <ellipse cx={cx} cy={cy} rx={R - 2} ry={R * 0.18}
-          fill="none" stroke="rgba(34,211,238,0.55)" strokeWidth="1" />
+        {/* Equator brighter */}
+        <ellipse cx={cx} cy={cy} rx={R * 0.97} ry={R * 0.22}
+          fill="none" stroke="rgba(34,211,238,0.60)" strokeWidth="1.1" />
 
-        {/* Longitude lines — vertical ellipses rotated */}
-        {Array.from({ length: lonCount }).map((_, i) => {
-          const angle = (i / lonCount) * 180
-          return (
-            <ellipse key={i} cx={cx} cy={cy} rx={R * 0.18} ry={R - 2}
-              fill="none" stroke="rgba(34,211,238,0.28)" strokeWidth="0.7"
-              transform={`rotate(${angle},${cx},${cy})`} />
-          )
-        })}
+        {/* Longitude lines — thin vertical ellipses rotated */}
+        {Array.from({ length: lons }).map((_, i) => (
+          <ellipse key={i} cx={cx} cy={cy} rx={R * 0.22} ry={R * 0.97}
+            fill="none" stroke="rgba(34,211,238,0.22)" strokeWidth="0.6"
+            transform={`rotate(${i * (180 / lons)},${cx},${cy})`} />
+        ))}
 
-        {/* Continent blobs — styled like real continents */}
-        {/* Americas */}
-        <ellipse cx={cx * 0.62} cy={cy * 0.72} rx={R * 0.13} ry={R * 0.22}
-          fill="rgba(0,180,220,0.22)" stroke="rgba(34,211,238,0.4)" strokeWidth="0.5" />
-        {/* Europe/Africa */}
-        <ellipse cx={cx * 1.05} cy={cy * 0.82} rx={R * 0.11} ry={R * 0.28}
-          fill="rgba(0,180,220,0.20)" stroke="rgba(34,211,238,0.38)" strokeWidth="0.5" />
-        {/* Asia */}
-        <ellipse cx={cx * 1.30} cy={cy * 0.68} rx={R * 0.20} ry={R * 0.18}
-          fill="rgba(0,180,220,0.22)" stroke="rgba(34,211,238,0.40)" strokeWidth="0.5" />
+        {/* ── Continent silhouettes (approximate) ── */}
+        {/* N. America */}
+        <path d={`M${cx*0.52},${cy*0.52} c-10,-8 -18,2 -14,18 c4,16 18,22 28,14 c8,-6 8,-20 -14,-32z`}
+          fill="rgba(0,200,230,0.22)" stroke="rgba(34,211,238,0.45)" strokeWidth="0.7" />
+        {/* S. America */}
+        <ellipse cx={cx*0.58} cy={cy*1.18} rx={R*0.10} ry={R*0.17}
+          fill="rgba(0,200,230,0.20)" stroke="rgba(34,211,238,0.40)" strokeWidth="0.7" />
+        {/* Europe */}
+        <ellipse cx={cx*1.02} cy={cy*0.70} rx={R*0.09} ry={R*0.10}
+          fill="rgba(0,200,230,0.20)" stroke="rgba(34,211,238,0.40)" strokeWidth="0.7" />
+        {/* Africa */}
+        <ellipse cx={cx*1.05} cy={cy*1.05} rx={R*0.10} ry={R*0.18}
+          fill="rgba(0,200,230,0.20)" stroke="rgba(34,211,238,0.38)" strokeWidth="0.7" />
+        {/* Asia (large) */}
+        <path d={`M${cx*1.15},${cy*0.52} c20,-4 40,4 42,18 c2,14 -10,22 -28,20 c-18,-2 -36,-12 -34,-26 c2,-8 12,-10 20,-12z`}
+          fill="rgba(0,200,230,0.22)" stroke="rgba(34,211,238,0.42)" strokeWidth="0.7" />
         {/* Australia */}
-        <ellipse cx={cx * 1.35} cy={cy * 1.25} rx={R * 0.10} ry={R * 0.08}
-          fill="rgba(0,180,220,0.18)" stroke="rgba(34,211,238,0.35)" strokeWidth="0.5" />
-        {/* Antarctica hint */}
-        <ellipse cx={cx} cy={cy * 1.82} rx={R * 0.55} ry={R * 0.08}
-          fill="rgba(180,230,255,0.12)" />
+        <ellipse cx={cx*1.38} cy={cy*1.22} rx={R*0.10} ry={R*0.08}
+          fill="rgba(0,200,230,0.18)" stroke="rgba(34,211,238,0.35)" strokeWidth="0.7" />
 
-        {/* Specular highlight */}
-        <circle cx={cx} cy={cy} r={R - 1} fill="url(#specular)" />
-
-        {/* Atmosphere rim */}
-        <circle cx={cx} cy={cy} r={R - 2}
-          fill="none" stroke="rgba(34,211,238,0.5)" strokeWidth="2.5" />
-        <circle cx={cx} cy={cy} r={R - 1}
-          fill="none" stroke="rgba(34,211,238,0.15)" strokeWidth="4" />
+        {/* Specular highlight — makes it look 3-D */}
+        <circle cx={cx} cy={cy} r={R - 1} fill="url(#spec)" />
       </g>
+
+      {/* Atmosphere rim */}
+      <circle cx={cx} cy={cy} r={R - 1} fill="url(#atm)" />
+      <circle cx={cx} cy={cy} r={R - 1.5}
+        fill="none" stroke="rgba(34,211,238,0.55)" strokeWidth="2" />
     </svg>
   )
 }
 
 export default function OrbitalServices() {
-  const [selected, setSelected] = useState(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [selected, setSelected]   = useState(null)
+  const [isMobile, setIsMobile]   = useState(false)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -169,60 +174,70 @@ export default function OrbitalServices() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  const S = isMobile ? 340 : 620
-  const CX = S / 2
-  const CY = S / 2
-
-  // ← smaller globe
-  const globeR = isMobile ? 88 : 155
+  /* ── Sizes — slightly smaller than before ── */
+  const S      = isMobile ? 310 : 560   // was 340 / 620
+  const CX     = S / 2
+  const CY     = S / 2
+  const globeR = isMobile ? 80  : 140   // was 88 / 155
 
   const rings = isMobile
     ? [
-        { rx: 152, ry: 60,  tilt: -18, dash: '6 5', opacity: 0.35 },
-        { rx: 138, ry: 50,  tilt: 14,  dash: '4 6', opacity: 0.22 },
-        { rx: 162, ry: 70,  tilt: -4,  dash: '3 8', opacity: 0.16 },
-        { rx: 102, ry: 102, tilt: 0,   dash: '5 5', opacity: 0.20 },
-        { rx: 125, ry: 125, tilt: 0,   dash: '3 7', opacity: 0.12 },
+        { rx:138, ry:55,  tilt:-18, dash:'6 5', op:0.35 },
+        { rx:125, ry:46,  tilt: 14, dash:'4 6', op:0.22 },
+        { rx:148, ry:64,  tilt: -4, dash:'3 8', op:0.16 },
+        { rx: 94, ry:94,  tilt:  0, dash:'5 5', op:0.20 },
+        { rx:114, ry:114, tilt:  0, dash:'3 7', op:0.12 },
       ]
     : [
-        { rx: 282, ry: 112, tilt: -18, dash: '6 5', opacity: 0.35 },
-        { rx: 262, ry: 92,  tilt: 14,  dash: '4 6', opacity: 0.22 },
-        { rx: 298, ry: 128, tilt: -4,  dash: '3 8', opacity: 0.16 },
-        { rx: 188, ry: 188, tilt: 0,   dash: '5 5', opacity: 0.20 },
-        { rx: 212, ry: 212, tilt: 0,   dash: '3 7', opacity: 0.12 },
+        { rx:255, ry:102, tilt:-18, dash:'6 5', op:0.35 },
+        { rx:238, ry: 86, tilt: 14, dash:'4 6', op:0.22 },
+        { rx:270, ry:118, tilt: -4, dash:'3 8', op:0.16 },
+        { rx:172, ry:172, tilt:  0, dash:'5 5', op:0.20 },
+        { rx:194, ry:194, tilt:  0, dash:'3 7', op:0.12 },
       ]
 
-  const dist = isMobile ? 145 : 265
+  const dist = isMobile ? 132 : 242
   const cards = {
-    top:    { x: CX,            y: CY - dist },
-    left:   { x: CX - dist - (isMobile ? 8 : 18), y: CY },
-    right:  { x: CX + dist + (isMobile ? 8 : 18), y: CY },
-    bottom: { x: CX,            y: CY + dist },
+    top:    { x: CX,                y: CY - dist },
+    left:   { x: CX - dist - (isMobile ? 6 : 14), y: CY },
+    right:  { x: CX + dist + (isMobile ? 6 : 14), y: CY },
+    bottom: { x: CX,                y: CY + dist },
   }
 
-  return (
-    <div className="relative flex items-center justify-center w-full overflow-visible py-2 select-none">
-      <div className="relative" style={{ width: S, height: S, maxWidth: '100%' }}>
+  /* single RAF loop — all 5 dots */
+  const dotDefs = [
+    { rx: rings[0].rx, ry: rings[0].ry, duration:11, startAngle: 30,  tiltDeg: rings[0].tilt },
+    { rx: rings[1].rx, ry: rings[1].ry, duration:15, startAngle:150,  tiltDeg: rings[1].tilt },
+    { rx: rings[2].rx, ry: rings[2].ry, duration:19, startAngle:270,  tiltDeg: rings[2].tilt },
+    { rx: rings[3].rx, ry: rings[3].ry, duration: 8, startAngle: 80,  tiltDeg: 0 },
+    { rx: rings[0].rx, ry: rings[0].ry, duration:11, startAngle:210,  tiltDeg: rings[0].tilt },
+  ]
+  const dotRefs = useOrbitDots(dotDefs, CX, CY)
 
-        {/* SVG: rings + connectors + dots */}
-        <svg className="absolute inset-0 pointer-events-none overflow-visible"
-          width={S} height={S} viewBox={`0 0 ${S} ${S}`}>
+  return (
+    <div className="relative flex items-center justify-center w-full overflow-hidden py-2 select-none">
+      {/* constrain width so it never bleeds off-screen */}
+      <div className="relative mx-auto" style={{ width: S, height: S, maxWidth: '100%' }}>
+
+        {/* ── SVG: rings + connectors + dots ── */}
+        <svg className="absolute inset-0 pointer-events-none"
+          width={S} height={S} viewBox={`0 0 ${S} ${S}`} overflow="visible">
           <defs>
-            <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(34,211,238,0.28)" />
+            <radialGradient id="glowRing" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stopColor="rgba(34,211,238,0.25)" />
               <stop offset="100%" stopColor="rgba(34,211,238,0)" />
             </radialGradient>
           </defs>
 
-          {/* Soft outer glow */}
-          <circle cx={CX} cy={CY} r={globeR + (isMobile ? 40 : 72)} fill="url(#glowGrad)" />
+          {/* Soft glow behind globe */}
+          <circle cx={CX} cy={CY} r={globeR + (isMobile ? 36 : 64)} fill="url(#glowRing)" />
 
           {/* Orbit rings */}
           {rings.map((r, i) => (
             <ellipse key={i} cx={CX} cy={CY} rx={r.rx} ry={r.ry}
               fill="none"
-              stroke={`rgba(34,211,238,${r.opacity})`}
-              strokeWidth={i < 2 ? "1.5" : "1"}
+              stroke={`rgba(34,211,238,${r.op})`}
+              strokeWidth={i < 2 ? '1.5' : '1'}
               strokeDasharray={r.dash}
               transform={`rotate(${r.tilt},${CX},${CY})`} />
           ))}
@@ -234,46 +249,41 @@ export default function OrbitalServices() {
               stroke="rgba(34,211,238,0.13)" strokeWidth="1" strokeDasharray="4 4" />
           })}
 
-          {/* Animated dots */}
-          <AnimatedDot rx={rings[0].rx} ry={rings[0].ry} cx={CX} cy={CY} duration={11} startAngle={30}  tiltDeg={rings[0].tilt} />
-          <AnimatedDot rx={rings[1].rx} ry={rings[1].ry} cx={CX} cy={CY} duration={15} startAngle={150} tiltDeg={rings[1].tilt} />
-          <AnimatedDot rx={rings[2].rx} ry={rings[2].ry} cx={CX} cy={CY} duration={19} startAngle={270} tiltDeg={rings[2].tilt} />
-          <AnimatedDot rx={rings[3].rx} ry={rings[3].ry} cx={CX} cy={CY} duration={8}  startAngle={80}  tiltDeg={0} />
-          <AnimatedDot rx={rings[0].rx} ry={rings[0].ry} cx={CX} cy={CY} duration={11} startAngle={210} tiltDeg={rings[0].tilt} />
+          {/* Animated dots — one circle element each, moved by shared RAF */}
+          {dotDefs.map((_, i) => (
+            <circle key={i} ref={el => dotRefs.current[i] = el} r="5" cx={CX} cy={CY}
+              fill="#22d3ee"
+              style={{ filter: 'drop-shadow(0 0 5px #22d3ee) drop-shadow(0 0 10px #06b6d4)' }} />
+          ))}
 
-          {/* Dot at each card anchor */}
+          {/* Small anchor dots at card positions */}
           {SERVICES.map(s => {
             const p = cards[s.position]
-            return <circle key={s.id+'-dot'} cx={p.x} cy={p.y} r="3"
+            return <circle key={s.id+'-a'} cx={p.x} cy={p.y} r="3"
               fill={s.color} style={{ filter: `drop-shadow(0 0 4px ${s.color})` }} />
           })}
         </svg>
 
         {/* ── GLOBE ── */}
-        <div className="absolute z-10 rounded-full flex flex-col items-center justify-center text-center overflow-hidden"
+        <div className="absolute z-10 rounded-full overflow-hidden"
           style={{
             width: globeR * 2, height: globeR * 2,
             left: CX, top: CY,
             transform: 'translate(-50%,-50%)',
-            boxShadow: `0 0 60px rgba(34,211,238,0.35), 0 0 120px rgba(34,211,238,0.12), inset 0 0 30px rgba(34,211,238,0.06)`,
-            borderRadius: '50%',
+            boxShadow: `0 0 60px rgba(34,211,238,0.30), 0 0 120px rgba(34,211,238,0.10)`,
           }}>
           <GlobeGraphic size={globeR * 2} />
 
-          {/* Text overlay */}
+          {/* Text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-            <span className="text-white font-extrabold tracking-wide drop-shadow-lg"
-              style={{ fontSize: isMobile ? '1rem' : '1.7rem', lineHeight: 1.1 }}>
-              Our
-            </span>
-            <span className="text-cyan-400 font-extrabold tracking-wide drop-shadow-lg"
-              style={{ fontSize: isMobile ? '1.1rem' : '1.85rem', lineHeight: 1.1 }}>
-              Services
-            </span>
-            <div className="bg-cyan-400 rounded-full mt-1 mb-1"
-              style={{ width: isMobile ? 28 : 50, height: 2.5 }} />
-            <span className="text-gray-300 text-center leading-snug px-2 drop-shadow"
-              style={{ fontSize: isMobile ? '0.48rem' : '0.68rem', maxWidth: isMobile ? 88 : 150 }}>
+            <span className="text-white font-extrabold drop-shadow-lg"
+              style={{ fontSize: isMobile ? '0.95rem' : '1.55rem', lineHeight: 1.1 }}>Our</span>
+            <span className="text-cyan-400 font-extrabold drop-shadow-lg"
+              style={{ fontSize: isMobile ? '1.05rem' : '1.7rem',  lineHeight: 1.1 }}>Services</span>
+            <div className="bg-cyan-400 rounded-full my-1"
+              style={{ width: isMobile ? 26 : 46, height: 2.5 }} />
+            <span className="text-gray-300 text-center leading-snug px-2"
+              style={{ fontSize: isMobile ? '0.44rem' : '0.62rem', maxWidth: isMobile ? 80 : 135 }}>
               Drop-off, Walk-in,<br />On-site & Pickup.
             </span>
           </div>
@@ -281,38 +291,36 @@ export default function OrbitalServices() {
 
         {/* ── SERVICE CARDS ── */}
         {SERVICES.map(s => {
-          const pos = cards[s.position]
+          const pos  = cards[s.position]
           const Icon = s.icon
-          const cardW = isMobile ? 110 : 200
+          const cw   = isMobile ? 100 : 185
           return (
             <div key={s.id} className="absolute z-20 cursor-pointer"
-              style={{ left: pos.x, top: pos.y, transform: 'translate(-50%,-50%)', width: cardW }}
+              style={{ left: pos.x, top: pos.y, transform: 'translate(-50%,-50%)', width: cw }}
               onClick={() => setSelected(s)}>
-              <div className="rounded-xl flex items-center gap-2 transition-all duration-200 hover:scale-105 hover:brightness-125"
+              <div className="rounded-xl flex items-center gap-2 transition-transform duration-200 hover:scale-105"
                 style={{
-                  background: 'rgba(4,14,32,0.88)',
+                  background: 'rgba(4,14,32,0.90)',
                   border: `1px solid ${s.color}44`,
-                  padding: isMobile ? '7px 9px' : '12px 14px',
-                  boxShadow: `0 0 24px ${s.color}22, 0 4px 20px rgba(0,0,0,0.4)`,
-                  backdropFilter: 'blur(14px)',
+                  padding: isMobile ? '6px 8px' : '11px 13px',
+                  boxShadow: `0 0 22px ${s.color}20, 0 4px 18px rgba(0,0,0,0.45)`,
+                  backdropFilter: 'blur(12px)',
                 }}>
                 <div className="rounded-xl flex-shrink-0 flex items-center justify-center"
                   style={{
                     background: s.iconBg,
-                    width: isMobile ? 36 : 58, height: isMobile ? 36 : 58,
-                    minWidth: isMobile ? 36 : 58,
-                    boxShadow: `0 0 16px ${s.color}88`,
+                    width:    isMobile ? 33 : 52,
+                    height:   isMobile ? 33 : 52,
+                    minWidth: isMobile ? 33 : 52,
+                    boxShadow: `0 0 14px ${s.color}80`,
                   }}>
-                  <Icon style={{ color: '#fff', width: isMobile ? 17 : 27, height: isMobile ? 17 : 27 }} />
+                  <Icon style={{ color:'#fff', width: isMobile ? 15 : 24, height: isMobile ? 15 : 24 }} />
                 </div>
                 <div>
                   <p className="text-white font-bold leading-tight"
-                    style={{ fontSize: isMobile ? '0.62rem' : '0.95rem' }}>
-                    {s.title}
-                  </p>
-                  <p style={{ color: s.color, fontSize: isMobile ? '0.52rem' : '0.74rem', marginTop: 2 }}>
-                    {s.subtitle}
-                  </p>
+                    style={{ fontSize: isMobile ? '0.58rem' : '0.88rem' }}>{s.title}</p>
+                  <p style={{ color: s.color, fontSize: isMobile ? '0.48rem' : '0.68rem', marginTop:2 }}>
+                    {s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -325,24 +333,19 @@ export default function OrbitalServices() {
             style={{ ...b.pos, transform: 'translate(-50%,-50%)' }}>
             <div className="rounded-lg text-center"
               style={{
-                background: 'rgba(4,14,32,0.82)',
-                border: '1px solid rgba(34,211,238,0.3)',
-                padding: isMobile ? '4px 8px' : '6px 13px',
+                background: 'rgba(4,14,32,0.84)',
+                border: '1px solid rgba(34,211,238,0.28)',
+                padding: isMobile ? '3px 7px' : '5px 11px',
                 backdropFilter: 'blur(10px)',
-                boxShadow: '0 0 16px rgba(34,211,238,0.12)',
+                boxShadow: '0 0 14px rgba(34,211,238,0.10)',
               }}>
               <p className="font-bold text-cyan-400"
-                style={{ fontSize: isMobile ? '0.55rem' : '0.78rem', lineHeight: 1.25 }}>
-                {b.label}
-              </p>
+                style={{ fontSize: isMobile ? '0.52rem' : '0.72rem', lineHeight:1.25 }}>{b.label}</p>
               <p className="text-gray-300"
-                style={{ fontSize: isMobile ? '0.48rem' : '0.68rem', lineHeight: 1.25 }}>
-                {b.sub}
-              </p>
+                style={{ fontSize: isMobile ? '0.44rem' : '0.62rem', lineHeight:1.25 }}>{b.sub}</p>
             </div>
           </div>
         ))}
-
       </div>
 
       {/* ── MODAL ── */}
@@ -350,31 +353,26 @@ export default function OrbitalServices() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
           onClick={() => setSelected(null)}>
           <div className="relative rounded-2xl p-6 md:p-8 w-full max-w-md"
-            style={{
-              background: '#05101f',
-              border: `1px solid ${selected.color}55`,
-              boxShadow: `0 0 60px ${selected.color}22`,
-            }}
+            style={{ background:'#05101f', border:`1px solid ${selected.color}55`, boxShadow:`0 0 60px ${selected.color}22` }}
             onClick={e => e.stopPropagation()}>
             <button className="absolute top-4 right-4 text-gray-400 hover:text-white"
               onClick={() => setSelected(null)}>
-              <FiX style={{ width: 20, height: 20 }} />
+              <FiX style={{ width:20, height:20 }} />
             </button>
             <div className="flex items-center gap-4 mb-6">
               <div className="rounded-2xl flex items-center justify-center"
-                style={{ background: selected.iconBg, width: 56, height: 56, boxShadow: `0 0 20px ${selected.color}66` }}>
-                <selected.icon style={{ color: '#fff', width: 28, height: 28 }} />
+                style={{ background:selected.iconBg, width:56, height:56, boxShadow:`0 0 20px ${selected.color}66` }}>
+                <selected.icon style={{ color:'#fff', width:28, height:28 }} />
               </div>
               <div>
                 <h3 className="text-white text-xl font-bold">{selected.title}</h3>
-                <p style={{ color: selected.color }} className="text-sm mt-1">{selected.subtitle}</p>
+                <p style={{ color:selected.color }} className="text-sm mt-1">{selected.subtitle}</p>
               </div>
             </div>
             <ul className="space-y-3">
-              {selected.details.map((item, i) => (
+              {selected.details.map((item,i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
-                    style={{ background: selected.color }} />
+                  <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background:selected.color }} />
                   <span className="text-gray-300 text-sm">{item}</span>
                 </li>
               ))}
