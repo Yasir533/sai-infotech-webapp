@@ -69,7 +69,7 @@ export default function Hero() {
                   className="text-transparent bg-clip-text"
                   style={{
                     backgroundImage:
-                      'linear-gradient(135deg, #0b74d1, #1d7cff)',
+                      'linear-gradient(135deg, #1e5fb8, #2f6fbf)',
                   }}
                 >
                   INFOTECH
@@ -93,7 +93,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-lg font-semibold mb-5 h-7"
               >
-                <span className="text-[#0b74d1] tracking-wide uppercase">
+                <span className="text-[#2f6fbf] tracking-wide uppercase">
                   PLC &amp; Automation Systems
                 </span>
               </motion.div>
@@ -122,7 +122,7 @@ export default function Hero() {
 
                 <a
                   href="#about"
-                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-300 shadow-sm"
+                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
                   style={{
                     backdropFilter: 'blur(8px)',
                   }}
@@ -133,7 +133,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#0b74d1] hover:bg-[#095fbd] shadow-[0_10px_24px_rgba(11,116,209,0.22)] transition-all duration-300"
+                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#2f6fbf] hover:bg-[#255c9d] shadow-[0_10px_22px_rgba(47,111,191,0.18)] transition-all duration-300"
                   style={{
                     backdropFilter: 'blur(8px)',
                   }}

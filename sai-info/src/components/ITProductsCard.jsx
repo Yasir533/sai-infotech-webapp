@@ -13,19 +13,19 @@ export default function ITProductsCard() {
         rounded-[20px]
         overflow-hidden
         border border-slate-200
-        bg-white
+        bg-[#fbfcfe]
         backdrop-blur-2xl
         px-5
         py-5
         text-slate-900
         transition-all
         duration-300
-        hover:border-[#0b74d1]/25
-        hover:shadow-[0_16px_40px_rgba(15,23,42,0.08)]
+        hover:border-[#2f6fbf]/18
+        hover:shadow-[0_16px_34px_rgba(15,23,42,0.06)]
       "
     >
       {/* Outer Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(11,116,209,0.08),transparent_35%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(47,111,191,0.05),transparent_35%)] pointer-events-none" />
 
       {/* Inner Border Glow */}
       <div className="absolute inset-[1px] rounded-[20px] border border-slate-200 pointer-events-none" />
@@ -45,11 +45,11 @@ export default function ITProductsCard() {
               items-center
               justify-center
               bg-cyan-400/10
-              border border-[#0b74d1]/15
-              shadow-[0_10px_24px_rgba(15,23,42,0.06)]
+              border border-[#2f6fbf]/12
+              shadow-[0_10px_22px_rgba(15,23,42,0.05)]
             "
           >
-            <FiShoppingCart className="text-[22px] text-[#0b74d1]" />
+            <FiShoppingCart className="text-[22px] text-[#2f6fbf]" />
           </div>
 
           <h2 className="text-[22px] sm:text-[24px] leading-none font-black text-slate-900 tracking-[-1px]">
@@ -74,7 +74,7 @@ export default function ITProductsCard() {
             w-full
             h-[40px]
             rounded-[12px]
-            bg-[#0b74d1]
+            bg-[#2f6fbf]
             text-white
             text-[13px]
             font-bold
@@ -86,7 +86,7 @@ export default function ITProductsCard() {
             transition-all
             duration-300
             hover:scale-[1.01]
-            hover:shadow-[0_12px_28px_rgba(11,116,209,0.24)]
+            hover:shadow-[0_12px_24px_rgba(47,111,191,0.18)]
           "
         >
           View Products
@@ -102,17 +102,17 @@ export default function ITProductsCard() {
       {/* FEATURES */}
       <div className="relative z-10 mt-4 flex items-center justify-between gap-3 flex-wrap">
 
-        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#2f6fbf] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Quality Checked</span>
         </div>
 
-        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#2f6fbf] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Good Condition</span>
         </div>
 
-        <div className="flex items-center gap-1 text-[#0b74d1] text-[9px] font-semibold whitespace-nowrap">
+        <div className="flex items-center gap-1 text-[#2f6fbf] text-[9px] font-semibold whitespace-nowrap">
           <span className="text-[12px]">✓</span>
           <span>Affordable Price</span>
         </div>
