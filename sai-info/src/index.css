@@ -359,8 +359,9 @@ html.dark .nav-glass {
 
 /* Light mode overlay — near-opaque white wash so dark text is fully legible
    while still letting a subtle hint of the video show through */
+/* bg image visible — overlay kept minimal */
 html:not(.dark) .video-overlay {
-  background: rgba(248, 250, 252, 0.7);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* Section / card backgrounds need slight tint in light mode so they don't
@@ -396,9 +397,11 @@ body {
   }
 
   /* Reduce blur filters */
-  .video-bg,
-  .video-overlay {
+  .video-bg {
     will-change: auto !important;
+  }
+  .video-overlay {
+    background: rgba(255, 255, 255, 0.18) !important;
   }
 
   /* Disable float animations */
