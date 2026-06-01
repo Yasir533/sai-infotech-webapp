@@ -58,6 +58,36 @@ export default function MissionVisionValues() {
     return () => document.removeEventListener('mvv-hover', handler)
   }, [])
 
+  function HoverDetails({ sections }) {
+    const idx = hoverIdx ?? 0
+    const sec = typeof idx === 'number' && idx !== null ? sections[idx] : null
+    return (
+      <div className="hidden lg:block w-80 flex-shrink-0">
+        <div className="glass rounded-3xl p-6 border border-white/8" style={{ boxShadow: `0 12px 40px ${sec ? sec.glow : 'rgba(0,0,0,0.06)'}` }}>
+          {sec ? (
+            <>
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center mb-4`} style={{ boxShadow: `0 8px 30px ${sec.glow}` }}>
+                <img src={sec.icon} alt={sec.title} className="w-8 h-8 object-contain" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">{sec.title}</h3>
+              <p className="text-slate-300 text-sm mb-3">{sec.points[0]}</p>
+              <ul className="space-y-2 text-slate-300 text-sm">
+                {sec.points.map((p, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(135deg, rgba(14,165,233,1), rgba(99,102,241,1))` }} />
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p className="text-slate-400">Hover a card to see details</p>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <section
       id="mission"
@@ -184,8 +214,6 @@ export default function MissionVisionValues() {
 
               </div>
             </motion.div>
-          ))}
-
           ))}
 
           </div>
