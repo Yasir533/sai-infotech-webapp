@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi'
 import { getApiBase } from '../utils/apiBase'
+import OrbitalServices from './OrbitalServices'
+import ITProductsCard from './ITProductsCard'
 
 const typingPhrases = [
   'Component Level Refurbishing',
@@ -173,6 +175,51 @@ export default function Hero() {
               </div>
             </div>
           </motion.div>
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1.25fr_0.75fr] items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+              className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90">
+                    Explore Services
+                  </p>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-black text-white">
+                    Orbital Service View
+                  </h3>
+                </div>
+                <div className="hidden sm:block rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-cyan-100 backdrop-blur-md">
+                  Dynamic overview
+                </div>
+              </div>
+              <div className="min-h-[420px]">
+                <OrbitalServices />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
+              className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
+            >
+              <div className="mb-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90">
+                  View Products
+                </p>
+                <h3 className="mt-2 text-xl sm:text-2xl font-black text-white">
+                  Product Highlights
+                </h3>
+              </div>
+              <ITProductsCard />
+            </motion.div>
+          </div>
         </div>
 
       </section>
