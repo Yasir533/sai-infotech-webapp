@@ -97,22 +97,25 @@ export default function MissionVisionValues() {
                 duration: 0.55,
                 delay: i * 0.15,
               }}
-              className="glass rounded-3xl border border-white/10 overflow-hidden "
+              className="glass rounded-3xl border border-white/10 overflow-hidden"
               style={{
-                boxShadow: `0 10px 30px ${sec.glow}`,
+                boxShadow: `0 12px 40px ${sec.glow}`,
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))'
               }}
             >
 
               {/* Top Line */}
               <div
-                className={`h-1 bg-gradient-to-r ${sec.color}`}
+                className={`h-2 bg-gradient-to-r ${sec.color} rounded-b-xl`}
+                style={{ opacity: 0.98 }}
               />
 
               <div className="p-8">
 
                 {/* Icon */}
                 <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center mb-6 shadow-md`}
+                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center mb-6`}
+                  style={{ boxShadow: `0 8px 30px ${sec.glow}` }}
                 >
 
                   <img
@@ -123,7 +126,7 @@ export default function MissionVisionValues() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-bold text-white mb-5">
+                <h3 className="text-2xl font-bold text-white mb-3">
                   {sec.title}
                 </h3>
 
@@ -146,12 +149,12 @@ export default function MissionVisionValues() {
                           i * 0.12 +
                           j * 0.07,
                       }}
-                      className="flex items-start gap-3 text-slate-400 text-sm leading-relaxed"
+                      className="flex items-start gap-3 text-slate-300 text-sm leading-relaxed"
                     >
 
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full bg-gradient-to-br ${sec.color} mt-2 flex-shrink-0`}
-                      />
+                        <div
+                          className={`w-2 h-2 rounded-full bg-gradient-to-br ${sec.color} mt-2 flex-shrink-0`}
+                        />
 
                       <span>
                         {point}
