@@ -57,7 +57,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="relative isolate overflow-hidden rounded-[2rem] border border-white/15 shadow-[0_30px_100px_rgba(2,8,23,0.35)] min-h-[78vh] lg:min-h-[82vh]"
+            className="relative isolate overflow-hidden rounded-none border border-white/15 shadow-[0_30px_100px_rgba(2,8,23,0.35)] min-h-[78vh] lg:min-h-[82vh]"
           >
             <motion.img
               src={heroImage}
@@ -176,7 +176,7 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[1.25fr_0.75fr] items-start">
+          <div className="mt-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] items-start">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -184,20 +184,7 @@ export default function Hero() {
               transition={{ duration: 0.7, ease: 'easeOut' }}
               className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
             >
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90">
-                    Explore Services
-                  </p>
-                  <h3 className="mt-2 text-xl sm:text-2xl font-black text-white">
-                    Orbital Service View
-                  </h3>
-                </div>
-                <div className="hidden sm:block rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-cyan-100 backdrop-blur-md">
-                  Dynamic overview
-                </div>
-              </div>
-              <div className="min-h-[420px]">
+              <div className="min-h-[300px] sm:min-h-[340px] max-w-[520px] mx-auto">
                 <OrbitalServices />
               </div>
             </motion.div>
