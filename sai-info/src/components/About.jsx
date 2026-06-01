@@ -168,23 +168,11 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Divider (dot moved to left) */}
-              <div className="relative flex items-center mb-6">
-                <div className="w-2 h-2 rounded-full bg-blue-400 mr-3" />
-                <div className="flex-1 h-px bg-white/10" />
-              </div>
-
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
                 SAI INFOTECH is officially certified under the{' '}
                 <span className="text-blue-400 font-semibold">ISO 9001:2015 Quality Management System</span>,
                 reflecting our commitment to consistent, world-class IT service delivery.
               </p>
-
-              {/* Divider (dot moved to left) */}
-              <div className="relative flex items-center mb-6">
-                <div className="w-2 h-2 rounded-full bg-blue-400 mr-3" />
-                <div className="flex-1 h-px bg-white/10" />
-              </div>
 
               <p className="text-slate-300 text-sm leading-relaxed">
                 This international certification confirms that SAI INFOTECH meets rigorous quality management standards — ensuring every client receives reliable, high-quality computer hardware services backed by a globally recognised quality framework.
