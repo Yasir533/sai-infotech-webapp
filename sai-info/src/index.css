@@ -57,6 +57,26 @@ body {
   overflow-x: hidden;
 }
 
+/* Fullscreen animated gradient layer for stronger motion */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  background: linear-gradient(120deg, var(--ocean-start), var(--ocean-mid), var(--ocean-end));
+  background-size: 400% 400%;
+  filter: blur(40px);
+  opacity: 0.9;
+  transform: translateZ(0);
+  animation: oceanShift 18s linear infinite;
+  pointer-events: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body, body::before { animation: none !important; background-position: 50% 50% !important; }
+}
+
 h1,
 h2,
 h3,
