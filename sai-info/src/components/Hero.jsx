@@ -20,7 +20,7 @@ export default function Hero() {
   const [currentPhrase, setCurrentPhrase] = useState(0)
   const [displayText, setDisplayText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
-  const heroImage = `${getApiBase()}/uploads/repair.jpg`
+  const heroImage = `${getApiBase()}/uploads/repair.jpeg`
 
   useEffect(() => {
     const phrase = typingPhrases[currentPhrase]
