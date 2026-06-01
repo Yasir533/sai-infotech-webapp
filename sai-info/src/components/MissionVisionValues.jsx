@@ -149,6 +149,12 @@ export default function MissionVisionValues() {
               }}
               onMouseEnter={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: i }))}
               onMouseLeave={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: null }))}
+              onPointerEnter={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: i }))}
+              onPointerLeave={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: null }))}
+              onFocus={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: i }))}
+              onBlur={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: null }))}
+              tabIndex={0}
+              style={{ cursor: 'pointer', pointerEvents: 'auto', boxShadow: `0 12px 40px ${sec.glow}`, background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))' }}
             >
 
               {/* Top Line */}
