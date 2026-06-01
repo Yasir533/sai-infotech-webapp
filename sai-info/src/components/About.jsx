@@ -168,10 +168,9 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Divider */}
+              {/* Divider (dot moved to left) */}
               <div className="relative flex items-center mb-6">
-                <div className="flex-1 h-px bg-white/10" />
-                <div className="w-2 h-2 rounded-full bg-blue-400 mx-3" />
+                <div className="w-2 h-2 rounded-full bg-blue-400 mr-3" />
                 <div className="flex-1 h-px bg-white/10" />
               </div>
 
@@ -181,10 +180,9 @@ export default function About() {
                 reflecting our commitment to consistent, world-class IT service delivery.
               </p>
 
-              {/* Divider */}
+              {/* Divider (dot moved to left) */}
               <div className="relative flex items-center mb-6">
-                <div className="flex-1 h-px bg-white/10" />
-                <div className="w-2 h-2 rounded-full bg-blue-400 mx-3" />
+                <div className="w-2 h-2 rounded-full bg-blue-400 mr-3" />
                 <div className="flex-1 h-px bg-white/10" />
               </div>
 
