@@ -22,6 +22,10 @@ html {
   --navbar-bg: rgba(246, 248, 251, 0.88);
   --gradient-start: #225aa8;
   --gradient-end: #345f9a;
+  /* Ocean gradient */
+  --ocean-start: #00b4db;
+  --ocean-mid: #0083b0;
+  --ocean-end: #012a4a;
   --scrollbar-bg: #d5dde6;
   --scrollbar-thumb: #76879d;
 }
@@ -33,6 +37,10 @@ html {
   --navbar-bg: rgba(16, 25, 34, 0.88);
   --gradient-start: #2b67c0;
   --gradient-end: #4a6ea3;
+  /* Dark ocean variant */
+  --ocean-start: #054a91;
+  --ocean-mid: #023e73;
+  --ocean-end: #001a33;
   --scrollbar-bg: #182433;
   --scrollbar-thumb: #55677d;
 }
@@ -40,7 +48,10 @@ html {
 /* ── Base ────────────────────────────────────────────────── */
 body {
   font-family: 'Nunito', sans-serif;
-  background: linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-end) 100%), var(--bg-color);
+  /* Animated ocean gradient background */
+  background: linear-gradient(120deg, var(--ocean-start), var(--ocean-mid), var(--ocean-end));
+  background-size: 300% 300%;
+  animation: oceanShift 12s ease infinite;
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
   overflow-x: hidden;
@@ -286,8 +297,15 @@ html:not(.dark) .contact-input:focus {
     radial-gradient(circle at 15% 20%, rgba(52, 95, 154, 0.022), transparent 22%),
     radial-gradient(circle at 80% 15%, rgba(34, 90, 168, 0.022), transparent 24%),
     radial-gradient(circle at 50% 70%, rgba(31, 41, 55, 0.014), transparent 28%),
-    linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      linear-gradient(180deg, var(--ocean-start) 0%, var(--ocean-mid) 50%, var(--ocean-end) 100%);
 }
+
+  /* Ocean gradient animation */
+  @keyframes oceanShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
 /* Dark mode overlay — deep tint so light text pops over the video */
 .video-overlay {
