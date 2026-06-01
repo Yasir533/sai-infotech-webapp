@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
-import logoIcon from '../assets/logo-icon-sm.png'
+import logoIcon from '../assets/logo.png'
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -87,9 +87,6 @@ export default function Navbar() {
               src={logoIcon}
               alt="SAI INFOTECH"
               className="h-16 w-16 sm:h-20 sm:w-20 object-contain transition-transform duration-300 group-hover:scale-105"
-              style={{
-                background: 'rgba(255,255,255,0.92)',
-              }}
             />
 
             <div className="leading-none">
