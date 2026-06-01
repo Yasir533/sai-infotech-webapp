@@ -43,7 +43,7 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '56px' }}>
 
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
             <a href="#home">
               <img
                 src={logoImg}
