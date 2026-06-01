@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <meta name="description" content="Sai Infotech - Premium IT Services in Bangalore. Chip level repair, data recovery, networking, cloud, AMC and more." />
     <title>Sai Infotech | IT Solutions Bangalore</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- CRITICAL: Run before any CSS paints — forces light mode even if OS is dark -->
+    <script>
+      (function() {
+        // Always remove dark class immediately — before first paint
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
+        localStorage.setItem('theme', 'light');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

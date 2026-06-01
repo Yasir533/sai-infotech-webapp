@@ -4,6 +4,57 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* ══════════════════════════════════════════════════════════════
+   LOCK TO LIGHT MODE — OS dark mode must NEVER change this site.
+   The site manages its own theme via .dark class only.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Tell the browser this page only supports light mode */
+:root {
+  color-scheme: light only;
+}
+
+/* If OS is dark but .dark class is NOT on html — stay fully light */
+@media (prefers-color-scheme: dark) {
+  html:not(.dark) {
+    /* Override all CSS variables back to light values */
+    --bg-color: #f7f9fc !important;
+    --text-color: #0f172a !important;
+    --card-bg: rgba(255, 255, 255, 0.78) !important;
+    --navbar-bg: rgba(248, 250, 252, 0.9) !important;
+    --gradient-start: #2f6fbf !important;
+    --gradient-end: #345f9a !important;
+    --ocean-start: #e6f2fb !important;
+    --ocean-mid: #2f6fbf !important;
+    --ocean-end: #345f9a !important;
+    --scrollbar-bg: #e6eef7 !important;
+    --scrollbar-thumb: #84a1ca !important;
+  }
+
+  /* Keep body background light */
+  html:not(.dark) body {
+    background: linear-gradient(120deg, #e6f2fb, #2f6fbf, #345f9a) !important;
+    color: #0f172a !important;
+  }
+
+  /* Keep text colors correct */
+  html:not(.dark) .text-white { color: #0f172a !important; }
+  html:not(.dark) .text-slate-300 { color: #334155 !important; }
+  html:not(.dark) .text-slate-400 { color: #475569 !important; }
+  html:not(.dark) .text-slate-500 { color: #64748b !important; }
+
+  /* Keep inputs light */
+  html:not(.dark) input,
+  html:not(.dark) textarea,
+  html:not(.dark) select {
+    color-scheme: light !important;
+    background: rgba(255,255,255,0.9) !important;
+    color: #0f172a !important;
+  }
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -423,76 +474,5 @@ body {
   /* Simplify transitions */
   * {
     transition-duration: 0.1s !important;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   FORCE LIGHT MODE — ignore OS/browser dark mode preference
-   The app manages its own theme via .dark class on <html>
-   ══════════════════════════════════════════════════════════════ */
-@media (prefers-color-scheme: dark) {
-  /* Override every OS dark-mode auto-style back to our light defaults */
-  :root {
-    color-scheme: light !important;
-  }
-  html:not(.dark) {
-    background-color: #f7f9fc !important;
-    color: #0f172a !important;
-  }
-  html:not(.dark) body {
-    background-color: transparent !important;
-    color: #0f172a !important;
-  }
-  /* Force all inputs/buttons to stay light */
-  html:not(.dark) input,
-  html:not(.dark) textarea,
-  html:not(.dark) select,
-  html:not(.dark) button {
-    color-scheme: light !important;
-  }
-}
-
-/* Force light color-scheme globally so browser chrome (inputs, scrollbars)
-   stays light when we haven't applied .dark */
-html:not(.dark) {
-  color-scheme: light !important;
-}
-
-
-/* ══════════════════════════════════════════════════════════════
-   EXTRA MOBILE PERFORMANCE — kill heavy body animations on 4G
-   ══════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  /* Kill the animated gradient on body */
-  body {
-    animation: none !important;
-    background: var(--ocean-mid) !important;
-    background-size: unset !important;
-  }
-
-  /* Kill the blurred pseudo-element — this is the heaviest GPU operation */
-  body::before {
-    display: none !important;
-  }
-
-  /* Kill ocean shift on video-bg too */
-  .video-bg {
-    animation: none !important;
-    background: linear-gradient(180deg, var(--ocean-start) 0%, var(--ocean-mid) 50%, var(--ocean-end) 100%) !important;
-  }
-
-  /* Disable float animation */
-  .float-anim {
-    animation: none !important;
-  }
-
-  /* Reduce marquee animation work */
-  .animate-marquee {
-    animation-duration: 40s !important;
-  }
-
-  /* Disable the scroll-up ticker on mobile */
-  .animate-scroll-up {
-    animation-duration: 30s !important;
   }
 }
