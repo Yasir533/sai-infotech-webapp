@@ -49,7 +49,7 @@ export default function Footer() {
                 src={logoImg}
                 alt="SAI INFOTECH"
                 style={{
-                  height: '140px',
+                  height: '180px',
                   width: 'auto',
                   objectFit: 'contain',
                   maxWidth: '260px',
