@@ -206,14 +206,14 @@ export default function About() {
             onClick={() => setActiveMVV(null)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.25 }}
-              className="relative bg-[#06111f] border border-white/10 rounded-2xl p-8 w-[400px] max-w-[90vw]"
-              style={{ boxShadow: `0 0 40px ${activeMVV.glow}` }}
-              onClick={(e) => e.stopPropagation()}
-            >
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.25 }}
+                className="relative rounded-2xl p-6 w-[440px] max-w-[95vw] glass border"
+                style={{ boxShadow: `0 16px 60px ${activeMVV.glow}`, borderColor:'rgba(255,255,255,0.06)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
               <button
                 className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
                 onClick={() => setActiveMVV(null)}
@@ -221,12 +221,12 @@ export default function About() {
                 <FiX size={20} />
               </button>
 
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${activeMVV.color} flex items-center justify-center mb-5 shadow-lg`}>
-                <img src={activeMVV.icon} alt={activeMVV.title} className="w-8 h-8 object-contain brightness-0 invert" />
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${activeMVV.color} flex items-center justify-center mb-4`} style={{ boxShadow: `0 10px 30px ${activeMVV.glow}` }}>
+                <img src={activeMVV.icon} alt={activeMVV.title} className="w-8 h-8 object-contain" />
               </div>
 
-              <h3 className="text-2xl font-bold text-white mb-4">{activeMVV.title}</h3>
-              <div className={`w-full h-px bg-gradient-to-r ${activeMVV.color} opacity-30 mb-5`} />
+              <h3 className="text-2xl font-bold text-white mb-3">{activeMVV.title}</h3>
+              <div className={`w-full h-px bg-gradient-to-r ${activeMVV.color} opacity-60 mb-4`} />
               <p className="text-slate-300 text-sm leading-relaxed">{activeMVV.desc}</p>
             </motion.div>
           </motion.div>
