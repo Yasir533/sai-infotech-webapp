@@ -119,8 +119,8 @@ const CX      = DESIGN / 2
 const CY      = DESIGN / 2
 const GLOBE_R = 155
 const DIST    = 268
-const CW      = 185
-const ICON_BOX= 52
+const CW      = 220
+const ICON_BOX= 56
 
 const CARD_POS = {
   top:    { x: CX,           y: CY - DIST },
@@ -166,10 +166,10 @@ export default function OrbitalServices() {
   const globeOurPx      = 44   // "Our"
   const globeServicesPx = 50   // "Services"
   const globeSubPx      = 18   // subtitle
-  const cardTitlePx     = 22   // card title
-  const cardSubPx       = 17   // card subtitle
-  const badgeLabelPx    = 18   // badge label
-  const badgeSubPx      = 15   // badge sub
+  const cardTitlePx     = 18   // card title (reduced to prevent overflow)
+  const cardSubPx       = 14   // card subtitle
+  const badgeLabelPx    = 16   // badge label
+  const badgeSubPx      = 13   // badge sub
 
   return (
     // KEY FIX: overflow:hidden on outer, exact height so nothing bleeds
@@ -245,18 +245,18 @@ export default function OrbitalServices() {
             <div key={s.id} style={{ position:'absolute', zIndex:20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
               onClick={() => setSelected(s)}>
               <div style={{
-                background:'#fff', border:'1px solid rgba(59,130,246,0.15)', borderRadius:14,
-                padding:'11px 13px', boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
-                display:'flex', alignItems:'center', gap:10, transition:'transform 0.2s',
-              }}
+                  background:'#fff', border:'1px solid rgba(59,130,246,0.15)', borderRadius:14,
+                  padding:'11px 13px', boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                  display:'flex', alignItems:'center', gap:10, transition:'transform 0.2s',
+                }}
                 onMouseEnter={e => e.currentTarget.style.transform='scale(1.05)'}
                 onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
                 <div style={{ background:s.iconBg, borderRadius:10, width:ICON_BOX, height:ICON_BOX, minWidth:ICON_BOX, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
                   <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize:cardSubPx, marginTop:2, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
+                    <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
+                    <p style={{ color:s.color, fontSize:cardSubPx, marginTop:2, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -266,7 +266,7 @@ export default function OrbitalServices() {
         {/* Floating Badges */}
         {BADGES.map(b => (
           <div key={b.label} style={{ position:'absolute', zIndex:30, pointerEvents:'none', left:b.pos.left, top:b.pos.top, transform:'translate(-50%,-50%)' }}>
-            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 13px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
+            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:9999, padding:'6px 14px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap', display:'inline-block' }}>
               <p style={{ color:'#2563eb', fontWeight:700, fontSize:badgeLabelPx, lineHeight:1.3, margin:0 }}>{b.label}</p>
               <p style={{ color:'#64748b', fontSize:badgeSubPx, lineHeight:1.3, margin:0 }}>{b.sub}</p>
             </div>
