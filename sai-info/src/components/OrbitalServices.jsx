@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FiCpu, FiTool, FiCloud, FiShield, FiX } from 'react-icons/fi'
 
 const CSS = `
@@ -107,8 +107,8 @@ const SERVICES = [
   { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
 ]
 
-// Badge positions as top/left px on the DESIGN canvas (780px).
-// Corners of the canvas, well clear of the cards and globe.
+// Badge positions as px on the 780px design canvas.
+// All use translate(-50%,-50%) — works correctly because all use top+left (no right/bottom).
 const BADGES = [
   { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 101, top: 140 } },
   { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 679, top:  94 } },
@@ -116,84 +116,80 @@ const BADGES = [
   { label:'Pan India',     sub:'Service',      pos:{ left: 679, top: 640 } },
 ]
 
+const DESIGN  = 780
+const CX      = DESIGN / 2   // 390
+const CY      = DESIGN / 2   // 390
+const GLOBE_R = 155
+const DIST    = 268
+const CW      = 185
+const ICON_BOX= 52
+
+const CARD_POS = {
+  top:    { x: CX,           y: CY - DIST      },
+  left:   { x: CX - DIST-10, y: CY             },
+  right:  { x: CX + DIST+10, y: CY             },
+  bottom: { x: CX,           y: CY + DIST      },
+}
+
+const RINGS = [
+  { rx:310, ry:124, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
+  { rx:290, ry:104, tilt: 14, dash:'4 6', op:0.22, sw:1   },
+  { rx:326, ry:142, tilt: -4, dash:'3 8', op:0.16, sw:1   },
+  { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
+]
+
 export default function OrbitalServices() {
   const [selected, setSelected] = useState(null)
-  const [vw, setVw] = useState(typeof window !== 'undefined' ? window.innerWidth : 640)
+  const [containerW, setContainerW] = useState(360)
+  const outerRef = useRef(null)
 
   useEffect(() => {
+    // Inject CSS once
     if (!document.getElementById('orbital-css')) {
       const el = document.createElement('style')
       el.id = 'orbital-css'
       el.textContent = CSS
       document.head.appendChild(el)
     }
-    const check = () => setVw(window.innerWidth)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    // Use ResizeObserver on the actual container element.
+    // This measures the true available width, ignoring scrollbars,
+    // sidebars, and any parent padding — window.innerWidth can lie on mobile.
+    const node = outerRef.current
+    if (!node) return
+    const measure = () => setContainerW(node.offsetWidth)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(node)
+    return () => ro.disconnect()
   }, [])
 
-  // DESIGN=780px gives plenty of breathing room:
-  //   globeR=155 → globe diameter=310px
-  //   dist=268 → card centres 268px from globe centre
-  //   gap between globe edge and nearest card edge = ~50px
-  //   left card left edge = 390-268-10-92 = 20px  (inside canvas)
-  //   right card right edge = 390+268+10+92 = 760px (inside canvas)
-  const DESIGN = 780
-  const MAX    = Math.min(vw, DESIGN)
-  const scale  = MAX / DESIGN
-
-  const CX     = DESIGN / 2   // 390
-  const CY     = DESIGN / 2   // 390
-  const globeR = 155
-
-  const rings = [
-    { rx:310, ry:124, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
-    { rx:290, ry:104, tilt: 14, dash:'4 6', op:0.22, sw:1   },
-    { rx:326, ry:142, tilt: -4, dash:'3 8', op:0.16, sw:1   },
-    { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
-  ]
-
-  // dist=268, cw=185 → left card left edge=20px, right card right edge=760px — both inside 780px
-  const dist   = 268
-  const cw     = 185
-  const iconBox= 52
-
-  const cardPos = {
-    top:    { x: CX,           y: CY - dist      },
-    left:   { x: CX - dist - 10, y: CY           },
-    right:  { x: CX + dist + 10, y: CY           },
-    bottom: { x: CX,           y: CY + dist      },
-  }
-
-  // With transformOrigin 'top left', scale shrinks from the top-left corner.
-  // We manually center by offsetting left by (vw - scaledWidth) / 2.
-  // This works correctly on every screen size including desktop.
-  const scaledW  = DESIGN * scale
-  const marginLeft = (vw - scaledW) / 2
+  // Scale the 780px design canvas to fit the container exactly.
+  // On phones: scale < 1. On desktop: scale = 1 (canvas fits, no scaling needed).
+  const scale      = Math.min(containerW, DESIGN) / DESIGN
+  const scaledW    = DESIGN * scale
+  // transformOrigin 'top left' → canvas shrinks from its top-left corner.
+  // marginLeft shifts it right to centre it inside the container.
+  // marginBottom collapses the blank vertical space that CSS scale leaves behind.
+  const marginLeft = (containerW - scaledW) / 2
+  const marginBot  = -(DESIGN * (1 - scale))
 
   return (
-    <div className="relative w-full py-4 select-none" style={{ overflowX:'hidden' }}>
+    <div ref={outerRef} style={{ width:'100%', overflowX:'hidden', padding:'16px 0' }}>
 
-      {/*
-        Rendered at DESIGN=780px, scaled down via CSS transform.
-        transformOrigin 'top left' → predictable: top-left corner stays put.
-        marginLeft centers the scaled canvas in the viewport.
-        marginBottom collapses the blank space left by scaling.
-      */}
       <div style={{
-        width: DESIGN,
-        height: DESIGN,
-        transform: `scale(${scale})`,
-        transformOrigin: 'top left',
-        marginLeft: marginLeft,
-        marginBottom: -(DESIGN * (1 - scale)),
-        position: 'relative',
-        flexShrink: 0,
+        width:            DESIGN,
+        height:           DESIGN,
+        transform:        `scale(${scale})`,
+        transformOrigin:  'top left',
+        marginLeft:       marginLeft,
+        marginBottom:     marginBot,
+        position:         'relative',
+        flexShrink:       0,
+        userSelect:       'none',
       }}>
 
-        {/* SVG: background glow + orbit rings + connector lines + anchor dots */}
-        <svg className="absolute inset-0 pointer-events-none"
+        {/* Orbit rings + connector lines + anchor dots */}
+        <svg style={{ position:'absolute', inset:0, pointerEvents:'none' }}
           width={DESIGN} height={DESIGN} viewBox={`0 0 ${DESIGN} ${DESIGN}`} overflow="visible">
           <defs>
             <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
@@ -201,36 +197,35 @@ export default function OrbitalServices() {
               <stop offset="100%" stopColor="rgba(96,165,250,0)"/>
             </radialGradient>
           </defs>
-          <circle cx={CX} cy={CY} r={globeR+80} fill="url(#glowBg)"/>
-          {rings.map((r,i) => (
+          <circle cx={CX} cy={CY} r={GLOBE_R+90} fill="url(#glowBg)"/>
+          {RINGS.map((r,i) => (
             <ellipse key={i} cx={CX} cy={CY} rx={r.rx} ry={r.ry}
               fill="none" stroke={`rgba(96,165,250,${r.op})`}
               strokeWidth={r.sw} strokeDasharray={r.dash}
               transform={`rotate(${r.tilt},${CX},${CY})`}/>
           ))}
           {SERVICES.map(s => {
-            const p = cardPos[s.position]
+            const p = CARD_POS[s.position]
             return <line key={s.id} x1={CX} y1={CY} x2={p.x} y2={p.y}
               stroke="rgba(96,165,250,0.16)" strokeWidth="1" strokeDasharray="5 5"/>
           })}
           {SERVICES.map(s => {
-            const p = cardPos[s.position]
+            const p = CARD_POS[s.position]
             return <circle key={s.id+'-a'} cx={p.x} cy={p.y} r="5"
               fill={s.color} style={{ filter:`drop-shadow(0 0 5px ${s.color})` }}/>
           })}
         </svg>
 
         {/* Rotating Earth Globe */}
-        <div className="absolute z-10"
-          style={{
-            width: globeR*2, height: globeR*2,
-            left: CX, top: CY,
-            transform: 'translate(-50%,-50%)',
-            animation: 'globeGlow 3.5s ease-in-out infinite',
-            borderRadius: '50%',
-            overflow: 'hidden',
-          }}>
-          <RotatingEarth size={globeR*2}/>
+        <div style={{
+          position:'absolute', zIndex:10,
+          width:GLOBE_R*2, height:GLOBE_R*2,
+          left:CX, top:CY,
+          transform:'translate(-50%,-50%)',
+          animation:'globeGlow 3.5s ease-in-out infinite',
+          borderRadius:'50%', overflow:'hidden',
+        }}>
+          <RotatingEarth size={GLOBE_R*2}/>
           <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:20, pointerEvents:'none' }}>
             <span style={{ color:'#fff', fontWeight:800, fontSize:'1.5rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Our</span>
             <span style={{ color:'#7dd3fc', fontWeight:800, fontSize:'1.65rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Services</span>
@@ -243,42 +238,36 @@ export default function OrbitalServices() {
 
         {/* Service Cards */}
         {SERVICES.map(s => {
-          const pos  = cardPos[s.position]
+          const pos  = CARD_POS[s.position]
           const Icon = s.icon
           return (
-            <div key={s.id} className="absolute z-20 cursor-pointer"
-              style={{ left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:cw }}
+            <div key={s.id} style={{ position:'absolute', zIndex:20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
               onClick={() => setSelected(s)}>
               <div style={{
-                background:'#fff',
-                border:'1px solid rgba(59,130,246,0.15)',
-                borderRadius:14,
-                padding:'11px 13px',
-                boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
-                display:'flex', alignItems:'center', gap:10,
-                transition:'transform 0.2s',
+                background:'#fff', border:'1px solid rgba(59,130,246,0.15)', borderRadius:14,
+                padding:'11px 13px', boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                display:'flex', alignItems:'center', gap:10, transition:'transform 0.2s',
               }}
                 onMouseEnter={e => e.currentTarget.style.transform='scale(1.05)'}
                 onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
-                <div style={{ background:s.iconBg, borderRadius:10, width:iconBox, height:iconBox, minWidth:iconBox, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
+                <div style={{ background:s.iconBg, borderRadius:10, width:ICON_BOX, height:ICON_BOX, minWidth:ICON_BOX, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
                   <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:'0.80rem', lineHeight:1.25 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize:'0.62rem', marginTop:2, lineHeight:1.25 }}>{s.subtitle}</p>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:'0.80rem', lineHeight:1.25, margin:0 }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize:'0.62rem', marginTop:2, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
           )
         })}
 
-        {/* Floating Badges — all top/left px, translate(-50%,-50%) centres all correctly */}
+        {/* Floating Badges */}
         {BADGES.map(b => (
-          <div key={b.label} className="absolute z-30 pointer-events-none"
-            style={{ left: b.pos.left, top: b.pos.top, transform:'translate(-50%,-50%)' }}>
-            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 11px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
-              <p style={{ color:'#2563eb', fontWeight:700, fontSize:'0.68rem', lineHeight:1.3 }}>{b.label}</p>
-              <p style={{ color:'#64748b', fontSize:'0.58rem', lineHeight:1.3 }}>{b.sub}</p>
+          <div key={b.label} style={{ position:'absolute', zIndex:30, pointerEvents:'none', left:b.pos.left, top:b.pos.top, transform:'translate(-50%,-50%)' }}>
+            <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 13px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
+              <p style={{ color:'#2563eb', fontWeight:700, fontSize:'0.70rem', lineHeight:1.3, margin:0 }}>{b.label}</p>
+              <p style={{ color:'#64748b', fontSize:'0.60rem', lineHeight:1.3, margin:0 }}>{b.sub}</p>
             </div>
           </div>
         ))}
@@ -286,24 +275,23 @@ export default function OrbitalServices() {
 
       {/* Modal */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+        <div style={{ position:'fixed', inset:0, zIndex:50, display:'flex', alignItems:'center', justifyContent:'center', background:'rgba(0,0,0,0.4)', backdropFilter:'blur(4px)', padding:'0 16px' }}
           onClick={() => setSelected(null)}>
-          <div className="relative rounded-2xl p-6 w-full max-w-md"
-            style={{ background:'#fff', border:`1.5px solid ${selected.color}33`, boxShadow:`0 8px 48px ${selected.color}22` }}
+          <div style={{ position:'relative', borderRadius:18, padding:24, width:'100%', maxWidth:420, background:'#fff', border:`1.5px solid ${selected.color}33`, boxShadow:`0 8px 48px ${selected.color}22` }}
             onClick={e => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-800" onClick={() => setSelected(null)}>
+            <button style={{ position:'absolute', top:14, right:16, background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:20, lineHeight:1 }} onClick={() => setSelected(null)}>
               <FiX style={{ width:20, height:20 }}/>
             </button>
-            <div className="flex items-center gap-4 mb-6">
-              <div style={{ background:selected.iconBg, borderRadius:14, width:56, height:56, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 22px ${selected.color}55` }}>
+            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
+              <div style={{ background:selected.iconBg, borderRadius:14, width:56, height:56, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 22px ${selected.color}55`, flexShrink:0 }}>
                 <selected.icon style={{ color:'#fff', width:28, height:28 }}/>
               </div>
               <div>
-                <h3 style={{ color:'#0f172a', fontSize:'1.2rem', fontWeight:700 }}>{selected.title}</h3>
-                <p style={{ color:selected.color, fontSize:'0.85rem', marginTop:3 }}>{selected.subtitle}</p>
+                <h3 style={{ color:'#0f172a', fontSize:'1.1rem', fontWeight:700, margin:0 }}>{selected.title}</h3>
+                <p style={{ color:selected.color, fontSize:'0.85rem', marginTop:3, marginBottom:0 }}>{selected.subtitle}</p>
               </div>
             </div>
-            <ul style={{ display:'flex', flexDirection:'column', gap:10 }}>
+            <ul style={{ display:'flex', flexDirection:'column', gap:10, listStyle:'none', padding:0, margin:0 }}>
               {selected.details.map((item,i) => (
                 <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
                   <div style={{ width:7, height:7, borderRadius:'50%', marginTop:5, flexShrink:0, background:selected.color }}/>
