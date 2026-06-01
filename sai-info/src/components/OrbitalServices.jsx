@@ -167,6 +167,7 @@ export default function OrbitalServices() {
   // On phones: scale < 1. On desktop: scale = 1 (canvas fits, no scaling needed).
   const scale      = Math.min(containerW, DESIGN) / DESIGN
   const scaledW    = DESIGN * scale
+  const isDesktop  = containerW >= 768
   // transformOrigin 'top left' → canvas shrinks from its top-left corner.
   // marginLeft shifts it right to centre it inside the container.
   // marginBottom collapses the blank vertical space that CSS scale leaves behind.
@@ -227,10 +228,10 @@ export default function OrbitalServices() {
         }}>
           <RotatingEarth size={GLOBE_R*2}/>
           <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:20, pointerEvents:'none' }}>
-            <span style={{ color:'#fff', fontWeight:800, fontSize:'1.85rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Our</span>
-            <span style={{ color:'#7dd3fc', fontWeight:800, fontSize:'2.05rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Services</span>
-            <div style={{ width:54, height:2.5, background:'#38bdf8', borderRadius:9999, margin:'5px 0' }}/>
-            <span style={{ color:'rgba(255,255,255,0.90)', fontSize:'0.78rem', textAlign:'center', lineHeight:1.5, maxWidth:145, textShadow:'0 1px 8px rgba(0,0,0,0.9)', padding:'0 6px' }}>
+            <span style={{ color:'#fff', fontWeight:800, fontSize: isDesktop ? '1.9rem' : '1.5rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Our</span>
+            <span style={{ color:'#7dd3fc', fontWeight:800, fontSize: isDesktop ? '2.1rem' : '1.65rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Services</span>
+            <div style={{ width:48, height:2.5, background:'#38bdf8', borderRadius:9999, margin:'4px 0' }}/>
+            <span style={{ color:'rgba(255,255,255,0.85)', fontSize: isDesktop ? '0.82rem' : '0.60rem', textAlign:'center', lineHeight:1.4, maxWidth:140, textShadow:'0 1px 8px rgba(0,0,0,0.9)', padding:'0 6px' }}>
               Drop-off, Walk-in,<br/>On-site & Pickup.
             </span>
           </div>
@@ -254,8 +255,8 @@ export default function OrbitalServices() {
                   <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:'0.92rem', lineHeight:1.25, margin:0 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize:'0.76rem', marginTop:3, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize: isDesktop ? '0.90rem' : '0.80rem', lineHeight:1.25, margin:0 }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize: isDesktop ? '0.75rem' : '0.62rem', marginTop:2, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -266,8 +267,8 @@ export default function OrbitalServices() {
         {BADGES.map(b => (
           <div key={b.label} style={{ position:'absolute', zIndex:30, pointerEvents:'none', left:b.pos.left, top:b.pos.top, transform:'translate(-50%,-50%)' }}>
             <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 13px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
-              <p style={{ color:'#2563eb', fontWeight:700, fontSize:'0.82rem', lineHeight:1.3, margin:0 }}>{b.label}</p>
-              <p style={{ color:'#64748b', fontSize:'0.72rem', lineHeight:1.3, margin:0 }}>{b.sub}</p>
+              <p style={{ color:'#2563eb', fontWeight:700, fontSize: isDesktop ? '0.78rem' : '0.70rem', lineHeight:1.3, margin:0 }}>{b.label}</p>
+              <p style={{ color:'#64748b', fontSize: isDesktop ? '0.68rem' : '0.60rem', lineHeight:1.3, margin:0 }}>{b.sub}</p>
             </div>
           </div>
         ))}
