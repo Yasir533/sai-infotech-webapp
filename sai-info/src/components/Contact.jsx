@@ -144,7 +144,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(11,116,209,0.04),transparent_45%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(28, 188, 206, 0.04),transparent_45%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}
         <motion.div
