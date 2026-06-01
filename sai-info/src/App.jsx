@@ -67,6 +67,11 @@ function App() {
   useEffect(() => {
 
     document.documentElement.classList.remove('dark')
+    document.documentElement.style.colorScheme = 'light'
+    // Force light mode meta — prevents OS dark mode from affecting the app
+    const meta = document.querySelector('meta[name="color-scheme"]')
+    if (meta) { meta.content = 'light' }
+    else { const m = document.createElement('meta'); m.name = 'color-scheme'; m.content = 'light'; document.head.appendChild(m) }
 
     localStorage.setItem('theme', 'light')
 

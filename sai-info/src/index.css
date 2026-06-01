@@ -425,3 +425,74 @@ body {
     transition-duration: 0.1s !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   FORCE LIGHT MODE — ignore OS/browser dark mode preference
+   The app manages its own theme via .dark class on <html>
+   ══════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+  /* Override every OS dark-mode auto-style back to our light defaults */
+  :root {
+    color-scheme: light !important;
+  }
+  html:not(.dark) {
+    background-color: #f7f9fc !important;
+    color: #0f172a !important;
+  }
+  html:not(.dark) body {
+    background-color: transparent !important;
+    color: #0f172a !important;
+  }
+  /* Force all inputs/buttons to stay light */
+  html:not(.dark) input,
+  html:not(.dark) textarea,
+  html:not(.dark) select,
+  html:not(.dark) button {
+    color-scheme: light !important;
+  }
+}
+
+/* Force light color-scheme globally so browser chrome (inputs, scrollbars)
+   stays light when we haven't applied .dark */
+html:not(.dark) {
+  color-scheme: light !important;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   EXTRA MOBILE PERFORMANCE — kill heavy body animations on 4G
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Kill the animated gradient on body */
+  body {
+    animation: none !important;
+    background: var(--ocean-mid) !important;
+    background-size: unset !important;
+  }
+
+  /* Kill the blurred pseudo-element — this is the heaviest GPU operation */
+  body::before {
+    display: none !important;
+  }
+
+  /* Kill ocean shift on video-bg too */
+  .video-bg {
+    animation: none !important;
+    background: linear-gradient(180deg, var(--ocean-start) 0%, var(--ocean-mid) 50%, var(--ocean-end) 100%) !important;
+  }
+
+  /* Disable float animation */
+  .float-anim {
+    animation: none !important;
+  }
+
+  /* Reduce marquee animation work */
+  .animate-marquee {
+    animation-duration: 40s !important;
+  }
+
+  /* Disable the scroll-up ticker on mobile */
+  .animate-scroll-up {
+    animation-duration: 30s !important;
+  }
+}
