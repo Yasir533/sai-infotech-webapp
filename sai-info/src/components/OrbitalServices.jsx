@@ -157,32 +157,33 @@ export default function OrbitalServices() {
     return () => ro.disconnect()
   }, [])
 
-  const scale      = Math.min(containerW, DESIGN) / DESIGN
-  const scaledH    = DESIGN * scale
-  const marginLeft = (containerW - DESIGN * scale) / 2
+  const scale   = Math.min(containerW, DESIGN) / DESIGN
+  const scaledH = DESIGN * scale
 
-  // ── Font sizes in px relative to the 780-px canvas ──────────────
-  // They live INSIDE the scaled div so they scale with the canvas
-  // automatically on every screen size.
-  // Desktop (scale≈1): these px values are exactly as written → large & readable
-  // Mobile  (scale≈0.44): the whole div shrinks → fonts shrink proportionally
-  const globeOurPx      = 34   // was ~24px (1.5rem). Now larger on desktop
-  const globeServicesPx = 38   // was ~26px (1.65rem)
-  const globeSubPx      = 14   // was ~10px (0.60rem)
-  const cardTitlePx     = 17   // was ~13px (0.80rem)
-  const cardSubPx       = 13   // was ~10px (0.62rem)
-  const badgeLabelPx    = 14   // was ~11px (0.70rem)
-  const badgeSubPx      = 12   // was ~10px (0.60rem)
+  // ── Font sizes in px (live inside the scaled canvas, so they scale with it) ──
+  // On desktop (scale≈1): rendered at full px value → large & readable
+  // On mobile (scale≈0.44): visually shrink proportionally with the canvas → no overflow
+  const globeOurPx      = 44   // "Our"
+  const globeServicesPx = 50   // "Services"
+  const globeSubPx      = 18   // subtitle
+  const cardTitlePx     = 22   // card title
+  const cardSubPx       = 17   // card subtitle
+  const badgeLabelPx    = 18   // badge label
+  const badgeSubPx      = 15   // badge sub
 
   return (
+    // KEY FIX: overflow:hidden on outer, exact height so nothing bleeds
     <div ref={outerRef} style={{ width:'100%', overflow:'hidden', padding:'16px 0', height: scaledH + 32 }}>
 
+      {/* KEY FIX: transformOrigin 'top center' + no marginLeft offset
+          This ensures the 780px canvas scales from the center outward,
+          so left & right cards stay symmetrically visible on all screen sizes */}
       <div style={{
         width:           DESIGN,
         height:          DESIGN,
         transform:       `scale(${scale})`,
-        transformOrigin: 'top left',
-        marginLeft:      marginLeft,
+        transformOrigin: 'top center',
+        marginLeft:      (containerW - DESIGN) / 2,
         position:        'relative',
         flexShrink:      0,
         userSelect:      'none',
