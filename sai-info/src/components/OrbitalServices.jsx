@@ -107,8 +107,6 @@ const SERVICES = [
   { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
 ]
 
-// Badge positions as px on the 780px design canvas.
-// All use translate(-50%,-50%) — works correctly because all use top+left (no right/bottom).
 const BADGES = [
   { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 101, top: 140 } },
   { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 679, top:  94 } },
@@ -117,8 +115,8 @@ const BADGES = [
 ]
 
 const DESIGN  = 780
-const CX      = DESIGN / 2   // 390
-const CY      = DESIGN / 2   // 390
+const CX      = DESIGN / 2
+const CY      = DESIGN / 2
 const GLOBE_R = 155
 const DIST    = 268
 const CW      = 185
@@ -144,16 +142,12 @@ export default function OrbitalServices() {
   const outerRef = useRef(null)
 
   useEffect(() => {
-    // Inject CSS once
     if (!document.getElementById('orbital-css')) {
       const el = document.createElement('style')
       el.id = 'orbital-css'
       el.textContent = CSS
       document.head.appendChild(el)
     }
-    // Use ResizeObserver on the actual container element.
-    // This measures the true available width, ignoring scrollbars,
-    // sidebars, and any parent padding — window.innerWidth can lie on mobile.
     const node = outerRef.current
     if (!node) return
     const measure = () => setContainerW(node.offsetWidth)
@@ -163,30 +157,37 @@ export default function OrbitalServices() {
     return () => ro.disconnect()
   }, [])
 
-  // Scale the 780px design canvas to fit the container exactly.
-  // On phones: scale < 1. On desktop: scale = 1 (canvas fits, no scaling needed).
   const scale      = Math.min(containerW, DESIGN) / DESIGN
   const scaledW    = DESIGN * scale
-  const isDesktop  = containerW >= 768
-  // transformOrigin 'top left' → canvas shrinks from its top-left corner.
-  // marginLeft shifts it right to centre it inside the container.
-  // marginBottom collapses the blank vertical space that CSS scale leaves behind.
+  const scaledH    = DESIGN * scale
   const marginLeft = (containerW - scaledW) / 2
-  const marginBot  = -(DESIGN * (1 - scale))
+
+  // font sizes: larger on desktop (>=768px), original on mobile
+  const isDesktop  = containerW >= 768
+  const fs = {
+    globeOur:      isDesktop ? '2.2rem'  : '1.5rem',
+    globeServices: isDesktop ? '2.4rem'  : '1.65rem',
+    globeSub:      isDesktop ? '0.85rem' : '0.60rem',
+    cardTitle:     isDesktop ? '1.0rem'  : '0.80rem',
+    cardSub:       isDesktop ? '0.78rem' : '0.62rem',
+    badgeLabel:    isDesktop ? '0.82rem' : '0.70rem',
+    badgeSub:      isDesktop ? '0.70rem' : '0.60rem',
+  }
 
   return (
-    <div ref={outerRef} style={{ width:'100%', overflowX:'hidden', padding:'16px 0' }}>
+    // KEY FIX: set explicit height = scaledH so container does not overflow
+    // overflow:hidden clips anything that bleeds out on mobile
+    <div ref={outerRef} style={{ width:'100%', overflow:'hidden', padding:'16px 0', height: scaledH + 32 }}>
 
       <div style={{
-        width:            DESIGN,
-        height:           DESIGN,
-        transform:        `scale(${scale})`,
-        transformOrigin:  'top left',
-        marginLeft:       marginLeft,
-        marginBottom:     marginBot,
-        position:         'relative',
-        flexShrink:       0,
-        userSelect:       'none',
+        width:           DESIGN,
+        height:          DESIGN,
+        transform:       `scale(${scale})`,
+        transformOrigin: 'top left',
+        marginLeft:      marginLeft,
+        position:        'relative',
+        flexShrink:      0,
+        userSelect:      'none',
       }}>
 
         {/* Orbit rings + connector lines + anchor dots */}
@@ -228,10 +229,10 @@ export default function OrbitalServices() {
         }}>
           <RotatingEarth size={GLOBE_R*2}/>
           <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:20, pointerEvents:'none' }}>
-            <span style={{ color:'#fff', fontWeight:800, fontSize: isDesktop ? '2.2rem' : '1.5rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Our</span>
-            <span style={{ color:'#7dd3fc', fontWeight:800, fontSize: isDesktop ? '2.4rem' : '1.65rem', lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Services</span>
+            <span style={{ color:'#fff', fontWeight:800, fontSize:fs.globeOur, lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Our</span>
+            <span style={{ color:'#7dd3fc', fontWeight:800, fontSize:fs.globeServices, lineHeight:1.1, textShadow:'0 2px 14px rgba(0,0,0,0.85)' }}>Services</span>
             <div style={{ width:48, height:2.5, background:'#38bdf8', borderRadius:9999, margin:'4px 0' }}/>
-            <span style={{ color:'rgba(255,255,255,0.85)', fontSize: isDesktop ? '0.85rem' : '0.60rem', textAlign:'center', lineHeight:1.4, maxWidth:140, textShadow:'0 1px 8px rgba(0,0,0,0.9)', padding:'0 6px' }}>
+            <span style={{ color:'rgba(255,255,255,0.85)', fontSize:fs.globeSub, textAlign:'center', lineHeight:1.4, maxWidth:140, textShadow:'0 1px 8px rgba(0,0,0,0.9)', padding:'0 6px' }}>
               Drop-off, Walk-in,<br/>On-site & Pickup.
             </span>
           </div>
@@ -255,8 +256,8 @@ export default function OrbitalServices() {
                   <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
-                  <p style={{ color:'#0f172a', fontWeight:700, fontSize: isDesktop ? '1.0rem' : '0.80rem', lineHeight:1.25, margin:0 }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize: isDesktop ? '0.78rem' : '0.62rem', marginTop:2, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:fs.cardTitle, lineHeight:1.25, margin:0 }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize:fs.cardSub, marginTop:2, lineHeight:1.25, marginBottom:0 }}>{s.subtitle}</p>
                 </div>
               </div>
             </div>
@@ -267,8 +268,8 @@ export default function OrbitalServices() {
         {BADGES.map(b => (
           <div key={b.label} style={{ position:'absolute', zIndex:30, pointerEvents:'none', left:b.pos.left, top:b.pos.top, transform:'translate(-50%,-50%)' }}>
             <div style={{ background:'#fff', border:'1px solid rgba(59,130,246,0.22)', borderRadius:10, padding:'5px 13px', textAlign:'center', animation:'badgePulse 3s ease-in-out infinite', whiteSpace:'nowrap' }}>
-              <p style={{ color:'#2563eb', fontWeight:700, fontSize: isDesktop ? '0.82rem' : '0.70rem', lineHeight:1.3, margin:0 }}>{b.label}</p>
-              <p style={{ color:'#64748b', fontSize: isDesktop ? '0.70rem' : '0.60rem', lineHeight:1.3, margin:0 }}>{b.sub}</p>
+              <p style={{ color:'#2563eb', fontWeight:700, fontSize:fs.badgeLabel, lineHeight:1.3, margin:0 }}>{b.label}</p>
+              <p style={{ color:'#64748b', fontSize:fs.badgeSub, lineHeight:1.3, margin:0 }}>{b.sub}</p>
             </div>
           </div>
         ))}
