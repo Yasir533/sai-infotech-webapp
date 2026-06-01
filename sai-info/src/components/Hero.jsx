@@ -52,7 +52,7 @@ export default function Hero() {
         id="home"
         className="relative min-h-screen flex items-center overflow-hidden pt-24 lg:pt-28 pb-10"
       >
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        <div className="relative z-10 w-full py-4 lg:py-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,36 +159,38 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] items-start">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
-            >
-              <div className="min-h-[300px] sm:min-h-[340px] max-w-[520px] mx-auto">
-                <OrbitalServices />
-              </div>
-            </motion.div>
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mt-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] items-start">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+                className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
+              >
+                <div className="min-h-[300px] sm:min-h-[340px] max-w-[520px] mx-auto">
+                  <OrbitalServices />
+                </div>
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
-              className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
-            >
-              <div className="mb-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90">
-                  View Products
-                </p>
-                <h3 className="mt-2 text-xl sm:text-2xl font-black text-white">
-                  Product Highlights
-                </h3>
-              </div>
-              <ITProductsCard />
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.05 }}
+                className="rounded-[2rem] border border-white/10 bg-white/8 p-4 sm:p-6 backdrop-blur-xl shadow-[0_18px_60px_rgba(2,8,23,0.18)]"
+              >
+                <div className="mb-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100/90">
+                    View Products
+                  </p>
+                  <h3 className="mt-2 text-xl sm:text-2xl font-black text-white">
+                    Product Highlights
+                  </h3>
+                </div>
+                <ITProductsCard />
+              </motion.div>
+            </div>
           </div>
         </div>
 
