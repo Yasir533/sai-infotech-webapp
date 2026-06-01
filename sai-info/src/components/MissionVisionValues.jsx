@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 import missionIcon from '../icons/icons8-mission-50.png'
@@ -49,6 +49,15 @@ export default function MissionVisionValues() {
     margin: '-100px',
   })
 
+  const [hoverIdx, setHoverIdx] = useState(0)
+
+  // listen for hover events from cards
+  React.useEffect(() => {
+    const handler = (e) => setHoverIdx(e.detail)
+    document.addEventListener('mvv-hover', handler)
+    return () => document.removeEventListener('mvv-hover', handler)
+  }, [])
+
   return (
     <section
       id="mission"
@@ -85,8 +94,14 @@ export default function MissionVisionValues() {
           <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full" />
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+        {/* Responsive layout: left details panel on large screens, cards on right */}
+        <div className="lg:flex lg:items-start lg:gap-8">
+
+          {/* Details panel (visible on large screens) */}
+          <HoverDetails sections={sections} />
+
+          {/* Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-7 flex-1">
 
           {sections.map((sec, i) => (
             <motion.div
@@ -102,6 +117,8 @@ export default function MissionVisionValues() {
                 boxShadow: `0 12px 40px ${sec.glow}`,
                 background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))'
               }}
+              onMouseEnter={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: i }))}
+              onMouseLeave={() => document.dispatchEvent(new CustomEvent('mvv-hover', { detail: null }))}
             >
 
               {/* Top Line */}
@@ -168,6 +185,10 @@ export default function MissionVisionValues() {
               </div>
             </motion.div>
           ))}
+
+          ))}
+
+          </div>
 
         </div>
       </div>
