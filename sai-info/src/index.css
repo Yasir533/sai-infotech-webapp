@@ -17,32 +17,32 @@ html {
 /* ── Theme Variables ─────────────────────────────────────── */
 :root {
   --bg-color: #f7f9fc;
-  --text-color: #1f2937;
-  --card-bg: rgba(255, 255, 255, 0.7);
-  --navbar-bg: rgba(246, 248, 251, 0.88);
-  --gradient-start: #225aa8;
-  --gradient-end: #345f9a;
-  /* Ocean gradient */
-  --ocean-start: #00b4db;
-  --ocean-mid: #0083b0;
-  --ocean-end: #012a4a;
-  --scrollbar-bg: #d5dde6;
-  --scrollbar-thumb: #76879d;
+  --text-color: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --navbar-bg: rgba(248, 250, 252, 0.9);
+  --gradient-start: #2f6fbf; /* lighter blue */
+  --gradient-end: #345f9a;   /* logo blue */
+  /* Ocean gradient (brand-centric) */
+  --ocean-start: #e6f2fb; /* pale */
+  --ocean-mid: #2f6fbf;   /* mid */
+  --ocean-end: #345f9a;   /* deep */
+  --scrollbar-bg: #e6eef7;
+  --scrollbar-thumb: #84a1ca;
 }
 
 .dark {
-  --bg-color: #101922;
-  --text-color: #e7edf5;
-  --card-bg: rgba(17, 24, 39, 0.74);
-  --navbar-bg: rgba(16, 25, 34, 0.88);
-  --gradient-start: #2b67c0;
-  --gradient-end: #4a6ea3;
+  --bg-color: #071025;
+  --text-color: #e7eef8;
+  --card-bg: rgba(7, 16, 37, 0.7);
+  --navbar-bg: rgba(6, 12, 28, 0.88);
+  --gradient-start: #274972;
+  --gradient-end: #213a58;
   /* Dark ocean variant */
-  --ocean-start: #054a91;
-  --ocean-mid: #023e73;
-  --ocean-end: #001a33;
-  --scrollbar-bg: #182433;
-  --scrollbar-thumb: #55677d;
+  --ocean-start: #023e73;
+  --ocean-mid: #2f568d;
+  --ocean-end: #17283a;
+  --scrollbar-bg: #071425;
+  --scrollbar-thumb: #3f5878;
 }
 
 /* ── Base ────────────────────────────────────────────────── */

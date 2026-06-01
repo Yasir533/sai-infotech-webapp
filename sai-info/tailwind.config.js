@@ -8,15 +8,29 @@ export default {
         poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
+        // Brand palette derived from the logo
+        brand: {
+          50: '#eef4fb',
+          100: '#dbe9f7',
+          200: '#b6d3ef',
+          300: '#8fbbe6',
+          400: '#5f9adc',
+          500: '#345f9a',
+          600: '#2f568d',
+          700: '#274972',
+          800: '#213a58',
+          900: '#17283a',
+        },
+        // Keep `primary` as an alias to brand for backward compatibility
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#eef4fb',
+          100: '#dbe9f7',
+          400: '#5f9adc',
+          500: '#345f9a',
+          600: '#2f568d',
+          700: '#274972',
+          800: '#213a58',
+          900: '#17283a',
         },
       },
       transitionProperty: {
