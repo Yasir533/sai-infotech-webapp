@@ -40,9 +40,9 @@ html {
 /* ── Base ────────────────────────────────────────────────── */
 body {
   font-family: 'Nunito', sans-serif;
-  background-color: var(--bg-color);
+  background: linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-end) 100%), var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background 0.3s, color 0.3s;
   overflow-x: hidden;
 }
 
@@ -286,7 +286,7 @@ html:not(.dark) .contact-input:focus {
     radial-gradient(circle at 15% 20%, rgba(52, 95, 154, 0.022), transparent 22%),
     radial-gradient(circle at 80% 15%, rgba(34, 90, 168, 0.022), transparent 24%),
     radial-gradient(circle at 50% 70%, rgba(31, 41, 55, 0.014), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f2f6fb 100%);
+    linear-gradient(180deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
 }
 
 /* Dark mode overlay — deep tint so light text pops over the video */
