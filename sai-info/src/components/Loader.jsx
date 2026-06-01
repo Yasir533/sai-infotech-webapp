@@ -15,23 +15,16 @@ export default function Loader() {
         transition={{ duration: 0.5 }}
         className="flex flex-col items-center gap-6"
       >
-        {/* Logo Image with glow animation */}
+        {/* Logo — no color filter so original colors show clearly */}
         <div className="relative">
           <motion.img
             src={logoImg}
             alt="SAI INFOTECH"
             className="h-40 w-auto object-contain relative z-10"
-            style={{ filter: 'drop-shadow(0 0 18px rgba(6,182,212,0.7)) drop-shadow(0 0 8px rgba(37,99,235,0.5))' }}
-            animate={{
-              filter: [
-                'drop-shadow(0 0 14px rgba(6,182,212,0.6)) drop-shadow(0 0 6px rgba(37,99,235,0.4))',
-                'drop-shadow(0 0 28px rgba(6,182,212,0.95)) drop-shadow(0 0 14px rgba(37,99,235,0.7))',
-                'drop-shadow(0 0 14px rgba(6,182,212,0.6)) drop-shadow(0 0 6px rgba(37,99,235,0.4))',
-              ],
-            }}
+            animate={{ scale: [1, 1.04, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-blue-600/20 to-cyan-500/20 blur-2xl animate-pulse" />
+          <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-blue-600/10 to-cyan-500/10 blur-2xl animate-pulse" />
         </div>
 
         {/* Brand name */}
