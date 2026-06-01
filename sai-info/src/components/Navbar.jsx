@@ -86,7 +86,7 @@ export default function Navbar() {
             <img
               src={logoIcon}
               alt="SAI INFOTECH"
-              className="h-11 w-11 sm:h-12 sm:w-12 rounded-full object-cover ring-1 ring-[#0b74d1]/20 shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-transform duration-300 group-hover:scale-105"
+              className="h-11 w-11 sm:h-12 sm:w-12 object-contain transition-transform duration-300 group-hover:scale-105"
               style={{
                 background: 'rgba(255,255,255,0.92)',
               }}
