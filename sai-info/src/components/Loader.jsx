@@ -20,7 +20,7 @@ export default function Loader() {
           <motion.img
             src={logoImg}
             alt="SAI INFOTECH"
-            className="h-16 w-auto object-contain relative z-10"
+            className="h-32 w-auto object-contain relative z-10"
             style={{ filter: 'drop-shadow(0 0 18px rgba(6,182,212,0.7)) drop-shadow(0 0 8px rgba(37,99,235,0.5))' }}
             animate={{
               filter: [
