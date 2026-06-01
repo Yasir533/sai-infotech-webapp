@@ -154,23 +154,6 @@ export default function Hero() {
                       <HiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
                     </a>
                   </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.52 }}
-                    className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
-                  >
-                    {['Refurbishing', 'Automation', 'Security'].map((item, index) => (
-                      <div
-                        key={item}
-                        className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold text-white/90 backdrop-blur-md"
-                        style={{ animationDelay: `${index * 160}ms` }}
-                      >
-                        {item}
-                      </div>
-                    ))}
-                  </motion.div>
                 </div>
               </div>
             </div>
