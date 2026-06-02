@@ -1,13 +1,19 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { FiAward, FiCheckCircle, FiShield } from 'react-icons/fi'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FiAward, FiCheckCircle, FiShield, FiX, FiInfo, FiExternalLink } from 'react-icons/fi'
+
+import isoBadge from '../assets/iso-badge.png'
+import qualityVeritas from '../assets/quality-veritas.png'
+import isoSeal from '../assets/iso-seal.png'
+import isoDoc from '../assets/iso-certificate-doc.jpeg'
 
 const mvvSections = [
   {
+    id: 'mission',
     icon: '/icons/icons8-mission-50.png',
     title: 'Our Mission',
     color: 'from-blue-600 to-blue-400',
-    glow: 'rgba(37,99,235,0.15)',
+    glow: 'rgba(37,99,235,0.2)',
     desc: 'Deliver reliable and innovative IT solutions that empower businesses to grow and succeed.',
     points: [
       'Deliver innovative, reliable IT solutions to every client',
@@ -16,10 +22,11 @@ const mvvSections = [
     ],
   },
   {
+    id: 'vision',
     icon: '/icons/icons8-vision-24.png',
     title: 'Our Vision',
     color: 'from-cyan-600 to-cyan-400',
-    glow: 'rgba(6,182,212,0.15)',
+    glow: 'rgba(6,182,212,0.2)',
     desc: 'To be a trusted leader in IT services, known for excellence, innovation, and integrity.',
     points: [
       "Be Bangalore's most trusted IT service provider",
@@ -28,10 +35,11 @@ const mvvSections = [
     ],
   },
   {
+    id: 'values',
     icon: '/icons/icons8-values-50.png',
     title: 'Our Values',
     color: 'from-indigo-600 to-violet-400',
-    glow: 'rgba(99,102,241,0.15)',
+    glow: 'rgba(99,102,241,0.2)',
     desc: 'Integrity, innovation, customer focus, and commitment to excellence drive everything we do.',
     points: [
       'Honesty — Transparent in every interaction',
@@ -42,6 +50,9 @@ const mvvSections = [
 ]
 
 export default function About() {
+  const [hoveredMVV, setHoveredMVV] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <section id="about" className="section-pad relative overflow-hidden">
       {/* Background patterns */}
@@ -57,7 +68,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
           <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">
             About Us
@@ -65,34 +76,30 @@ export default function About() {
           <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
             About <span className="text-gradient">Sai Infotech</span>
           </h2>
-          <p className="max-w-3xl mx-auto text-slate-400 text-lg leading-relaxed">
-            Delivering innovative IT solutions, infrastructure services,
-            networking, surveillance systems, and managed technology support
-            with a commitment to quality, reliability, and customer success.
-          </p>
+          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full mt-4" />
         </motion.div>
 
-        {/* ================= ABOUT US CONTENT ================= */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-28">
-          {/* About Image - Comes from Left */}
+        {/* ================= ROW 1: ABOUT US IMAGE & CONTENT ================= */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          {/* About Image - Comes from Left, bounded to prevent being huge */}
           <motion.div
-            initial={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8 }}
-            className="relative group"
+            className="relative group flex justify-center"
           >
-            <div className="absolute inset-0 bg-blue-500/10 rounded-3xl blur-xl group-hover:bg-blue-500/20 transition-all duration-500" />
+            <div className="absolute inset-0 bg-blue-500/10 rounded-3xl blur-2xl group-hover:bg-blue-500/20 transition-all duration-500" />
             <img
               src="/about.jpeg"
               alt="About Sai Infotech"
-              className="w-full rounded-3xl border border-white/10 shadow-2xl relative z-10 hover:border-blue-500/30 transition-all duration-500"
+              className="w-full max-w-[480px] max-h-[340px] md:max-h-[385px] object-cover rounded-3xl border border-white/10 shadow-2xl relative z-10 hover:border-blue-500/30 transition-all duration-500"
             />
           </motion.div>
 
           {/* About Content - Comes from Right */}
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
+            initial={{ opacity: 0, x: 80 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8 }}
@@ -108,7 +115,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="space-y-4 text-slate-300 text-base leading-relaxed">
+            <div className="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed">
               <p>
                 Sai Infotech is a leading IT solutions and technology services company
                 based in Bangalore, committed to delivering innovative, reliable, and
@@ -131,163 +138,213 @@ export default function About() {
           </motion.div>
         </div>
 
-        {/* ================= MISSION, VISION & VALUES ================= */}
-        <div className="text-center mb-16">
+        {/* ================= ROW 2: SPLIT MVV & CERTIFICATE ================= */}
+        <div className="grid lg:grid-cols-2 gap-10 items-stretch">
+          
+          {/* LEFT COLUMN: Mission Vision Values with interactive hover */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
+            className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between"
           >
-            <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">
-              What Drives Us
-            </p>
-            <h3 className="text-3xl md:text-5xl font-black text-white mb-4">
-              Mission, Vision & <span className="text-gradient">Values</span>
-            </h3>
-            <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full mt-4" />
-          </motion.div>
-        </div>
+            <div>
+              <p className="text-blue-400 text-xs font-semibold tracking-widest uppercase mb-1">
+                What Drives Us
+              </p>
+              <h4 className="text-white font-bold text-2xl mb-6">
+                Mission, Vision & <span className="text-gradient">Values</span>
+              </h4>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-28">
-          {mvvSections.map((sec, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              className="glass rounded-3xl border border-white/10 p-8 flex flex-col hover:border-blue-500/30 transition-all duration-300 relative group overflow-hidden"
-              style={{
-                boxShadow: `0 12px 40px ${sec.glow}`,
-              }}
-            >
-              {/* Top accent line */}
-              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${sec.color} opacity-85`} />
-              
-              <div className="mb-6 flex items-center justify-between">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center shadow-lg`} style={{ boxShadow: `0 8px 24px ${sec.glow}` }}>
-                  <img
-                    src={sec.icon}
-                    alt={sec.title}
-                    className="w-7 h-7 object-contain brightness-0 invert"
-                  />
-                </div>
-                <span className="text-slate-600/30 text-5xl font-black select-none group-hover:text-blue-500/10 transition-colors duration-300">0{i+1}</span>
+              {/* Buttons Grid */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                {mvvSections.map((sec) => {
+                  const isActive = hoveredMVV?.id === sec.id
+                  return (
+                    <div
+                      key={sec.id}
+                      onMouseEnter={() => setHoveredMVV(sec)}
+                      onMouseLeave={() => setHoveredMVV(null)}
+                      className={`glass rounded-2xl p-3 sm:p-4 border cursor-pointer flex flex-col items-center text-center gap-3 transition-all duration-300 ${
+                        isActive
+                          ? 'border-blue-500/50 bg-blue-500/10 shadow-lg scale-105'
+                          : 'border-white/10 hover:border-blue-500/30'
+                      }`}
+                      style={{
+                        boxShadow: isActive ? `0 8px 24px ${sec.glow}` : 'none',
+                      }}
+                    >
+                      <div
+                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${sec.color} flex items-center justify-center`}
+                      >
+                        <img
+                          src={sec.icon}
+                          alt={sec.title}
+                          className="w-6 h-6 object-contain brightness-0 invert"
+                        />
+                      </div>
+                      <h5 className="text-white font-bold text-xs sm:text-sm">
+                        {sec.title.split(' ')[1]}
+                      </h5>
+                    </div>
+                  )
+                })}
               </div>
-
-              <h4 className="text-white text-xl font-bold mb-4">{sec.title}</h4>
-              
-              <p className="text-slate-300 text-sm leading-relaxed mb-6">{sec.desc}</p>
-
-              <ul className="space-y-3 mt-auto border-t border-white/5 pt-4">
-                {sec.points.map((pt, j) => (
-                  <li key={j} className="flex items-start gap-2.5 text-slate-400 text-xs leading-relaxed">
-                    <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${sec.color} mt-1.5 flex-shrink-0`} />
-                    <span>{pt}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* ================= CERTIFICATE SECTION ================= */}
-        {/* Scroll Target with offset */}
-        <div id="certificate" className="absolute -mt-24" />
-
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">
-              Quality Standards
-            </p>
-            <h3 className="text-3xl md:text-5xl font-black text-white mb-4">
-              Our <span className="text-gradient">Certifications</span>
-            </h3>
-            <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-indigo-500 mx-auto rounded-full mt-4" />
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8 }}
-          className="glass rounded-3xl border border-white/10 p-8 sm:p-12 shadow-2xl relative overflow-hidden"
-        >
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px]" />
-          <div className="absolute -left-20 -top-20 w-80 h-80 bg-blue-500/5 rounded-full blur-[100px]" />
-
-          <div className="grid lg:grid-cols-12 gap-8 items-center relative z-10">
-            {/* ISO Badge column */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center text-center py-4 border-b lg:border-b-0 lg:border-r border-white/10 lg:pr-8">
-              <div className="relative w-36 h-36 flex items-center justify-center mb-6">
-                {/* Outer animated rings */}
-                <div className="absolute inset-0 rounded-full border-4 border-cyan-500/30 animate-pulse" />
-                <div className="absolute -inset-2 rounded-full border border-cyan-400 opacity-60 animate-spin" style={{ animationDuration: '10s' }} />
-                <div className="absolute inset-2 rounded-full border border-dashed border-blue-400 opacity-40 animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }} />
-                <div className="absolute inset-4 rounded-full bg-slate-900 border border-white/10 shadow-inner flex flex-col items-center justify-center">
-                  <p className="text-cyan-400 text-[10px] font-black tracking-widest uppercase">Certified</p>
-                  <p className="text-white text-3xl font-black leading-none my-1">ISO</p>
-                  <p className="text-white text-xs font-bold">9001:2015</p>
-                  <div className="flex justify-center mt-1">
-                    <FiCheckCircle className="text-cyan-400" size={14} />
-                  </div>
-                </div>
-              </div>
-              <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
-              <p className="text-cyan-400 font-bold text-sm tracking-wide uppercase mt-1">Quality Management System</p>
             </div>
 
-            {/* Info Content column */}
-            <div className="lg:col-span-7 space-y-5 lg:pl-4">
+            {/* Hover Detail Panel */}
+            <div className="relative h-[225px] sm:h-[185px] w-full mt-4 flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {hoveredMVV ? (
+                  <motion.div
+                    key={hoveredMVV.id}
+                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full h-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center"
+                    style={{
+                      boxShadow: `inset 0 0 20px ${hoveredMVV.glow}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${hoveredMVV.color}`} />
+                      <h4 className="text-white text-base font-bold">{hoveredMVV.title}</h4>
+                    </div>
+                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                      {hoveredMVV.desc}
+                    </p>
+                    <ul className="space-y-1.5 border-t border-white/5 pt-2">
+                      {hoveredMVV.points.map((pt, index) => (
+                        <li key={index} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
+                          <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${hoveredMVV.color} mt-1.5 flex-shrink-0`} />
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.7 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl w-full h-full bg-white/2"
+                  >
+                    <FiInfo className="text-blue-400 text-2xl mb-2 animate-pulse" />
+                    <p className="text-slate-400 text-sm font-medium">
+                      Hover over Mission, Vision, or Values above to explore details
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+
+          {/* RIGHT COLUMN: ISO Certification Section */}
+          <motion.div
+            id="certificate"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden"
+          >
+            <div className="absolute -right-20 -bottom-20 w-60 h-60 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+            
+            <div>
+              <p className="text-cyan-400 text-xs font-semibold tracking-widest uppercase mb-1">
+                Quality Standard
+              </p>
+              <h4 className="text-white font-bold text-2xl mb-6">
+                ISO Certification
+              </h4>
+
+              {/* Brand Logos block with veritas and iso badges */}
+              <div className="flex items-center justify-around gap-4 bg-slate-950/40 border border-white/5 rounded-2xl p-4 mb-5">
+                <img
+                  src={qualityVeritas}
+                  alt="Bureau Veritas"
+                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                />
+                <div className="h-10 w-px bg-white/10" />
+                <img
+                  src={isoBadge}
+                  alt="ISO 9001:2015 Certified"
+                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                />
+                <div className="h-10 w-px bg-white/10" />
+                <img
+                  src={isoSeal}
+                  alt="ISO 9001:2015 Seal"
+                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </div>
+
+              <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                SAI INFOTECH is officially certified under the **ISO 9001:2015** Quality
+                Management System. This reflects our compliance with international operational standards.
+              </p>
+            </div>
+
+            {/* Document Preview Card / Click to enlarge */}
+            <div
+              onClick={() => setModalOpen(true)}
+              className="group cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/30 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all duration-300"
+            >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
                   <FiShield className="text-cyan-400 text-lg" />
                 </div>
-                <h4 className="text-white text-xl font-bold">Quality Assurance & Trust</h4>
+                <div>
+                  <h5 className="text-white font-bold text-xs sm:text-sm leading-tight">View Certificate Document</h5>
+                  <p className="text-slate-400 text-[11px] mt-0.5">Click to preview full document</p>
+                </div>
               </div>
-              
-              <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
-                <p>
-                  SAI INFOTECH is officially certified under the ISO 9001:2015 Quality
-                  Management System, reflecting our commitment to world-class IT services.
-                </p>
-                <p>
-                  This certification demonstrates our dedication to quality,
-                  reliability, customer satisfaction, and continuous improvement. We ensure that
-                  our technical workflows and customer support processes adhere to the highest international standards.
-                </p>
-              </div>
-
-              <div className="grid sm:grid-cols-2 gap-4 pt-2">
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
-                  <FiCheckCircle className="text-cyan-400 flex-shrink-0" />
-                  <span>Standardized Workflows</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
-                  <FiCheckCircle className="text-cyan-400 flex-shrink-0" />
-                  <span>Customer Satisfaction Focus</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
-                  <FiCheckCircle className="text-cyan-400 flex-shrink-0" />
-                  <span>Continuous Self-Auditing</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
-                  <FiCheckCircle className="text-cyan-400 flex-shrink-0" />
-                  <span>Reliable IT Governance</span>
-                </div>
+              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:text-cyan-400 group-hover:bg-cyan-500/10 transition-all">
+                <FiExternalLink size={14} />
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
       </div>
+
+      {/* ================= CERTIFICATE MODAL ================= */}
+      <AnimatePresence>
+        {modalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+            onClick={() => setModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative max-w-3xl w-full bg-slate-900 border border-cyan-500/20 rounded-2xl overflow-hidden shadow-2xl p-2"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setModalOpen(false)}
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center border border-white/10 transition-colors cursor-pointer"
+              >
+                <FiX size={18} />
+              </button>
+              
+              <img
+                src={isoDoc}
+                alt="ISO Certificate Document"
+                className="w-full max-h-[85vh] object-contain rounded-xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
