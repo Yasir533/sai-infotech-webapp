@@ -21,7 +21,22 @@ export default function Navbar() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 50)
+
+      // Auto-detect active section on scroll
+      const sections = navLinks.map(link => link.href.replace('#', ''))
+      let current = '#home'
+      for (const section of sections) {
+        const el = document.getElementById(section)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 120) {
+            current = `#${section}`
+          }
+        }
+      }
+      setActive(current)
     }
+
     window.addEventListener('scroll', onScroll)
     return () => {
       window.removeEventListener('scroll', onScroll)
@@ -47,7 +62,9 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       style={{ fontFamily: "'Bookman Old Style', 'Bookman', serif" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'nav-glass shadow-lg shadow-black/30 py-2' : 'py-3'
+        scrolled
+          ? 'nav-glass shadow-lg shadow-black/30 py-2'
+          : 'py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,10 +99,10 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2 text-[15px] font-medium transition-all duration-200 relative ${
                   active === link.href
-                    ? 'text-white bg-[#345f9a] shadow-[0_0_16px_rgba(52,95,154,0.16)]'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                    ? 'text-slate-900 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[2px] after:bg-[#345f9a] after:rounded-full'
+                    : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {link.label}
@@ -95,9 +112,13 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-3 px-5 py-2 rounded-full text-sm font-semibold text-white bg-[#345f9a] hover:bg-[#2f568d] shadow-[0_8px_18px_rgba(52,95,154,0.16)] transition-all duration-300"
+              className={`ml-3 px-4 py-2 text-[15px] font-medium transition-all duration-200 relative ${
+                active === '#contact'
+                  ? 'text-slate-900 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[2px] after:bg-[#345f9a] after:rounded-full'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <span>Get Service</span>
+              Get Service
             </a>
           </div>
 
@@ -128,9 +149,9 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`px-4 py-3 rounded-xl font-medium transition-all ${
+                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-all ${
                     active === link.href
-                      ? 'text-[#345f9a] bg-[#345f9a]/10'
+                      ? 'text-[#345f9a] border-l-2 border-[#345f9a]'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                   }`}
                 >
@@ -141,9 +162,13 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className="mt-2 px-4 py-3 rounded-xl text-center font-semibold text-white bg-[#345f9a] hover:bg-[#2f568d] shadow-[0_8px_18px_rgba(52,95,154,0.16)]"
+                className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-all ${
+                  active === '#contact'
+                    ? 'text-[#345f9a] border-l-2 border-[#345f9a]'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+                }`}
               >
-                <span>Get Service</span>
+                Get Service
               </a>
             </div>
           </motion.div>
