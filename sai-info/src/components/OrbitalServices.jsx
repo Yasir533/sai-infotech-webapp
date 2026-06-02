@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { FiCpu, FiTool, FiCloud, FiShield, FiX } from 'react-icons/fi'
+import { FiCpu, FiTool, FiCloud, FiShield, FiX, FiPhone, FiMail } from 'react-icons/fi'
 
 const CSS = `
 @keyframes earthRotate {
@@ -110,9 +110,9 @@ function RotatingEarth({ size }) {
 
 const SERVICES = [
   { id:'repair',      title:'Repair & Recovery',        subtitle:'Fast & Reliable Support',       icon:FiCpu,    color:'#2563eb', iconBg:'linear-gradient(135deg,#1e3a8a,#2563eb)', position:'top',    details:['Chip-level PCB repair','Data recovery from HDD/SSD','Motherboard fault detection','GPU & CPU reballing','On-site & walk-in service'] },
-  { id:'maintenance', title:'Maintenance & Automation', subtitle:'Smart Automation Solutions',    icon:FiTool,   color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'left',   details:['Annual maintenance contracts','PLC & automation systems','Preventive maintenance','Industrial control systems','SCADA integration'] },
+  { id:'maintenance', title:'Maintenance & Automation', subtitle:'Smart Automation Solutions',    icon:FiTool,   color:'#ea580c', iconBg:'linear-gradient(135deg,#7c2d12,#ea580c)', position:'left',   details:['Annual maintenance contracts','PLC & automation systems','Preventive maintenance','Industrial control systems','SCADA integration'] },
   { id:'network',     title:'Network & Cloud',          subtitle:'Secure & Scalable Networks',    icon:FiCloud,  color:'#0284c7', iconBg:'linear-gradient(135deg,#0c4a6e,#0284c7)', position:'right',  details:['LAN/WAN infrastructure','Cloud migration (AWS/Azure/GCP)','Enterprise WiFi deployment','Firewall & VPN setup','Network monitoring'] },
-  { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#16a34a', iconBg:'linear-gradient(135deg,#14532d,#16a34a)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
+  { id:'security',    title:'Security & AV',            subtitle:'Advanced Protection Always On', icon:FiShield, color:'#10b981', iconBg:'linear-gradient(135deg,#064e3b,#10b981)', position:'bottom', details:['CCTV system installation','Access control & biometrics','AV conference room setup','Remote surveillance','Security audit & compliance'] },
 ]
 
 const BADGES = [
@@ -126,23 +126,15 @@ const DESIGN  = 780
 const CX      = DESIGN / 2
 const CY      = DESIGN / 2
 const GLOBE_R = 155
-const DIST    = 268
-const CW      = 220
-const ICON_BOX= 56
+const CW      = 265
+const ICON_BOX= 60
 
+// Perfect spacing for larger cards to avoid overlapping
 const CARD_POS = {
-  top:    { x: CX,           y: CY - DIST },
-  left:   { x: CX - DIST-10, y: CY        },
-  right:  { x: CX + DIST+10, y: CY        },
-  bottom: { x: CX,           y: CY + DIST },
-}
-
-// Detail panel offset per position — where the panel appears relative to the card
-const DETAIL_OFFSET = {
-  top:    { dx: 0,    dy: -1,  originX: '50%', originY: '100%' },   // above card
-  bottom: { dx: 0,    dy:  1,  originX: '50%', originY: '0%'   },   // below card
-  left:   { dx: -1,  dy:  0,  originX: '100%', originY: '50%' },   // left of card
-  right:  { dx:  1,  dy:  0,  originX: '0%',   originY: '50%' },   // right of card
+  top:    { x: CX,       y: CY - 275 },
+  left:   { x: CX - 285, y: CY       },
+  right:  { x: CX + 285, y: CY       },
+  bottom: { x: CX,       y: CY + 275 },
 }
 
 const RINGS = [
@@ -152,84 +144,356 @@ const RINGS = [
   { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
 ]
 
-// Detail Panel component — shown on hover or click
+// Desktop/Tablet Detail Panel — shown beside the card with zero-hover-gap padding and visual connector
 function DetailPanel({ service, onClose }) {
-  const offset = DETAIL_OFFSET[service.position]
-  const PANEL_W = 210
-  const PANEL_GAP = 12 // gap from card edge
+  const isTop = service.position === 'top'
+  const isBottom = service.position === 'bottom'
+  const isLeft = service.position === 'left'
+  const isRight = service.position === 'right'
 
-  // Position: offset from center of card
-  // card is CW wide, ~78px tall approx
-  const cardH = 78
-  const panelStyle = {
+  const PANEL_CONTENT_W = 420
+  const GAP = 40 // Connector line gap
+
+  const containerStyle = {
     position: 'absolute',
-    zIndex: 40,
-    width: PANEL_W,
-    animation: 'detailFadeIn 0.18s ease-out forwards',
-    transformOrigin: `${offset.originX} ${offset.originY}`,
-    // horizontal
-    ...(offset.dx === 0 && { left: `calc(50% - ${PANEL_W/2}px)` }),
-    ...(offset.dx === -1 && { right: `calc(100% + ${PANEL_GAP}px)`, top: '50%', transform: 'translateY(-50%)' }),
-    ...(offset.dx ===  1 && { left: `calc(100% + ${PANEL_GAP}px)`, top: '50%', transform: 'translateY(-50%)' }),
-    // vertical
-    ...(offset.dy === -1 && { bottom: `calc(100% + ${PANEL_GAP}px)` }),
-    ...(offset.dy ===  1 && { top:    `calc(100% + ${PANEL_GAP}px)` }),
+    zIndex: 50,
+    animation: 'detailFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+    pointerEvents: 'auto',
+
+    ...(isTop && {
+      top: '100%',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      paddingTop: GAP,
+      width: PANEL_CONTENT_W,
+      transformOrigin: 'top center',
+    }),
+    ...(isBottom && {
+      bottom: '100%',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      paddingBottom: GAP,
+      width: PANEL_CONTENT_W,
+      transformOrigin: 'bottom center',
+    }),
+    ...(isLeft && {
+      left: '100%',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      paddingLeft: GAP,
+      width: PANEL_CONTENT_W + GAP,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      transformOrigin: 'left center',
+    }),
+    ...(isRight && {
+      right: '100%',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      paddingRight: GAP,
+      width: PANEL_CONTENT_W + GAP,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      transformOrigin: 'right center',
+    }),
   }
 
+  const Connector = () => {
+    if (isTop) {
+      return (
+        <div style={{ height: GAP, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', top: 0, left: 0, right: 0, pointerEvents: 'none' }}>
+          <svg width="20" height={GAP}>
+            <line x1="10" y1="0" x2="10" y2={GAP} stroke={service.color} strokeWidth="2" strokeDasharray="3 3" />
+            <circle cx="10" cy="4" r="4" fill={service.color} style={{ filter: `drop-shadow(0 0 4px ${service.color}88)` }} />
+            <path d="M 5,32 L 10,38 L 15,32" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )
+    }
+    if (isBottom) {
+      return (
+        <div style={{ height: GAP, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none' }}>
+          <svg width="20" height={GAP}>
+            <line x1="10" y1="0" x2="10" y2={GAP} stroke={service.color} strokeWidth="2" strokeDasharray="3 3" />
+            <circle cx="10" cy={GAP - 4} r="4" fill={service.color} style={{ filter: `drop-shadow(0 0 4px ${service.color}88)` }} />
+            <path d="M 5,8 L 10,2 L 15,8" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )
+    }
+    if (isLeft) {
+      return (
+        <div style={{ width: GAP, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, pointerEvents: 'none' }}>
+          <svg width={GAP} height="20">
+            <line x1="0" y1="10" x2={GAP} y2="10" stroke={service.color} strokeWidth="2" strokeDasharray="3 3" />
+            <circle cx="4" cy="10" r="4" fill={service.color} style={{ filter: `drop-shadow(0 0 4px ${service.color}88)` }} />
+            <path d="M 32,5 L 38,10 L 32,15" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )
+    }
+    if (isRight) {
+      return (
+        <div style={{ width: GAP, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, pointerEvents: 'none' }}>
+          <svg width={GAP} height="20">
+            <line x1="0" y1="10" x2={GAP} y2="10" stroke={service.color} strokeWidth="2" strokeDasharray="3 3" />
+            <circle cx={GAP - 4} cy="10" r="4" fill={service.color} style={{ filter: `drop-shadow(0 0 4px ${service.color}88)` }} />
+            <path d="M 8,5 L 2,10 L 8,15" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )
+    }
+    return null
+  }
+
+  const cardContent = (
+    <div style={{
+      background: 'rgba(255, 255, 255, 0.98)',
+      border: `1.5px solid ${service.color}33`,
+      borderRadius: 18,
+      padding: '22px 24px',
+      boxShadow: `0 15px 45px ${service.color}24, 0 3px 14px rgba(0,0,0,0.06)`,
+      position: 'relative',
+      width: PANEL_CONTENT_W,
+      boxSizing: 'border-box',
+    }}>
+      <button
+        onClick={onClose}
+        style={{
+          position: 'absolute',
+          top: 14,
+          right: 14,
+          background: 'rgba(15, 23, 42, 0.05)',
+          border: 'none',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          color: '#64748b',
+          width: 26,
+          height: 26,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.2s',
+          outline: 'none',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = 'rgba(15, 23, 42, 0.1)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'rgba(15, 23, 42, 0.05)'}
+      >
+        <FiX style={{ width: 14, height: 14 }} />
+      </button>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+        <div style={{
+          background: service.iconBg,
+          borderRadius: 10,
+          width: 42,
+          height: 42,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          boxShadow: `0 4px 12px ${service.color}35`,
+        }}>
+          <service.icon style={{ color: '#fff', width: 20, height: 20 }} />
+        </div>
+        <div>
+          <p style={{ color: '#0f172a', fontWeight: 800, fontSize: 17, margin: 0, lineHeight: 1.2 }}>{service.title}</p>
+          <p style={{ color: service.color, fontSize: 13, fontWeight: 600, margin: '2px 0 0 0', lineHeight: 1.2 }}>{service.subtitle}</p>
+        </div>
+      </div>
+
+      <div style={{ height: 1, background: `${service.color}22`, marginBottom: 14 }} />
+
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 9 }}>
+        {service.details.map((item, i) => (
+          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: service.color, marginTop: 6, flexShrink: 0 }} />
+            <span style={{ color: '#334155', fontSize: 14, lineHeight: 1.4, fontWeight: 500 }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+
   return (
-    <div style={panelStyle} onClick={e => e.stopPropagation()}>
-      <div style={{
-        background: '#fff',
-        border: `1.5px solid ${service.color}33`,
-        borderRadius: 14,
-        padding: '14px 16px',
-        boxShadow: `0 8px 40px ${service.color}28, 0 2px 12px rgba(0,0,0,0.10)`,
-        position: 'relative',
-      }}>
-        {/* Close button (visible on click/mobile) */}
+    <div style={containerStyle} onClick={e => e.stopPropagation()}>
+      {(isTop || isBottom) && (
+        <>
+          {isBottom && <Connector />}
+          {cardContent}
+          {isTop && <Connector />}
+        </>
+      )}
+
+      {isLeft && (
+        <>
+          <Connector />
+          {cardContent}
+        </>
+      )}
+      {isRight && (
+        <>
+          {cardContent}
+          <Connector />
+        </>
+      )}
+    </div>
+  )
+}
+
+// Mobile details modal (unscaled viewport-relative layout)
+function MobileDetailModal({ service, onClose }) {
+  const Icon = service.icon
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+        background: 'rgba(15, 23, 42, 0.6)',
+        backdropFilter: 'blur(8px)',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '440px',
+          background: '#ffffff',
+          borderRadius: '24px',
+          padding: '28px 24px 24px 24px',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35)',
+          position: 'relative',
+          animation: 'detailFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          boxSizing: 'border-box',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
-          style={{ position:'absolute', top:8, right:10, background:'none', border:'none', cursor:'pointer', color:'#94a3b8', padding:2, lineHeight:1 }}>
-          <FiX style={{ width:15, height:15 }}/>
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            background: 'rgba(15, 23, 42, 0.05)',
+            border: 'none',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            color: '#64748b',
+            width: 32,
+            height: 32,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s',
+          }}
+        >
+          <FiX style={{ width: 16, height: 16 }} />
         </button>
 
-        {/* Header */}
-        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
-          <div style={{ background:service.iconBg, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-            <service.icon style={{ color:'#fff', width:16, height:16 }}/>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+          <div style={{
+            background: service.iconBg,
+            borderRadius: '14px',
+            width: 52,
+            height: 52,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            boxShadow: `0 4px 14px ${service.color}44`,
+          }}>
+            <Icon style={{ color: '#fff', width: 24, height: 24 }} />
           </div>
           <div>
-            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:0, lineHeight:1.2 }}>{service.title}</p>
-            <p style={{ color:service.color, fontSize:11, margin:0, lineHeight:1.2 }}>{service.subtitle}</p>
+            <h3 style={{ color: '#0f172a', fontWeight: 800, fontSize: '20px', margin: 0, lineHeight: 1.2 }}>{service.title}</h3>
+            <p style={{ color: service.color, fontWeight: 600, fontSize: '14px', margin: '4px 0 0 0', lineHeight: 1.2 }}>{service.subtitle}</p>
           </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ height:1, background:`${service.color}22`, marginBottom:10 }}/>
+        <div style={{ height: '1px', background: `${service.color}22`, marginBottom: 20 }} />
 
-        {/* Detail list */}
-        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:7 }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {service.details.map((item, i) => (
-            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
-              <div style={{ width:6, height:6, borderRadius:'50%', background:service.color, marginTop:5, flexShrink:0 }}/>
-              <span style={{ color:'#334155', fontSize:12, lineHeight:1.4 }}>{item}</span>
+            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: service.color, marginTop: 7, flexShrink: 0 }} />
+              <span style={{ color: '#334155', fontSize: '15px', lineHeight: 1.5, fontWeight: 500 }}>{item}</span>
             </li>
           ))}
         </ul>
+
+        <div style={{ display: 'flex', gap: 12 }}>
+          <a
+            href="tel:+918310338544"
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '14px 0',
+              borderRadius: '14px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: '#fff',
+              textDecoration: 'none',
+              textAlign: 'center',
+              background: service.color,
+              boxShadow: `0 4px 14px ${service.color}40`,
+            }}
+          >
+            Call Now
+          </a>
+          <a
+            href="#contact"
+            onClick={onClose}
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '14px 0',
+              borderRadius: '14px',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: service.color,
+              textDecoration: 'none',
+              textAlign: 'center',
+              background: `${service.color}12`,
+              border: `1px solid ${service.color}25`,
+            }}
+          >
+            Get Quote
+          </a>
+        </div>
       </div>
     </div>
   )
 }
 
 export default function OrbitalServices() {
-  const [activeId, setActiveId]     = useState(null)   // clicked/locked open
-  const [hoveredId, setHoveredId]   = useState(null)   // hovered
+  const [activeId, setActiveId]     = useState(null)
+  const [hoveredId, setHoveredId]   = useState(null)
   const [containerW, setContainerW] = useState(780)
+  const [isMobile, setIsMobile]     = useState(false)
   const outerRef = useRef(null)
 
-  // The currently shown service: clicked takes priority over hovered
   const visibleId = activeId || hoveredId
   const visibleService = SERVICES.find(s => s.id === visibleId) || null
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     if (!document.getElementById('orbital-css')) {
@@ -247,7 +511,6 @@ export default function OrbitalServices() {
     return () => ro.disconnect()
   }, [])
 
-  // Click outside to dismiss locked panel
   useEffect(() => {
     if (!activeId) return
     const handleClick = () => setActiveId(null)
@@ -261,13 +524,13 @@ export default function OrbitalServices() {
   const globeOurPx      = 44
   const globeServicesPx = 50
   const globeSubPx      = 18
-  const cardTitlePx     = 18
-  const cardSubPx       = 14
+  const cardTitlePx     = 17
+  const cardSubPx       = 13
   const badgeLabelPx    = 16
   const badgeSubPx      = 13
 
   return (
-    <div ref={outerRef} style={{ width:'100%', overflow:'hidden', padding:'16px 0', height: scaledH + 32 }}>
+    <div ref={outerRef} style={{ width:'100%', overflow:'visible', padding:'16px 0', height: scaledH + 32, position: 'relative' }}>
       <div style={{
         width:           DESIGN,
         height:          DESIGN,
@@ -277,6 +540,7 @@ export default function OrbitalServices() {
         position:        'relative',
         flexShrink:      0,
         userSelect:      'none',
+        overflow:        'visible',
       }}>
 
         {/* Orbit rings + connector lines + anchor dots */}
@@ -342,38 +606,37 @@ export default function OrbitalServices() {
               onMouseLeave={() => setHoveredId(null)}
               onClick={(e) => {
                 e.stopPropagation()
-                // Toggle: click same card closes, click new card opens
                 setActiveId(prev => prev === s.id ? null : s.id)
               }}
             >
-              {/* Card face */}
+              {/* Card Face */}
               <div
                 className="orbital-card-inner"
                 style={{
                   background: isActive ? `linear-gradient(135deg, #f0f7ff, #fff)` : '#fff',
                   border: isActive ? `1.5px solid ${s.color}55` : '1px solid rgba(59,130,246,0.15)',
                   borderRadius: 14,
-                  padding: '11px 13px',
+                  padding: '12px 14px',
                   boxShadow: isActive
                     ? `0 8px 32px ${s.color}33, 0 2px 8px rgba(0,0,0,0.10)`
                     : '0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 10,
+                  gap: 12,
                   transition: 'all 0.2s ease',
                 }}
               >
-                <div style={{ background:s.iconBg, borderRadius:10, width:ICON_BOX, height:ICON_BOX, minWidth:ICON_BOX, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
-                  <Icon style={{ color:'#fff', width:22, height:22 }}/>
+                <div style={{ background:s.iconBg, borderRadius:10, width:ICON_BOX, height:ICON_BOX, minWidth:ICON_BOX, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}44`, flexShrink:0 }}>
+                  <Icon style={{ color:'#fff', width:26, height:26 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
                   <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
-                  <p style={{ color:s.color, fontSize:cardSubPx, marginTop:2, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
+                  <p style={{ color:s.color, fontSize:cardSubPx, marginTop:3, fontWeight: 600, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
                 </div>
               </div>
 
-              {/* Detail panel — shown on hover OR click */}
-              {isActive && (
+              {/* Detail panel — shown on hover OR click on desktop/tablet */}
+              {isActive && !isMobile && (
                 <DetailPanel
                   service={s}
                   onClose={(e) => {
@@ -397,6 +660,17 @@ export default function OrbitalServices() {
           </div>
         ))}
       </div>
+
+      {/* Unscaled mobile detail overlay */}
+      {isMobile && visibleService && (
+        <MobileDetailModal
+          service={visibleService}
+          onClose={() => {
+            setActiveId(null)
+            setHoveredId(null)
+          }}
+        />
+      )}
     </div>
   )
 }

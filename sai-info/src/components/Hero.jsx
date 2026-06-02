@@ -159,7 +159,7 @@ export default function Hero() {
               initial={{ opacity: 0, x: 60 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-7/12 flex-shrink-0 flex items-center justify-center overflow-hidden"
+              className="w-full lg:w-7/12 flex-shrink-0 flex items-center justify-center overflow-visible"
             >
               <div className="w-full flex items-center justify-center">
                 <OrbitalServices />
