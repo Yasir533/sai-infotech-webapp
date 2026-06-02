@@ -5,10 +5,10 @@ import logoIcon from '../assets/logo.png'
 
 const navLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
   { label: 'Services', href: '#services' },
-  { label: 'Clients', href: '#clients' },
+  { label: 'About', href: '#about' },
   { label: 'Certificate', href: '#certificate' },
+  { label: 'Clients', href: '#clients' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -22,7 +22,6 @@ export default function Navbar() {
     const onScroll = () => {
       setScrolled(window.scrollY > 50)
 
-      // Auto-detect active section on scroll
       const sections = navLinks.map(link => link.href.replace('#', ''))
       let current = '#home'
       for (const section of sections) {
@@ -79,14 +78,20 @@ export default function Navbar() {
             <img
               src={logoIcon}
               alt="SAI INFOTECH"
-              className="h-16 w-16 sm:h-20 sm:w-20 object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-20 w-20 sm:h-24 sm:w-24 object-contain transition-transform duration-300 group-hover:scale-105"
             />
             <div className="leading-none">
-              <div className="text-slate-900 text-base sm:text-lg font-extrabold tracking-[0.16em]">
+              <div
+                style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem' }}
+                className="text-slate-900 sm:text-xl font-black tracking-[0.16em]"
+              >
                 SAI
                 <span className="text-[#345f9a]"> INFOTECH</span>
               </div>
-              <div className="text-[10px] sm:text-[11px] text-slate-500 tracking-[0.32em] uppercase mt-1">
+              <div
+                style={{ fontFamily: 'Georgia, serif', fontSize: '0.65rem' }}
+                className="text-slate-600 tracking-[0.32em] uppercase mt-1 font-bold"
+              >
                 Technology Services
               </div>
             </div>
@@ -99,7 +104,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-4 py-2 text-[15px] font-medium transition-all duration-200 relative ${
+                className={`px-4 py-2 text-[15px] font-bold transition-all duration-200 relative ${
                   active === link.href
                     ? 'text-slate-900 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[2px] after:bg-[#345f9a] after:rounded-full'
                     : 'text-slate-600 hover:text-slate-900'
@@ -112,13 +117,13 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className={`ml-3 px-4 py-2 text-[15px] font-medium transition-all duration-200 relative ${
+              className={`ml-3 px-4 py-2 text-[15px] font-bold transition-all duration-200 relative ${
                 active === '#contact'
                   ? 'text-slate-900 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[2px] after:bg-[#345f9a] after:rounded-full'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Get Service
+              Get Services
             </a>
           </div>
 
@@ -149,7 +154,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-all ${
+                  className={`px-4 py-3 rounded-xl text-[15px] font-bold transition-all ${
                     active === link.href
                       ? 'text-[#345f9a] border-l-2 border-[#345f9a]'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
@@ -162,13 +167,13 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}
-                className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-all ${
+                className={`px-4 py-3 rounded-xl text-[15px] font-bold transition-all ${
                   active === '#contact'
                     ? 'text-[#345f9a] border-l-2 border-[#345f9a]'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 }`}
               >
-                Get Service
+                Get Services
               </a>
             </div>
           </motion.div>
