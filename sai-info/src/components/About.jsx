@@ -48,12 +48,15 @@ export default function About() {
         >
           <p className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-3">About Us</p>
           <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
-            Trusted IT Solutions for
-            <span className="text-gradient block">Modern Businesses</span>
-          </h2>
-          <p className="max-w-3xl mx-auto text-slate-400 text-lg leading-relaxed">
-            We provide end-to-end IT infrastructure, networking, surveillance, cloud, and enterprise solutions with 25+ years of trusted expertise.
-          </p>
+  About
+  <span className="text-gradient block">Sai Infotech</span>
+</h2>
+
+<p className="max-w-3xl mx-auto text-slate-400 text-lg leading-relaxed">
+  Delivering innovative IT solutions, infrastructure services, networking,
+  surveillance systems, and managed technology support with a commitment to
+  quality, reliability, and customer success.
+</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-10 items-start">
@@ -67,39 +70,54 @@ export default function About() {
           >
 
             {/* Why Choose Us */}
-            <div className="glass rounded-3xl p-8 border border-white/10">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
-                  <FiAward className="text-blue-400 text-xl" />
-                </div>
-                <div>
-                  <h3 className="text-white text-2xl font-bold">Why Choose Us</h3>
-                  <p className="text-slate-400 text-sm">Excellence in every solution</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {[
-                  'Certified & experienced technical team',
-                  'Advanced infrastructure & tools',
-                  'Enterprise-grade service quality',
-                  'Fast response & support',
-                  'Client satisfaction is our priority',
-                ].map((point, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                      <FiCheckCircle className="text-blue-400 text-sm" />
-                    </div>
-                    <span className="text-slate-300">{point}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+            {/* About Sai Infotech */}
+<div className="glass rounded-3xl p-8 border border-white/10">
+  <div className="flex items-center gap-3 mb-6">
+    <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+      <FiAward className="text-blue-400 text-xl" />
+    </div>
+    <div>
+      <h3 className="text-white text-2xl font-bold">About Sai Infotech</h3>
+      <p className="text-slate-400 text-sm">
+        Your Trusted Technology Partner
+      </p>
+    </div>
+  </div>
+
+  <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
+    <p>
+      Sai Infotech is a leading IT solutions and technology services company
+      based in Bangalore, committed to delivering innovative, reliable, and
+      cost-effective technology solutions for businesses and individuals.
+    </p>
+
+    <p>
+      We specialize in component-level refurbishing, IT asset management,
+      computer sales and services, networking solutions, CCTV surveillance,
+      AV solutions, managed IT services, cloud solutions, and technology
+      consulting.
+    </p>
+
+    <p>
+      Our experienced team works closely with clients to understand their
+      unique requirements and deliver customized solutions that improve
+      productivity, security, and operational efficiency.
+    </p>
+
+    <p>
+      As an ISO 9001:2015 Certified Company, we maintain the highest
+      standards of quality, reliability, and customer satisfaction while
+      continuously embracing new technologies and industry best practices.
+    </p>
+
+    <p>
+      Whether it's upgrading infrastructure, securing business environments,
+      or providing ongoing technical support, Sai Infotech remains dedicated
+      to empowering organizations with smart, scalable, and future-ready IT
+      solutions.
+    </p>
+  </div>
+</div>
 
             {/* Mission Vision Values — click to open modal */}
             <div className="glass rounded-3xl p-6 border border-white/10">
