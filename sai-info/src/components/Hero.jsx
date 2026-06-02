@@ -63,7 +63,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
                 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.05em]"
-                style={{ fontFamily: 'ADLaM Display, serif' }}
+                style={{ fontFamily: 'Elephant, serif' }}
               >
                 <span className="text-slate-900">SAI </span>
                 <span
