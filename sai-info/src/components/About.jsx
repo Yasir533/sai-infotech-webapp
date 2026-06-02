@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiAward, FiShield, FiX, FiExternalLink } from 'react-icons/fi'
-
-import isoBadge from '../assets/iso-badge.png'
-import qualityVeritas from '../assets/quality-veritas.png'
-import isoDoc from '../assets/iso-certificate-doc.jpeg'
+import { FiAward, FiCheckCircle, FiShield } from 'react-icons/fi'
 
 const mvvSections = [
   {
@@ -50,10 +46,6 @@ const mvvSections = [
 
 export default function About() {
   const [hoveredMVV, setHoveredMVV] = useState(null)
-  const [modalOpen, setModalOpen] = useState(false)
-
-  // Use hovered item if available, otherwise default to Mission to keep the section populated without blank space
-  const activeMVV = hoveredMVV || mvvSections[0]
 
   return (
     <section id="about" className="section-pad relative overflow-hidden">
@@ -141,7 +133,8 @@ export default function About() {
         </div>
 
         {/* ================= ROW 2: SPLIT MVV & CERTIFICATE ================= */}
-        <div className="grid lg:grid-cols-2 gap-10 items-stretch">
+        {/* Align items-start to prevent columns stretching and creating empty space */}
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
           
           {/* LEFT COLUMN: Mission Vision Values with interactive hover */}
           <motion.div
@@ -160,9 +153,9 @@ export default function About() {
               </h4>
 
               {/* Buttons Grid */}
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-3 gap-3">
                 {mvvSections.map((sec) => {
-                  const isActive = activeMVV.id === sec.id
+                  const isActive = hoveredMVV?.id === sec.id
                   return (
                     <div
                       key={sec.id}
@@ -195,41 +188,44 @@ export default function About() {
               </div>
             </div>
 
-            {/* Hover Detail Panel - Dynamic Height, Default Populated */}
-            <div className="w-full mt-4">
-              <AnimatePresence mode="wait">
+            {/* Hover Detail Panel - Shows details only on hover and collapses to 0 height when not hovered */}
+            <AnimatePresence>
+              {hoveredMVV && (
                 <motion.div
-                  key={activeMVV.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
-                  className="w-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center shadow-lg"
-                  style={{
-                    boxShadow: `inset 0 0 20px ${activeMVV.glow}`,
-                  }}
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  className="w-full overflow-hidden"
                 >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${activeMVV.color}`} />
-                    <h4 className="text-white text-base font-bold">{activeMVV.title}</h4>
+                  <div
+                    className="w-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center shadow-lg"
+                    style={{
+                      boxShadow: `inset 0 0 20px ${hoveredMVV.glow}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${hoveredMVV.color}`} />
+                      <h4 className="text-white text-base font-bold">{hoveredMVV.title}</h4>
+                    </div>
+                    <p className="text-slate-200 text-xs sm:text-sm leading-relaxed mb-3">
+                      {hoveredMVV.desc}
+                    </p>
+                    <ul className="space-y-1.5 border-t border-white/5 pt-2">
+                      {hoveredMVV.points.map((pt, index) => (
+                        <li key={index} className="flex items-start gap-2 text-slate-200 text-xs leading-relaxed">
+                          <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${hoveredMVV.color} mt-1.5 flex-shrink-0`} />
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
-                    {activeMVV.desc}
-                  </p>
-                  <ul className="space-y-1.5 border-t border-white/5 pt-2">
-                    {activeMVV.points.map((pt, index) => (
-                      <li key={index} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
-                        <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${activeMVV.color} mt-1.5 flex-shrink-0`} />
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </motion.div>
-              </AnimatePresence>
-            </div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
-          {/* RIGHT COLUMN: ISO Certification Section */}
+          {/* RIGHT COLUMN: ISO Certification Section - Restored to original design */}
           <motion.div
             id="certificate"
             initial={{ opacity: 0, y: 50 }}
@@ -238,94 +234,55 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden"
           >
-            <div className="absolute -right-20 -bottom-20 w-60 h-60 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
-            
             <div>
-              <p className="text-cyan-400 text-xs font-semibold tracking-widest uppercase mb-1">
-                Quality Standard
-              </p>
-              <h4 className="text-white font-bold text-2xl mb-6">
-                ISO Certification
-              </h4>
+              {/* Shield Header */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+                  <FiShield className="text-blue-400 text-xl" />
+                </div>
+                <div>
+                  <h3 className="text-white text-2xl font-bold">Quality Assurance</h3>
+                  <p className="text-slate-400 text-sm">Committed to the highest standards</p>
+                </div>
+              </div>
 
-              {/* Brand Logos block - Bureau Veritas & ISO badges rendered in full color */}
-              <div className="flex items-center justify-center gap-8 bg-slate-950/40 border border-white/5 rounded-2xl p-4 mb-5">
-                <img
-                  src={qualityVeritas}
-                  alt="Bureau Veritas Logo"
-                  className="h-16 w-auto object-contain hover:scale-105 transition-all duration-300"
-                />
-                <div className="h-12 w-px bg-white/10" />
-                <img
-                  src={isoBadge}
-                  alt="ISO 9001:2015 Certified Logo"
-                  className="h-16 w-auto object-contain hover:scale-105 transition-all duration-300"
-                />
+              {/* Glowing Pure-CSS ISO Badge */}
+              <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
+                <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
+                    style={{ boxShadow: '0 0 20px rgba(6,182,212,0.7), 0 0 50px rgba(6,182,212,0.3)' }}
+                  />
+                  <div className="text-center">
+                    <p className="text-cyan-400 text-[9px] font-bold tracking-widest uppercase">Certified</p>
+                    <p className="text-white text-lg font-black leading-none">ISO</p>
+                    <p className="text-white text-[10px] font-bold">9001:2015</p>
+                    <div className="flex justify-center mt-1">
+                      <FiCheckCircle className="text-cyan-400" size={14} />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
+                  <p className="text-blue-400 text-xl font-bold">Certified</p>
+                  <p className="text-slate-400 text-sm mt-1">Quality Management System</p>
+                </div>
               </div>
 
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                SAI INFOTECH is officially certified under the **ISO 9001:2015** Quality
-                Management System. This reflects our compliance with international operational standards.
+                SAI INFOTECH is officially certified under the ISO 9001:2015 Quality
+                Management System, reflecting our commitment to world-class IT services.
               </p>
-            </div>
 
-            {/* Document Preview Card */}
-            <div
-              onClick={() => setModalOpen(true)}
-              className="group cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/30 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all duration-300"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                  <FiShield className="text-cyan-400 text-lg" />
-                </div>
-                <div>
-                  <h5 className="text-white font-bold text-xs sm:text-sm leading-tight">View Certificate Document</h5>
-                  <p className="text-slate-400 text-[11px] mt-0.5">Click to preview full document</p>
-                </div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:text-cyan-400 group-hover:bg-cyan-500/10 transition-all">
-                <FiExternalLink size={14} />
-              </div>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                This certification demonstrates our dedication to quality,
+                reliability, customer satisfaction, and continuous improvement.
+              </p>
             </div>
           </motion.div>
         </div>
 
       </div>
-
-      {/* ================= CERTIFICATE MODAL ================= */}
-      <AnimatePresence>
-        {modalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
-            onClick={() => setModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative max-w-3xl w-full bg-slate-900 border border-cyan-500/20 rounded-2xl overflow-hidden shadow-2xl p-2"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setModalOpen(false)}
-                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center border border-white/10 transition-colors cursor-pointer"
-              >
-                <FiX size={18} />
-              </button>
-              
-              <img
-                src={isoDoc}
-                alt="ISO Certificate Document"
-                className="w-full max-h-[85vh] object-contain rounded-xl"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   )
 }
