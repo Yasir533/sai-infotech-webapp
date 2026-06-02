@@ -254,7 +254,7 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Glowing Badge with ISO badge logo (iso-seal.png) */}
+              {/* Glowing Badge with ISO badge logo (iso-seal.png) - round seal */}
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
                 <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
                   <div
@@ -264,7 +264,7 @@ export default function About() {
                   <img
                     src={isoBadge}
                     alt="ISO Certification Badge"
-                    className="w-20 h-20 object-contain relative z-10"
+                    className="w-20 h-20 object-contain relative z-10 rounded-full shadow-inner"
                   />
                 </div>
                 <div>
