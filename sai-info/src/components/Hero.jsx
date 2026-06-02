@@ -31,7 +31,6 @@ export default function Hero() {
       setCurrentPhrase((p) => (p + 1) % typingPhrases.length)
     } else {
       const speed = isDeleting ? 50 : 80
-
       timeout = setTimeout(() => {
         setDisplayText(
           isDeleting
@@ -62,15 +61,17 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 whitespace-nowrap tracking-[-0.05em]"
-                style={{ fontFamily: 'Elephant, serif' }}
+                className="font-black leading-none mb-4 whitespace-nowrap tracking-[-0.02em]"
+                style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
+                }}
               >
                 <span className="text-slate-900">SAI </span>
                 <span
                   className="text-transparent bg-clip-text"
                   style={{
-                    backgroundImage:
-                      'linear-gradient(135deg, #1e5fb8, #2f6fbf)',
+                    backgroundImage: 'linear-gradient(135deg, #1e5fb8, #2f6fbf)',
                   }}
                 >
                   INFOTECH
@@ -94,8 +95,9 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-lg font-semibold mb-5 h-7"
               >
-                <span className="text-[#2f6fbf] tracking-wide uppercase">
-                  PLC &amp; Automation Systems
+                <span className="text-[#1a4a8a] tracking-wide uppercase font-bold">
+                  {displayText}
+                  <span className="animate-pulse">|</span>
                 </span>
               </motion.div>
 
@@ -104,7 +106,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-600 text-sm sm:text-base leading-relaxed mb-8 max-w-xl"
+                className="text-slate-900 text-base sm:text-lg leading-relaxed mb-8 max-w-xl font-medium"
               >
                 Premium IT services in Bangalore since 2019.
                 We specialize in enterprise-grade technology solutions,
@@ -123,10 +125,7 @@ export default function Hero() {
 
                 <a
                   href="#about"
-                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
-                  style={{
-                    backdropFilter: 'blur(8px)',
-                  }}
+                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border-2 border-slate-300 bg-white hover:bg-[#2f6fbf] hover:text-white hover:border-[#2f6fbf] transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
                 >
                   <span>About Us</span>
                   <HiArrowRight />
@@ -134,10 +133,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-xl font-bold text-white flex items-center gap-2 text-sm bg-[#2f6fbf] hover:bg-[#255c9d] shadow-[0_10px_22px_rgba(47,111,191,0.18)] transition-all duration-300"
-                  style={{
-                    backdropFilter: 'blur(8px)',
-                  }}
+                  className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border-2 border-slate-300 bg-white hover:bg-[#2f6fbf] hover:text-white hover:border-[#2f6fbf] transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
                 >
                   <span>Contact Us</span>
                   <HiArrowRight />
