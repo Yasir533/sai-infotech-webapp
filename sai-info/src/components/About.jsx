@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { FiAward, FiCheckCircle, FiShield, FiX } from 'react-icons/fi'
+import isoSeal from '../assets/iso-seal.png'
+import qualityVeritas from '../assets/quality-veritas.png'
 
 const mvvSections = [
   {
@@ -156,8 +158,8 @@ export default function About() {
           >
             <div className="glass rounded-3xl p-8 border border-white/10">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
-                  <FiShield className="text-blue-400 text-xl" />
+                <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 bg-white p-0.5">
+                  <img src={qualityVeritas} alt="Quality Veritas" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h3 className="text-white text-2xl font-bold">Quality Assurance</h3>
@@ -167,17 +169,9 @@ export default function About() {
 
               {/* ISO Badge */}
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
-                <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
-                    style={{ boxShadow: '0 0 20px rgba(6,182,212,0.7), 0 0 50px rgba(6,182,212,0.3)' }} />
-                  <div className="text-center">
-                    <p className="text-cyan-400 text-[9px] font-bold tracking-widest uppercase">Certified</p>
-                    <p className="text-white text-lg font-black leading-none">ISO</p>
-                    <p className="text-white text-[10px] font-bold">9001:2015</p>
-                    <div className="flex justify-center mt-1">
-                      <FiCheckCircle className="text-cyan-400" size={14} />
-                    </div>
-                  </div>
+                <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center bg-white rounded-full p-2 shadow-lg"
+                  style={{ boxShadow: '0 0 20px rgba(255,255,255,0.1)' }}>
+                  <img src={isoSeal} alt="ISO 9001:2015 Certified Seal" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
