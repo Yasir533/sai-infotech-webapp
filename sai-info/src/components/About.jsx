@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiAward } from 'react-icons/fi'
 
-import isoBadge from '../assets/iso-badge.png'
+import isoBadge from '../assets/iso-seal.png'
 import qualityVeritas from '../assets/quality-veritas.png'
 
 const mvvSections = [
@@ -241,7 +241,7 @@ export default function About() {
             className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden"
           >
             <div>
-              {/* Header with Bureau Veritas logo (Image 2) */}
+              {/* Header with Bureau Veritas logo */}
               <div className="flex items-center gap-4 mb-6">
                 <img
                   src={qualityVeritas}
@@ -254,7 +254,7 @@ export default function About() {
                 </div>
               </div>
 
-              {/* Glowing Badge with ISO badge logo (Image 3) */}
+              {/* Glowing Badge with ISO badge logo (iso-seal.png) */}
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
                 <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
                   <div
