@@ -116,24 +116,25 @@ const SERVICES = [
 ]
 
 const BADGES = [
-  { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 101, top: 140 } },
-  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 679, top:  94 } },
-  { label:'ISO Certified', sub:'Process',      pos:{ left:  62, top: 622 } },
-  { label:'Pan India',     sub:'Service',      pos:{ left: 679, top: 640 } },
+  { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 120, top: 140 } },
+  { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 780, top:  94 } },
+  { label:'ISO Certified', sub:'Process',      pos:{ left:  80, top: 622 } },
+  { label:'Pan India',     sub:'Service',      pos:{ left: 780, top: 640 } },
 ]
 
-const DESIGN  = 780
-const CX      = DESIGN / 2
-const CY      = DESIGN / 2
+const DESIGN_W = 900
+const DESIGN_H = 780
+const CX      = DESIGN_W / 2
+const CY      = DESIGN_H / 2
 const GLOBE_R = 155
 const CW      = 265
 const ICON_BOX= 60
 
-// Perfect spacing for larger cards to avoid overlapping
+// Perfect spacing for larger cards to avoid overlapping the globe
 const CARD_POS = {
   top:    { x: CX,       y: CY - 275 },
-  left:   { x: CX - 285, y: CY       },
-  right:  { x: CX + 285, y: CY       },
+  left:   { x: CX - 325, y: CY       },
+  right:  { x: CX + 325, y: CY       },
   bottom: { x: CX,       y: CY + 275 },
 }
 
@@ -518,8 +519,8 @@ export default function OrbitalServices() {
     return () => document.removeEventListener('click', handleClick)
   }, [activeId])
 
-  const scale   = Math.min(containerW, DESIGN) / DESIGN
-  const scaledH = DESIGN * scale
+  const scale   = Math.min(containerW, DESIGN_W) / DESIGN_W
+  const scaledH = DESIGN_H * scale
 
   const globeOurPx      = 44
   const globeServicesPx = 50
@@ -532,11 +533,11 @@ export default function OrbitalServices() {
   return (
     <div ref={outerRef} style={{ width:'100%', overflow:'visible', padding:'16px 0', height: scaledH + 32, position: 'relative' }}>
       <div style={{
-        width:           DESIGN,
-        height:          DESIGN,
+        width:           DESIGN_W,
+        height:          DESIGN_H,
         transform:       `scale(${scale})`,
         transformOrigin: 'top center',
-        marginLeft:      (containerW - DESIGN) / 2,
+        marginLeft:      (containerW - DESIGN_W) / 2,
         position:        'relative',
         flexShrink:      0,
         userSelect:      'none',
@@ -545,7 +546,7 @@ export default function OrbitalServices() {
 
         {/* Orbit rings + connector lines + anchor dots */}
         <svg style={{ position:'absolute', inset:0, pointerEvents:'none' }}
-          width={DESIGN} height={DESIGN} viewBox={`0 0 ${DESIGN} ${DESIGN}`} overflow="visible">
+          width={DESIGN_W} height={DESIGN_H} viewBox={`0 0 ${DESIGN_W} ${DESIGN_H}`} overflow="visible">
           <defs>
             <radialGradient id="glowBg" cx="50%" cy="50%" r="50%">
               <stop offset="0%"   stopColor="rgba(96,165,250,0.18)"/>
