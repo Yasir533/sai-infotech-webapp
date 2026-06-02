@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiAward, FiCheckCircle, FiShield } from 'react-icons/fi'
+import { FiAward } from 'react-icons/fi'
+
+import isoBadge from '../assets/iso-badge.png'
+import qualityVeritas from '../assets/quality-veritas.png'
 
 const mvvSections = [
   {
@@ -46,6 +49,9 @@ const mvvSections = [
 
 export default function About() {
   const [hoveredMVV, setHoveredMVV] = useState(null)
+
+  // Use hovered item if available, otherwise default to Mission when not hovered (to avoid blank layout spaces)
+  const activeMVV = hoveredMVV || mvvSections[0]
 
   return (
     <section id="about" className="section-pad relative overflow-hidden">
@@ -225,7 +231,7 @@ export default function About() {
             </AnimatePresence>
           </motion.div>
 
-          {/* RIGHT COLUMN: ISO Certification Section - Restored to original design */}
+          {/* RIGHT COLUMN: ISO Certification Section */}
           <motion.div
             id="certificate"
             initial={{ opacity: 0, y: 50 }}
@@ -235,32 +241,31 @@ export default function About() {
             className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden"
           >
             <div>
-              {/* Shield Header */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
-                  <FiShield className="text-blue-400 text-xl" />
-                </div>
+              {/* Header with Bureau Veritas logo (Image 2) */}
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src={qualityVeritas}
+                  alt="Quality Veritas Logo"
+                  className="w-12 h-12 rounded-xl object-contain bg-white p-0.5 shadow-md flex-shrink-0"
+                />
                 <div>
                   <h3 className="text-white text-2xl font-bold">Quality Assurance</h3>
                   <p className="text-slate-400 text-sm">Committed to the highest standards</p>
                 </div>
               </div>
 
-              {/* Glowing Pure-CSS ISO Badge */}
+              {/* Glowing Badge with ISO badge logo (Image 3) */}
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
                 <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
                   <div
                     className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
                     style={{ boxShadow: '0 0 20px rgba(6,182,212,0.7), 0 0 50px rgba(6,182,212,0.3)' }}
                   />
-                  <div className="text-center">
-                    <p className="text-cyan-400 text-[9px] font-bold tracking-widest uppercase">Certified</p>
-                    <p className="text-white text-lg font-black leading-none">ISO</p>
-                    <p className="text-white text-[10px] font-bold">9001:2015</p>
-                    <div className="flex justify-center mt-1">
-                      <FiCheckCircle className="text-cyan-400" size={14} />
-                    </div>
-                  </div>
+                  <img
+                    src={isoBadge}
+                    alt="ISO Certification Badge"
+                    className="w-20 h-20 object-contain relative z-10"
+                  />
                 </div>
                 <div>
                   <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
