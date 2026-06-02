@@ -14,6 +14,10 @@ const CSS = `
   0%,100% { box-shadow: 0 0 44px 10px rgba(96,165,250,0.24), 0 0 0 3px rgba(96,165,250,0.32); }
   50%      { box-shadow: 0 0 80px 22px rgba(96,165,250,0.38), 0 0 0 3px rgba(96,165,250,0.50); }
 }
+@keyframes detailFadeIn {
+  from { opacity: 0; transform: scale(0.93) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
 .earth-strip {
   display: flex;
   width: 200%;
@@ -22,6 +26,10 @@ const CSS = `
   will-change: transform;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+}
+.orbital-card:hover .orbital-card-inner {
+  transform: scale(1.05);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.22), 0 2px 8px rgba(0,0,0,0.10);
 }
 `
 
@@ -129,6 +137,14 @@ const CARD_POS = {
   bottom: { x: CX,           y: CY + DIST },
 }
 
+// Detail panel offset per position — where the panel appears relative to the card
+const DETAIL_OFFSET = {
+  top:    { dx: 0,    dy: -1,  originX: '50%', originY: '100%' },   // above card
+  bottom: { dx: 0,    dy:  1,  originX: '50%', originY: '0%'   },   // below card
+  left:   { dx: -1,  dy:  0,  originX: '100%', originY: '50%' },   // left of card
+  right:  { dx:  1,  dy:  0,  originX: '0%',   originY: '50%' },   // right of card
+}
+
 const RINGS = [
   { rx:310, ry:124, tilt:-18, dash:'6 5', op:0.35, sw:1.5 },
   { rx:290, ry:104, tilt: 14, dash:'4 6', op:0.22, sw:1   },
@@ -136,10 +152,84 @@ const RINGS = [
   { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
 ]
 
+// Detail Panel component — shown on hover or click
+function DetailPanel({ service, onClose }) {
+  const offset = DETAIL_OFFSET[service.position]
+  const PANEL_W = 210
+  const PANEL_GAP = 12 // gap from card edge
+
+  // Position: offset from center of card
+  // card is CW wide, ~78px tall approx
+  const cardH = 78
+  const panelStyle = {
+    position: 'absolute',
+    zIndex: 40,
+    width: PANEL_W,
+    animation: 'detailFadeIn 0.18s ease-out forwards',
+    transformOrigin: `${offset.originX} ${offset.originY}`,
+    // horizontal
+    ...(offset.dx === 0 && { left: `calc(50% - ${PANEL_W/2}px)` }),
+    ...(offset.dx === -1 && { right: `calc(100% + ${PANEL_GAP}px)`, top: '50%', transform: 'translateY(-50%)' }),
+    ...(offset.dx ===  1 && { left: `calc(100% + ${PANEL_GAP}px)`, top: '50%', transform: 'translateY(-50%)' }),
+    // vertical
+    ...(offset.dy === -1 && { bottom: `calc(100% + ${PANEL_GAP}px)` }),
+    ...(offset.dy ===  1 && { top:    `calc(100% + ${PANEL_GAP}px)` }),
+  }
+
+  return (
+    <div style={panelStyle} onClick={e => e.stopPropagation()}>
+      <div style={{
+        background: '#fff',
+        border: `1.5px solid ${service.color}33`,
+        borderRadius: 14,
+        padding: '14px 16px',
+        boxShadow: `0 8px 40px ${service.color}28, 0 2px 12px rgba(0,0,0,0.10)`,
+        position: 'relative',
+      }}>
+        {/* Close button (visible on click/mobile) */}
+        <button
+          onClick={onClose}
+          style={{ position:'absolute', top:8, right:10, background:'none', border:'none', cursor:'pointer', color:'#94a3b8', padding:2, lineHeight:1 }}>
+          <FiX style={{ width:15, height:15 }}/>
+        </button>
+
+        {/* Header */}
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
+          <div style={{ background:service.iconBg, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <service.icon style={{ color:'#fff', width:16, height:16 }}/>
+          </div>
+          <div>
+            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:0, lineHeight:1.2 }}>{service.title}</p>
+            <p style={{ color:service.color, fontSize:11, margin:0, lineHeight:1.2 }}>{service.subtitle}</p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height:1, background:`${service.color}22`, marginBottom:10 }}/>
+
+        {/* Detail list */}
+        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:7 }}>
+          {service.details.map((item, i) => (
+            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+              <div style={{ width:6, height:6, borderRadius:'50%', background:service.color, marginTop:5, flexShrink:0 }}/>
+              <span style={{ color:'#334155', fontSize:12, lineHeight:1.4 }}>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 export default function OrbitalServices() {
-  const [selected, setSelected]   = useState(null)
+  const [activeId, setActiveId]     = useState(null)   // clicked/locked open
+  const [hoveredId, setHoveredId]   = useState(null)   // hovered
   const [containerW, setContainerW] = useState(780)
   const outerRef = useRef(null)
+
+  // The currently shown service: clicked takes priority over hovered
+  const visibleId = activeId || hoveredId
+  const visibleService = SERVICES.find(s => s.id === visibleId) || null
 
   useEffect(() => {
     if (!document.getElementById('orbital-css')) {
@@ -157,27 +247,27 @@ export default function OrbitalServices() {
     return () => ro.disconnect()
   }, [])
 
+  // Click outside to dismiss locked panel
+  useEffect(() => {
+    if (!activeId) return
+    const handleClick = () => setActiveId(null)
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [activeId])
+
   const scale   = Math.min(containerW, DESIGN) / DESIGN
   const scaledH = DESIGN * scale
 
-  // ── Font sizes in px (live inside the scaled canvas, so they scale with it) ──
-  // On desktop (scale≈1): rendered at full px value → large & readable
-  // On mobile (scale≈0.44): visually shrink proportionally with the canvas → no overflow
-  const globeOurPx      = 44   // "Our"
-  const globeServicesPx = 50   // "Services"
-  const globeSubPx      = 18   // subtitle
-  const cardTitlePx     = 18   // card title (reduced to prevent overflow)
-  const cardSubPx       = 14   // card subtitle
-  const badgeLabelPx    = 16   // badge label
-  const badgeSubPx      = 13   // badge sub
+  const globeOurPx      = 44
+  const globeServicesPx = 50
+  const globeSubPx      = 18
+  const cardTitlePx     = 18
+  const cardSubPx       = 14
+  const badgeLabelPx    = 16
+  const badgeSubPx      = 13
 
   return (
-    // KEY FIX: overflow:hidden on outer, exact height so nothing bleeds
     <div ref={outerRef} style={{ width:'100%', overflow:'hidden', padding:'16px 0', height: scaledH + 32 }}>
-
-      {/* KEY FIX: transformOrigin 'top center' + no marginLeft offset
-          This ensures the 780px canvas scales from the center outward,
-          so left & right cards stay symmetrically visible on all screen sizes */}
       <div style={{
         width:           DESIGN,
         height:          DESIGN,
@@ -241,24 +331,58 @@ export default function OrbitalServices() {
         {SERVICES.map(s => {
           const pos  = CARD_POS[s.position]
           const Icon = s.icon
+          const isActive = visibleId === s.id
+
           return (
-            <div key={s.id} style={{ position:'absolute', zIndex:20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
-              onClick={() => setSelected(s)}>
-              <div style={{
-                  background:'#fff', border:'1px solid rgba(59,130,246,0.15)', borderRadius:14,
-                  padding:'11px 13px', boxShadow:'0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
-                  display:'flex', alignItems:'center', gap:10, transition:'transform 0.2s',
+            <div
+              key={s.id}
+              className="orbital-card"
+              style={{ position:'absolute', zIndex: isActive ? 35 : 20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
+              onMouseEnter={() => setHoveredId(s.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              onClick={(e) => {
+                e.stopPropagation()
+                // Toggle: click same card closes, click new card opens
+                setActiveId(prev => prev === s.id ? null : s.id)
+              }}
+            >
+              {/* Card face */}
+              <div
+                className="orbital-card-inner"
+                style={{
+                  background: isActive ? `linear-gradient(135deg, #f0f7ff, #fff)` : '#fff',
+                  border: isActive ? `1.5px solid ${s.color}55` : '1px solid rgba(59,130,246,0.15)',
+                  borderRadius: 14,
+                  padding: '11px 13px',
+                  boxShadow: isActive
+                    ? `0 8px 32px ${s.color}33, 0 2px 8px rgba(0,0,0,0.10)`
+                    : '0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  transition: 'all 0.2s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.transform='scale(1.05)'}
-                onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}>
+              >
                 <div style={{ background:s.iconBg, borderRadius:10, width:ICON_BOX, height:ICON_BOX, minWidth:ICON_BOX, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 14px ${s.color}55`, flexShrink:0 }}>
                   <Icon style={{ color:'#fff', width:22, height:22 }}/>
                 </div>
                 <div style={{ minWidth:0 }}>
-                    <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
-                    <p style={{ color:s.color, fontSize:cardSubPx, marginTop:2, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
+                  <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
+                  <p style={{ color:s.color, fontSize:cardSubPx, marginTop:2, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
                 </div>
               </div>
+
+              {/* Detail panel — shown on hover OR click */}
+              {isActive && (
+                <DetailPanel
+                  service={s}
+                  onClose={(e) => {
+                    e && e.stopPropagation()
+                    setActiveId(null)
+                    setHoveredId(null)
+                  }}
+                />
+              )}
             </div>
           )
         })}
@@ -273,36 +397,6 @@ export default function OrbitalServices() {
           </div>
         ))}
       </div>
-
-      {/* Modal */}
-      {selected && (
-        <div style={{ position:'fixed', inset:0, zIndex:50, display:'flex', alignItems:'center', justifyContent:'center', background:'rgba(0,0,0,0.4)', backdropFilter:'blur(4px)', padding:'0 16px' }}
-          onClick={() => setSelected(null)}>
-          <div style={{ position:'relative', borderRadius:18, padding:24, width:'100%', maxWidth:420, background:'#fff', border:`1.5px solid ${selected.color}33`, boxShadow:`0 8px 48px ${selected.color}22` }}
-            onClick={e => e.stopPropagation()}>
-            <button style={{ position:'absolute', top:14, right:16, background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:20, lineHeight:1 }} onClick={() => setSelected(null)}>
-              <FiX style={{ width:20, height:20 }}/>
-            </button>
-            <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:20 }}>
-              <div style={{ background:selected.iconBg, borderRadius:14, width:56, height:56, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 0 22px ${selected.color}55`, flexShrink:0 }}>
-                <selected.icon style={{ color:'#fff', width:28, height:28 }}/>
-              </div>
-              <div>
-                <h3 style={{ color:'#0f172a', fontSize:'1.1rem', fontWeight:700, margin:0 }}>{selected.title}</h3>
-                <p style={{ color:selected.color, fontSize:'0.85rem', marginTop:3, marginBottom:0 }}>{selected.subtitle}</p>
-              </div>
-            </div>
-            <ul style={{ display:'flex', flexDirection:'column', gap:10, listStyle:'none', padding:0, margin:0 }}>
-              {selected.details.map((item,i) => (
-                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
-                  <div style={{ width:7, height:7, borderRadius:'50%', marginTop:5, flexShrink:0, background:selected.color }}/>
-                  <span style={{ color:'#334155', fontSize:'0.9rem' }}>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
