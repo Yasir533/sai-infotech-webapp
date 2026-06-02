@@ -56,7 +56,7 @@ export default function Hero() {
             {/* LEFT CONTENT */}
             <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-5/12 flex-shrink-0">
 
-              {/* MAIN TITLE */}
+              {/* MAIN TITLE — reduced from clamp(2.8rem,7vw,5.5rem) to clamp(2.2rem,5.5vw,4rem) */}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export default function Hero() {
                 className="font-black leading-none mb-4 whitespace-nowrap tracking-[-0.02em]"
                 style={{
                   fontFamily: 'Georgia, serif',
-                  fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
+                  fontSize: 'clamp(2.2rem, 5.5vw, 4rem)',
                 }}
               >
                 <span className="text-slate-900">SAI </span>
@@ -101,12 +101,12 @@ export default function Hero() {
                 </span>
               </motion.div>
 
-              {/* DESCRIPTION */}
+              {/* DESCRIPTION — added text-justify */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.28 }}
-                className="text-slate-900 text-base sm:text-lg leading-relaxed mb-8 max-w-xl font-medium"
+                className="text-slate-900 text-base sm:text-lg leading-relaxed mb-8 max-w-xl font-medium !text-justify"
               >
                 Premium IT services in Bangalore since 2019.
                 We specialize in enterprise-grade technology solutions,
