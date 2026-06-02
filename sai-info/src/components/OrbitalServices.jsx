@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { FiMonitor, FiTool, FiCamera, FiPackage, FiX, FiPhone, FiMail } from 'react-icons/fi'
+import { FiMonitor, FiTool, FiCamera, FiPackage, FiX, FiPhone, FiMail, FiCheckCircle } from 'react-icons/fi'
 
 const CSS = `
 @keyframes earthRotate {
@@ -18,6 +18,10 @@ const CSS = `
   from { opacity: 0; transform: scale(0.93) translateY(6px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
+@keyframes brandSlide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 .earth-strip {
   display: flex;
   width: 200%;
@@ -30,6 +34,14 @@ const CSS = `
 .orbital-card:hover .orbital-card-inner {
   transform: scale(1.05);
   box-shadow: 0 8px 32px rgba(59,130,246,0.22), 0 2px 8px rgba(0,0,0,0.10);
+}
+.brand-track {
+  display: flex;
+  animation: brandSlide 18s linear infinite;
+  will-change: transform;
+}
+.brand-track:hover {
+  animation-play-state: paused;
 }
 `
 
@@ -108,7 +120,40 @@ function RotatingEarth({ size }) {
   )
 }
 
-// ─── UPDATED SERVICES ────────────────────────────────────────────────────────
+// ─── Brand logo slider component ─────────────────────────────────────────────
+const IT_BRANDS = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'Intel', 'Microsoft', 'Samsung']
+
+function BrandSlider({ color }) {
+  const brands = [...IT_BRANDS, ...IT_BRANDS] // duplicate for seamless loop
+  return (
+    <div style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+      {/* fade edges */}
+      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:28, background:'linear-gradient(to right, rgba(255,255,255,0.98), transparent)', zIndex:2, pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', right:0, top:0, bottom:0, width:28, background:'linear-gradient(to left, rgba(255,255,255,0.98), transparent)', zIndex:2, pointerEvents:'none' }}/>
+      <div className="brand-track">
+        {brands.map((b, i) => (
+          <div key={i} style={{
+            flexShrink: 0,
+            margin: '0 6px',
+            padding: '5px 12px',
+            borderRadius: 8,
+            background: '#f8fafc',
+            border: `1px solid ${color}22`,
+            fontSize: 11,
+            fontWeight: 700,
+            color: '#334155',
+            whiteSpace: 'nowrap',
+            letterSpacing: 0.3,
+          }}>
+            {b}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── SERVICES ─────────────────────────────────────────────────────────────────
 const SERVICES = [
   {
     id: 'itproducts',
@@ -118,13 +163,19 @@ const SERVICES = [
     color: '#2563eb',
     iconBg: 'linear-gradient(135deg,#1e3a8a,#2563eb)',
     position: 'top',
-    details: [
+    // Rich layout for IT Products
+    offerings: [
       'New & Refurbished Laptops',
       'Desktops & Workstations',
       'Servers & Storage Solutions',
-      'Printers & Peripherals',
+      'Printers & Accessories',
       'Networking Equipment',
+      'CCTV Equipment',
+      'IT Peripherals',
+      'Monitors & Displays',
     ],
+    hasBrands: true,
+    details: [], // not used for this card — offerings+brands used instead
   },
   {
     id: 'repair',
@@ -134,6 +185,8 @@ const SERVICES = [
     color: '#ea580c',
     iconBg: 'linear-gradient(135deg,#7c2d12,#ea580c)',
     position: 'left',
+    offerings: null,
+    hasBrands: false,
     details: [
       'Chip-Level PCB Repair',
       'Data Recovery from HDD/SSD',
@@ -150,6 +203,8 @@ const SERVICES = [
     color: '#0284c7',
     iconBg: 'linear-gradient(135deg,#0c4a6e,#0284c7)',
     position: 'right',
+    offerings: null,
+    hasBrands: false,
     details: [
       'CCTV Installation & Monitoring',
       'Network Infrastructure Setup',
@@ -166,6 +221,8 @@ const SERVICES = [
     color: '#10b981',
     iconBg: 'linear-gradient(135deg,#064e3b,#10b981)',
     position: 'bottom',
+    offerings: null,
+    hasBrands: false,
     details: [
       'IT Asset Disposal & Buyback',
       'Certified Refurbished Devices',
@@ -205,14 +262,14 @@ const RINGS = [
   { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
 ]
 
-// ─── Desktop Detail Panel ────────────────────────────────────────────────────
+// ─── Desktop Detail Panel ─────────────────────────────────────────────────────
 function DetailPanel({ service, onClose }) {
   const isTop    = service.position === 'top'
   const isBottom = service.position === 'bottom'
   const isLeft   = service.position === 'left'
   const isRight  = service.position === 'right'
 
-  const PANEL_CONTENT_W = 420
+  const PANEL_CONTENT_W = service.hasBrands ? 460 : 420
   const GAP = 40
 
   const containerStyle = {
@@ -220,10 +277,10 @@ function DetailPanel({ service, onClose }) {
     zIndex: 50,
     animation: 'detailFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards',
     pointerEvents: 'auto',
-    ...(isTop && { top:'100%', left:'50%', transform:'translateX(-50%)', paddingTop:GAP, width:PANEL_CONTENT_W, transformOrigin:'top center' }),
+    ...(isTop    && { top:'100%', left:'50%', transform:'translateX(-50%)', paddingTop:GAP, width:PANEL_CONTENT_W, transformOrigin:'top center' }),
     ...(isBottom && { bottom:'100%', left:'50%', transform:'translateX(-50%)', paddingBottom:GAP, width:PANEL_CONTENT_W, transformOrigin:'bottom center' }),
-    ...(isLeft && { left:'100%', top:'50%', transform:'translateY(-50%)', paddingLeft:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'left center' }),
-    ...(isRight && { right:'100%', top:'50%', transform:'translateY(-50%)', paddingRight:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'right center' }),
+    ...(isLeft   && { left:'100%', top:'50%', transform:'translateY(-50%)', paddingLeft:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'left center' }),
+    ...(isRight  && { right:'100%', top:'50%', transform:'translateY(-50%)', paddingRight:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'right center' }),
   }
 
   const Connector = () => {
@@ -277,12 +334,15 @@ function DetailPanel({ service, onClose }) {
       width: PANEL_CONTENT_W,
       boxSizing: 'border-box',
     }}>
+      {/* Close button */}
       <button onClick={onClose}
         style={{ position:'absolute', top:14, right:14, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:26, height:26, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', outline:'none' }}
         onMouseEnter={e => e.currentTarget.style.background='rgba(15,23,42,0.1)'}
         onMouseLeave={e => e.currentTarget.style.background='rgba(15,23,42,0.05)'}>
         <FiX style={{ width:14, height:14 }}/>
       </button>
+
+      {/* Header */}
       <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
         <div style={{ background:service.iconBg, borderRadius:10, width:42, height:42, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 12px ${service.color}35` }}>
           <service.icon style={{ color:'#fff', width:20, height:20 }}/>
@@ -292,15 +352,42 @@ function DetailPanel({ service, onClose }) {
           <p style={{ color:service.color, fontSize:13, fontWeight:600, margin:'2px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
         </div>
       </div>
+
       <div style={{ height:1, background:`${service.color}22`, marginBottom:14 }}/>
-      <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:9 }}>
-        {service.details.map((item, i) => (
-          <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
-            <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:6, flexShrink:0 }}/>
-            <span style={{ color:'#334155', fontSize:14, lineHeight:1.4, fontWeight:500 }}>{item}</span>
-          </li>
-        ))}
-      </ul>
+
+      {/* IT Products: rich layout with offerings grid + brand slider */}
+      {service.hasBrands && service.offerings ? (
+        <>
+          <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>
+            Product Offerings
+          </p>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'7px 12px', marginBottom:18 }}>
+            {service.offerings.map((item, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:7 }}>
+                <FiCheckCircle style={{ color:'#22c55e', width:13, height:13, flexShrink:0, marginTop:2 }}/>
+                <span style={{ color:'#334155', fontSize:12.5, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ height:1, background:`${service.color}18`, marginBottom:12 }}/>
+
+          <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>
+            Brands
+          </p>
+          <BrandSlider color={service.color}/>
+        </>
+      ) : (
+        /* Standard detail list for other cards */
+        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:9 }}>
+          {service.details.map((item, i) => (
+            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+              <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:6, flexShrink:0 }}/>
+              <span style={{ color:'#334155', fontSize:14, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 
@@ -313,12 +400,12 @@ function DetailPanel({ service, onClose }) {
   )
 }
 
-// ─── Mobile Detail Modal ─────────────────────────────────────────────────────
+// ─── Mobile Detail Modal ──────────────────────────────────────────────────────
 function MobileDetailModal({ service, onClose }) {
   const Icon = service.icon
   return (
     <div style={{ position:'fixed', inset:0, zIndex:99999, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', background:'rgba(15,23,42,0.6)', backdropFilter:'blur(8px)' }} onClick={onClose}>
-      <div style={{ width:'100%', maxWidth:'440px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box' }} onClick={e => e.stopPropagation()}>
+      <div style={{ width:'100%', maxWidth:'440px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box', maxHeight:'85vh', overflowY:'auto' }} onClick={e => e.stopPropagation()}>
         <button onClick={onClose} style={{ position:'absolute', top:16, right:16, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center' }}>
           <FiX style={{ width:16, height:16 }}/>
         </button>
@@ -332,28 +419,57 @@ function MobileDetailModal({ service, onClose }) {
           </div>
         </div>
         <div style={{ height:'1px', background:`${service.color}22`, marginBottom:20 }}/>
-        <ul style={{ listStyle:'none', padding:0, margin:'0 0 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
-          {service.details.map((item, i) => (
-            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-              <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:7, flexShrink:0 }}/>
-              <span style={{ color:'#334155', fontSize:'15px', lineHeight:1.5, fontWeight:500 }}>{item}</span>
-            </li>
-          ))}
-        </ul>
-        <div style={{ display:'flex', gap:12 }}>
-          <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
-            <FiPhone style={{ width:15, height:15 }}/> Call Now
-          </a>
-          <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
-            <FiMail style={{ width:15, height:15 }}/> Get Quote
-          </a>
-        </div>
+
+        {/* IT Products mobile: offerings grid + brand slider */}
+        {service.hasBrands && service.offerings ? (
+          <>
+            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>Product Offerings</p>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'9px 10px', marginBottom:20 }}>
+              {service.offerings.map((item, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+                  <FiCheckCircle style={{ color:'#22c55e', width:14, height:14, flexShrink:0, marginTop:2 }}/>
+                  <span style={{ color:'#334155', fontSize:13, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ height:'1px', background:`${service.color}18`, marginBottom:14 }}/>
+            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>Brands</p>
+            <BrandSlider color={service.color}/>
+            <div style={{ marginTop:20, display:'flex', gap:12 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+                <FiPhone style={{ width:15, height:15 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
+                <FiMail style={{ width:15, height:15 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        ) : (
+          <>
+            <ul style={{ listStyle:'none', padding:0, margin:'0 0 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
+              {service.details.map((item, i) => (
+                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:7, flexShrink:0 }}/>
+                  <span style={{ color:'#334155', fontSize:'15px', lineHeight:1.5, fontWeight:500 }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div style={{ display:'flex', gap:12 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+                <FiPhone style={{ width:15, height:15 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
+                <FiMail style={{ width:15, height:15 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
 }
 
-// ─── Main Export ─────────────────────────────────────────────────────────────
+// ─── Main Export ──────────────────────────────────────────────────────────────
 export default function OrbitalServices() {
   const [activeId, setActiveId]     = useState(null)
   const [hoveredId, setHoveredId]   = useState(null)
