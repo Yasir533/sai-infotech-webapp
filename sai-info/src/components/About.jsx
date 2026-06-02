@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiAward, FiCheckCircle, FiShield, FiX, FiInfo, FiExternalLink } from 'react-icons/fi'
+import { FiAward, FiShield, FiX, FiExternalLink } from 'react-icons/fi'
 
 import isoBadge from '../assets/iso-badge.png'
 import qualityVeritas from '../assets/quality-veritas.png'
-import isoSeal from '../assets/iso-seal.png'
 import isoDoc from '../assets/iso-certificate-doc.jpeg'
 
 const mvvSections = [
@@ -53,6 +52,9 @@ export default function About() {
   const [hoveredMVV, setHoveredMVV] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  // Use hovered item if available, otherwise default to Mission to keep the section populated without blank space
+  const activeMVV = hoveredMVV || mvvSections[0]
+
   return (
     <section id="about" className="section-pad relative overflow-hidden">
       {/* Background patterns */}
@@ -81,7 +83,7 @@ export default function About() {
 
         {/* ================= ROW 1: ABOUT US IMAGE & CONTENT ================= */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-          {/* About Image - Comes from Left, bounded to prevent being huge */}
+          {/* About Image - Bounded side-by-side view */}
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -97,7 +99,7 @@ export default function About() {
             />
           </motion.div>
 
-          {/* About Content - Comes from Right */}
+          {/* About Content */}
           <motion.div
             initial={{ opacity: 0, x: 80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -158,9 +160,9 @@ export default function About() {
               </h4>
 
               {/* Buttons Grid */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-3 gap-3 mb-4">
                 {mvvSections.map((sec) => {
-                  const isActive = hoveredMVV?.id === sec.id
+                  const isActive = activeMVV.id === sec.id
                   return (
                     <div
                       key={sec.id}
@@ -193,51 +195,36 @@ export default function About() {
               </div>
             </div>
 
-            {/* Hover Detail Panel */}
-            <div className="relative h-[225px] sm:h-[185px] w-full mt-4 flex items-center justify-center">
+            {/* Hover Detail Panel - Dynamic Height, Default Populated */}
+            <div className="w-full mt-4">
               <AnimatePresence mode="wait">
-                {hoveredMVV ? (
-                  <motion.div
-                    key={hoveredMVV.id}
-                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="w-full h-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center"
-                    style={{
-                      boxShadow: `inset 0 0 20px ${hoveredMVV.glow}`,
-                    }}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${hoveredMVV.color}`} />
-                      <h4 className="text-white text-base font-bold">{hoveredMVV.title}</h4>
-                    </div>
-                    <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
-                      {hoveredMVV.desc}
-                    </p>
-                    <ul className="space-y-1.5 border-t border-white/5 pt-2">
-                      {hoveredMVV.points.map((pt, index) => (
-                        <li key={index} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
-                          <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${hoveredMVV.color} mt-1.5 flex-shrink-0`} />
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="placeholder"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.7 }}
-                    exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl w-full h-full bg-white/2"
-                  >
-                    <FiInfo className="text-blue-400 text-2xl mb-2 animate-pulse" />
-                    <p className="text-slate-400 text-sm font-medium">
-                      Hover over Mission, Vision, or Values above to explore details
-                    </p>
-                  </motion.div>
-                )}
+                <motion.div
+                  key={activeMVV.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="w-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center shadow-lg"
+                  style={{
+                    boxShadow: `inset 0 0 20px ${activeMVV.glow}`,
+                  }}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${activeMVV.color}`} />
+                    <h4 className="text-white text-base font-bold">{activeMVV.title}</h4>
+                  </div>
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
+                    {activeMVV.desc}
+                  </p>
+                  <ul className="space-y-1.5 border-t border-white/5 pt-2">
+                    {activeMVV.points.map((pt, index) => (
+                      <li key={index} className="flex items-start gap-2 text-slate-400 text-xs leading-relaxed">
+                        <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${activeMVV.color} mt-1.5 flex-shrink-0`} />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
               </AnimatePresence>
             </div>
           </motion.div>
@@ -261,24 +248,18 @@ export default function About() {
                 ISO Certification
               </h4>
 
-              {/* Brand Logos block with veritas and iso badges */}
-              <div className="flex items-center justify-around gap-4 bg-slate-950/40 border border-white/5 rounded-2xl p-4 mb-5">
+              {/* Brand Logos block - Bureau Veritas & ISO badges rendered in full color */}
+              <div className="flex items-center justify-center gap-8 bg-slate-950/40 border border-white/5 rounded-2xl p-4 mb-5">
                 <img
                   src={qualityVeritas}
-                  alt="Bureau Veritas"
-                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                  alt="Bureau Veritas Logo"
+                  className="h-16 w-auto object-contain hover:scale-105 transition-all duration-300"
                 />
-                <div className="h-10 w-px bg-white/10" />
+                <div className="h-12 w-px bg-white/10" />
                 <img
                   src={isoBadge}
-                  alt="ISO 9001:2015 Certified"
-                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
-                />
-                <div className="h-10 w-px bg-white/10" />
-                <img
-                  src={isoSeal}
-                  alt="ISO 9001:2015 Seal"
-                  className="h-16 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
+                  alt="ISO 9001:2015 Certified Logo"
+                  className="h-16 w-auto object-contain hover:scale-105 transition-all duration-300"
                 />
               </div>
 
@@ -288,7 +269,7 @@ export default function About() {
               </p>
             </div>
 
-            {/* Document Preview Card / Click to enlarge */}
+            {/* Document Preview Card */}
             <div
               onClick={() => setModalOpen(true)}
               className="group cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/30 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all duration-300"
