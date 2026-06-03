@@ -38,41 +38,40 @@ export default function BrandTicker() {
   return (
     <div
       style={{
+        marginTop: '96px',        /* push below fixed navbar (logo is h-24 = 96px) */
         width: '100%',
-        backgroundColor: '#ffffff',
-        borderTop: '1px solid #e2e8f0',
-        borderBottom: '1px solid #e2e8f0',
-        padding: '14px 0',
+        backgroundColor: 'rgba(246, 248, 251, 0.95)',
+        borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+        padding: '12px 0',
         overflow: 'hidden',
         position: 'relative',
-        zIndex: 10,
+        zIndex: 40,
       }}
     >
       <style>{`
-        @keyframes ticker {
+        @keyframes brand-ticker {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .ticker-track {
+        .brand-ticker-track {
           display: flex;
           width: max-content;
-          animation: ticker 35s linear infinite;
+          animation: brand-ticker 35s linear infinite;
         }
-        .ticker-track:hover {
+        .brand-ticker-track:hover {
           animation-play-state: paused;
         }
       `}</style>
 
-      <div className="ticker-track">
+      <div className="brand-ticker-track">
         {duplicated.map((brand, index) => (
           <div
             key={index}
             style={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 32px',
+              margin: '0 36px',
               flexShrink: 0,
             }}
           >
@@ -80,15 +79,14 @@ export default function BrandTicker() {
               src={brand.src}
               alt={brand.name}
               style={{
-                height: '36px',
+                height: '32px',
                 width: 'auto',
                 objectFit: 'contain',
-                filter: 'brightness(0)',
-                opacity: 0.6,
-                transition: 'opacity 0.3s',
+                filter: 'brightness(0) opacity(0.55)',
+                transition: 'filter 0.3s ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '0.6'}
+              onMouseEnter={e => e.currentTarget.style.filter = 'brightness(0) opacity(1)'}
+              onMouseLeave={e => e.currentTarget.style.filter = 'brightness(0) opacity(0.55)'}
             />
           </div>
         ))}
