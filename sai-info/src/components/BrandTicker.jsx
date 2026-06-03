@@ -85,8 +85,8 @@ export default function BrandTicker() {
               alt={brand.name}
               className="brand-logo"
               style={{
-                height: '40px',
-                width: 'auto',
+                height: '48px',
+                width: '120px',
                 objectFit: 'contain',
               }}
             />
