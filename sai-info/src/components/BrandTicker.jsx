@@ -32,17 +32,39 @@ const brands = [
   { src: ruckus, name: 'Ruckus' },
 ]
 
+// Duplicate for seamless infinite loop
+const duplicated = [...brands, ...brands]
+
 export default function BrandTicker() {
   return (
-    <div className="w-full py-6 bg-slate-900">
-      <div className="flex flex-wrap justify-center gap-8">
-        {brands.map((brand, index) => (
-          <img
+    <div className="w-full py-6 bg-slate-900 overflow-hidden">
+      <style>{`
+        @keyframes ticker {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+          display: flex;
+          width: max-content;
+          animation: ticker 30s linear infinite;
+        }
+        .ticker-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <div className="ticker-track">
+        {duplicated.map((brand, index) => (
+          <div
             key={index}
-            src={brand.src}
-            alt={brand.name}
-            className="h-12 object-contain"
-          />
+            className="flex items-center justify-center mx-8 shrink-0"
+          >
+            <img
+              src={brand.src}
+              alt={brand.name}
+              className="h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+            />
+          </div>
         ))}
       </div>
     </div>
