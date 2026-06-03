@@ -104,6 +104,31 @@ export default function Footer() {
                 </div>
               </div>
             </div>
+
+            {/* Our Location — Google Maps embed (mobile) */}
+            <div>
+              <h4 style={headingStyle}>Our Location</h4>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(47,111,191,0.18)', boxShadow: '0 4px 18px rgba(47,111,191,0.10)' }}>
+                <iframe
+                  title="SAI INFOTECH Location Mobile"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5938!2d77.5695!3d12.9435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15800f7b7d8d%3A0xa3e6c12fba7e9b56!2sVijaya%20Rangamma%20Layout%2C%20Basavanagudi%2C%20Bengaluru%2C%20Karnataka%20560004!5e0!3m2!1sen!2sin!4v1717000000000!5m2!1sen!2sin"
+                  width="100%"
+                  height="180"
+                  style={{ display: 'block', border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <a
+                href="https://maps.google.com/?q=SAI+INFOTECH+Basavanagudi+Bangalore"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, color: '#2f6fbf', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}
+              >
+                <FiMapPin size={13}/> Get Directions ↗
+              </a>
+            </div>
           </div>
         ) : (
           /* ── DESKTOP layout ── */
@@ -167,6 +192,33 @@ export default function Footer() {
                   <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>linkedin.com</a>
                 </div>
               </div>
+            </div>
+
+            {/* Our Location — Google Maps embed */}
+            <div>
+              <h4 style={headingStyle}>Our Location</h4>
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(47,111,191,0.18)', boxShadow: '0 4px 18px rgba(47,111,191,0.10)' }}>
+                <iframe
+                  title="SAI INFOTECH Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5938!2d77.5695!3d12.9435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15800f7b7d8d%3A0xa3e6c12fba7e9b56!2sVijaya%20Rangamma%20Layout%2C%20Basavanagudi%2C%20Bengaluru%2C%20Karnataka%20560004!5e0!3m2!1sen!2sin!4v1717000000000!5m2!1sen!2sin"
+                  width="100%"
+                  height="200"
+                  style={{ display: 'block', border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <a
+                href="https://maps.google.com/?q=SAI+INFOTECH+Basavanagudi+Bangalore"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, color: '#2f6fbf', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}
+                onMouseEnter={e => e.currentTarget.style.color='#1a4a8a'}
+                onMouseLeave={e => e.currentTarget.style.color='#2f6fbf'}
+              >
+                <FiMapPin size={13}/> Get Directions ↗
+              </a>
             </div>
           </div>
         )}
