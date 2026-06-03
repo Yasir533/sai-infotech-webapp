@@ -31,9 +31,9 @@ function HomePage() {
       <VideoBackground />
 
       <Navbar />
-      <BrandTicker />
 
       <main>
+        <BrandTicker />
         <Hero />
         <About />
         <section id="clients" className="section-pad relative overflow-hidden">
@@ -66,53 +66,28 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-
     document.documentElement.classList.remove('dark')
     document.documentElement.style.colorScheme = 'light'
     const meta = document.querySelector('meta[name="color-scheme"]')
     if (meta) { meta.content = 'light' }
     else { const m = document.createElement('meta'); m.name = 'color-scheme'; m.content = 'light'; document.head.appendChild(m) }
-
     localStorage.setItem('theme', 'light')
-
   }, [])
 
   useEffect(() => {
-
-    const timer = setTimeout(
-      () => setLoading(false),
-      2200
-    )
-
+    const timer = setTimeout(() => setLoading(false), 2200)
     return () => clearTimeout(timer)
-
   }, [])
 
   if (loading) return <Loader />
 
   return (
-
     <BrowserRouter>
-
       <Routes>
-
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
-
-        <Route
-          path="/admin"
-          element={<AdminDashboard />}
-        />
-
-        <Route
-          path="/admin-reset"
-          element={<AdminReset />}
-        />
-
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin-reset" element={<AdminReset />} />
       </Routes>
-
     </BrowserRouter>
   )
 }

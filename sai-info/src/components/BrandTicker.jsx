@@ -32,12 +32,22 @@ const brands = [
   { src: ruckus, name: 'Ruckus' },
 ]
 
-// Duplicate for seamless infinite loop
 const duplicated = [...brands, ...brands]
 
 export default function BrandTicker() {
   return (
-    <div className="w-full py-6 bg-slate-900 overflow-hidden">
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: '#ffffff',
+        borderTop: '1px solid #e2e8f0',
+        borderBottom: '1px solid #e2e8f0',
+        padding: '14px 0',
+        overflow: 'hidden',
+        position: 'relative',
+        zIndex: 10,
+      }}
+    >
       <style>{`
         @keyframes ticker {
           0%   { transform: translateX(0); }
@@ -46,7 +56,7 @@ export default function BrandTicker() {
         .ticker-track {
           display: flex;
           width: max-content;
-          animation: ticker 30s linear infinite;
+          animation: ticker 35s linear infinite;
         }
         .ticker-track:hover {
           animation-play-state: paused;
@@ -57,12 +67,28 @@ export default function BrandTicker() {
         {duplicated.map((brand, index) => (
           <div
             key={index}
-            className="flex items-center justify-center mx-8 shrink-0"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 32px',
+              flexShrink: 0,
+            }}
           >
             <img
               src={brand.src}
               alt={brand.name}
-              className="h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
+              style={{
+                height: '36px',
+                width: 'auto',
+                objectFit: 'contain',
+                filter: 'brightness(0)',
+                opacity: 0.6,
+                transition: 'opacity 0.3s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '0.6'}
             />
           </div>
         ))}
