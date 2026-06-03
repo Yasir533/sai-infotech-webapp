@@ -77,18 +77,15 @@ export default function Clients() {
             {doubled.map((client, i) => (
               <div
                 key={i}
-                className="glass rounded-2xl border border-white/10 hover:border-blue-500/40 transition-all duration-300 flex flex-col items-center justify-center gap-2 p-4 group cursor-default"
+                className="glass rounded-2xl border border-white/10 hover:border-blue-500/40 transition-all duration-300 flex items-center justify-center p-3 group cursor-default"
               >
-                <div className="w-full flex items-center justify-center bg-white rounded-xl px-3 py-3" style={{ minHeight: '60px' }}>
+                <div className="w-full flex items-center justify-center bg-white rounded-xl px-3 py-4" style={{ minHeight: '75px' }}>
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="max-w-[110px] max-h-[45px] object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="max-w-[110px] max-h-[50px] object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <p className="text-slate-500 group-hover:text-slate-300 text-[10px] font-medium tracking-wide uppercase transition-colors text-center truncate w-full">
-                  {client.name}
-                </p>
               </div>
             ))}
           </div>
