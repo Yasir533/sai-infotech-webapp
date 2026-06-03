@@ -30,9 +30,7 @@ function HomePage() {
       <VideoBackground />
       <Navbar />
       <BrandTicker />
-
-      {/* paddingTop = navbar height (96px) + ticker height (~80px) */}
-      <main style={{ paddingTop: '176px' }}>
+      <main>
         <Hero />
         <About />
         <section id="clients" className="section-pad relative overflow-hidden">
