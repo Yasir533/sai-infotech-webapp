@@ -11,7 +11,12 @@ const mvvSections = [
     icon: '/icons/icons8-mission-50.png',
     title: 'Our Mission',
     color: 'from-blue-600 to-blue-400',
-    glow: 'rgba(37,99,235,0.2)',
+    glow: 'rgba(37,99,235,0.35)',
+    bg: 'rgba(8, 20, 58, 0.95)',
+    border: 'rgba(37,99,235,0.55)',
+    divider: 'rgba(37,99,235,0.35)',
+    dotFrom: '#2563eb',
+    dotTo: '#60a5fa',
     desc: 'Deliver reliable and innovative IT solutions that empower businesses to grow and succeed.',
     points: [
       'Deliver innovative, reliable IT solutions to every client',
@@ -24,7 +29,12 @@ const mvvSections = [
     icon: '/icons/icons8-vision-24.png',
     title: 'Our Vision',
     color: 'from-cyan-600 to-cyan-400',
-    glow: 'rgba(6,182,212,0.2)',
+    glow: 'rgba(6,182,212,0.35)',
+    bg: 'rgba(3, 24, 40, 0.95)',
+    border: 'rgba(6,182,212,0.55)',
+    divider: 'rgba(6,182,212,0.35)',
+    dotFrom: '#0891b2',
+    dotTo: '#22d3ee',
     desc: 'To be a trusted leader in IT services, known for excellence, innovation, and integrity.',
     points: [
       "Be Bangalore's most trusted IT service provider",
@@ -37,7 +47,12 @@ const mvvSections = [
     icon: '/icons/icons8-values-50.png',
     title: 'Our Values',
     color: 'from-indigo-600 to-violet-400',
-    glow: 'rgba(99,102,241,0.2)',
+    glow: 'rgba(99,102,241,0.35)',
+    bg: 'rgba(14, 8, 52, 0.95)',
+    border: 'rgba(99,102,241,0.55)',
+    divider: 'rgba(99,102,241,0.35)',
+    dotFrom: '#6366f1',
+    dotTo: '#a78bfa',
     desc: 'Integrity, innovation, customer focus, and commitment to excellence drive everything we do.',
     points: [
       'Honesty — Transparent in every interaction',
@@ -205,22 +220,34 @@ export default function About() {
                   className="w-full overflow-hidden"
                 >
                   <div
-                    className="w-full glass-card p-5 rounded-2xl border border-blue-500/20 bg-slate-950/60 flex flex-col justify-center shadow-lg"
+                    className="w-full p-5 rounded-2xl flex flex-col justify-center"
                     style={{
-                      boxShadow: `inset 0 0 20px ${hoveredMVV.glow}`,
+                      background: hoveredMVV.bg,
+                      border: `1.5px solid ${hoveredMVV.border}`,
+                      boxShadow: `0 8px 32px ${hoveredMVV.glow}, inset 0 1px 0 rgba(255,255,255,0.07)`,
                     }}
                   >
                     <div className="flex items-center gap-2.5 mb-2">
-                      <span className={`w-2 h-2 rounded-full bg-gradient-to-r ${hoveredMVV.color}`} />
+                      <span
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
+                      />
                       <h4 className="text-white text-base font-bold">{hoveredMVV.title}</h4>
                     </div>
-                    <p className="text-slate-200 text-xs sm:text-sm leading-relaxed mb-3">
+                    <p className="text-slate-100 text-xs sm:text-sm leading-relaxed mb-3">
                       {hoveredMVV.desc}
                     </p>
-                    <ul className="space-y-1.5 border-t border-white/5 pt-2">
+                    <div
+                      className="h-px w-full mb-3"
+                      style={{ background: `linear-gradient(to right, ${hoveredMVV.divider}, transparent)` }}
+                    />
+                    <ul className="space-y-1.5">
                       {hoveredMVV.points.map((pt, index) => (
-                        <li key={index} className="flex items-start gap-2 text-slate-200 text-xs leading-relaxed">
-                          <span className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${hoveredMVV.color} mt-1.5 flex-shrink-0`} />
+                        <li key={index} className="flex items-start gap-2 text-slate-100 text-xs leading-relaxed">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                            style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
+                          />
                           <span>{pt}</span>
                         </li>
                       ))}
