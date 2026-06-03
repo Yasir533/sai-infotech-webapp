@@ -60,10 +60,10 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       style={{ fontFamily: "'Bookman Old Style', 'Bookman', serif" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 nav-glass ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'shadow-lg shadow-black/30 py-2'
-          : 'py-3.5'
+          ? 'nav-glass shadow-lg shadow-black/30 py-2'
+          : 'py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

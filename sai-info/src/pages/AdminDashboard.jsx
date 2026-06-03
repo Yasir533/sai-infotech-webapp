@@ -395,13 +395,8 @@ export default function AdminDashboard() {
 
   return (
 
-    <div className="relative min-h-screen overflow-hidden bg-white text-slate-900">
-
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 left-10 h-72 w-72 rounded-full bg-slate-100 blur-3xl animate-pulse" />
-        <div className="absolute top-40 right-10 h-80 w-80 rounded-full bg-slate-100 blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-slate-100 blur-3xl animate-pulse" />
-      </div>
+    <div className="relative min-h-screen overflow-hidden gradient-bg text-slate-900">
+      <VideoBackground />
 
       {/* HEADER */}
       <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
