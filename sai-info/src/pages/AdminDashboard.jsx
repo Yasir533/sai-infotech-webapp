@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiTrash2,
@@ -500,6 +501,8 @@ export default function AdminDashboard() {
 
             </motion.div>
           ))}
+
+        </div>
 
       </div>
 
