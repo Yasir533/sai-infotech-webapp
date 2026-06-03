@@ -46,7 +46,7 @@ export default function Hero() {
     <>
       <section
         id="home"
-        className="relative min-h-screen flex items-center overflow-hidden pt-24 lg:pt-28"
+        className="relative min-h-screen flex items-center overflow-hidden"
       >
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
 
@@ -55,7 +55,6 @@ export default function Hero() {
             {/* LEFT CONTENT */}
             <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full lg:w-5/12 flex-shrink-0">
 
-              {/* MAIN TITLE — reduced from clamp(2.8rem,7vw,5.5rem) to clamp(2.2rem,5.5vw,4rem) */}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -77,7 +76,6 @@ export default function Hero() {
                 </span>
               </motion.h1>
 
-              {/* SUBTITLE */}
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -87,7 +85,6 @@ export default function Hero() {
                 IT / ITeS / Technology Services & Managed Services
               </motion.h2>
 
-              {/* TYPING TEXT */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -100,7 +97,6 @@ export default function Hero() {
                 </span>
               </motion.div>
 
-              {/* DESCRIPTION — added text-justify */}
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -114,14 +110,12 @@ export default function Hero() {
                 and end-to-end IT lifecycle management.
               </motion.p>
 
-              {/* BUTTONS */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.36 }}
                 className="flex flex-wrap gap-4 justify-center lg:justify-start"
               >
-
                 <a
                   href="#about"
                   className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border-2 border-slate-300 bg-white hover:bg-[#2f6fbf] hover:text-white hover:border-[#2f6fbf] transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
@@ -129,7 +123,6 @@ export default function Hero() {
                   <span>About Us</span>
                   <HiArrowRight />
                 </a>
-
                 <a
                   href="#contact"
                   className="px-7 py-3 rounded-xl font-bold text-slate-900 flex items-center gap-2 text-sm border-2 border-slate-300 bg-white hover:bg-[#2f6fbf] hover:text-white hover:border-[#2f6fbf] transition-all duration-300 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
@@ -137,10 +130,7 @@ export default function Hero() {
                   <span>Contact Us</span>
                   <HiArrowRight />
                 </a>
-
               </motion.div>
-
-              {/* PRODUCTS CARD */}
 
             </div>
 
@@ -158,9 +148,7 @@ export default function Hero() {
             </motion.div>
 
           </div>
-
         </div>
-
       </section>
     </>
   )
