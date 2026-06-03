@@ -11,12 +11,12 @@ const mvvSections = [
     icon: '/icons/icons8-mission-50.png',
     title: 'Our Mission',
     color: 'from-blue-600 to-blue-400',
-    glow: 'rgba(37,99,235,0.35)',
-    bg: 'rgba(8, 20, 58, 0.95)',
-    border: 'rgba(37,99,235,0.55)',
-    divider: 'rgba(37,99,235,0.35)',
-    dotFrom: '#2563eb',
-    dotTo: '#60a5fa',
+    glow: 'rgba(37,99,235,0.45)',
+    bg: 'rgba(30, 64, 175, 0.35)',
+    border: 'rgba(96,165,250,0.7)',
+    divider: 'rgba(96,165,250,0.5)',
+    dotFrom: '#60a5fa',
+    dotTo: '#93c5fd',
     desc: 'Deliver reliable and innovative IT solutions that empower businesses to grow and succeed.',
     points: [
       'Deliver innovative, reliable IT solutions to every client',
@@ -29,12 +29,12 @@ const mvvSections = [
     icon: '/icons/icons8-vision-24.png',
     title: 'Our Vision',
     color: 'from-cyan-600 to-cyan-400',
-    glow: 'rgba(6,182,212,0.35)',
-    bg: 'rgba(3, 24, 40, 0.95)',
-    border: 'rgba(6,182,212,0.55)',
-    divider: 'rgba(6,182,212,0.35)',
-    dotFrom: '#0891b2',
-    dotTo: '#22d3ee',
+    glow: 'rgba(6,182,212,0.45)',
+    bg: 'rgba(8, 145, 178, 0.30)',
+    border: 'rgba(34,211,238,0.7)',
+    divider: 'rgba(34,211,238,0.5)',
+    dotFrom: '#22d3ee',
+    dotTo: '#67e8f9',
     desc: 'To be a trusted leader in IT services, known for excellence, innovation, and integrity.',
     points: [
       "Be Bangalore's most trusted IT service provider",
@@ -47,12 +47,12 @@ const mvvSections = [
     icon: '/icons/icons8-values-50.png',
     title: 'Our Values',
     color: 'from-indigo-600 to-violet-400',
-    glow: 'rgba(99,102,241,0.35)',
-    bg: 'rgba(14, 8, 52, 0.95)',
-    border: 'rgba(99,102,241,0.55)',
-    divider: 'rgba(99,102,241,0.35)',
-    dotFrom: '#6366f1',
-    dotTo: '#a78bfa',
+    glow: 'rgba(99,102,241,0.45)',
+    bg: 'rgba(79, 70, 229, 0.30)',
+    border: 'rgba(167,139,250,0.7)',
+    divider: 'rgba(167,139,250,0.5)',
+    dotFrom: '#a78bfa',
+    dotTo: '#c4b5fd',
     desc: 'Integrity, innovation, customer focus, and commitment to excellence drive everything we do.',
     points: [
       'Honesty — Transparent in every interaction',
@@ -234,7 +234,7 @@ export default function About() {
                       />
                       <h4 className="text-white text-base font-bold tracking-wide">{hoveredMVV.title}</h4>
                     </div>
-                    <p className="text-blue-100 text-xs sm:text-sm leading-relaxed mb-3 font-medium">
+                    <p className="text-white text-xs sm:text-sm leading-relaxed mb-3 font-medium">
                       {hoveredMVV.desc}
                     </p>
                     <div
@@ -243,7 +243,7 @@ export default function About() {
                     />
                     <ul className="space-y-2">
                       {hoveredMVV.points.map((pt, index) => (
-                        <li key={index} className="flex items-start gap-2 text-blue-100 text-xs sm:text-sm leading-relaxed font-medium">
+                        <li key={index} className="flex items-start gap-2 text-white text-xs sm:text-sm leading-relaxed font-medium">
                           <span
                             className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
                             style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
