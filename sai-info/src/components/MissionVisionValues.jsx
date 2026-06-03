@@ -65,7 +65,6 @@ const sections = [
   },
 ]
 
-/* ── Detail panel shown on lg screens when a card is hovered ── */
 function HoverDetails({ sections, hoverIdx }) {
   const sec = typeof hoverIdx === 'number' ? sections[hoverIdx] : null
 
@@ -91,22 +90,15 @@ function HoverDetails({ sections, hoverIdx }) {
               transition={{ duration: 0.22 }}
               className="flex flex-col flex-1"
             >
-              {/* Icon */}
               <div
                 className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center mb-5 flex-shrink-0`}
                 style={{ boxShadow: `0 6px 24px ${sec.glow}` }}
               >
                 <img src={sec.icon} alt={sec.title} className="w-8 h-8 object-contain brightness-0 invert" />
               </div>
-
-              {/* Title + summary */}
               <h3 className="text-xl font-bold text-white mb-2">{sec.title}</h3>
               <p className="text-slate-300 text-sm leading-relaxed mb-5">{sec.summary}</p>
-
-              {/* Divider */}
               <div className="h-px w-full mb-5" style={{ background: `linear-gradient(to right, ${sec.dividerColor}, transparent)` }} />
-
-              {/* Points */}
               <ul className="space-y-3 flex-1">
                 {sec.points.map((p, i) => (
                   <motion.li
@@ -147,7 +139,6 @@ function HoverDetails({ sections, hoverIdx }) {
   )
 }
 
-/* ── Main component ── */
 export default function MissionVisionValues() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
@@ -160,12 +151,12 @@ export default function MissionVisionValues() {
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-10 left-1/4 w-[520px] h-[280px] bg-blue-700/10 rounded-full blur-[110px]" />
         <div className="absolute top-20 right-1/4 w-[400px] h-[240px] bg-indigo-600/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-cyan-600/7 rounded-full blur-[90px]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-cyan-600/5 rounded-full blur-[90px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* Section header */}
+        {/* Header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
@@ -223,7 +214,7 @@ export default function MissionVisionValues() {
                 />
 
                 <div className="p-7">
-                  {/* Icon badge */}
+                  {/* Icon */}
                   <div
                     className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${sec.color} flex items-center justify-center mb-5`}
                     style={{ boxShadow: `0 8px 28px ${sec.glow}` }}
