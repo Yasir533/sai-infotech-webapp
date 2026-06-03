@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import logoIcon from "../assets/logo.png";
 import {
   FiTrash2,
   FiCheckCircle,
@@ -350,8 +351,30 @@ export default function AdminDashboard() {
     return (
       <div className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden px-4 text-slate-900">
         <VideoBackground />
-        <div className="w-full max-w-sm rounded-[2rem] border border-slate-200/50 bg-white/80 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.12)] z-10">
-          <h2 className="text-xl font-semibold mb-4 text-slate-900">Admin Login</h2>
+        <div className="w-full max-w-sm rounded-[2rem] border border-slate-200/50 bg-white/85 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.12)] z-10 flex flex-col items-center">
+          <Link to="/" className="flex flex-col items-center gap-2 group mb-6">
+            <img
+              src={logoIcon}
+              alt="SAI INFOTECH"
+              className="h-20 w-20 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="text-center leading-none">
+              <div
+                style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem' }}
+                className="text-slate-900 font-black tracking-[0.16em]"
+              >
+                SAI
+                <span className="text-[#345f9a]"> INFOTECH</span>
+              </div>
+              <div
+                style={{ fontFamily: 'Georgia, serif', fontSize: '0.65rem' }}
+                className="text-slate-600 tracking-[0.25em] uppercase mt-1.5 font-bold"
+              >
+                Technology Services
+              </div>
+            </div>
+          </Link>
+          <h2 className="text-xl font-semibold mb-4 text-slate-900 self-start">Admin Login</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -403,18 +426,35 @@ export default function AdminDashboard() {
 
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-          <div className="space-y-1">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
-              Admin workspace
-            </p>
-
-            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900">
-              SAI INFOTECH
-            </h1>
-
-            <p className="text-sm text-slate-500">
-              Admin Dashboard
-            </p>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/"
+              className="flex items-center gap-3 group flex-shrink-0"
+            >
+              <img
+                src={logoIcon}
+                alt="SAI INFOTECH"
+                className="h-16 w-16 sm:h-20 sm:w-20 object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="leading-none">
+                <div
+                  style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem' }}
+                  className="text-slate-900 sm:text-xl font-black tracking-[0.16em]"
+                >
+                  SAI
+                  <span className="text-[#345f9a]"> INFOTECH</span>
+                </div>
+                <div
+                  style={{ fontFamily: 'Georgia, serif', fontSize: '0.65rem' }}
+                  className="text-slate-600 tracking-[0.32em] uppercase mt-1 font-bold"
+                >
+                  Technology Services
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mt-1.5 font-semibold">
+                  Admin Dashboard
+                </div>
+              </div>
+            </Link>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
