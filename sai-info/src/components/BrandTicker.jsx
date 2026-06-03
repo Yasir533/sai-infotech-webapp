@@ -38,13 +38,10 @@ export default function BrandTicker() {
   return (
     <div
       style={{
-        marginTop: '120px',
+        marginTop: '60px',
         width: '100%',
-        backgroundColor: '#ffffff',
-        borderTop: '3px solid #345f9a',
-        borderBottom: '3px solid #345f9a',
-        padding: '22px 0',
         overflow: 'hidden',
+        padding: '22px 0',
       }}
     >
       <style>{`
@@ -63,6 +60,7 @@ export default function BrandTicker() {
         .brand-logo {
           opacity: 0.85;
           transition: opacity 0.3s ease, transform 0.3s ease;
+          filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
         }
         .brand-logo:hover {
           opacity: 1;
