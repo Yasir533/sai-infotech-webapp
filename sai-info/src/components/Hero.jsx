@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi'
 import OrbitalServices from './OrbitalServices'
-import ITProductsCard from './ITProductsCard'
 
 const typingPhrases = [
   'Component Level Refurbishing',
@@ -139,16 +138,6 @@ export default function Hero() {
                   <HiArrowRight />
                 </a>
 
-              </motion.div>
-
-              {/* PRODUCTS CARD */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="mt-10 w-full flex justify-center lg:justify-start"
-              >
-                <ITProductsCard />
               </motion.div>
 
             </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiTrash2,
@@ -9,22 +8,12 @@ import {
   FiClock,
   FiSearch,
   FiRefreshCw,
-  FiUpload,
-  
 } from "react-icons/fi";
 import { getApiBase } from "../utils/apiBase";
-import imageCompression from "browser-image-compression";
 
 export default function AdminDashboard() {
 
   const API_BASE = getApiBase();
-
-  // Resolve relative /uploads/ paths to full URLs for any device
-  function resolveImg(src) {
-    if (!src) return "";
-    if (src.startsWith("/uploads/")) return `${API_BASE}${src}`;
-    return src;
-  }
 
   const [enquiries, setEnquiries] = useState([]);
   const [search, setSearch] = useState("");
@@ -32,19 +21,6 @@ export default function AdminDashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
-  const [activeTab, setActiveTab] = useState("enquiries");
-
-  // Product upload state changes
-  const [productName, setProductName] = useState("");
-  const [productCategory, setProductCategory] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productImages, setProductImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploadMessage, setUploadMessage] = useState("");
-  const [products, setProducts] = useState([]);
-  const [productsLoading, setProductsLoading] = useState(false);
-  const [deletingProductId, setDeletingProductId] = useState("");
 
   // Server-backed admin auth
   const [authenticated, setAuthenticated] = useState(false);
@@ -84,29 +60,12 @@ export default function AdminDashboard() {
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      setProductsLoading(true);
-
-      const response = await fetch(`${API_BASE}/api/products`);
-
-      const data = await response.json();
-
-      setProducts(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setProductsLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (!authenticated && !adminToken) {
       return;
     }
 
     fetchEnquiries();
-    fetchProducts();
 
     const intervalId = setInterval(() => {
       fetchEnquiries(true);
@@ -178,132 +137,6 @@ export default function AdminDashboard() {
     );
 
     fetchEnquiries(true);
-  };
-
-  const uploadProduct = async (e) => {
-    e.preventDefault();
-
-    if (!productName || productImages.length === 0) {
-      setUploadMessage("Please fill in name and select at least one image");
-      return;
-    }
-
-    if (productImages.length > 10) {
-      setUploadMessage("You can upload a maximum of 10 photos at a time");
-      return;
-    }
-
-    try {
-      setUploading(true);
-
-      const compressionOptions = {
-        maxSizeMB: 0.3,
-        maxWidthOrHeight: 1400,
-        useWebWorker: true,
-      };
-
-      const compressedImages = await Promise.all(
-        productImages.map(async (image) => {
-          try {
-            return await imageCompression(image, compressionOptions);
-          } catch (err) {
-            console.log("Compression failed for one image:", err);
-            return image;
-          }
-        })
-      );
-
-      const formData = new FormData();
-      formData.append("name", productName);
-      formData.append("category", productCategory);
-      formData.append("description", productDescription);
-      formData.append("price", productPrice);
-
-      compressedImages.forEach((image) => {
-        formData.append("images", image);
-      });
-
-      const res = await fetch(`${API_BASE}/api/products`, {
-        method: "POST",
-        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setUploadMessage("✓ Product uploaded successfully!");
-        setProductName("");
-        setProductCategory("");
-        setProductDescription("");
-        setProductPrice("");
-        setProductImages([]);
-        fetchProducts();
-        setTimeout(() => setUploadMessage(""), 3000);
-      } else {
-        setUploadMessage("Error uploading product: " + data.message);
-      }
-    } catch (error) {
-      setUploadMessage("Error uploading product");
-      console.log(error);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleProductImagesChange = (e) => {
-    const selectedFiles = Array.from(e.target.files || []);
-
-    if (selectedFiles.length === 0) {
-      return;
-    }
-
-    setProductImages((currentImages) => {
-      const combinedImages = [...currentImages, ...selectedFiles];
-      return combinedImages.slice(0, 10);
-    });
-
-    e.target.value = "";
-  };
-
-  const deleteProduct = async (id) => {
-
-    if (!window.confirm("Delete this product?")) {
-      return;
-    }
-
-    try {
-      setDeletingProductId(id);
-
-      const response = await fetch(
-        `${API_BASE}/api/products/${id}`,
-        {
-          method: "DELETE",
-          headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
-        }
-      );
-
-      const raw = await response.text();
-      let data = {};
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch {
-        data = { message: raw || "Non-JSON response from server" };
-      }
-
-      if (response.ok) {
-        setUploadMessage("✓ Product deleted successfully!");
-        fetchProducts();
-        setTimeout(() => setUploadMessage(""), 3000);
-      } else {
-        setUploadMessage("Error deleting product: " + (data.message || `HTTP ${response.status}`));
-      }
-    } catch (error) {
-      setUploadMessage("Error deleting product");
-      console.log(error);
-    } finally {
-      setDeletingProductId("");
-    }
   };
 
   const normalizedSearch = search.trim().toLowerCase();
@@ -483,56 +316,29 @@ export default function AdminDashboard() {
 
         </div>
 
-        {/* TABS */}
-        <div className="flex gap-3 flex-wrap border-b border-slate-800 pb-4">
-          <button
-            onClick={() => setActiveTab("enquiries")}
-            className={`px-4 py-2 font-medium transition-all ${
-              activeTab === "enquiries"
-                ? "border-b-2 border-blue-500 text-blue-400"
-                : "text-slate-400 hover:text-slate-300"
-            }`}
-          >
-            Enquiries
-          </button>
-          <button
-            onClick={() => setActiveTab("products")}
-            className={`px-4 py-2 font-medium transition-all ${
-              activeTab === "products"
-                ? "border-b-2 border-blue-500 text-blue-400"
-                : "text-slate-400 hover:text-slate-300"
-            }`}
-          >
-            Upload Products
-          </button>
+        {/* STATUS TOGGLE */}
+        <div className="flex gap-3 flex-wrap">
+          {[
+            { label: "All", value: "all" },
+            { label: "Pending", value: "pending" },
+            { label: "Completed", value: "completed" },
+          ].map((option) => (
+            <button
+              key={option.value}
+              onClick={() => setStatusFilter(option.value)}
+              className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+                statusFilter === option.value
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "border border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
 
-        {/* ENQUIRIES TAB */}
-        {activeTab === "enquiries" && (
-          <>
-            {/* STATUS TOGGLE */}
-            <div className="flex gap-3 flex-wrap">
-              {[
-                { label: "All", value: "all" },
-                { label: "Pending", value: "pending" },
-                { label: "Completed", value: "completed" },
-              ].map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => setStatusFilter(option.value)}
-                  className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
-                    statusFilter === option.value
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "border border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-
-            {/* ENQUIRIES */}
-            <div className="grid gap-5 pb-10">
+        {/* ENQUIRIES */}
+        <div className="grid gap-5 pb-10">
 
           {loading && enquiries.length === 0 && (
             <div className="grid gap-4">
@@ -694,156 +500,6 @@ export default function AdminDashboard() {
 
             </motion.div>
           ))}
-
-            </div>
-          </>
-        )}
-
-        {/* PRODUCTS TAB */}
-        {activeTab === "products" && (
-          <div className="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-8">
-            <h2 className="text-2xl font-semibold mb-6">Upload New Product</h2>
-
-            {uploadMessage && (
-              <div className={`mb-6 rounded-xl p-4 text-sm ${
-                uploadMessage.includes("✓")
-                  ? "bg-green-500/20 border border-green-500/40 text-green-300"
-                  : "bg-rose-500/20 border border-rose-500/40 text-rose-300"
-              }`}>
-                {uploadMessage}
-              </div>
-            )}
-
-            <form onSubmit={uploadProduct} className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Product Name *</label>
-                  <input
-                    type="text"
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
-                    placeholder="e.g., HP Laptop 15 inch"
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Category</label>
-                  <input
-                    type="text"
-                    value={productCategory}
-                    onChange={(e) => setProductCategory(e.target.value)}
-                    placeholder="e.g., laptops, network, displays"
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Price (₹)</label>
-                  <input
-                    type="number"
-                    value={productPrice}
-                    onChange={(e) => setProductPrice(e.target.value)}
-                    placeholder="e.g., 25000"
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
-                <textarea
-                  value={productDescription}
-                  onChange={(e) => setProductDescription(e.target.value)}
-                  placeholder="Product details..."
-                  rows={4}
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Product Photos *</label>
-                <div className="relative border-2 border-dashed border-slate-700 rounded-2xl p-8 text-center hover:border-cyan-500/50 transition">
-                  <FiUpload className="mx-auto mb-2 text-slate-400" size={32} />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleProductImagesChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <p className="text-sm text-slate-400">
-                    {productImages.length > 0
-                      ? `${productImages.length} photo${productImages.length === 1 ? "" : "s"} selected`
-                      : "Click or drag photos here"}
-                  </p>
-                  <p className="mt-2 text-xs text-slate-500">
-                    Pick photos again to add more. Maximum 10 photos total.
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={uploading}
-                className="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-6 py-3 text-sm font-semibold transition-all hover:shadow-lg disabled:opacity-50"
-              >
-                {uploading ? "Uploading..." : "Upload Product"}
-              </button>
-            </form>
-
-            <div className="mt-10">
-              <h3 className="text-xl font-semibold mb-4">Uploaded Products</h3>
-
-              {productsLoading ? (
-                <div className="text-sm text-slate-400">Loading products...</div>
-              ) : products.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-700 p-6 text-sm text-slate-400">
-                  No products uploaded yet.
-                </div>
-              ) : (
-                <div className="grid gap-4">
-                  {products.map((item) => (
-                    <div
-                      key={item._id}
-                      className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 rounded-2xl border border-slate-700 bg-slate-800/50 p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={resolveImg(item.image)}
-                          alt={item.name}
-                          className="h-16 w-16 rounded-lg object-cover bg-slate-700"
-                        />
-
-                        <div>
-                          <p className="font-semibold text-white">{item.name}</p>
-
-                          <p className="text-xs text-slate-400">
-                            {item.category || "general"}
-                          </p>
-
-                          <p className="text-sm text-sky-400 font-semibold">
-                            ₹{Number(item.price || 0).toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => deleteProduct(item._id)}
-                        disabled={deletingProductId === item._id}
-                        className="flex items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium transition hover:bg-red-700 disabled:opacity-50"
-                      >
-                        <FiTrash2 size={16} />
-                        {deletingProductId === item._id ? "Deleting..." : "Delete"}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
       </div>
 

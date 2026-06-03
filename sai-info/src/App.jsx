@@ -21,7 +21,6 @@ import ScrollToTop from './components/ScrollToTop'
 import AIChat from './components/AIChat'
 
 import AdminDashboard from "./pages/AdminDashboard"
-import ITProducts from "./pages/ITProducts"
 import AdminReset from "./pages/AdminReset"
 
 function HomePage() {
@@ -109,11 +108,6 @@ function App() {
         <Route
           path="/admin-reset"
           element={<AdminReset />}
-        />
-
-        <Route
-          path="/it-products"
-          element={<ITProducts />}
         />
 
       </Routes>
