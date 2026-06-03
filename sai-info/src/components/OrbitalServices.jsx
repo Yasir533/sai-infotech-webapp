@@ -193,14 +193,19 @@ function DesktopModal({ service, onClose }) {
     <div
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         zIndex: 99998,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
-        padding: '24px',
+        /* paddingTop = navbar (~96px) + breathing room (20px) */
+        padding: '116px 24px 24px 24px',
         background: 'rgba(15,23,42,0.45)',
         backdropFilter: 'blur(6px)',
+        overflowY: 'auto',
       }}
       onClick={onClose}
     >
@@ -215,9 +220,9 @@ function DesktopModal({ service, onClose }) {
           position: 'relative',
           animation: 'detailFadeIn 0.22s cubic-bezier(0.16,1,0.3,1) forwards',
           boxSizing: 'border-box',
-          maxHeight: '85vh',
-          overflowY: 'auto',
+          flexShrink: 0,
           border: `1.5px solid ${service.color}22`,
+          marginBottom: 24,
         }}
         onClick={e => e.stopPropagation()}
       >
