@@ -489,8 +489,9 @@ export default function OrbitalServices() {
   const [isMobile, setIsMobile]     = useState(false)
   const outerRef = useRef(null)
 
-  const visibleId      = activeId || hoveredId
-  const visibleService = SERVICES.find(s => s.id === visibleId) || null
+  // Only click (activeId) opens the modal — hover just highlights the card
+  const visibleId      = activeId
+  const visibleService = SERVICES.find(s => s.id === activeId) || null
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640)
@@ -600,11 +601,12 @@ export default function OrbitalServices() {
           </div>
         </div>
 
-        {/* Service Cards — click triggers full modal, no inline panel */}
+        {/* Service Cards — CLICK to open modal, hover just highlights */}
         {SERVICES.map(s => {
           const pos      = CARD_POS[s.position]
           const Icon     = s.icon
-          const isActive = visibleId === s.id
+          const isActive = activeId === s.id
+          const isHovered = hoveredId === s.id
 
           return (
             <div
@@ -619,13 +621,16 @@ export default function OrbitalServices() {
               }}
             >
               <div className="orbital-card-inner" style={{
-                background: isActive ? 'linear-gradient(135deg,#f0f7ff,#fff)' : '#fff',
-                border: isActive ? `1.5px solid ${s.color}55` : '1px solid rgba(59,130,246,0.15)',
+                background: isActive ? 'linear-gradient(135deg,#f0f7ff,#fff)' : isHovered ? 'linear-gradient(135deg,#f8fbff,#fff)' : '#fff',
+                border: isActive ? `1.5px solid ${s.color}55` : isHovered ? `1.5px solid ${s.color}44` : '1px solid rgba(59,130,246,0.15)',
                 borderRadius: 14,
                 padding: '12px 14px',
                 boxShadow: isActive
                   ? `0 8px 32px ${s.color}33, 0 2px 8px rgba(0,0,0,0.10)`
+                  : isHovered
+                  ? `0 6px 24px ${s.color}28, 0 2px 8px rgba(0,0,0,0.08)`
                   : '0 4px 24px rgba(59,130,246,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+                transform: isHovered && !isActive ? 'scale(1.04)' : 'scale(1)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 12,
@@ -637,6 +642,9 @@ export default function OrbitalServices() {
                 <div style={{ minWidth:0 }}>
                   <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
                   <p style={{ color:s.color, fontSize:cardSubPx, marginTop:3, fontWeight:600, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
+                  {isHovered && !isActive && (
+                    <p style={{ color:'#94a3b8', fontSize:11, margin:'4px 0 0 0', fontWeight:500 }}>Click to view details</p>
+                  )}
                 </div>
               </div>
             </div>
