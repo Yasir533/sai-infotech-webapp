@@ -38,15 +38,16 @@ export default function BrandTicker() {
   return (
     <div
       style={{
-        marginTop: '96px',
-        width: '100%',
-        backgroundColor: '#0f172a',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-        padding: '16px 0',
+        position: 'fixed',
+        top: '96px',          /* sits exactly below the fixed navbar */
+        left: 0,
+        right: 0,
+        zIndex: 45,
+        backgroundColor: '#0b1120',
+        borderTop: '2px solid rgba(52, 95, 154, 0.4)',
+        borderBottom: '2px solid rgba(52, 95, 154, 0.4)',
+        padding: '14px 0',
         overflow: 'hidden',
-        position: 'relative',
-        zIndex: 40,
       }}
     >
       <style>{`
@@ -57,18 +58,18 @@ export default function BrandTicker() {
         .brand-ticker-track {
           display: flex;
           width: max-content;
-          animation: brand-ticker 35s linear infinite;
+          animation: brand-ticker 40s linear infinite;
         }
         .brand-ticker-track:hover {
           animation-play-state: paused;
         }
         .brand-logo {
-          opacity: 0.75;
+          opacity: 0.85;
           transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .brand-logo:hover {
           opacity: 1;
-          transform: scale(1.1);
+          transform: scale(1.15);
         }
       `}</style>
 
@@ -80,7 +81,7 @@ export default function BrandTicker() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 40px',
+              margin: '0 48px',
               flexShrink: 0,
             }}
           >
@@ -89,7 +90,7 @@ export default function BrandTicker() {
               alt={brand.name}
               className="brand-logo"
               style={{
-                height: '44px',
+                height: '52px',
                 width: 'auto',
                 objectFit: 'contain',
               }}

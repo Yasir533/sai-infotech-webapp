@@ -25,15 +25,14 @@ import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
 
 function HomePage() {
-
   return (
     <div className="gradient-bg min-h-screen">
       <VideoBackground />
-
       <Navbar />
+      <BrandTicker />
 
-      <main>
-        <BrandTicker />
+      {/* paddingTop = navbar height (96px) + ticker height (~80px) */}
+      <main style={{ paddingTop: '176px' }}>
         <Hero />
         <About />
         <section id="clients" className="section-pad relative overflow-hidden">
@@ -46,23 +45,18 @@ function HomePage() {
             </div>
           </div>
         </section>
-
         <Contact />
       </main>
 
       <Footer />
-
       <FloatingButtons />
-
       <ScrollToTop />
-
       <AIChat />
     </div>
   )
 }
 
 function App() {
-
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
