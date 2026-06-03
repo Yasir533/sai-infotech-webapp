@@ -263,6 +263,9 @@ html:not(.dark) .text-slate-500 {
 html:not(.dark) .text-slate-600 {
   color: #64748b !important;
 }
+html:not(.dark) .text-blue-400 {
+  color: #1e5fb8 !important;
+}
 html:not(.dark) .placeholder-slate-600::placeholder {
   color: #94a3b8;
 }
