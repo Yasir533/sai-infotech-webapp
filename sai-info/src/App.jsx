@@ -22,10 +22,10 @@ function HomePage() {
     <div className="gradient-bg min-h-screen">
       <VideoBackground />
       <Navbar />
-      <BrandTicker />
       <main>
         <Hero />
         <About />
+        <BrandTicker />
         <section id="clients" className="section-pad relative overflow-hidden">
           <div id="testimonials" />
           <div className="absolute inset-0 grid-pattern opacity-15" />
