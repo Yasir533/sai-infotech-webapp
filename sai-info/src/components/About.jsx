@@ -227,23 +227,23 @@ export default function About() {
                       boxShadow: `0 8px 32px ${hoveredMVV.glow}, inset 0 1px 0 rgba(255,255,255,0.07)`,
                     }}
                   >
-                    <div className="flex items-center gap-2.5 mb-2">
+                    <div className="flex items-center gap-2.5 mb-3">
                       <span
-                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                         style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
                       />
-                      <h4 className="text-white text-base font-bold">{hoveredMVV.title}</h4>
+                      <h4 className="text-white text-base font-bold tracking-wide">{hoveredMVV.title}</h4>
                     </div>
-                    <p className="text-slate-100 text-xs sm:text-sm leading-relaxed mb-3">
+                    <p className="text-blue-100 text-xs sm:text-sm leading-relaxed mb-3 font-medium">
                       {hoveredMVV.desc}
                     </p>
                     <div
                       className="h-px w-full mb-3"
                       style={{ background: `linear-gradient(to right, ${hoveredMVV.divider}, transparent)` }}
                     />
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-2">
                       {hoveredMVV.points.map((pt, index) => (
-                        <li key={index} className="flex items-start gap-2 text-slate-100 text-xs leading-relaxed">
+                        <li key={index} className="flex items-start gap-2 text-blue-100 text-xs sm:text-sm leading-relaxed font-medium">
                           <span
                             className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
                             style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
