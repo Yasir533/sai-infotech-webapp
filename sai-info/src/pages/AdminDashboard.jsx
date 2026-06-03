@@ -10,9 +10,11 @@ import {
   FiSearch,
   FiRefreshCw,
   FiUpload,
-  
+  FiEye,
+  FiEyeOff,
 } from "react-icons/fi";
 import { getApiBase } from "../utils/apiBase";
+import VideoBackground from "../components/VideoBackground";
 import imageCompression from "browser-image-compression";
 
 export default function AdminDashboard() {
@@ -50,6 +52,7 @@ export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false);
   const [adminToken, setAdminToken] = useState(() => localStorage.getItem("adminToken") || "");
   const [passwordInput, setPasswordInput] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
 
 
@@ -345,25 +348,35 @@ export default function AdminDashboard() {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-slate-900">
-        <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+      <div className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden px-4 text-slate-900">
+        <VideoBackground />
+        <div className="w-full max-w-sm rounded-[2rem] border border-slate-200/50 bg-white/80 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.12)] z-10">
           <h2 className="text-xl font-semibold mb-4 text-slate-900">Admin Login</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
-              <input
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                className="w-full rounded-2xl border border-slate-300 bg-white py-3 px-4 text-sm text-slate-900 outline-none focus:border-cyan-500"
-                placeholder="Enter admin password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 bg-white py-3 pl-4 pr-12 text-sm text-slate-900 outline-none focus:border-cyan-500"
+                  placeholder="Enter admin password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
             </div>
 
             {authError && <div className="text-sm text-rose-500">{authError}</div>}
 
             <div className="flex gap-3">
-              <button className="flex-1 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-semibold">
+              <button className="flex-1 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-3.5 text-sm font-semibold text-white transition hover:brightness-110">
                 Login
               </button>
             </div>

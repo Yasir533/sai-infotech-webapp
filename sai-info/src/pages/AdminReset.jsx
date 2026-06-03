@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getApiBase } from '../utils/apiBase'
+import VideoBackground from '../components/VideoBackground'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 const OTP_LENGTH = 6
 
@@ -13,6 +15,8 @@ export default function AdminReset() {
   const [resetToken, setResetToken] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -174,10 +178,11 @@ export default function AdminReset() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10">
-        <div className="grid w-full gap-8 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)] lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative hidden overflow-hidden border-r border-slate-200 bg-slate-50 p-10 lg:block">
+    <div className="gradient-bg min-h-screen relative overflow-hidden">
+      <VideoBackground />
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 relative z-10">
+        <div className="grid w-full gap-8 overflow-hidden rounded-[2rem] border border-slate-200/50 bg-white/85 backdrop-blur-xl shadow-[0_20px_50px_rgba(15,23,42,0.12)] lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative hidden overflow-hidden border-r border-slate-200/50 bg-slate-50/70 p-10 lg:block">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.12),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.08),transparent_35%)]" />
             <div className="relative flex h-full flex-col justify-between">
               <div>
@@ -297,24 +302,42 @@ export default function AdminReset() {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700">New password</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(event) => setNewPassword(event.target.value)}
-                    className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500"
-                    placeholder="Minimum 6 characters"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={newPassword}
+                      onChange={(event) => setNewPassword(event.target.value)}
+                      className="w-full rounded-2xl border border-slate-300 bg-white pl-4 pr-12 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500"
+                      placeholder="Minimum 6 characters"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                    >
+                      {showNewPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700">Confirm password</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                    className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500"
-                    placeholder="Re-enter the new password"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      className="w-full rounded-2xl border border-slate-300 bg-white pl-4 pr-12 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500"
+                      placeholder="Re-enter the new password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+                    >
+                      {showConfirmPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 {error && <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">{error}</div>}
