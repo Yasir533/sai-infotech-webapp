@@ -345,9 +345,9 @@ export default function AdminDashboard() {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
-        <div className="w-full max-w-sm rounded-2xl border border-slate-800 bg-slate-900/80 p-8">
-          <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
+      <div className="min-h-screen flex items-center justify-center bg-white text-slate-900">
+        <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+          <h2 className="text-xl font-semibold mb-4 text-slate-900">Admin Login</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -355,12 +355,12 @@ export default function AdminDashboard() {
                 type="password"
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
-                className="w-full rounded-2xl border border-slate-700 bg-slate-800/60 py-3 px-4 text-sm outline-none focus:border-cyan-500"
+                className="w-full rounded-2xl border border-slate-300 bg-white py-3 px-4 text-sm text-slate-900 outline-none focus:border-cyan-500"
                 placeholder="Enter admin password"
               />
             </div>
 
-            {authError && <div className="text-sm text-rose-400">{authError}</div>}
+            {authError && <div className="text-sm text-rose-500">{authError}</div>}
 
             <div className="flex gap-3">
               <button className="flex-1 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-semibold">
@@ -369,8 +369,8 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center justify-between mt-2 text-xs">
-              <span className="text-slate-400">Reset via your registered email.</span>
-              <Link to="/admin-reset" className="text-cyan-400 hover:text-cyan-300">
+              <span className="text-slate-500">Reset via your registered email.</span>
+              <Link to="/admin-reset" className="text-cyan-600 hover:text-cyan-500">
                 Forgot password?
               </Link>
             </div>
@@ -382,16 +382,16 @@ export default function AdminDashboard() {
 
   return (
 
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-white text-slate-900">
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 left-10 h-72 w-72 rounded-full bg-blue-500/15 blur-3xl animate-pulse" />
-        <div className="absolute top-40 right-10 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl animate-pulse" />
+        <div className="absolute -top-24 left-10 h-72 w-72 rounded-full bg-slate-100 blur-3xl animate-pulse" />
+        <div className="absolute top-40 right-10 h-80 w-80 rounded-full bg-slate-100 blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-slate-100 blur-3xl animate-pulse" />
       </div>
 
       {/* HEADER */}
-      <div className="sticky top-0 z-50 border-b border-slate-800/70 bg-slate-950/75 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
 
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
@@ -400,11 +400,11 @@ export default function AdminDashboard() {
               Admin workspace
             </p>
 
-            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900">
               SAI INFOTECH
             </h1>
 
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500">
               Admin Dashboard
             </p>
           </div>
@@ -421,13 +421,13 @@ export default function AdminDashboard() {
                 placeholder="Search enquiries..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-2xl border border-slate-700 bg-slate-900/80 py-3 pl-12 pr-4 text-sm outline-none transition focus:border-cyan-500 focus:bg-slate-900"
+                className="w-full rounded-2xl border border-slate-300 bg-white py-3 pl-12 pr-4 text-sm text-slate-900 outline-none transition focus:border-cyan-500 focus:bg-white"
               />
               {search && (
                 <button
                   type="button"
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-xs text-slate-300 transition hover:bg-slate-800"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-xs text-slate-500 transition hover:bg-slate-100"
                 >
                   Clear
                 </button>
@@ -467,15 +467,15 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-5 shadow-xl backdrop-blur-sm"
+              className="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_14px_34px_rgba(15,23,42,0.06)]"
             >
               <div className={`mb-4 h-1.5 w-20 rounded-full bg-gradient-to-r ${stat.accent}`} />
 
-              <h3 className="text-sm text-slate-400">
+              <h3 className="text-sm text-slate-500">
                 {stat.label}
               </h3>
 
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight">
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">
                 {stat.value}
               </h2>
             </motion.div>
@@ -484,13 +484,13 @@ export default function AdminDashboard() {
         </div>
 
         {/* TABS */}
-        <div className="flex gap-3 flex-wrap border-b border-slate-800 pb-4">
+        <div className="flex gap-3 flex-wrap border-b border-slate-200 pb-4">
           <button
             onClick={() => setActiveTab("enquiries")}
             className={`px-4 py-2 font-medium transition-all ${
               activeTab === "enquiries"
                 ? "border-b-2 border-blue-500 text-blue-400"
-                : "text-slate-400 hover:text-slate-300"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             Enquiries
@@ -513,7 +513,7 @@ export default function AdminDashboard() {
                   className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
                     statusFilter === option.value
                       ? "bg-blue-600 text-white shadow-lg"
-                      : "border border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800"
+                        : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                   }`}
                 >
                   {option.label}
@@ -529,7 +529,7 @@ export default function AdminDashboard() {
               {[1, 2, 3].map((index) => (
                 <div
                   key={index}
-                  className="h-52 rounded-3xl border border-slate-800 bg-slate-900/70 animate-pulse"
+                  className="h-52 rounded-3xl border border-slate-200 bg-slate-50 animate-pulse"
                 />
               ))}
             </div>
@@ -537,7 +537,7 @@ export default function AdminDashboard() {
 
           {filteredEnquiries.length === 0 && (
 
-            <div className="rounded-3xl border border-dashed border-slate-800 bg-slate-900/60 py-20 text-center text-sm text-slate-500">
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white py-20 text-center text-sm text-slate-500">
               No enquiries found
             </div>
           )}
@@ -549,11 +549,11 @@ export default function AdminDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
               whileHover={{ y: -4 }}
-              className="overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/80 shadow-2xl transition-all duration-300 hover:border-cyan-500/40"
+              className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_16px_40px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-cyan-300"
             >
 
               {/* TOP */}
-              <div className="flex flex-col gap-6 border-b border-slate-800 p-5 lg:flex-row lg:items-start lg:justify-between">
+              <div className="flex flex-col gap-6 border-b border-slate-200 p-5 lg:flex-row lg:items-start lg:justify-between">
 
                 <div className="space-y-4 flex-1">
 
@@ -570,7 +570,7 @@ export default function AdminDashboard() {
                         {item.name}
                       </h2>
 
-                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-slate-400">
+                      <div className="mt-1 flex flex-wrap gap-3 text-sm text-slate-500">
 
                         <div className="flex items-center gap-2">
                           <FiMail />
@@ -589,13 +589,13 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* MESSAGE */}
-                  <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-4">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
 
                     <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-blue-400">
                       Customer Message
                     </h3>
 
-                    <p className="text-sm leading-6 text-slate-300">
+                    <p className="text-sm leading-6 text-slate-700">
                       {item.message}
                     </p>
 
@@ -639,7 +639,7 @@ export default function AdminDashboard() {
                       Status
                     </p>
 
-                    <h3 className={`text-lg font-semibold ${
+                      <h3 className={`text-lg font-semibold ${
                       item.status === "Completed"
                         ? "text-green-400"
                         : "text-yellow-400"
@@ -665,14 +665,14 @@ export default function AdminDashboard() {
                     Delete
                   </button>
 
-                  <div className="rounded-2xl border border-slate-700 bg-slate-800 p-4 text-sm text-slate-400">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
 
                     <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-slate-500">
                       <FiClock />
                       Created At
                     </div>
 
-                    <p className="text-sm text-slate-300">
+                    <p className="text-sm text-slate-700">
                       {new Date(item.createdAt).toLocaleString()}
                     </p>
 
