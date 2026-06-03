@@ -140,6 +140,8 @@ export default function Hero() {
 
               </motion.div>
 
+              {/* PRODUCTS CARD */}
+
             </div>
 
             {/* RIGHT SIDE */}
