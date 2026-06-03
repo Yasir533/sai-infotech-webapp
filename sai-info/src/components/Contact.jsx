@@ -176,7 +176,7 @@ export default function Contact() {
                 key={i}
                 className="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)]"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-800 to-[#2f6fbf] flex items-center justify-center">
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}>
                   {iconImageByTitle[info.title] ? (
                     <>
                       <img
