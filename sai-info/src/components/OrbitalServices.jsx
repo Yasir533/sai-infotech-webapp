@@ -1,6 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FiMonitor, FiTool, FiCamera, FiPackage, FiX, FiPhone, FiMail, FiCheckCircle } from 'react-icons/fi'
 
+// ─── Import brand logos ───────────────────────────────────────────────────────
+import dellLogo      from '../assets/brands/dell.png'
+import hpLogo        from '../assets/brands/hp.png'
+import lenovoLogo    from '../assets/brands/lenovo.png'
+import asusLogo      from '../assets/brands/asus.png'
+import acerLogo      from '../assets/brands/acer.png'
+import intelLogo     from '../assets/brands/intel.png'
+import microsoftLogo from '../assets/brands/microsoft.png'
+import samsungLogo   from '../assets/brands/samsung.png'
+import appleLogo     from '../assets/brands/apple.png'
+import ciscoLogo     from '../assets/brands/cisco.png'
+import awsLogo       from '../assets/brands/aws.png'
+import azureLogo     from '../assets/brands/azure.png'
+import googleCloudLogo from '../assets/brands/google-cloud.png'
+import ubiquitiLogo  from '../assets/brands/ubiquiti.png'
+import ruckusLogo    from '../assets/brands/ruckus.png'
+
+const BRAND_LOGOS = [
+  { name: 'Dell',         src: dellLogo },
+  { name: 'HP',           src: hpLogo },
+  { name: 'Lenovo',       src: lenovoLogo },
+  { name: 'ASUS',         src: asusLogo },
+  { name: 'Acer',         src: acerLogo },
+  { name: 'Intel',        src: intelLogo },
+  { name: 'Microsoft',    src: microsoftLogo },
+  { name: 'Samsung',      src: samsungLogo },
+  { name: 'Apple',        src: appleLogo },
+  { name: 'Cisco',        src: ciscoLogo },
+  { name: 'AWS',          src: awsLogo },
+  { name: 'Azure',        src: azureLogo },
+  { name: 'Google Cloud', src: googleCloudLogo },
+  { name: 'Ubiquiti',     src: ubiquitiLogo },
+  { name: 'Ruckus',       src: ruckusLogo },
+]
+
 const CSS = `
 @keyframes earthRotate {
   from { transform: translateX(0) }
@@ -37,11 +72,34 @@ const CSS = `
 }
 .brand-track {
   display: flex;
-  animation: brandSlide 18s linear infinite;
+  align-items: center;
+  animation: brandSlide 22s linear infinite;
   will-change: transform;
 }
 .brand-track:hover {
   animation-play-state: paused;
+}
+.brand-logo-item {
+  flex-shrink: 0;
+  margin: 0 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid rgba(37,99,235,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.18s;
+}
+.brand-logo-item:hover {
+  box-shadow: 0 2px 10px rgba(37,99,235,0.12);
+}
+.brand-logo-item img {
+  height: 32px;
+  width: auto;
+  max-width: 72px;
+  object-fit: contain;
+  display: block;
 }
 `
 
@@ -121,31 +179,18 @@ function RotatingEarth({ size }) {
 }
 
 // ─── Brand logo slider component ─────────────────────────────────────────────
-const IT_BRANDS = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'Intel', 'Microsoft', 'Samsung']
-
 function BrandSlider({ color }) {
-  const brands = [...IT_BRANDS, ...IT_BRANDS] // duplicate for seamless loop
+  // Duplicate for seamless loop
+  const logos = [...BRAND_LOGOS, ...BRAND_LOGOS]
   return (
-    <div style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+    <div style={{ overflow: 'hidden', width: '100%', position: 'relative', borderRadius: 8 }}>
       {/* fade edges */}
-      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:28, background:'linear-gradient(to right, rgba(255,255,255,0.98), transparent)', zIndex:2, pointerEvents:'none' }}/>
-      <div style={{ position:'absolute', right:0, top:0, bottom:0, width:28, background:'linear-gradient(to left, rgba(255,255,255,0.98), transparent)', zIndex:2, pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:32, background:'linear-gradient(to right, rgba(255,255,255,1), transparent)', zIndex:2, pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', right:0, top:0, bottom:0, width:32, background:'linear-gradient(to left, rgba(255,255,255,1), transparent)', zIndex:2, pointerEvents:'none' }}/>
       <div className="brand-track">
-        {brands.map((b, i) => (
-          <div key={i} style={{
-            flexShrink: 0,
-            margin: '0 6px',
-            padding: '5px 12px',
-            borderRadius: 8,
-            background: '#f8fafc',
-            border: `1px solid ${color}22`,
-            fontSize: 11,
-            fontWeight: 700,
-            color: '#334155',
-            whiteSpace: 'nowrap',
-            letterSpacing: 0.3,
-          }}>
-            {b}
+        {logos.map((brand, i) => (
+          <div key={i} className="brand-logo-item">
+            <img src={brand.src} alt={brand.name} title={brand.name} />
           </div>
         ))}
       </div>
@@ -163,7 +208,6 @@ const SERVICES = [
     color: '#2563eb',
     iconBg: 'linear-gradient(135deg,#1e3a8a,#2563eb)',
     position: 'top',
-    // Rich layout for IT Products
     offerings: [
       'New & Refurbished Laptops',
       'Desktops & Workstations',
@@ -175,7 +219,7 @@ const SERVICES = [
       'Monitors & Displays',
     ],
     hasBrands: true,
-    details: [], // not used for this card — offerings+brands used instead
+    details: [],
   },
   {
     id: 'repair',
@@ -269,7 +313,8 @@ function DetailPanel({ service, onClose }) {
   const isLeft   = service.position === 'left'
   const isRight  = service.position === 'right'
 
-  const PANEL_CONTENT_W = service.hasBrands ? 460 : 420
+  // Wider panel for IT Products (has brand logos), standard for others
+  const PANEL_CONTENT_W = service.hasBrands ? 500 : 440
   const GAP = 40
 
   const containerStyle = {
@@ -327,8 +372,8 @@ function DetailPanel({ service, onClose }) {
     <div style={{
       background: 'rgba(255,255,255,0.98)',
       border: `1.5px solid ${service.color}33`,
-      borderRadius: 18,
-      padding: '22px 24px',
+      borderRadius: 20,
+      padding: '26px 28px',
       boxShadow: `0 15px 45px ${service.color}24, 0 3px 14px rgba(0,0,0,0.06)`,
       position: 'relative',
       width: PANEL_CONTENT_W,
@@ -336,54 +381,53 @@ function DetailPanel({ service, onClose }) {
     }}>
       {/* Close button */}
       <button onClick={onClose}
-        style={{ position:'absolute', top:14, right:14, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:26, height:26, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', outline:'none' }}
+        style={{ position:'absolute', top:14, right:14, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', outline:'none' }}
         onMouseEnter={e => e.currentTarget.style.background='rgba(15,23,42,0.1)'}
         onMouseLeave={e => e.currentTarget.style.background='rgba(15,23,42,0.05)'}>
         <FiX style={{ width:14, height:14 }}/>
       </button>
 
       {/* Header */}
-      <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:14 }}>
-        <div style={{ background:service.iconBg, borderRadius:10, width:42, height:42, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 12px ${service.color}35` }}>
-          <service.icon style={{ color:'#fff', width:20, height:20 }}/>
+      <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:16 }}>
+        <div style={{ background:service.iconBg, borderRadius:12, width:48, height:48, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 12px ${service.color}35` }}>
+          <service.icon style={{ color:'#fff', width:22, height:22 }}/>
         </div>
         <div>
-          <p style={{ color:'#0f172a', fontWeight:800, fontSize:17, margin:0, lineHeight:1.2 }}>{service.title}</p>
-          <p style={{ color:service.color, fontSize:13, fontWeight:600, margin:'2px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
+          <p style={{ color:'#0f172a', fontWeight:800, fontSize:18, margin:0, lineHeight:1.2 }}>{service.title}</p>
+          <p style={{ color:service.color, fontSize:13.5, fontWeight:600, margin:'3px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
         </div>
       </div>
 
-      <div style={{ height:1, background:`${service.color}22`, marginBottom:14 }}/>
+      <div style={{ height:1, background:`${service.color}22`, marginBottom:16 }}/>
 
-      {/* IT Products: rich layout with offerings grid + brand slider */}
+      {/* IT Products: offerings grid + real brand logo slider */}
       {service.hasBrands && service.offerings ? (
         <>
-          <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>
+          <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>
             Product Offerings
           </p>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'7px 12px', marginBottom:18 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px 14px', marginBottom:18 }}>
             {service.offerings.map((item, i) => (
-              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:7 }}>
-                <FiCheckCircle style={{ color:'#22c55e', width:13, height:13, flexShrink:0, marginTop:2 }}/>
-                <span style={{ color:'#334155', fontSize:12.5, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+                <FiCheckCircle style={{ color:'#22c55e', width:14, height:14, flexShrink:0, marginTop:2 }}/>
+                <span style={{ color:'#334155', fontSize:13, lineHeight:1.4, fontWeight:500 }}>{item}</span>
               </div>
             ))}
           </div>
 
-          <div style={{ height:1, background:`${service.color}18`, marginBottom:12 }}/>
+          <div style={{ height:1, background:`${service.color}18`, marginBottom:14 }}/>
 
-          <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>
-            Brands
+          <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>
+            Brands We Carry
           </p>
           <BrandSlider color={service.color}/>
         </>
       ) : (
-        /* Standard detail list for other cards */
-        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:9 }}>
+        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10 }}>
           {service.details.map((item, i) => (
-            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:11 }}>
               <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:6, flexShrink:0 }}/>
-              <span style={{ color:'#334155', fontSize:14, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+              <span style={{ color:'#334155', fontSize:14.5, lineHeight:1.4, fontWeight:500 }}>{item}</span>
             </li>
           ))}
         </ul>
@@ -405,7 +449,7 @@ function MobileDetailModal({ service, onClose }) {
   const Icon = service.icon
   return (
     <div style={{ position:'fixed', inset:0, zIndex:99999, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', background:'rgba(15,23,42,0.6)', backdropFilter:'blur(8px)' }} onClick={onClose}>
-      <div style={{ width:'100%', maxWidth:'440px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box', maxHeight:'85vh', overflowY:'auto' }} onClick={e => e.stopPropagation()}>
+      <div style={{ width:'100%', maxWidth:'460px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box', maxHeight:'85vh', overflowY:'auto' }} onClick={e => e.stopPropagation()}>
         <button onClick={onClose} style={{ position:'absolute', top:16, right:16, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center' }}>
           <FiX style={{ width:16, height:16 }}/>
         </button>
@@ -420,10 +464,10 @@ function MobileDetailModal({ service, onClose }) {
         </div>
         <div style={{ height:'1px', background:`${service.color}22`, marginBottom:20 }}/>
 
-        {/* IT Products mobile: offerings grid + brand slider */}
+        {/* IT Products mobile: offerings grid + real brand logo slider */}
         {service.hasBrands && service.offerings ? (
           <>
-            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>Product Offerings</p>
+            <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Product Offerings</p>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'9px 10px', marginBottom:20 }}>
               {service.offerings.map((item, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
@@ -433,7 +477,7 @@ function MobileDetailModal({ service, onClose }) {
               ))}
             </div>
             <div style={{ height:'1px', background:`${service.color}18`, marginBottom:14 }}/>
-            <p style={{ color:'#0f172a', fontWeight:700, fontSize:13, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.06em' }}>Brands</p>
+            <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Brands We Carry</p>
             <BrandSlider color={service.color}/>
             <div style={{ marginTop:20, display:'flex', gap:12 }}>
               <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
