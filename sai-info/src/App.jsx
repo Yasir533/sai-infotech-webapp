@@ -9,6 +9,7 @@ import {
 import Loader from './components/Loader'
 import VideoBackground from './components/VideoBackground'
 import Navbar from './components/Navbar'
+import BrandTicker from './components/BrandTicker'
 import Hero from './components/Hero'
 import About from './components/About'
 import Clients from './components/Clients'
@@ -30,6 +31,7 @@ function HomePage() {
       <VideoBackground />
 
       <Navbar />
+      <BrandTicker />
 
       <main>
         <Hero />
@@ -67,7 +69,6 @@ function App() {
 
     document.documentElement.classList.remove('dark')
     document.documentElement.style.colorScheme = 'light'
-    // Force light mode meta — prevents OS dark mode from affecting the app
     const meta = document.querySelector('meta[name="color-scheme"]')
     if (meta) { meta.content = 'light' }
     else { const m = document.createElement('meta'); m.name = 'color-scheme'; m.content = 'light'; document.head.appendChild(m) }
