@@ -50,7 +50,7 @@ const CSS = `
   50%      { box-shadow: 0 0 80px 22px rgba(96,165,250,0.38), 0 0 0 3px rgba(96,165,250,0.50); }
 }
 @keyframes detailFadeIn {
-  from { opacity: 0; transform: scale(0.93) translateY(6px); }
+  from { opacity: 0; transform: scale(0.95) translateY(12px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes brandSlide {
@@ -82,22 +82,23 @@ const CSS = `
 .brand-logo-item {
   flex-shrink: 0;
   margin: 0 10px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #f8fafc;
-  border: 1px solid rgba(37,99,235,0.10);
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: 1px solid rgba(37,99,235,0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: box-shadow 0.18s;
 }
 .brand-logo-item:hover {
-  box-shadow: 0 2px 10px rgba(37,99,235,0.12);
+  box-shadow: 0 2px 10px rgba(37,99,235,0.14);
+  background: #fff;
 }
 .brand-logo-item img {
-  height: 32px;
+  height: 36px;
   width: auto;
-  max-width: 72px;
+  max-width: 80px;
   object-fit: contain;
   display: block;
 }
@@ -129,9 +130,7 @@ function EarthStrip({ W, H }) {
   const lonGrid = [-150,-120,-90,-60,-30,0,30,60,90,120,150]
 
   return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ display:'block', flexShrink:0 }}>
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" style={{ display:'block', flexShrink:0 }}>
       <defs>
         <linearGradient id="oceanH" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"   stopColor="#0f4c8a"/>
@@ -146,18 +145,10 @@ function EarthStrip({ W, H }) {
         </linearGradient>
       </defs>
       <rect width={W} height={H} fill="url(#oceanH)"/>
-      {latGrid.map(la => {
-        const y = ((90-la)/180)*H
-        return <line key={`la${la}`} x1={0} y1={y} x2={W} y2={y} stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
-      })}
-      {lonGrid.map(lo => {
-        const x = ((lo+180)/360)*W
-        return <line key={`lo${lo}`} x1={x} y1={0} x2={x} y2={H} stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/>
-      })}
+      {latGrid.map(la => { const y = ((90-la)/180)*H; return <line key={`la${la}`} x1={0} y1={y} x2={W} y2={y} stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/> })}
+      {lonGrid.map(lo => { const x = ((lo+180)/360)*W; return <line key={`lo${lo}`} x1={x} y1={0} x2={x} y2={H} stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"/> })}
       <line x1={0} y1={H/2} x2={W} y2={H/2} stroke="rgba(255,255,255,0.18)" strokeWidth="1"/>
-      {continents.map((pts,i) => (
-        <polygon key={i} points={poly(pts)} fill="url(#landG)" stroke="rgba(255,255,255,0.14)" strokeWidth="0.6"/>
-      ))}
+      {continents.map((pts,i) => <polygon key={i} points={poly(pts)} fill="url(#landG)" stroke="rgba(255,255,255,0.14)" strokeWidth="0.6"/>)}
       <ellipse cx={W*0.22} cy={H*0.28} rx={W*0.10} ry={H*0.025} fill="rgba(255,255,255,0.07)" transform={`rotate(-8,${W*0.22},${H*0.28})`}/>
       <ellipse cx={W*0.60} cy={H*0.38} rx={W*0.12} ry={H*0.022} fill="rgba(255,255,255,0.06)" transform={`rotate(5,${W*0.60},${H*0.38})`}/>
     </svg>
@@ -178,21 +169,200 @@ function RotatingEarth({ size }) {
   )
 }
 
-// ─── Brand logo slider component ─────────────────────────────────────────────
+// ─── Brand logo slider ────────────────────────────────────────────────────────
 function BrandSlider({ color }) {
-  // Duplicate for seamless loop
   const logos = [...BRAND_LOGOS, ...BRAND_LOGOS]
   return (
-    <div style={{ overflow: 'hidden', width: '100%', position: 'relative', borderRadius: 8 }}>
-      {/* fade edges */}
-      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:32, background:'linear-gradient(to right, rgba(255,255,255,1), transparent)', zIndex:2, pointerEvents:'none' }}/>
-      <div style={{ position:'absolute', right:0, top:0, bottom:0, width:32, background:'linear-gradient(to left, rgba(255,255,255,1), transparent)', zIndex:2, pointerEvents:'none' }}/>
+    <div style={{ overflow:'hidden', width:'100%', position:'relative', borderRadius:10 }}>
+      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:36, background:'linear-gradient(to right, #fff, transparent)', zIndex:2, pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', right:0, top:0, bottom:0, width:36, background:'linear-gradient(to left, #fff, transparent)', zIndex:2, pointerEvents:'none' }}/>
       <div className="brand-track">
         {logos.map((brand, i) => (
           <div key={i} className="brand-logo-item">
-            <img src={brand.src} alt={brand.name} title={brand.name} />
+            <img src={brand.src} alt={brand.name} title={brand.name}/>
           </div>
         ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Desktop Full Modal (renders outside scaled container — no clipping) ──────
+function DesktopModal({ service, onClose }) {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99998,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        background: 'rgba(15,23,42,0.45)',
+        backdropFilter: 'blur(6px)',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: 680,
+          background: '#ffffff',
+          borderRadius: 24,
+          padding: '36px 40px 32px 40px',
+          boxShadow: `0 30px 80px ${service.color}28, 0 8px 24px rgba(0,0,0,0.12)`,
+          position: 'relative',
+          animation: 'detailFadeIn 0.22s cubic-bezier(0.16,1,0.3,1) forwards',
+          boxSizing: 'border-box',
+          maxHeight: '85vh',
+          overflowY: 'auto',
+          border: `1.5px solid ${service.color}22`,
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Close */}
+        <button
+          onClick={onClose}
+          style={{ position:'absolute', top:18, right:18, background:'rgba(15,23,42,0.06)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', outline:'none', fontSize:16 }}
+          onMouseEnter={e => e.currentTarget.style.background='rgba(15,23,42,0.12)'}
+          onMouseLeave={e => e.currentTarget.style.background='rgba(15,23,42,0.06)'}
+        >
+          <FiX style={{ width:16, height:16 }}/>
+        </button>
+
+        {/* Header */}
+        <div style={{ display:'flex', alignItems:'center', gap:18, marginBottom:20 }}>
+          <div style={{ background:service.iconBg, borderRadius:16, width:60, height:60, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 6px 18px ${service.color}40` }}>
+            <service.icon style={{ color:'#fff', width:28, height:28 }}/>
+          </div>
+          <div>
+            <h2 style={{ color:'#0f172a', fontWeight:800, fontSize:24, margin:0, lineHeight:1.2 }}>{service.title}</h2>
+            <p style={{ color:service.color, fontSize:15, fontWeight:600, margin:'4px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
+          </div>
+        </div>
+
+        <div style={{ height:1, background:`${service.color}20`, marginBottom:22 }}/>
+
+        {/* IT Products layout */}
+        {service.hasBrands && service.offerings ? (
+          <>
+            <p style={{ color:'#64748b', fontWeight:700, fontSize:11, margin:'0 0 14px 0', textTransform:'uppercase', letterSpacing:'0.09em' }}>
+              Product Offerings
+            </p>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'11px 20px', marginBottom:24 }}>
+              {service.offerings.map((item, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+                  <FiCheckCircle style={{ color:'#22c55e', width:16, height:16, flexShrink:0, marginTop:2 }}/>
+                  <span style={{ color:'#334155', fontSize:14.5, lineHeight:1.45, fontWeight:500 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ height:1, background:`${service.color}15`, marginBottom:20 }}/>
+
+            <p style={{ color:'#64748b', fontWeight:700, fontSize:11, margin:'0 0 14px 0', textTransform:'uppercase', letterSpacing:'0.09em' }}>
+              Brands We Carry
+            </p>
+            <BrandSlider color={service.color}/>
+
+            <div style={{ marginTop:28, display:'flex', gap:14 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
+                <FiPhone style={{ width:16, height:16 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:service.color, textDecoration:'none', background:`${service.color}10`, border:`1.5px solid ${service.color}30` }}>
+                <FiMail style={{ width:16, height:16 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        ) : (
+          <>
+            <ul style={{ listStyle:'none', padding:0, margin:'0 0 28px 0', display:'flex', flexDirection:'column', gap:13 }}>
+              {service.details.map((item, i) => (
+                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
+                  <div style={{ width:9, height:9, borderRadius:'50%', background:service.color, marginTop:7, flexShrink:0 }}/>
+                  <span style={{ color:'#334155', fontSize:15.5, lineHeight:1.5, fontWeight:500 }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div style={{ display:'flex', gap:14 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
+                <FiPhone style={{ width:16, height:16 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:service.color, textDecoration:'none', background:`${service.color}10`, border:`1.5px solid ${service.color}30` }}>
+                <FiMail style={{ width:16, height:16 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Mobile Detail Modal ──────────────────────────────────────────────────────
+function MobileDetailModal({ service, onClose }) {
+  const Icon = service.icon
+  return (
+    <div style={{ position:'fixed', inset:0, zIndex:99999, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', background:'rgba(15,23,42,0.6)', backdropFilter:'blur(8px)' }} onClick={onClose}>
+      <div style={{ width:'100%', maxWidth:'460px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box', maxHeight:'85vh', overflowY:'auto' }} onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} style={{ position:'absolute', top:16, right:16, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <FiX style={{ width:16, height:16 }}/>
+        </button>
+        <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:20 }}>
+          <div style={{ background:service.iconBg, borderRadius:'14px', width:52, height:52, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 14px ${service.color}44` }}>
+            <Icon style={{ color:'#fff', width:24, height:24 }}/>
+          </div>
+          <div>
+            <h3 style={{ color:'#0f172a', fontWeight:800, fontSize:'20px', margin:0, lineHeight:1.2 }}>{service.title}</h3>
+            <p style={{ color:service.color, fontWeight:600, fontSize:'14px', margin:'4px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
+          </div>
+        </div>
+        <div style={{ height:'1px', background:`${service.color}22`, marginBottom:20 }}/>
+
+        {service.hasBrands && service.offerings ? (
+          <>
+            <p style={{ color:'#64748b', fontWeight:700, fontSize:11, margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Product Offerings</p>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'9px 10px', marginBottom:20 }}>
+              {service.offerings.map((item, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+                  <FiCheckCircle style={{ color:'#22c55e', width:14, height:14, flexShrink:0, marginTop:2 }}/>
+                  <span style={{ color:'#334155', fontSize:13, lineHeight:1.4, fontWeight:500 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ height:'1px', background:`${service.color}18`, marginBottom:14 }}/>
+            <p style={{ color:'#64748b', fontWeight:700, fontSize:11, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Brands We Carry</p>
+            <BrandSlider color={service.color}/>
+            <div style={{ marginTop:20, display:'flex', gap:12 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+                <FiPhone style={{ width:15, height:15 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
+                <FiMail style={{ width:15, height:15 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        ) : (
+          <>
+            <ul style={{ listStyle:'none', padding:0, margin:'0 0 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
+              {service.details.map((item, i) => (
+                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:7, flexShrink:0 }}/>
+                  <span style={{ color:'#334155', fontSize:'15px', lineHeight:1.5, fontWeight:500 }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div style={{ display:'flex', gap:12 }}>
+              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+                <FiPhone style={{ width:15, height:15 }}/> Call Now
+              </a>
+              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
+                <FiMail style={{ width:15, height:15 }}/> Get Quote
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
@@ -306,213 +476,6 @@ const RINGS = [
   { rx:212, ry:212, tilt:  0, dash:'5 5', op:0.20, sw:1.2 },
 ]
 
-// ─── Desktop Detail Panel ─────────────────────────────────────────────────────
-function DetailPanel({ service, onClose }) {
-  const isTop    = service.position === 'top'
-  const isBottom = service.position === 'bottom'
-  const isLeft   = service.position === 'left'
-  const isRight  = service.position === 'right'
-
-  // Wider panel for IT Products (has brand logos), standard for others
-  const PANEL_CONTENT_W = service.hasBrands ? 500 : 440
-  const GAP = 40
-
-  const containerStyle = {
-    position: 'absolute',
-    zIndex: 50,
-    animation: 'detailFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-    pointerEvents: 'auto',
-    ...(isTop    && { top:'100%', left:'50%', transform:'translateX(-50%)', paddingTop:GAP, width:PANEL_CONTENT_W, transformOrigin:'top center' }),
-    ...(isBottom && { bottom:'100%', left:'50%', transform:'translateX(-50%)', paddingBottom:GAP, width:PANEL_CONTENT_W, transformOrigin:'bottom center' }),
-    ...(isLeft   && { left:'100%', top:'50%', transform:'translateY(-50%)', paddingLeft:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'left center' }),
-    ...(isRight  && { right:'100%', top:'50%', transform:'translateY(-50%)', paddingRight:GAP, width:PANEL_CONTENT_W+GAP, display:'flex', flexDirection:'row', alignItems:'center', transformOrigin:'right center' }),
-  }
-
-  const Connector = () => {
-    if (isTop) return (
-      <div style={{ height:GAP, display:'flex', alignItems:'center', justifyContent:'center', position:'absolute', top:0, left:0, right:0, pointerEvents:'none' }}>
-        <svg width="20" height={GAP}>
-          <line x1="10" y1="0" x2="10" y2={GAP} stroke={service.color} strokeWidth="2" strokeDasharray="3 3"/>
-          <circle cx="10" cy="4" r="4" fill={service.color} style={{ filter:`drop-shadow(0 0 4px ${service.color}88)` }}/>
-          <path d="M 5,32 L 10,38 L 15,32" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
-    )
-    if (isBottom) return (
-      <div style={{ height:GAP, display:'flex', alignItems:'center', justifyContent:'center', position:'absolute', bottom:0, left:0, right:0, pointerEvents:'none' }}>
-        <svg width="20" height={GAP}>
-          <line x1="10" y1="0" x2="10" y2={GAP} stroke={service.color} strokeWidth="2" strokeDasharray="3 3"/>
-          <circle cx="10" cy={GAP-4} r="4" fill={service.color} style={{ filter:`drop-shadow(0 0 4px ${service.color}88)` }}/>
-          <path d="M 5,8 L 10,2 L 15,8" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
-    )
-    if (isLeft) return (
-      <div style={{ width:GAP, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, pointerEvents:'none' }}>
-        <svg width={GAP} height="20">
-          <line x1="0" y1="10" x2={GAP} y2="10" stroke={service.color} strokeWidth="2" strokeDasharray="3 3"/>
-          <circle cx="4" cy="10" r="4" fill={service.color} style={{ filter:`drop-shadow(0 0 4px ${service.color}88)` }}/>
-          <path d="M 32,5 L 38,10 L 32,15" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
-    )
-    if (isRight) return (
-      <div style={{ width:GAP, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, pointerEvents:'none' }}>
-        <svg width={GAP} height="20">
-          <line x1="0" y1="10" x2={GAP} y2="10" stroke={service.color} strokeWidth="2" strokeDasharray="3 3"/>
-          <circle cx={GAP-4} cy="10" r="4" fill={service.color} style={{ filter:`drop-shadow(0 0 4px ${service.color}88)` }}/>
-          <path d="M 8,5 L 2,10 L 8,15" fill="none" stroke={service.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </div>
-    )
-    return null
-  }
-
-  const cardContent = (
-    <div style={{
-      background: 'rgba(255,255,255,0.98)',
-      border: `1.5px solid ${service.color}33`,
-      borderRadius: 20,
-      padding: '26px 28px',
-      boxShadow: `0 15px 45px ${service.color}24, 0 3px 14px rgba(0,0,0,0.06)`,
-      position: 'relative',
-      width: PANEL_CONTENT_W,
-      boxSizing: 'border-box',
-    }}>
-      {/* Close button */}
-      <button onClick={onClose}
-        style={{ position:'absolute', top:14, right:14, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:28, height:28, display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', outline:'none' }}
-        onMouseEnter={e => e.currentTarget.style.background='rgba(15,23,42,0.1)'}
-        onMouseLeave={e => e.currentTarget.style.background='rgba(15,23,42,0.05)'}>
-        <FiX style={{ width:14, height:14 }}/>
-      </button>
-
-      {/* Header */}
-      <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:16 }}>
-        <div style={{ background:service.iconBg, borderRadius:12, width:48, height:48, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 12px ${service.color}35` }}>
-          <service.icon style={{ color:'#fff', width:22, height:22 }}/>
-        </div>
-        <div>
-          <p style={{ color:'#0f172a', fontWeight:800, fontSize:18, margin:0, lineHeight:1.2 }}>{service.title}</p>
-          <p style={{ color:service.color, fontSize:13.5, fontWeight:600, margin:'3px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
-        </div>
-      </div>
-
-      <div style={{ height:1, background:`${service.color}22`, marginBottom:16 }}/>
-
-      {/* IT Products: offerings grid + real brand logo slider */}
-      {service.hasBrands && service.offerings ? (
-        <>
-          <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>
-            Product Offerings
-          </p>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px 14px', marginBottom:18 }}>
-            {service.offerings.map((item, i) => (
-              <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
-                <FiCheckCircle style={{ color:'#22c55e', width:14, height:14, flexShrink:0, marginTop:2 }}/>
-                <span style={{ color:'#334155', fontSize:13, lineHeight:1.4, fontWeight:500 }}>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ height:1, background:`${service.color}18`, marginBottom:14 }}/>
-
-          <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>
-            Brands We Carry
-          </p>
-          <BrandSlider color={service.color}/>
-        </>
-      ) : (
-        <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10 }}>
-          {service.details.map((item, i) => (
-            <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:11 }}>
-              <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:6, flexShrink:0 }}/>
-              <span style={{ color:'#334155', fontSize:14.5, lineHeight:1.4, fontWeight:500 }}>{item}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-
-  return (
-    <div style={containerStyle} onClick={e => e.stopPropagation()}>
-      {(isTop || isBottom) && (<>{isBottom && <Connector/>}{cardContent}{isTop && <Connector/>}</>)}
-      {isLeft  && (<><Connector/>{cardContent}</>)}
-      {isRight && (<>{cardContent}<Connector/></>)}
-    </div>
-  )
-}
-
-// ─── Mobile Detail Modal ──────────────────────────────────────────────────────
-function MobileDetailModal({ service, onClose }) {
-  const Icon = service.icon
-  return (
-    <div style={{ position:'fixed', inset:0, zIndex:99999, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', background:'rgba(15,23,42,0.6)', backdropFilter:'blur(8px)' }} onClick={onClose}>
-      <div style={{ width:'100%', maxWidth:'460px', background:'#ffffff', borderRadius:'24px', padding:'28px 24px 24px 24px', boxShadow:'0 25px 50px -12px rgba(0,0,0,0.35)', position:'relative', animation:'detailFadeIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards', boxSizing:'border-box', maxHeight:'85vh', overflowY:'auto' }} onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} style={{ position:'absolute', top:16, right:16, background:'rgba(15,23,42,0.05)', border:'none', borderRadius:'50%', cursor:'pointer', color:'#64748b', width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center' }}>
-          <FiX style={{ width:16, height:16 }}/>
-        </button>
-        <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:20 }}>
-          <div style={{ background:service.iconBg, borderRadius:'14px', width:52, height:52, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:`0 4px 14px ${service.color}44` }}>
-            <Icon style={{ color:'#fff', width:24, height:24 }}/>
-          </div>
-          <div>
-            <h3 style={{ color:'#0f172a', fontWeight:800, fontSize:'20px', margin:0, lineHeight:1.2 }}>{service.title}</h3>
-            <p style={{ color:service.color, fontWeight:600, fontSize:'14px', margin:'4px 0 0 0', lineHeight:1.2 }}>{service.subtitle}</p>
-          </div>
-        </div>
-        <div style={{ height:'1px', background:`${service.color}22`, marginBottom:20 }}/>
-
-        {/* IT Products mobile: offerings grid + real brand logo slider */}
-        {service.hasBrands && service.offerings ? (
-          <>
-            <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 12px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Product Offerings</p>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'9px 10px', marginBottom:20 }}>
-              {service.offerings.map((item, i) => (
-                <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
-                  <FiCheckCircle style={{ color:'#22c55e', width:14, height:14, flexShrink:0, marginTop:2 }}/>
-                  <span style={{ color:'#334155', fontSize:13, lineHeight:1.4, fontWeight:500 }}>{item}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ height:'1px', background:`${service.color}18`, marginBottom:14 }}/>
-            <p style={{ color:'#0f172a', fontWeight:700, fontSize:12, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Brands We Carry</p>
-            <BrandSlider color={service.color}/>
-            <div style={{ marginTop:20, display:'flex', gap:12 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
-                <FiPhone style={{ width:15, height:15 }}/> Call Now
-              </a>
-              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
-                <FiMail style={{ width:15, height:15 }}/> Get Quote
-              </a>
-            </div>
-          </>
-        ) : (
-          <>
-            <ul style={{ listStyle:'none', padding:0, margin:'0 0 24px 0', display:'flex', flexDirection:'column', gap:12 }}>
-              {service.details.map((item, i) => (
-                <li key={i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                  <div style={{ width:8, height:8, borderRadius:'50%', background:service.color, marginTop:7, flexShrink:0 }}/>
-                  <span style={{ color:'#334155', fontSize:'15px', lineHeight:1.5, fontWeight:500 }}>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <div style={{ display:'flex', gap:12 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
-                <FiPhone style={{ width:15, height:15 }}/> Call Now
-              </a>
-              <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
-                <FiMail style={{ width:15, height:15 }}/> Get Quote
-              </a>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
-
 // ─── Main Export ──────────────────────────────────────────────────────────────
 export default function OrbitalServices() {
   const [activeId, setActiveId]     = useState(null)
@@ -557,13 +520,18 @@ export default function OrbitalServices() {
   const scale   = Math.min(containerW, DESIGN_W) / DESIGN_W
   const scaledH = DESIGN_H * scale
 
+  const cardTitlePx = 17
+  const cardSubPx   = 13
+  const badgeLabelPx = 16
+  const badgeSubPx   = 13
   const globeOurPx      = 44
   const globeServicesPx = 50
   const globeSubPx      = 18
-  const cardTitlePx     = 17
-  const cardSubPx       = 13
-  const badgeLabelPx    = 16
-  const badgeSubPx      = 13
+
+  const handleClose = () => {
+    setActiveId(null)
+    setHoveredId(null)
+  }
 
   return (
     <div ref={outerRef} style={{ width:'100%', overflow:'visible', padding:'16px 0', height: scaledH + 32, position:'relative' }}>
@@ -627,7 +595,7 @@ export default function OrbitalServices() {
           </div>
         </div>
 
-        {/* Service Cards */}
+        {/* Service Cards — click triggers full modal, no inline panel */}
         {SERVICES.map(s => {
           const pos      = CARD_POS[s.position]
           const Icon     = s.icon
@@ -637,7 +605,7 @@ export default function OrbitalServices() {
             <div
               key={s.id}
               className="orbital-card"
-              style={{ position:'absolute', zIndex:isActive ? 35 : 20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
+              style={{ position:'absolute', zIndex:20, cursor:'pointer', left:pos.x, top:pos.y, transform:'translate(-50%,-50%)', width:CW }}
               onMouseEnter={() => setHoveredId(s.id)}
               onMouseLeave={() => setHoveredId(null)}
               onClick={(e) => {
@@ -666,17 +634,6 @@ export default function OrbitalServices() {
                   <p style={{ color:s.color, fontSize:cardSubPx, marginTop:3, fontWeight:600, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
                 </div>
               </div>
-
-              {isActive && !isMobile && (
-                <DetailPanel
-                  service={s}
-                  onClose={(e) => {
-                    e && e.stopPropagation()
-                    setActiveId(null)
-                    setHoveredId(null)
-                  }}
-                />
-              )}
             </div>
           )
         })}
@@ -692,15 +649,12 @@ export default function OrbitalServices() {
         ))}
       </div>
 
-      {/* Mobile detail overlay (unscaled) */}
-      {isMobile && visibleService && (
-        <MobileDetailModal
-          service={visibleService}
-          onClose={() => {
-            setActiveId(null)
-            setHoveredId(null)
-          }}
-        />
+      {/* ── Modals rendered OUTSIDE the scaled div — no clipping, correct size ── */}
+      {visibleService && isMobile && (
+        <MobileDetailModal service={visibleService} onClose={handleClose}/>
+      )}
+      {visibleService && !isMobile && (
+        <DesktopModal service={visibleService} onClose={handleClose}/>
       )}
     </div>
   )
