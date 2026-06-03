@@ -38,11 +38,12 @@ export default function BrandTicker() {
   return (
     <div
       style={{
-        marginTop: '96px',        /* push below fixed navbar (logo is h-24 = 96px) */
+        marginTop: '96px',
         width: '100%',
-        backgroundColor: 'rgba(246, 248, 251, 0.95)',
-        borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
-        padding: '12px 0',
+        backgroundColor: '#0f172a',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        padding: '16px 0',
         overflow: 'hidden',
         position: 'relative',
         zIndex: 40,
@@ -61,6 +62,14 @@ export default function BrandTicker() {
         .brand-ticker-track:hover {
           animation-play-state: paused;
         }
+        .brand-logo {
+          opacity: 0.75;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .brand-logo:hover {
+          opacity: 1;
+          transform: scale(1.1);
+        }
       `}</style>
 
       <div className="brand-ticker-track">
@@ -71,22 +80,19 @@ export default function BrandTicker() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 36px',
+              margin: '0 40px',
               flexShrink: 0,
             }}
           >
             <img
               src={brand.src}
               alt={brand.name}
+              className="brand-logo"
               style={{
-                height: '32px',
+                height: '44px',
                 width: 'auto',
                 objectFit: 'contain',
-                filter: 'brightness(0) opacity(0.55)',
-                transition: 'filter 0.3s ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.filter = 'brightness(0) opacity(1)'}
-              onMouseLeave={e => e.currentTarget.style.filter = 'brightness(0) opacity(0.55)'}
             />
           </div>
         ))}
