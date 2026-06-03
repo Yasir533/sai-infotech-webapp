@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import Loader from './components/Loader'
 import VideoBackground from './components/VideoBackground'
@@ -14,13 +9,11 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Clients from './components/Clients'
 import Ratings from './components/Ratings'
-
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FloatingButtons from './components/FloatingButtons'
 import ScrollToTop from './components/ScrollToTop'
 import AIChat from './components/AIChat'
-
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
 
@@ -45,7 +38,6 @@ function HomePage() {
         </section>
         <Contact />
       </main>
-
       <Footer />
       <FloatingButtons />
       <ScrollToTop />

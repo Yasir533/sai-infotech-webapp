@@ -38,12 +38,12 @@ export default function BrandTicker() {
   return (
     <div
       style={{
+        marginTop: '96px',
         width: '100%',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
-        padding: '18px 0',
+        padding: '16px 0',
         overflow: 'hidden',
-        marginTop: '96px',   /* exactly navbar height — no fixed, just normal flow */
       }}
     >
       <style>{`
@@ -60,13 +60,11 @@ export default function BrandTicker() {
           animation-play-state: paused;
         }
         .brand-logo {
-          opacity: 0.7;
-          filter: grayscale(20%);
-          transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+          opacity: 0.8;
+          transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .brand-logo:hover {
           opacity: 1;
-          filter: grayscale(0%);
           transform: scale(1.12);
         }
       `}</style>
@@ -79,7 +77,7 @@ export default function BrandTicker() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 44px',
+              margin: '0 40px',
               flexShrink: 0,
             }}
           >
