@@ -35,11 +35,11 @@ const mvvSections = [
     divider: 'rgba(34,211,238,0.5)',
     dotFrom: '#22d3ee',
     dotTo: '#67e8f9',
-    desc: 'To be a trusted leader in IT services, known for excellence, innovation, and integrity.',
+    desc: 'Regional dominance in technology & deliver optimum & cost effective solutions to all customers inspiring, enhancing technology adaptation.',
     points: [
-      "Be Bangalore's most trusted IT service provider",
-      'Build lasting partnerships through quality and integrity',
-      'Continuously innovate to lead in a fast-changing industry',
+      'Partner with technology leaders in the industry, to engage & deliver optimised solutions to customers',
+      'Innovate, Integrate, & provide impact technology solutions to customers irrespective of any industry or sector',
+      'Regional dominance in technology & deliver optimum & cost effective solutions to all customers inspiring, enhancing technology adaptation',
     ],
   },
   {
