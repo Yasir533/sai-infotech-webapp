@@ -24,12 +24,12 @@ const serviceLinks = [
 
 const helpLinks = [,
   { label: 'Contact Us', href: '/#contact' },
-  { label: 'Privacy Policy', to: '/privacy-policy' },
-  { label: 'Return Policy', to: '/return-policy' },
-  { label: 'Shipping Policy', to: '/shipping-policy' },
-  { label: 'Refund Policy', to: '/refund-policy' },
-  { label: 'Warranty Policy', to: '/warranty-policy' },
-  { label: 'Terms And Conditions', to: '/terms-and-conditions' },
+  { label: 'Privacy Policy', to: '/Privacypolicy' },
+  { label: 'Return Policy', to: '/Returnpolicy' },
+  { label: 'Shipping Policy', to: '/Shippingpolicy' },
+  { label: 'Refund Policy', to: '/Refundpolicy' },
+  { label: 'Warranty Policy', to: '/Warrantypolicy' },
+  { label: 'Terms And Conditions', to: '/TermsAndconditions' },
 ]
 
 const linkStyle = { color: '#334155', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }
