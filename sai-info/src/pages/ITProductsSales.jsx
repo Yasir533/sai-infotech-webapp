@@ -5,9 +5,9 @@ import { FiArrowRight, FiMenu, FiX, FiChevronRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import VideoBackground from '../components/VideoBackground'
 import Navbar from '../components/Navbar'
+import BrandTicker from '../components/BrandTicker'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
-import BrandTicker from '../components/BrandTicker'
 
 const categories = [
   {
@@ -90,10 +90,15 @@ export default function ITProductsSales() {
       <VideoBackground />
       <Navbar />
 
+      {/* Brand Ticker — just below navbar */}
+      <div className="relative z-10 pt-24 sm:pt-28 lg:pt-32">
+        <BrandTicker />
+      </div>
+
       {/* Main content */}
-      <main className="flex-1 relative z-10 pt-24 pb-12 sm:pt-28 lg:pt-32">
+      <main className="flex-1 relative z-10 pt-6 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Breadcrumb */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2 text-sm text-slate-600 mb-8">
@@ -114,11 +119,11 @@ export default function ITProductsSales() {
 
           {/* Two-column layout */}
           <div className="grid lg:grid-cols-4 gap-8">
-            
+
             {/* Left Sidebar */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-1">
-              
+
               {/* Mobile toggle button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -201,7 +206,7 @@ export default function ITProductsSales() {
             {/* Right Content Area */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-lg border border-slate-200">
-              
+
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCategory}
@@ -209,7 +214,7 @@ export default function ITProductsSales() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}>
-                  
+
                   {/* Category Title */}
                   <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">
                     {currentCategory?.label}
@@ -240,14 +245,6 @@ export default function ITProductsSales() {
                         </motion.div>
                       ))}
                     </div>
-                  </div>
-
-                  {/* Brands Slider */}
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                      <span className="text-red-600">▸</span> Brands
-                    </h3>
-                    <BrandTicker />
                   </div>
 
                   {/* CTA */}
