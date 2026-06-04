@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight, FiMenu, FiX, FiChevronRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
-import VideoBackground from '../components/VideoBackground'
-import Navbar from '../components/Navbar'
 import BrandTicker from '../components/BrandTicker'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
@@ -61,11 +59,9 @@ export default function ITProductsSales() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
-      <VideoBackground />
-      <Navbar />
 
-      {/* Brand Ticker — just below navbar */}
-      <div className="relative z-10 pt-24 sm:pt-28 lg:pt-32">
+      {/* Brand Ticker at very top — no navbar */}
+      <div className="relative z-10 pt-4">
         <BrandTicker />
       </div>
 
