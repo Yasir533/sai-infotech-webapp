@@ -83,14 +83,14 @@ export default function ITProductsSales() {
             <span className="text-slate-900 font-semibold">IT Products & Sales</span>
           </motion.div>
 
-          {/* Header banner — image as CSS background so it always loads */}
+          {/* Header banner */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-12 rounded-2xl overflow-hidden relative"
             style={{ minHeight: '220px' }}
           >
-            {/* Background image via inline style — most reliable method */}
+            {/* Background image */}
             <div
               className="absolute inset-0"
               style={{
@@ -99,15 +99,29 @@ export default function ITProductsSales() {
                 backgroundPosition: 'center',
               }}
             />
-            {/* Dark overlay only on left side for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/30" />
+            {/* Strong uniform dark overlay so ALL text is visible */}
+            <div className="absolute inset-0" style={{ background: 'rgba(10,20,40,0.78)' }} />
 
-            {/* Text content */}
-            <div className="relative z-10 p-8 lg:p-12 max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl font-black text-white mb-3 drop-shadow-lg">
-                IT Products <span className="text-cyan-400">&amp; Sales</span>
+            {/* Text content — centered so it's never hidden behind image */}
+            <div className="relative z-10 p-8 lg:p-12 flex flex-col items-center justify-center text-center" style={{ minHeight: '220px' }}>
+              <h1
+                className="font-black mb-3"
+                style={{
+                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                  color: '#ffffff',
+                  textShadow: '0 2px 16px rgba(0,0,0,0.8)',
+                }}
+              >
+                IT Products <span style={{ color: '#22d3ee' }}>&amp; Sales</span>
               </h1>
-              <p className="text-lg text-slate-200 drop-shadow">
+              <p
+                className="max-w-2xl"
+                style={{
+                  color: '#e2e8f0',
+                  fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
+                  textShadow: '0 1px 8px rgba(0,0,0,0.7)',
+                }}
+              >
                 Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
               </p>
             </div>
