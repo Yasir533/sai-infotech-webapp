@@ -22,7 +22,7 @@ import ShippingPolicy from './components/Shippingpolicy'
 import RefundPolicy from './components/Refundpolicy'
 import WarrantyPolicy from './components/Warrantypolicy'
 import TermsAndConditions from './components/Termsandconditions'
-import EWasteManagement from './pages/EWasteManagement'
+import EWasteManagement from './components/EWasteManagement'
 
 function HomePage() {
   const location = useLocation()
