@@ -7,7 +7,7 @@ import ReturnPolicy from './components/ReturnPolicy'
 import ShippingPolicy from './components/ShippingPolicy'
 import RefundPolicy from './components/RefundPolicy'
 import WarrantyPolicy from './components/WarrantyPolicy'
-import TermsAndConditions from './components/TermsAndConditions'
+import TermsAndConditions from './components/TermsAndconditions'
 
 const quickLinks = [
   { label: 'Home', href: '#home' },
