@@ -107,7 +107,7 @@ export default function EWasteManagement() {
 
       {/* HERO BANNER */}
       <div style={{ backgroundImage: `url(${ewasteCycle})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '64px 24px 80px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(10,30,20,0.82)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,15,10,0.92)' }} />
       {/* Animated circles background */}
         {[...Array(5)].map((_, i) => (
           <motion.div key={i}
