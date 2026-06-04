@@ -1,5 +1,5 @@
 import React from 'react'
-import PolicyPage from './PolicyPage'
+import PolicyPage from '../components/PolicyPage'
 
 const Section = ({ title, children }) => (
   <div style={{ marginBottom: '32px' }}>

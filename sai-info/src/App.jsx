@@ -22,7 +22,7 @@ import ShippingPolicy from './components/Shippingpolicy'
 import RefundPolicy from './components/Refundpolicy'
 import WarrantyPolicy from './components/Warrantypolicy'
 import TermsAndConditions from './components/Termsandconditions'
-import EWasteManagement from './components/EWasteManagement'
+import EWasteManagement from './pages/EWasteManagement'
 
 function HomePage() {
   const location = useLocation()
@@ -97,7 +97,7 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin-reset" element={<AdminReset />} />
         <Route path="/services/it-products-sales" element={<ITProductsSales />} />
-        <Route path="/e-waste-management" element={<EWasteManagement />} />
+        <Route path="/services/e-waste-management" element={<EWasteManagement />} />
       </Routes>
     </BrowserRouter>
   )
