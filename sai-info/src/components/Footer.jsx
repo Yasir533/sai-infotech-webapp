@@ -60,6 +60,7 @@ export default function Footer() {
                 <img src={logoImg} alt="SAI INFOTECH" style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
               </a>
             </div>
+
             {/* Quick Links + Services side by side */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
               <div>
@@ -89,8 +90,9 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
+
             {/* Help full width */}
-            <div>
+            <div style={{ marginBottom: '32px' }}>
               <h4 style={headingStyle}>Help</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {helpLinks.map((link, i) => (
@@ -129,15 +131,18 @@ export default function Footer() {
               </a>
             </div>
           </div>
+
         ) : (
           /* ── DESKTOP layout ── */
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '56px' }}>
+
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
               <a href="#home">
                 <img src={logoImg} alt="SAI INFOTECH" style={{ height: '180px', width: 'auto', objectFit: 'contain', maxWidth: '260px', filter: 'drop-shadow(0 8px 20px rgba(15,23,42,0.10))' }} />
               </a>
             </div>
+
             {/* Quick Links */}
             <div>
               <h4 style={headingStyle}>Quick Links</h4>
@@ -152,6 +157,7 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
+
             {/* Services */}
             <div>
               <h4 style={headingStyle}>Services</h4>
@@ -166,6 +172,7 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
+
             {/* Help */}
             <div>
               <h4 style={headingStyle}>Help</h4>
@@ -207,6 +214,7 @@ export default function Footer() {
                 <FiMapPin size={13}/> Get Directions ↗
               </a>
             </div>
+
           </div>
         )}
 
