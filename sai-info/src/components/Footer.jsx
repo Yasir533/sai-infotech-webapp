@@ -24,7 +24,7 @@ const serviceLinks = [
 
 const helpLinks = [
   { label: 'Help', to: '/help' },
-  { label: 'Contact Us', to: '/contact-us' },
+  { label: 'Contact Us', href: '/#contact' },
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Return Policy', to: '/return-policy' },
   { label: 'Shipping Policy', to: '/shipping-policy' },
@@ -95,10 +95,10 @@ export default function Footer() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {helpLinks.map((link, i) => (
                   <li key={i}>
-                    <Link to={link.to} style={{ ...linkStyle, fontSize: '13px' }}>
-                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                      {link.label}
-                    </Link>
+                    {link.href
+                      ? <a href={link.href} style={{ ...linkStyle, fontSize: '13px' }}><span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</a>
+                      : <Link to={link.to} style={{ ...linkStyle, fontSize: '13px' }}><span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</Link>
+                    }
                   </li>
                 ))}
               </ul>
@@ -172,10 +172,10 @@ export default function Footer() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {helpLinks.map((link, i) => (
                   <li key={i}>
-                    <Link to={link.to} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                      {link.label}
-                    </Link>
+                    {link.href
+                      ? <a href={link.href} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</a>
+                      : <Link to={link.to} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</Link>
+                    }
                   </li>
                 ))}
               </ul>
