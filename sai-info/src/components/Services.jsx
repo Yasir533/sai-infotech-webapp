@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FiCpu, FiHardDrive, FiWifi, FiShield,
@@ -12,7 +13,7 @@ const services = [
   { icon: FiHardDrive, label: 'Data Recovery',           shortDesc: 'HDD/SSD recovery & backup solutions',          iconBg: '#3b82f6', glowColor: '#3b82f6', details: { tagline: 'Recover what matters most — fast & secure', description: 'We recover data from failed, formatted, or corrupted drives using professional-grade tools.', features: ['HDD platter & head recovery','SSD & NVMe NAND flash recovery','RAID 0/1/5/6 array reconstruction','Formatted/corrupted partition recovery','Cloud backup & disaster-recovery planning','Secure data destruction (DoD-standard wipe)'], turnaround: '24–48 hours', warranty: '100% data integrity guarantee' } },
   { icon: FiWifi,      label: 'Network Setup',           shortDesc: 'LAN/WAN, WiFi & enterprise connectivity',      iconBg: '#8b5cf6', glowColor: '#8b5cf6', details: { tagline: 'Enterprise-grade networking for every scale', description: 'From small-office WiFi to multi-site WAN infrastructure, we design, install, and manage networks that are fast, secure, and future-proof.', features: ['Structured cabling (CAT6/CAT6A)','Managed switches, routers & firewalls','Enterprise WiFi (Cisco, Ubiquiti, Ruckus)','SD-WAN & VPN setup','Network monitoring & 24/7 NOC support','ISP coordination & bandwidth management'], turnaround: '1–3 days installation', warranty: '1 year support' } },
   { icon: FiShield,    label: 'Security & Access',       shortDesc: 'CCTV surveillance & access control systems',   iconBg: '#22c55e', glowColor: '#22c55e', details: { tagline: 'Smart surveillance & access for total peace of mind', description: 'We supply, install, and maintain IP camera systems and biometric access solutions.', features: ['2MP–8MP IP & analog CCTV cameras','NVR/DVR setup with remote viewing','Biometric attendance & door-access systems','Video analytics & motion alerts','Integration with HR & ERP platforms','Preventive AMC for all security hardware'], turnaround: '1–2 days installation', warranty: '1 year hardware warranty' } },
-  { icon: FiMonitor,   label: 'IT Solution',             shortDesc: 'IT sales, rentals & display infrastructure',   iconBg: '#f97316', glowColor: '#f97316', details: { tagline: 'Buy, rent, or lease — flexible IT for every budget', description: 'We offer short-term and long-term rentals on laptops, desktops, servers, projectors, and LED walls.', features: ['Laptop & desktop rental (daily/monthly/yearly)','Projector & LED display rental','Bulk procurement with OEM warranty','On-site setup & asset tracking','End-of-life buyback & disposal','Flexible upgrade cycles'], turnaround: 'Same-day delivery (Bengaluru)', warranty: 'Full replacement guarantee' } },
+  { icon: FiMonitor,   label: 'IT Products (Sales)',  shortDesc: 'IT sales, rentals & display infrastructure',   iconBg: '#f97316', glowColor: '#f97316', details: { tagline: 'Buy, rent, or lease — flexible IT for every budget', description: 'We offer short-term and long-term rentals on laptops, desktops, servers, projectors, and LED walls.', features: ['Laptop & desktop rental (daily/monthly/yearly)','Projector & LED display rental','Bulk procurement with OEM warranty','On-site setup & asset tracking','End-of-life buyback & disposal','Flexible upgrade cycles'], turnaround: 'Same-day delivery (Bengaluru)', warranty: 'Full replacement guarantee' }, isProductPage: true },
   { icon: FiCloud,     label: 'Cloud Products',          shortDesc: 'Cloud setup, migration & management',          iconBg: '#0ea5e9', glowColor: '#0ea5e9', details: { tagline: 'Accelerate your business with managed cloud', description: 'We help businesses migrate to and optimise AWS, Azure, and Google Cloud.', features: ['AWS, Azure & GCP migration','Microsoft 365 & Google Workspace setup','Cloud cost optimisation & FinOps','Backup-as-a-Service & DR planning','Identity management (Azure AD, SSO)','Managed cloud security & compliance'], turnaround: '1–4 weeks migration', warranty: 'Ongoing managed support' } },
   { icon: FiTool,      label: 'Annual Maintenance',      shortDesc: 'Comprehensive AMC & preventive support',       iconBg: '#ef4444', glowColor: '#ef4444', details: { tagline: 'Zero-downtime IT with proactive AMC plans', description: 'Our Annual Maintenance Contracts keep your entire IT estate running at peak performance.', features: ['Quarterly preventive maintenance visits','4-hour on-site response SLA','Patch management & OS updates','Antivirus & endpoint security monitoring','Hardware replacement pool','Monthly health reports & recommendations'], turnaround: '4-hour SLA response', warranty: 'Guaranteed uptime SLA' } },
   { icon: FiServer,    label: 'Server Maintenance',      shortDesc: 'Server upkeep, health & preventive maintenance',iconBg: '#ec4899', glowColor: '#ec4899', details: { tagline: 'Build the backbone your business deserves', description: 'From rack-and-stack to hyper-converged clusters, we design, deploy, and manage on-premise server and storage infrastructure.', features: ['Dell, HP & Lenovo server supply & racking','SAN/NAS storage configuration','Hyper-V & VMware virtualisation','Server room design & power management','Tape & disk backup solutions','Proactive hardware monitoring (SNMP/IPMI)'], turnaround: '2–5 days deployment', warranty: '1 year support contract' } },
@@ -120,6 +121,7 @@ function getAngle(i, n) {
 
 /* ─── Main export ────────────────────────────────────────────────── */
 export default function Services() {
+  const navigate = useNavigate()
   const [activeModal, setActiveModal] = useState(null)
   const [isMobile, setIsMobile]       = useState(false)
 
@@ -269,13 +271,21 @@ export default function Services() {
 
                 const isHov = false
 
+                const handleCardClick = () => {
+                  if (svc.isProductPage) {
+                    navigate('/services/it-products-sales')
+                  } else {
+                    setActiveModal(svc)
+                  }
+                }
+
                 return (
                   <motion.div key={i}
                     style={{ position: 'absolute', left, top, width: cardW, zIndex: 3, cursor: 'pointer' }}
                     initial={{ opacity: 0, scale: 0.75 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.06, duration: 0.5, ease: 'easeOut' }}
-                    onClick={() => setActiveModal(svc)}
+                    onClick={handleCardClick}
                   >
                     <div style={{
                       borderRadius: 16,
@@ -346,7 +356,13 @@ export default function Services() {
                     <motion.div key={i}
                       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                       transition={{ delay: i * 0.06, duration: 0.45 }}
-                      onClick={() => setActiveModal(svc)}
+                      onClick={() => {
+                        if (svc.isProductPage) {
+                          navigate('/services/it-products-sales')
+                        } else {
+                          setActiveModal(svc)
+                        }
+                      }}
                       className="relative rounded-2xl p-4 cursor-pointer"
                       style={{ background: 'rgba(6,11,30,0.82)', border: '1px solid rgba(56,189,248,0.14)', backdropFilter: 'blur(16px)' }}>
                       <div className="flex items-center gap-3 mb-2">

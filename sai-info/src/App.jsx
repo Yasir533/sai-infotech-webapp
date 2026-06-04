@@ -24,6 +24,7 @@ import ShippingPolicy from "./pages/policies/ShippingPolicy"
 import RefundPolicy from "./pages/policies/RefundPolicy"
 import WarrantyPolicy from "./pages/policies/WarrantyPolicy"
 import TermsAndConditions from "./pages/policies/TermsAndConditions"
+import ITProductsSales from "./pages/ITProductsSales"
 
 function HomePage() {
   return (
@@ -87,6 +88,7 @@ function App() {
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/warranty-policy" element={<WarrantyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/services/it-products-sales" element={<ITProductsSales />} />
       </Routes>
     </BrowserRouter>
   )
