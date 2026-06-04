@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight, FiMenu, FiX, FiChevronRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import BrandTicker from '../components/BrandTicker'
+import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
 
@@ -60,8 +61,11 @@ export default function ITProductsSales() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
 
-      {/* Brand Ticker at very top — no navbar */}
-      <div className="relative z-10 pt-4">
+      {/* Navbar with correct logo */}
+      <Navbar />
+
+      {/* Brand Ticker below navbar */}
+      <div className="relative z-10 pt-20">
         <BrandTicker />
       </div>
 
