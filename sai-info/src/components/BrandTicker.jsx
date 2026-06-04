@@ -1,4 +1,4 @@
-import saiInfotech from '../assets/brands/logo-icon-sm.png'
+import saiInfotech from '../assets/brands/sai-infotech-logo.png'
 import dell from '../assets/brands/dell.png'
 import hp from '../assets/brands/hp.png'
 import lenovo from '../assets/brands/lenovo.png'
@@ -82,40 +82,17 @@ export default function BrandTicker() {
           marginRight: '20px',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
         }}
       >
         <img
           src={saiInfotech}
-          alt="SAI INFOTECH Logo"
+          alt="SAI INFOTECH"
           style={{
-            height: '48px',
-            width: '48px',
+            height: '54px',
+            width: '160px',
             objectFit: 'contain',
           }}
         />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <span
-            style={{
-              fontSize: '14px',
-              fontWeight: '700',
-              color: '#1e40af',
-              lineHeight: '1.2',
-            }}
-          >
-            SAI INFOTECH
-          </span>
-          <span
-            style={{
-              fontSize: '11px',
-              fontWeight: '500',
-              color: '#64748b',
-              lineHeight: '1.2',
-            }}
-          >
-            TECHNOLOGY SERVICES
-          </span>
-        </div>
       </div>
 
       {/* Scrolling brand logos */}
