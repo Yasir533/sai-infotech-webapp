@@ -84,24 +84,37 @@ export default function BrandTicker() {
           gap: '12px',
         }}
       >
-        {/* Logo Icon */}
-        <div
-          style={{
-            width: '48px',
-            height: '48px',
-            background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '24px',
-            color: 'white',
-            boxShadow: '0 2px 8px rgba(0, 102, 204, 0.3)',
-          }}
+        {/* Logo Icon - Geometric Design */}
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 48 48"
+          style={{ flexShrink: 0 }}
         >
-          SI
-        </div>
+          {/* Orange petals - outer ring */}
+          <circle cx="24" cy="8" r="6" fill="#FF9D3D" />
+          <circle cx="36" cy="12" r="6" fill="#FF9D3D" />
+          <circle cx="40" cy="24" r="6" fill="#FF9D3D" />
+          <circle cx="36" cy="36" r="6" fill="#FF9D3D" />
+          <circle cx="24" cy="40" r="6" fill="#FF9D3D" />
+          <circle cx="12" cy="36" r="6" fill="#FF9D3D" />
+          <circle cx="8" cy="24" r="6" fill="#FF9D3D" />
+          <circle cx="12" cy="12" r="6" fill="#FF9D3D" />
+          
+          {/* Blue center circle with SI */}
+          <circle cx="24" cy="24" r="14" fill="#0066CC" />
+          <text
+            x="24"
+            y="28"
+            textAnchor="middle"
+            fontSize="16"
+            fontWeight="bold"
+            fill="white"
+            fontFamily="Arial, sans-serif"
+          >
+            SI
+          </text>
+        </svg>
         {/* Logo Text */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <span
