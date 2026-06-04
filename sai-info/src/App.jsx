@@ -16,6 +16,12 @@ import AIChat from './components/AIChat'
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
 import ITProductsSales from "./pages/ITProductsSales"
+import PrivacyPolicy from './components/Privacypolicy'
+import ReturnPolicy from './components/Returnpolicy'
+import ShippingPolicy from './components/Shippingpolicy'
+import RefundPolicy from './components/Refundpolicy'
+import WarrantyPolicy from './components/Warrantypolicy'
+import TermsAndConditions from './components/Termsandconditions'
 
 function HomePage() {
   return (
@@ -68,6 +74,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/return-policy" element={<ReturnPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/warranty-policy" element={<WarrantyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin-reset" element={<AdminReset />} />
         <Route path="/services/it-products-sales" element={<ITProductsSales />} />
