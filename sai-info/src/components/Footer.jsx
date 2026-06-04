@@ -22,8 +22,7 @@ const serviceLinks = [
   { label: 'Remote Support', href: '#it-solutions' },
 ]
 
-const helpLinks = [
-  { label: 'Help', to: '/help' },
+const helpLinks = [,
   { label: 'Contact Us', href: '/#contact' },
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Return Policy', to: '/return-policy' },
