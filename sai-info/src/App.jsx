@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Loader from './components/Loader'
 import VideoBackground from './components/VideoBackground'
 import Navbar from './components/Navbar'
-import BrandTicker from './components/BrandTicker'
 import Hero from './components/Hero'
 import About from './components/About'
 import Clients from './components/Clients'
@@ -26,7 +25,6 @@ function HomePage() {
       <main>
         <Hero />
         <About />
-        <BrandTicker />
         <section id="clients" className="section-pad relative overflow-hidden">
           <div id="testimonials" />
           <div className="absolute inset-0 grid-pattern opacity-15" />
