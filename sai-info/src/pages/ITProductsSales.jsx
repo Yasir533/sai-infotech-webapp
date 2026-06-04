@@ -98,20 +98,45 @@ export default function ITProductsSales() {
             {/* Left Sidebar */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-1">
 
+              {/* Mobile Categories Toggle Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden w-full mb-4 flex items-center justify-between gap-2 px-4 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors">
-                <span className="flex items-center gap-2"><FiMenu size={20} />Categories</span>
-                {mobileMenuOpen ? <FiX size={20} /> : null}
+                className="lg:hidden w-full mb-4 flex items-center justify-between gap-2 px-4 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
+                <span className="flex items-center gap-2">
+                  <FiMenu size={20} />
+                  {mobileMenuOpen ? 'Hide Categories' : `Categories — ${currentCategory?.label}`}
+                </span>
+                {mobileMenuOpen ? <FiX size={20} /> : <FiArrowRight size={20} />}
               </button>
 
+              {/* Desktop sidebar */}
+              <div className="hidden lg:block space-y-2">
+                {categories.map((cat, idx) => (
+                  <motion.button
+                    key={cat.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                      activeCategory === cat.id ? 'bg-red-600 text-white shadow-lg' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+                    }`}>
+                    <span>{cat.label}</span>
+                    <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
+                      <FiArrowRight size={18} />
+                    </motion.div>
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Mobile dropdown */}
               <AnimatePresence>
-                {(mobileMenuOpen || true) && (
+                {mobileMenuOpen && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="hidden lg:block space-y-2">
+                    className="lg:hidden space-y-2 mb-4">
                     {categories.map((cat, idx) => (
                       <motion.button
                         key={cat.id}
@@ -123,35 +148,13 @@ export default function ITProductsSales() {
                           activeCategory === cat.id ? 'bg-red-600 text-white shadow-lg' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                         }`}>
                         <span>{cat.label}</span>
-                        <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
-                          <FiArrowRight size={18} />
-                        </motion.div>
+                        <FiArrowRight size={18} />
                       </motion.button>
                     ))}
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {mobileMenuOpen && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="lg:hidden space-y-2 mt-4">
-                  {categories.map((cat, idx) => (
-                    <motion.button
-                      key={cat.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      onClick={() => { setActiveCategory(cat.id); setMobileMenuOpen(false) }}
-                      className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                        activeCategory === cat.id ? 'bg-red-600 text-white shadow-lg' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                      }`}>
-                      <span>{cat.label}</span>
-                      <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
-                        <FiArrowRight size={18} />
-                      </motion.div>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              )}
             </motion.div>
 
             {/* Right Content Area */}

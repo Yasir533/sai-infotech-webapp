@@ -70,27 +70,40 @@ export default function BrandTicker() {
           opacity: 1;
           transform: scale(1.15);
         }
+        .brand-ticker-text {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        @media (max-width: 640px) {
+          .brand-ticker-text {
+            display: none;
+          }
+          .brand-ticker-divider {
+            display: none;
+          }
+        }
       `}</style>
 
       {/* Fixed SAI INFOTECH logo on the left */}
       <div
         style={{
           flexShrink: 0,
-          paddingLeft: '24px',
-          paddingRight: '28px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
           borderRight: '2px solid #e2e8f0',
-          marginRight: '20px',
+          marginRight: '16px',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: '10px',
         }}
       >
         <img
           src={logoIcon}
           alt="SAI INFOTECH"
-          style={{ height: '56px', width: '56px', objectFit: 'contain' }}
+          style={{ height: '52px', width: '52px', objectFit: 'contain', flexShrink: 0 }}
         />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div className="brand-ticker-text">
           <span
             style={{
               fontSize: '14px',
@@ -126,7 +139,7 @@ export default function BrandTicker() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 20px',
+                margin: '0 16px',
                 flexShrink: 0,
               }}
             >
@@ -135,8 +148,8 @@ export default function BrandTicker() {
                 alt={brand.name}
                 className="brand-logo"
                 style={{
-                  height: '44px',
-                  width: '110px',
+                  height: '40px',
+                  width: '90px',
                   objectFit: 'contain',
                 }}
               />
