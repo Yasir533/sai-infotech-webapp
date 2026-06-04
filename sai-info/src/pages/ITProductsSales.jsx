@@ -72,8 +72,8 @@ export default function ITProductsSales() {
         backgroundAttachment: 'fixed',
       }}>
 
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-slate-900/75 z-0" />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-slate-900/80 z-0" />
 
       {/* Brand Ticker at very top */}
       <div className="relative z-10 pt-4">
@@ -131,7 +131,7 @@ export default function ITProductsSales() {
                     className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
                       activeCategory === cat.id
                         ? 'bg-red-600 text-white shadow-lg'
-                        : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+                        : 'bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm'
                     }`}>
                     <span>{cat.label}</span>
                     <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
@@ -159,7 +159,7 @@ export default function ITProductsSales() {
                         className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
                           activeCategory === cat.id
                             ? 'bg-red-600 text-white shadow-lg'
-                            : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
+                            : 'bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm'
                         }`}>
                         <span>{cat.label}</span>
                         <FiArrowRight size={18} />
@@ -171,9 +171,9 @@ export default function ITProductsSales() {
 
             </motion.div>
 
-            {/* Right Content Area */}
+            {/* Right Content Area — white card for readability */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 bg-white/10 backdrop-blur-md rounded-2xl p-8 sm:p-10 shadow-lg border border-white/20">
+              className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-xl border border-slate-200">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCategory}
@@ -182,19 +182,19 @@ export default function ITProductsSales() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}>
 
-                  <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">
                     {currentCategory?.label}
                   </h2>
 
                   {currentCategory?.description && (
-                    <p className="text-slate-300 text-base leading-relaxed mb-8">
+                    <p className="text-slate-600 text-base leading-relaxed mb-8">
                       {currentCategory.description}
                     </p>
                   )}
 
                   <div className="mb-10">
-                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                      <span className="text-red-400">▸</span> Product Offerings
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                      <span className="text-red-600">▸</span> Product Offerings
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-3">
                       {currentCategory?.products.map((product, idx) => (
@@ -203,15 +203,15 @@ export default function ITProductsSales() {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.03 }}
-                          className="flex items-center gap-3 px-4 py-2.5 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
-                          <IoCheckmarkCircle className="text-green-400 flex-shrink-0" size={18} />
-                          <span className="text-slate-200 font-medium">{product}</span>
+                          className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                          <IoCheckmarkCircle className="text-green-500 flex-shrink-0" size={18} />
+                          <span className="text-slate-700 font-medium">{product}</span>
                         </motion.div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-white/20 text-center">
+                  <div className="mt-8 pt-6 border-t border-slate-100 text-center">
                     <a
                       href="/#contact"
                       onClick={handleGetInTouch}
