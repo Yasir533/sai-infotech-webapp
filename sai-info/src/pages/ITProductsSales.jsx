@@ -64,16 +64,7 @@ export default function ITProductsSales() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col relative"
-      style={{
-        backgroundImage: `url(${itBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}>
-
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-slate-900/80 z-0" />
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
 
       {/* Brand Ticker at very top */}
       <div className="relative z-10 pt-4">
@@ -86,20 +77,35 @@ export default function ITProductsSales() {
 
           {/* Breadcrumb */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-sm text-slate-300 mb-8">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
+            className="flex items-center gap-2 text-sm text-slate-600 mb-8">
+            <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
             <FiChevronRight size={16} />
-            <span className="text-white font-semibold">IT Products & Sales</span>
+            <span className="text-slate-900 font-semibold">IT Products & Sales</span>
           </motion.div>
 
-          {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-            <h1 className="text-4xl sm:text-5xl font-black text-white mb-3">
-              IT Products <span className="text-cyan-400">&amp; Sales</span>
-            </h1>
-            <p className="text-lg text-slate-300 max-w-2xl">
-              Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
-            </p>
+          {/* Header with image on right */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-12 flex flex-col lg:flex-row items-center gap-8 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 overflow-hidden">
+
+            {/* Left: title + description */}
+            <div className="flex-1">
+              <h1 className="text-4xl sm:text-5xl font-black text-white mb-3">
+                IT Products <span className="text-cyan-400">&amp; Sales</span>
+              </h1>
+              <p className="text-lg text-slate-300 max-w-xl">
+                Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
+              </p>
+            </div>
+
+            {/* Right: product image */}
+            <div className="flex-shrink-0 w-full lg:w-96">
+              <img
+                src={itBg}
+                alt="IT Products"
+                className="w-full h-48 lg:h-56 object-cover rounded-xl shadow-2xl"
+              />
+            </div>
+
           </motion.div>
 
           {/* Two-column layout */}
@@ -131,7 +137,7 @@ export default function ITProductsSales() {
                     className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
                       activeCategory === cat.id
                         ? 'bg-red-600 text-white shadow-lg'
-                        : 'bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm'
+                        : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                     }`}>
                     <span>{cat.label}</span>
                     <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
@@ -159,7 +165,7 @@ export default function ITProductsSales() {
                         className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
                           activeCategory === cat.id
                             ? 'bg-red-600 text-white shadow-lg'
-                            : 'bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm'
+                            : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
                         }`}>
                         <span>{cat.label}</span>
                         <FiArrowRight size={18} />
@@ -171,9 +177,9 @@ export default function ITProductsSales() {
 
             </motion.div>
 
-            {/* Right Content Area — white card for readability */}
+            {/* Right Content Area */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-xl border border-slate-200">
+              className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-lg border border-slate-200">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCategory}
