@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 
 import Loader from './components/Loader'
 import VideoBackground from './components/VideoBackground'
@@ -24,6 +24,18 @@ import WarrantyPolicy from './components/Warrantypolicy'
 import TermsAndConditions from './components/Termsandconditions'
 
 function HomePage() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '')
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [location])
+
   return (
     <div className="gradient-bg min-h-screen">
       <VideoBackground />
