@@ -48,7 +48,7 @@ export default function Hero() {
         id="home"
         className="relative min-h-screen flex items-center overflow-hidden"
       >
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-10 sm:pt-24 lg:py-14">
 
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
 
