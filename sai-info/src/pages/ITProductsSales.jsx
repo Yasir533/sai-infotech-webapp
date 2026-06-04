@@ -6,6 +6,7 @@ import { IoCheckmarkCircle } from 'react-icons/io5'
 import BrandTicker from '../components/BrandTicker'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
+import itBg from '../assets/it-products-bg.png'
 
 const categories = [
   {
@@ -63,9 +64,18 @@ export default function ITProductsSales() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen flex flex-col relative"
+      style={{
+        backgroundImage: `url(${itBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}>
 
-      {/* Brand Ticker at very top — no navbar */}
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-slate-900/75 z-0" />
+
+      {/* Brand Ticker at very top */}
       <div className="relative z-10 pt-4">
         <BrandTicker />
       </div>
@@ -76,18 +86,18 @@ export default function ITProductsSales() {
 
           {/* Breadcrumb */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-sm text-slate-600 mb-8">
-            <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+            className="flex items-center gap-2 text-sm text-slate-300 mb-8">
+            <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <FiChevronRight size={16} />
-            <span className="text-slate-900 font-semibold">IT Products & Sales</span>
+            <span className="text-white font-semibold">IT Products & Sales</span>
           </motion.div>
 
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-3">
-              IT Products <span className="text-cyan-600">&amp; Sales</span>
+            <h1 className="text-4xl sm:text-5xl font-black text-white mb-3">
+              IT Products <span className="text-cyan-400">&amp; Sales</span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl">
+            <p className="text-lg text-slate-300 max-w-2xl">
               Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
             </p>
           </motion.div>
@@ -119,7 +129,9 @@ export default function ITProductsSales() {
                     transition={{ delay: idx * 0.05 }}
                     onClick={() => setActiveCategory(cat.id)}
                     className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                      activeCategory === cat.id ? 'bg-red-600 text-white shadow-lg' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+                      activeCategory === cat.id
+                        ? 'bg-red-600 text-white shadow-lg'
+                        : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
                     }`}>
                     <span>{cat.label}</span>
                     <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
@@ -145,7 +157,9 @@ export default function ITProductsSales() {
                         transition={{ delay: idx * 0.05 }}
                         onClick={() => { setActiveCategory(cat.id); setMobileMenuOpen(false) }}
                         className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                          activeCategory === cat.id ? 'bg-red-600 text-white shadow-lg' : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+                          activeCategory === cat.id
+                            ? 'bg-red-600 text-white shadow-lg'
+                            : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
                         }`}>
                         <span>{cat.label}</span>
                         <FiArrowRight size={18} />
@@ -159,7 +173,7 @@ export default function ITProductsSales() {
 
             {/* Right Content Area */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-lg border border-slate-200">
+              className="lg:col-span-3 bg-white/10 backdrop-blur-md rounded-2xl p-8 sm:p-10 shadow-lg border border-white/20">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCategory}
@@ -168,19 +182,19 @@ export default function ITProductsSales() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}>
 
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">
+                  <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
                     {currentCategory?.label}
                   </h2>
 
                   {currentCategory?.description && (
-                    <p className="text-slate-600 text-base leading-relaxed mb-8">
+                    <p className="text-slate-300 text-base leading-relaxed mb-8">
                       {currentCategory.description}
                     </p>
                   )}
 
                   <div className="mb-10">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                      <span className="text-red-600">▸</span> Product Offerings
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                      <span className="text-red-400">▸</span> Product Offerings
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-3">
                       {currentCategory?.products.map((product, idx) => (
@@ -189,15 +203,15 @@ export default function ITProductsSales() {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.03 }}
-                          className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                          <IoCheckmarkCircle className="text-green-500 flex-shrink-0" size={18} />
-                          <span className="text-slate-700 font-medium">{product}</span>
+                          className="flex items-center gap-3 px-4 py-2.5 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
+                          <IoCheckmarkCircle className="text-green-400 flex-shrink-0" size={18} />
+                          <span className="text-slate-200 font-medium">{product}</span>
                         </motion.div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                  <div className="mt-8 pt-6 border-t border-white/20 text-center">
                     <a
                       href="/#contact"
                       onClick={handleGetInTouch}
