@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { FiMonitor, FiTool, FiCamera, FiPackage, FiX, FiPhone, FiMail, FiCheckCircle } from 'react-icons/fi'
 
 // ─── Import brand logos ───────────────────────────────────────────────────────
@@ -483,6 +484,7 @@ const RINGS = [
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
 export default function OrbitalServices() {
+  const navigate = useNavigate()
   const [activeId, setActiveId]     = useState(null)
   const [hoveredId, setHoveredId]   = useState(null)
   const [containerW, setContainerW] = useState(780)
@@ -617,7 +619,12 @@ export default function OrbitalServices() {
               onMouseLeave={() => setHoveredId(null)}
               onClick={(e) => {
                 e.stopPropagation()
-                setActiveId(prev => prev === s.id ? null : s.id)
+                // IT Products (Sales) should navigate to dedicated page, not open modal
+                if (s.id === 'itproducts') {
+                  navigate('/services/it-products-sales')
+                } else {
+                  setActiveId(prev => prev === s.id ? null : s.id)
+                }
               }}
             >
               <div className="orbital-card-inner" style={{
