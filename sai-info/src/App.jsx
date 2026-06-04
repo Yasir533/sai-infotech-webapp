@@ -16,6 +16,14 @@ import ScrollToTop from './components/ScrollToTop'
 import AIChat from './components/AIChat'
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
+import Help from "./pages/policies/Help"
+import ContactUs from "./pages/policies/ContactUs"
+import PrivacyPolicy from "./pages/policies/PrivacyPolicy"
+import ReturnPolicy from "./pages/policies/ReturnPolicy"
+import ShippingPolicy from "./pages/policies/ShippingPolicy"
+import RefundPolicy from "./pages/policies/RefundPolicy"
+import WarrantyPolicy from "./pages/policies/WarrantyPolicy"
+import TermsAndConditions from "./pages/policies/TermsAndConditions"
 
 function HomePage() {
   return (
@@ -71,6 +79,14 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin-reset" element={<AdminReset />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/return-policy" element={<ReturnPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/warranty-policy" element={<WarrantyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
       </Routes>
     </BrowserRouter>
   )

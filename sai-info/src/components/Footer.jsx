@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi'
-import { FaLinkedinIn } from 'react-icons/fa'
+import { FiMapPin } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
 
 const quickLinks = [
@@ -20,6 +20,17 @@ const serviceLinks = [
   { label: 'Networking', href: '#services' },
   { label: 'Virus Removal', href: '#it-solutions' },
   { label: 'Remote Support', href: '#it-solutions' },
+]
+
+const helpLinks = [
+  { label: 'Help', to: '/help' },
+  { label: 'Contact Us', to: '/contact-us' },
+  { label: 'Privacy Policy', to: '/privacy-policy' },
+  { label: 'Return Policy', to: '/return-policy' },
+  { label: 'Shipping Policy', to: '/shipping-policy' },
+  { label: 'Refund Policy', to: '/refund-policy' },
+  { label: 'Warranty Policy', to: '/warranty-policy' },
+  { label: 'Terms And Conditions', to: '/terms-and-conditions' },
 ]
 
 const linkStyle = { color: '#334155', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }
@@ -78,31 +89,19 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
-            {/* Contact full width */}
+            {/* Help full width */}
             <div>
-              <h4 style={headingStyle}>Contact Info</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <FiMapPin style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
-                  <p style={{ color: '#334155', fontSize: '13px', lineHeight: '1.6', margin: 0 }}>#9, 1st Main, Ground Floor, Vijay Rangamma Layout,<br />Basavanagudi, Bangalore-560004</p>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <FiPhone style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
-                  <div>
-                    {['+91 83 10 33 85 44', '+91 76 76 95 21 39'].map((num, i) => (
-                      <a key={i} href={`tel:${num.replace(/\s/g,'')}`} style={{ ...linkStyle, fontSize: '13px', display: 'block', marginBottom: '4px' }}>{num}</a>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <FiMail style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
-                  <a href="mailto:ssmb@sais.in" style={{ ...linkStyle, fontSize: '13px' }}>ssmb@sais.in</a>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <FaLinkedinIn style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, fontSize: '13px' }}>linkedin.com</a>
-                </div>
-              </div>
+              <h4 style={headingStyle}>Help</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {helpLinks.map((link, i) => (
+                  <li key={i}>
+                    <Link to={link.to} style={{ ...linkStyle, fontSize: '13px' }}>
+                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Our Location — Google Maps embed (mobile) */}
@@ -167,31 +166,19 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-            {/* Contact */}
+            {/* Help */}
             <div>
-              <h4 style={headingStyle}>Contact Info</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <FiMapPin style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
-                  <p style={{ color: '#334155', fontSize: '14px', lineHeight: '1.6', margin: 0 }}>#9, 1st Main, Ground Floor, Vijay Rangamma Layout,<br />Basavanagudi, Bangalore-560004</p>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <FiPhone style={{ color: '#2f6fbf', flexShrink: 0, marginTop: '2px' }} size={15} />
-                  <div>
-                    {['+91 83 10 33 85 44', '+91 76 76 95 21 39'].map((num, i) => (
-                      <a key={i} href={`tel:${num.replace(/\s/g,'')}`} style={{ ...linkStyle, display: 'block', marginBottom: '4px' }} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>{num}</a>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <FiMail style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
-                  <a href="mailto:ssmb@sais.in" style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>ssmb@sais.in</a>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <FaLinkedinIn style={{ color: '#2f6fbf', flexShrink: 0 }} size={15} />
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>linkedin.com</a>
-                </div>
-              </div>
+              <h4 style={headingStyle}>Help</h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {helpLinks.map((link, i) => (
+                  <li key={i}>
+                    <Link to={link.to} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Our Location — Google Maps embed */}
@@ -227,13 +214,8 @@ export default function Footer() {
         <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, rgba(148,163,184,0.35), transparent)', marginBottom: '32px' }} />
 
         {/* Bottom */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <p style={{ color: '#475569', fontSize: '14px', margin: 0 }}>© {new Date().getFullYear()} SAI INFOTECH. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: '24px' }}>
-            {['Privacy Policy', 'Terms of Service', 'Sitemap'].map((label, i) => (
-              <a key={i} href="#" style={{ color: '#475569', fontSize: '14px', textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#475569'}>{label}</a>
-            ))}
-          </div>
         </div>
 
       </div>
