@@ -619,12 +619,14 @@ export default function OrbitalServices() {
               onMouseLeave={() => setHoveredId(null)}
               onClick={(e) => {
                 e.stopPropagation()
-                // IT Products (Sales) should navigate to dedicated page, not open modal
+
                 if (s.id === 'itproducts') {
-                  navigate('/services/it-products-sales')
-                } else {
-                  setActiveId(prev => prev === s.id ? null : s.id)
-                }
+                navigate('/services/it-products-sales')
+              } else if (s.id === 'ewaste') {
+                navigate('/services/e-waste-management')
+              } else {
+                setActiveId(prev => prev === s.id ? null : s.id)
+              }
               }}
             >
               <div className="orbital-card-inner" style={{
