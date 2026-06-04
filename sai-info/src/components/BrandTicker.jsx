@@ -1,4 +1,3 @@
-import saiInfotech from '../assets/brands/sai-infotech-logo.png'
 import dell from '../assets/brands/dell.png'
 import hp from '../assets/brands/hp.png'
 import lenovo from '../assets/brands/lenovo.png'
@@ -82,17 +81,52 @@ export default function BrandTicker() {
           marginRight: '20px',
           display: 'flex',
           alignItems: 'center',
+          gap: '12px',
         }}
       >
-        <img
-          src={saiInfotech}
-          alt="SAI INFOTECH"
+        {/* Logo Icon */}
+        <div
           style={{
-            height: '54px',
-            width: '160px',
-            objectFit: 'contain',
+            width: '48px',
+            height: '48px',
+            background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: '24px',
+            color: 'white',
+            boxShadow: '0 2px 8px rgba(0, 102, 204, 0.3)',
           }}
-        />
+        >
+          SI
+        </div>
+        {/* Logo Text */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <span
+            style={{
+              fontSize: '14px',
+              fontWeight: '700',
+              color: '#1a202c',
+              lineHeight: '1.2',
+              letterSpacing: '0.5px',
+            }}
+          >
+            SAI <span style={{ color: '#0066cc' }}>INFOTECH</span>
+          </span>
+          <span
+            style={{
+              fontSize: '10px',
+              fontWeight: '600',
+              color: '#64748b',
+              lineHeight: '1.2',
+              letterSpacing: '0.8px',
+            }}
+          >
+            TECHNOLOGY SERVICES
+          </span>
+        </div>
       </div>
 
       {/* Scrolling brand logos */}
