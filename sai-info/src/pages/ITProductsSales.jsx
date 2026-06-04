@@ -57,6 +57,11 @@ export default function ITProductsSales() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const currentCategory = categories.find(cat => cat.id === activeCategory)
 
+  const handleGetInTouch = (e) => {
+    e.preventDefault()
+    window.location.href = '/#contact'
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
 
@@ -190,7 +195,9 @@ export default function ITProductsSales() {
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                    <a href="/#contact"
+                    <a
+                      href="/#contact"
+                      onClick={handleGetInTouch}
                       className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition-colors text-sm">
                       Get in Touch <FiArrowRight size={16} />
                     </a>
