@@ -2,12 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { FiMapPin } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
-import PrivacyPolicy from './components/Privacypolicy'
-import ReturnPolicy from './components/ReturnPolicy'
-import ShippingPolicy from './components/ShippingPolicy'
-import RefundPolicy from './components/RefundPolicy'
-import WarrantyPolicy from './components/WarrantyPolicy'
-import TermsAndConditions from './components/TermsAndConditions'
 
 const quickLinks = [
   { label: 'Home', href: '#home' },
