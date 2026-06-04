@@ -83,29 +83,34 @@ export default function ITProductsSales() {
             <span className="text-slate-900 font-semibold">IT Products & Sales</span>
           </motion.div>
 
-          {/* Header with image on right */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="mb-12 flex flex-col lg:flex-row items-center gap-8 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 overflow-hidden">
+          {/* Header banner — image as CSS background so it always loads */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12 rounded-2xl overflow-hidden relative"
+            style={{ minHeight: '220px' }}
+          >
+            {/* Background image via inline style — most reliable method */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url(${itBg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+            {/* Dark overlay only on left side for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/30" />
 
-            {/* Left: title + description */}
-            <div className="flex-1">
-              <h1 className="text-4xl sm:text-5xl font-black text-white mb-3">
+            {/* Text content */}
+            <div className="relative z-10 p-8 lg:p-12 max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl font-black text-white mb-3 drop-shadow-lg">
                 IT Products <span className="text-cyan-400">&amp; Sales</span>
               </h1>
-              <p className="text-lg text-slate-300 max-w-xl">
+              <p className="text-lg text-slate-200 drop-shadow">
                 Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
               </p>
             </div>
-
-            {/* Right: product image */}
-            <div className="flex-shrink-0 w-full lg:w-96">
-              <img
-                src={itBg}
-                alt="IT Products"
-                className="w-full h-48 lg:h-56 object-cover rounded-xl shadow-2xl"
-              />
-            </div>
-
           </motion.div>
 
           {/* Two-column layout */}
