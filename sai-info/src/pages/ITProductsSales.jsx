@@ -7,6 +7,7 @@ import VideoBackground from '../components/VideoBackground'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
+import BrandTicker from '../components/BrandTicker'
 
 const categories = [
   {
@@ -17,7 +18,6 @@ const categories = [
       'Desktops', 'Processors', 'Zero Client', 'Printers',
       'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation'
     ],
-    brands: ['Dell', 'HP', 'Lenovo', 'Intel', 'ASUS', 'Acer', 'Microsoft Surface']
   },
   {
     id: 'data-centers',
@@ -28,7 +28,6 @@ const categories = [
       'Virtualization Solutions', 'Data Center Management Solutions', 'Storage Networking',
       'Private Cloud', 'Hyper-Converged Solutions', 'Server Consolidation Solutions'
     ],
-    brands: ['Dell', 'Hewlett Packard Enterprise', 'Nutanix', 'NetApp', 'Lenovo', 'Intel', 'VMware', 'Citrix', 'Microsoft']
   },
   {
     id: 'electronic-security',
@@ -40,7 +39,6 @@ const categories = [
       'P Gates', 'Door Frame Metal Detectors', 'Hand Held Detectors', 'Biometric Access Controls',
       'Facial Access Controls', 'Intrusion Analytics', 'Incident Handling', 'Motion Detectors', 'Access Controls'
     ],
-    brands: ['Honeywell', 'Hikvision', 'Matrix', 'eSSL', 'Leaptor']
   },
   {
     id: 'it-accessories',
@@ -50,7 +48,6 @@ const categories = [
       'SSD/HDD', 'Graphic Cards', 'Advanced Headsets', 'Gaming Keyboards',
       'Gaming Headsets', 'RAM', 'Routers', 'Projectors', 'Gaming Mouse'
     ],
-    brands: ['Dell', 'HP', 'Lenovo', 'Vention', 'Seagate', 'Western Digital', 'Logitech', 'Panasonic', 'Philips']
   },
   {
     id: 'it-security',
@@ -61,7 +58,6 @@ const categories = [
       'Email & Web Security Isolation', 'UTM Unified Threat Management', 'Data Encryption',
       'IoT & Server Security', 'Intrusion Analysis & Incident Handling'
     ],
-    brands: ['Fortinet', 'Cisco', 'Sophos', 'Trend Micro', 'Kaspersky', 'Palo Alto Networks']
   },
   {
     id: 'mobility',
@@ -71,7 +67,6 @@ const categories = [
       'Laptops', 'Smart Phones', 'POS Solutions', 'Chromebooks',
       'Industrial Thermal Scanners', 'Tablets', 'Wireless Cameras', 'Mobile Workstations', 'KIOSK Systems'
     ],
-    brands: ['Dell', 'HP', 'Lenovo', 'Samsung', 'ASUS', 'Acer', 'Posiflex', 'Microsoft Surface']
   },
   {
     id: 'networking',
@@ -81,50 +76,8 @@ const categories = [
       'SDN / SDWAN', 'Wireless Solutions', 'NAS & SAN Solutions', 'Telephony Systems & VoIP',
       'Email & Collaboration Solutions', 'Network Infrastructure', 'WAN, Intranet & VPN', 'Switching & Routing Solutions', 'Passive Cabling'
     ],
-    brands: ['Hewlett Packard Enterprise', 'Aruba', 'Cisco', 'Netgear', 'D-Link', 'Molex', 'Netfox', 'TP-Link']
   }
 ]
-
-const brandLogos = {
-  'Dell': '🖥️',
-  'HP': '🖥️',
-  'Lenovo': '🖥️',
-  'Intel': '💻',
-  'ASUS': '💻',
-  'Acer': '💻',
-  'Microsoft Surface': '📱',
-  'Hewlett Packard Enterprise': '🖥️',
-  'Nutanix': '☁️',
-  'NetApp': '💾',
-  'VMware': '☁️',
-  'Citrix': '☁️',
-  'Microsoft': '☁️',
-  'Honeywell': '🔒',
-  'Hikvision': '📹',
-  'Matrix': '🔒',
-  'eSSL': '🔐',
-  'Leaptor': '📹',
-  'Vention': '🔌',
-  'Seagate': '💾',
-  'Western Digital': '💾',
-  'Logitech': '🖱️',
-  'Panasonic': '🔌',
-  'Philips': '💡',
-  'Fortinet': '🛡️',
-  'Cisco': '🌐',
-  'Sophos': '🛡️',
-  'Trend Micro': '🛡️',
-  'Kaspersky': '🛡️',
-  'Palo Alto Networks': '🛡️',
-  'Samsung': '📱',
-  'Posiflex': '🖥️',
-  'Netgear': '🌐',
-  'D-Link': '🌐',
-  'Molex': '🔌',
-  'Netfox': '🌐',
-  'TP-Link': '🌐',
-  'Aruba': '🌐'
-}
 
 export default function ITProductsSales() {
   const [activeCategory, setActiveCategory] = useState('computing')
@@ -289,45 +242,28 @@ export default function ITProductsSales() {
                     </div>
                   </div>
 
-                  {/* Brands */}
+                  {/* Brands Slider */}
                   <div>
                     <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                       <span className="text-red-600">▸</span> Brands
                     </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {currentCategory?.brands.map((brand, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: idx * 0.04 }}
-                          className="bg-white border-2 border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center gap-2 hover:border-slate-300 hover:shadow-md transition-all">
-                          <span className="text-3xl">{brandLogos[brand] || '🏢'}</span>
-                          <span className="text-xs font-semibold text-slate-800 text-center">{brand}</span>
-                        </motion.div>
-                      ))}
-                    </div>
+                    <BrandTicker />
                   </div>
+
+                  {/* CTA */}
+                  <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                    <a
+                      href="/#contact"
+                      className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition-colors text-sm">
+                      Get in Touch <FiArrowRight size={16} />
+                    </a>
+                  </div>
+
                 </motion.div>
               </AnimatePresence>
             </motion.div>
           </div>
 
-          {/* CTA */}
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-16 text-center">
-            <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-10 text-white shadow-xl">
-              <h3 className="text-2xl font-bold mb-3">Ready to get started?</h3>
-              <p className="text-red-100 mb-6 max-w-md mx-auto">
-                Contact our sales team today to explore the perfect solution for your business.
-              </p>
-              <a href="#contact"
-                className="inline-flex items-center gap-2 bg-white text-red-600 px-8 py-3 rounded-lg font-bold hover:bg-red-50 transition-colors">
-                Get in Touch <FiArrowRight size={18} />
-              </a>
-            </div>
-          </motion.div>
         </div>
       </main>
 
