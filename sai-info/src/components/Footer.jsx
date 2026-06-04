@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { FiMapPin } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
+import PrivacyPolicy from './components/Privacypolicy'
+import ReturnPolicy from './components/ReturnPolicy'
+import ShippingPolicy from './components/ShippingPolicy'
+import RefundPolicy from './components/RefundPolicy'
+import WarrantyPolicy from './components/WarrantyPolicy'
+import TermsAndConditions from './components/TermsAndConditions'
 
 const quickLinks = [
   { label: 'Home', href: '#home' },
@@ -22,14 +28,14 @@ const serviceLinks = [
   { label: 'Remote Support', href: '#it-solutions' },
 ]
 
-const helpLinks = [,
+const helpLinks = [
   { label: 'Contact Us', href: '/#contact' },
-  { label: 'Privacy Policy', to: '/#Privacypolicy' },
-  { label: 'Return Policy', to: '/#Returnpolicy' },
-  { label: 'Shipping Policy', to: '/#Shippingpolicy' },
-  { label: 'Refund Policy', to: '/#Refundpolicy' },
-  { label: 'Warranty Policy', to: '/#Warrantypolicy' },
-  { label: 'Terms And Conditions', to: '/#TermsAndconditions' },
+  { label: 'Privacy Policy', to: '/privacy-policy' },
+  { label: 'Return Policy', to: '/return-policy' },
+  { label: 'Shipping Policy', to: '/shipping-policy' },
+  { label: 'Refund Policy', to: '/refund-policy' },
+  { label: 'Warranty Policy', to: '/warranty-policy' },
+  { label: 'Terms And Conditions', to: '/terms-and-conditions' },
 ]
 
 const linkStyle = { color: '#334155', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }
