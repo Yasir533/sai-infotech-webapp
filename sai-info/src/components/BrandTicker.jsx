@@ -13,6 +13,7 @@ import azure from '../assets/brands/azure.png'
 import googleCloud from '../assets/brands/google-cloud.png'
 import ubiquiti from '../assets/brands/ubiquiti.png'
 import ruckus from '../assets/brands/ruckus.png'
+import logoIcon from '../assets/logo.png'
 
 const brands = [
   { src: dell, name: 'Dell' },
@@ -84,38 +85,11 @@ export default function BrandTicker() {
           gap: '12px',
         }}
       >
-        {/* Logo Icon - Geometric Design */}
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 48 48"
-          style={{ flexShrink: 0 }}
-        >
-          {/* Orange petals - outer ring */}
-          <circle cx="24" cy="8" r="6" fill="#FF9D3D" />
-          <circle cx="36" cy="12" r="6" fill="#FF9D3D" />
-          <circle cx="40" cy="24" r="6" fill="#FF9D3D" />
-          <circle cx="36" cy="36" r="6" fill="#FF9D3D" />
-          <circle cx="24" cy="40" r="6" fill="#FF9D3D" />
-          <circle cx="12" cy="36" r="6" fill="#FF9D3D" />
-          <circle cx="8" cy="24" r="6" fill="#FF9D3D" />
-          <circle cx="12" cy="12" r="6" fill="#FF9D3D" />
-          
-          {/* Blue center circle with SI */}
-          <circle cx="24" cy="24" r="14" fill="#0066CC" />
-          <text
-            x="24"
-            y="28"
-            textAnchor="middle"
-            fontSize="16"
-            fontWeight="bold"
-            fill="white"
-            fontFamily="Arial, sans-serif"
-          >
-            SI
-          </text>
-        </svg>
-        {/* Logo Text */}
+        <img
+          src={logoIcon}
+          alt="SAI INFOTECH"
+          style={{ height: '56px', width: '56px', objectFit: 'contain' }}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <span
             style={{
