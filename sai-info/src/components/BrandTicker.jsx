@@ -1,3 +1,4 @@
+import saiInfotech from '../assets/brands/sai-infotech-logo.png'
 import dell from '../assets/brands/dell.png'
 import hp from '../assets/brands/hp.png'
 import lenovo from '../assets/brands/lenovo.png'
@@ -39,7 +40,8 @@ export default function BrandTicker() {
     <div
       style={{
         width: '100%',
-        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
         padding: '18px 0',
         background: 'rgba(255,255,255,0.85)',
         borderTop: '1px solid #e2e8f0',
@@ -70,30 +72,56 @@ export default function BrandTicker() {
         }
       `}</style>
 
-      <div className="brand-ticker-track">
-        {duplicated.map((brand, index) => (
-          <div
-            key={index}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 20px',
-              flexShrink: 0,
-            }}
-          >
-            <img
-              src={brand.src}
-              alt={brand.name}
-              className="brand-logo"
+      {/* Fixed SAI INFOTECH logo on the left */}
+      <div
+        style={{
+          flexShrink: 0,
+          paddingLeft: '24px',
+          paddingRight: '28px',
+          borderRight: '2px solid #e2e8f0',
+          marginRight: '20px',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <img
+          src={saiInfotech}
+          alt="SAI INFOTECH"
+          style={{
+            height: '54px',
+            width: '160px',
+            objectFit: 'contain',
+          }}
+        />
+      </div>
+
+      {/* Scrolling brand logos */}
+      <div style={{ overflow: 'hidden', flex: 1 }}>
+        <div className="brand-ticker-track">
+          {duplicated.map((brand, index) => (
+            <div
+              key={index}
               style={{
-                height: '44px',
-                width: '110px',
-                objectFit: 'contain',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 20px',
+                flexShrink: 0,
               }}
-            />
-          </div>
-        ))}
+            >
+              <img
+                src={brand.src}
+                alt={brand.name}
+                className="brand-logo"
+                style={{
+                  height: '44px',
+                  width: '110px',
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
