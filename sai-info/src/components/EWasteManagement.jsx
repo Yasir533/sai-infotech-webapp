@@ -120,8 +120,8 @@ export default function EWasteManagement() {
 
             {/* About — inside hero below stats */}
             <div style={{ marginTop: '20px', background: 'rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px 20px', borderLeft: '4px solid #4ade80' }}>
-              <h2 style={{ color: '#4ade80', fontSize: '0.85rem', fontWeight: 800, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>About GRKMS</h2>
-              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.82rem', lineHeight: 1.65, margin: 0 }}>
+              <h2 style={{ color: '#4ade80', fontSize: "1.05rem", fontWeight: 800, marginBottom: "8px", textTransform: 'uppercase', letterSpacing: '0.08em' }}>About GRKMS</h2>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: "0.95rem", lineHeight: 1.7, margin: 0 }}>
                 <strong style={{ color: '#fff' }}>Global Resource Knowledge Management Service (GRKMS)</strong> is a leading E-Waste Management Company specializing in IT Asset Disposition, Asset Remarketing, Secure Data Destruction, Logistics and Sustainable Recycling Services across India. Established in 2010, GRKMS brings over <strong style={{ color: '#4ade80' }}>20 years of industry expertise</strong> in environmentally responsible recycling and IT asset lifecycle management.
               </p>
             </div>
