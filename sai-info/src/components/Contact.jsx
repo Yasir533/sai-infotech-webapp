@@ -40,7 +40,7 @@ const contactInfo = [
   {
     icon: FiMail,
     title: 'Email',
-    lines: ['ssmb@sais.in','acts@sais.in'],
+    lines: ['ssmb@sais.in'],
     color: 'from-violet-600 to-violet-400',
   },
 ]
