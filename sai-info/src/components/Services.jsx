@@ -83,7 +83,7 @@ function ServiceModal({ service, onClose }) {
             </div>
           </div>
           <div className="flex gap-3 pt-1">
-            <a href="tel:+918310338544"
+            <a href="tel:+917676952139"
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 active:scale-95"
               style={{ background: `linear-gradient(135deg,${service.glowColor},${service.glowColor}cc)`, boxShadow: `0 4px 20px ${service.glowColor}40` }}>
               <FiPhone size={15} /> Call Now
@@ -391,7 +391,7 @@ export default function Services() {
             className="text-center mt-12">
             <p className="text-slate-400 text-sm mb-4">Can&apos;t find what you need? Talk to our experts.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="tel:+918310338544"
+              <a href="tel:+917676952139"
                 className="px-8 py-3.5 rounded-xl font-bold text-white text-sm flex items-center gap-2 transition-all hover:opacity-90"
                 style={{ background: 'linear-gradient(135deg,#0ea5e9,#06b6d4)', boxShadow: '0 4px 20px rgba(6,182,212,0.35)' }}>
                 <FiPhone size={16} /> +91 83 10 33 85 44

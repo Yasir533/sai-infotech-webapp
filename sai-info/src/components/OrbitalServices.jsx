@@ -273,7 +273,7 @@ function DesktopModal({ service, onClose }) {
             <BrandSlider color={service.color}/>
 
             <div style={{ marginTop:28, display:'flex', gap:14 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
+              <a href="tel:+917676952139" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
                 <FiPhone style={{ width:16, height:16 }}/> Call Now
               </a>
               <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:service.color, textDecoration:'none', background:`${service.color}10`, border:`1.5px solid ${service.color}30` }}>
@@ -292,7 +292,7 @@ function DesktopModal({ service, onClose }) {
               ))}
             </ul>
             <div style={{ display:'flex', gap:14 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
+              <a href="tel:+917676952139" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 16px ${service.color}44` }}>
                 <FiPhone style={{ width:16, height:16 }}/> Call Now
               </a>
               <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:10, padding:'15px 0', borderRadius:14, fontSize:15, fontWeight:700, color:service.color, textDecoration:'none', background:`${service.color}10`, border:`1.5px solid ${service.color}30` }}>
@@ -341,7 +341,7 @@ function MobileDetailModal({ service, onClose }) {
             <p style={{ color:'#64748b', fontWeight:700, fontSize:11, margin:'0 0 10px 0', textTransform:'uppercase', letterSpacing:'0.07em' }}>Brands We Carry</p>
             <BrandSlider color={service.color}/>
             <div style={{ marginTop:20, display:'flex', gap:12 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+              <a href="tel:+917676952139" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
                 <FiPhone style={{ width:15, height:15 }}/> Call Now
               </a>
               <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
@@ -360,7 +360,7 @@ function MobileDetailModal({ service, onClose }) {
               ))}
             </ul>
             <div style={{ display:'flex', gap:12 }}>
-              <a href="tel:+918310338544" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
+              <a href="tel:+917676952139" style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:'#fff', textDecoration:'none', background:service.color, boxShadow:`0 4px 14px ${service.color}40` }}>
                 <FiPhone style={{ width:15, height:15 }}/> Call Now
               </a>
               <a href="#contact" onClick={onClose} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'14px 0', borderRadius:'14px', fontSize:'14px', fontWeight:'bold', color:service.color, textDecoration:'none', background:`${service.color}12`, border:`1px solid ${service.color}25` }}>
