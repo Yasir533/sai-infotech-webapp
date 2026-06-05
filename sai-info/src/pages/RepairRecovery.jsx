@@ -34,7 +34,7 @@ const categories = [
     icon: '🖥️',
     accent: '#0284c7',
     bgColor: '#f0f9ff',
-    image: 'https://images.unsplash.com/photo-1593640408182-31c228f505e7?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=600&q=80',
     description:
       'From power supply failures to full system overhauls, our desktop repair service covers all brands and configurations. We handle walk-in and on-site repairs for homes and businesses alike.',
     services: [
