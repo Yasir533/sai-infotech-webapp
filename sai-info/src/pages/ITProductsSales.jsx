@@ -13,7 +13,7 @@ const categories = [
     id: 'computing',
     label: 'Computing',
     description: 'Our aim is to develop tomorrow\'s information technology that supports innovative applications, from big data analytics to the Internet of Things. It covers all aspects of information technology including energy efficient and robust hardware systems, software defined networks, secure distributed systems, scalability and integration in increasing computing density, reliability and lower power consumption and costs.',
-    products: ['Desktops', 'Processors', 'Zero Client', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation'],
+    products: ['Desktops', 'Processors', 'Chip Level', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation'],
   },
   {
     id: 'data-centers',
