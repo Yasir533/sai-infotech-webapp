@@ -14,10 +14,10 @@
   ]
 
   const serviceLinks = [
-  { label: 'IT Products & Sales', href: '/services/it-products-sales' },
-  { label: 'Repair & Recovery', href: '#services' },
+  { label: 'IT Products & Sales', href: '#it-products' },
+  { label: 'Repair & Recovery', href: '#repair-recovery' },
   { label: 'IT Solutions', href: '#it-solutions' },
-  { label: 'E-Waste Solutions', href: '/services/e-waste-management' },
+  { label: 'E-Waste Solutions', href: '#ewaste-solutions' },
 ]
 
   const helpLinks = [
