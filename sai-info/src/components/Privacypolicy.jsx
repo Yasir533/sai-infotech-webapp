@@ -5,7 +5,8 @@ const Section = ({ title, children }) => (
   <div
     style={{
       marginBottom: '32px',
-      padding: '24px',
+      padding: '30px',
+      minHeight: '260px',
       background: '#ffffff',
       borderRadius: '16px',
       boxShadow: '0 4px 20px rgba(15, 23, 42, 0.06)',
@@ -57,12 +58,14 @@ export default function PrivacyPolicy() {
     request from our Team. Depending on your Product, we may collect the following information:
   </p>
 
-  <ul
+ <ul
   style={{
     paddingLeft: '24px',
     lineHeight: '2',
     color: '#475569',
-    marginTop: '10px'
+    marginTop: '10px',
+    columns: '2 250px',
+    columnGap: '40px'
   }}
 >
     <li>Full Name</li>

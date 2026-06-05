@@ -68,7 +68,7 @@ export default function PolicyPage({ title, children }) {
 
       {/* Content */}
       <div style={{
-        maxWidth: '820px',
+        maxWidth: '1400px',
         margin: '0 auto',
         padding: '48px 24px 80px',
       }}>
