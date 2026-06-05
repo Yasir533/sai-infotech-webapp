@@ -624,6 +624,10 @@ export default function OrbitalServices() {
                 navigate('/services/it-products-sales')
               } else if (s.id === 'ewaste') {
                 navigate('/services/e-waste-management')
+              } else if (s.id === 'repair') {
+                navigate('/services/repair-recovery')
+              } else if (s.id === 'itsolutions') {
+                navigate('/services/it-solutions')
               } else {
                 setActiveId(prev => prev === s.id ? null : s.id)
               }
@@ -652,7 +656,7 @@ export default function OrbitalServices() {
                   <p style={{ color:'#0f172a', fontWeight:700, fontSize:cardTitlePx, lineHeight:1.25, margin:0, overflowWrap:'break-word', wordBreak:'break-word' }}>{s.title}</p>
                   <p style={{ color:s.color, fontSize:cardSubPx, marginTop:3, fontWeight:600, lineHeight:1.25, marginBottom:0, overflowWrap:'break-word' }}>{s.subtitle}</p>
                   {isHovered && !isActive && (
-                    <p style={{ color:'#94a3b8', fontSize:11, margin:'4px 0 0 0', fontWeight:500 }}>Click to view details</p>
+                    <p style={{ color:'#94a3b8', fontSize:11, margin:'4px 0 0 0', fontWeight:500 }}>Click to explore</p>
                   )}
                 </div>
               </div>

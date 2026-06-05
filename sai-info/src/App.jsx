@@ -16,6 +16,8 @@ import AIChat from './components/AIChat'
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
 import ITProductsSales from "./pages/ITProductsSales"
+import RepairRecovery from "./pages/RepairRecovery"
+import ITSolutionsPage from "./pages/ITSolutionsPage"
 import PrivacyPolicy from './components/Privacypolicy'
 import ReturnPolicy from './components/Returnpolicy'
 import ShippingPolicy from './components/Shippingpolicy'
@@ -98,6 +100,8 @@ function App() {
         <Route path="/admin-reset" element={<AdminReset />} />
         <Route path="/services/it-products-sales" element={<ITProductsSales />} />
         <Route path="/services/e-waste-management" element={<EWasteManagement />} />
+        <Route path="/services/repair-recovery" element={<RepairRecovery />} />
+        <Route path="/services/it-solutions" element={<ITSolutionsPage />} />
       </Routes>
     </BrowserRouter>
   )
