@@ -122,10 +122,9 @@ export default function EWasteManagement() {
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
-          style={{ flex: '1 1 320px', maxWidth: '520px', position: 'relative', overflow: 'hidden', minHeight: '240px' }}>
+          style={{ flex: '1 1 480px', maxWidth: '700px', position: 'relative', overflow: 'hidden', minHeight: '260px' }}>
           <img src={ewasteCycle} alt="E-Waste Recycling Process"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', opacity: 0.9 }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #0f172a 0%, transparent 40%)' }} />
         </motion.div>
 
       </div>
