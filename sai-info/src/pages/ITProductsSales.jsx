@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiArrowRight, FiChevronRight } from 'react-icons/fi'
+import { FiArrowRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import BrandTicker from '../components/BrandTicker'
 
@@ -69,30 +69,12 @@ const categories = [
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
     products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring'],
   },
-  {
-    id: 'av-solutions',
-    name: 'AV Solutions',
-    icon: '📽️',
-    color: '#c05621',
-    bgImage: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&q=80',
-    description: 'Transform your meeting rooms, auditoriums, and training centres with our professional audio-visual solutions. We deliver seamless AV integration for corporate, educational, and entertainment environments.',
-    products: ['Projectors', 'LED Video Walls', 'Interactive Displays', 'Conference Cameras', 'Microphone Systems', 'Audio Amplifiers', 'Video Conferencing', 'Digital Signage', 'Control Systems', 'Presentation Tools'],
-  },
 ]
 
 export default function ITProductsSales() {
   const [selected, setSelected] = useState(null)
-  const [view, setView] = useState('grid') // 'grid' | 'detail'
 
-  const handleCardClick = (cat) => {
-    setSelected(cat)
-    setView('detail')
-  }
-
-  const handleBack = () => {
-    setView('grid')
-    setSelected(null)
-  }
+  const handleBack = () => setSelected(null)
 
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", background: '#f8fafc', minHeight: '100vh' }}>
@@ -107,33 +89,33 @@ export default function ITProductsSales() {
       </div>
 
       {/* BRAND TICKER */}
-      <div style={{ position: 'relative', zIndex: 10, paddingTop: '0' }}>
+      <div style={{ position: 'relative', zIndex: 10 }}>
         <BrandTicker />
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px 48px' }}>
 
-        {/* PAGE HEADER */}
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
-            IT Products <span style={{ color: '#345f9a' }}>&amp; Sales</span>
-          </h1>
-          <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
-            Browse our complete range of IT products across all categories
-          </p>
-        </div>
-
         <AnimatePresence mode="wait">
 
-          {/* GRID VIEW */}
-          {view === 'grid' && (
+          {/* ── GRID VIEW ── */}
+          {!selected && (
             <motion.div
               key="grid"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
+              {/* Header */}
+              <div style={{ marginBottom: '32px' }}>
+                <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                  IT Products <span style={{ color: '#345f9a' }}>&amp; Sales</span>
+                </h1>
+                <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
+                  Browse our complete range of IT products across all categories
+                </p>
+              </div>
+
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
@@ -145,26 +127,23 @@ export default function ITProductsSales() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.06 }}
-                    whileHover={{ y: -6, boxShadow: `0 16px 40px rgba(0,0,0,0.14)` }}
-                    onClick={() => handleCardClick(cat)}
+                    whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(0,0,0,0.14)' }}
+                    onClick={() => setSelected(cat)}
                     style={{
                       background: '#fff',
                       borderRadius: '14px',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-                      transition: 'box-shadow 0.2s',
                       border: '1px solid #e2e8f0',
                     }}
                   >
-                    {/* Card image */}
+                    {/* Image area */}
                     <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
                       <img
                         src={cat.bgImage}
                         alt={cat.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
-                        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
-                        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                       {/* Icon badge */}
                       <div style={{
@@ -188,7 +167,7 @@ export default function ITProductsSales() {
                       borderTop: `3px solid ${cat.color}`,
                     }}>
                       <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>{cat.name}</span>
-                      <FiArrowRight style={{ color: cat.color, fontSize: '1.1rem', fontWeight: 700 }} />
+                      <FiArrowRight style={{ color: cat.color, fontSize: '1.1rem' }} />
                     </div>
                   </motion.div>
                 ))}
@@ -196,144 +175,104 @@ export default function ITProductsSales() {
             </motion.div>
           )}
 
-          {/* DETAIL VIEW */}
-          {view === 'detail' && selected && (
+          {/* ── DETAIL VIEW (no sidebar) ── */}
+          {selected && (
             <motion.div
-              key="detail"
+              key={selected.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap' }}
             >
-              {/* SIDEBAR */}
-              <div style={{
-                flex: '0 0 240px',
-                background: '#fff',
-                borderRadius: '14px',
-                overflow: 'hidden',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-                border: '1px solid #e2e8f0',
-              }}>
-                {/* Back button */}
+              {/* Breadcrumb / back */}
+              <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button
                   onClick={handleBack}
                   style={{
-                    width: '100%', padding: '12px 18px',
-                    background: '#f1f5f9', border: 'none', borderBottom: '1px solid #e2e8f0',
-                    color: '#475569', fontSize: '0.82rem', fontWeight: 600,
-                    cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '6px',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: '#345f9a', fontWeight: 700, fontSize: '0.9rem',
+                    padding: 0, display: 'flex', alignItems: 'center', gap: '4px',
                   }}
                 >
                   ← All Categories
                 </button>
-                {categories.map((cat) => (
-                  <div
-                    key={cat.id}
-                    onClick={() => setSelected(cat)}
-                    style={{
-                      padding: '12px 18px',
-                      cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      background: selected.id === cat.id ? cat.color : 'transparent',
-                      color: selected.id === cat.id ? '#fff' : '#334155',
-                      fontWeight: selected.id === cat.id ? 700 : 500,
-                      fontSize: '0.9rem',
-                      borderBottom: '1px solid #f1f5f9',
-                      transition: 'background 0.15s',
-                    }}
-                    onMouseEnter={e => { if (selected.id !== cat.id) e.currentTarget.style.background = '#f8fafc' }}
-                    onMouseLeave={e => { if (selected.id !== cat.id) e.currentTarget.style.background = 'transparent' }}
-                  >
-                    <span>{cat.name}</span>
-                    <FiChevronRight style={{ opacity: selected.id === cat.id ? 1 : 0.4 }} />
-                  </div>
-                ))}
+                <span style={{ color: '#cbd5e1' }}>/</span>
+                <span style={{ color: '#64748b', fontSize: '0.9rem' }}>{selected.name}</span>
               </div>
 
-              {/* CONTENT PANEL */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={selected.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.25 }}
-                  style={{
-                    flex: '1 1 500px',
-                    background: '#fff',
-                    borderRadius: '14px',
-                    padding: '32px 36px',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
-                    border: '1px solid #e2e8f0',
-                  }}
-                >
-                  {/* Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
-                    <div style={{
-                      background: selected.color, borderRadius: '12px',
-                      width: '48px', height: '48px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '1.5rem', flexShrink: 0,
-                    }}>
-                      {selected.icon}
-                    </div>
-                    <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
-                      {selected.name}
-                    </h2>
+              {/* Content card */}
+              <div style={{
+                background: '#fff',
+                borderRadius: '16px',
+                padding: '36px 40px',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+                border: '1px solid #e2e8f0',
+                maxWidth: '960px',
+              }}>
+                {/* Title */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+                  <div style={{
+                    background: selected.color, borderRadius: '12px',
+                    width: '52px', height: '52px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.6rem', flexShrink: 0,
+                  }}>
+                    {selected.icon}
                   </div>
+                  <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                    {selected.name}
+                  </h2>
+                </div>
 
-                  {/* Description */}
-                  <p style={{ color: '#475569', lineHeight: 1.75, fontSize: '0.97rem', marginBottom: '28px' }}>
-                    {selected.description}
-                  </p>
+                {/* Description */}
+                <p style={{ color: '#475569', lineHeight: 1.8, fontSize: '1rem', marginBottom: '28px', borderBottom: '2px solid #f1f5f9', paddingBottom: '24px' }}>
+                  {selected.description}
+                </p>
 
-                  {/* Product Offerings */}
-                  <div style={{ borderTop: '2px solid #f1f5f9', paddingTop: '22px' }}>
-                    <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem' }}>
-                      <span style={{ color: selected.color, fontSize: '1.1rem' }}>▶</span>
-                      Product Offerings
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px 24px' }}>
-                      {selected.products.map((product, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.04 }}
-                          style={{
-                            display: 'flex', alignItems: 'center', gap: '10px',
-                            padding: '10px 12px',
-                            borderRadius: '8px',
-                            background: '#f8fafc',
-                            border: '1px solid #e2e8f0',
-                          }}
-                        >
-                          <IoCheckmarkCircle style={{ color: '#22c55e', fontSize: '1.15rem', flexShrink: 0 }} />
-                          <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.88rem' }}>{product}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
+                {/* Product Offerings heading */}
+                <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.05rem' }}>
+                  <span style={{ color: selected.color, fontSize: '1.1rem' }}>▶</span>
+                  Product Offerings
+                </h3>
 
-                  {/* CTA */}
-                  <div style={{ marginTop: '28px', paddingTop: '22px', borderTop: '2px solid #f1f5f9' }}>
-                    <Link
-                      to="/#contact"
+                {/* Products grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px 20px' }}>
+                  {selected.products.map((product, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.045 }}
                       style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                        background: selected.color, color: '#fff',
-                        padding: '11px 24px', borderRadius: '10px',
-                        fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
-                        boxShadow: `0 4px 16px ${selected.color}55`,
-                        transition: 'opacity 0.15s',
+                        display: 'flex', alignItems: 'center', gap: '12px',
+                        padding: '12px 16px',
+                        borderRadius: '10px',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
                       }}
                     >
-                      Get a Quote <FiArrowRight />
-                    </Link>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                      <IoCheckmarkCircle style={{ color: '#22c55e', fontSize: '1.25rem', flexShrink: 0 }} />
+                      <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.92rem' }}>{product}</span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '2px solid #f1f5f9' }}>
+                  <Link
+                    to="/#contact"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '8px',
+                      background: selected.color, color: '#fff',
+                      padding: '12px 28px', borderRadius: '10px',
+                      fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
+                      boxShadow: `0 4px 16px ${selected.color}55`,
+                    }}
+                  >
+                    Get a Quote <FiArrowRight />
+                  </Link>
+                </div>
+              </div>
             </motion.div>
           )}
 
