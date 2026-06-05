@@ -129,11 +129,17 @@ const categories = [
   },
 ]
 
-const whyChooseUs = [
-  { icon: '🛠️', title: 'Expert Technicians', desc: 'Skilled in chip-level & component repairs' },
-  { icon: '⚡', title: 'Fast Turnaround', desc: 'Quick service with minimal downtime' },
-  { icon: '💰', title: 'Transparent Pricing', desc: 'No hidden costs — honest quotes upfront' },
-  { icon: '🔒', title: 'Trusted Partner', desc: 'Trusted by 100+ businesses across Bangalore' },
+const brands = [
+  { name: 'ASUS', src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg' },
+  { name: 'Acer', src: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Acer_2011.svg' },
+  { name: 'Intel', src: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg' },
+  { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' },
+  { name: 'Samsung', src: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg' },
+  { name: 'Apple', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
+  { name: 'Cisco', src: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg' },
+  { name: 'AWS', src: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
+  { name: 'Dell', src: 'https://upload.wikimedia.org/wikipedia/commons/4/48/Dell_Logo.svg' },
+  { name: 'HP', src: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg' },
 ]
 
 export default function RepairRecovery() {
@@ -147,26 +153,23 @@ export default function RepairRecovery() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
 
-      {/* Why Choose Us strip */}
-      <div className="relative z-10 pt-4 pb-2 bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {whyChooseUs.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-                className="flex items-center gap-3 py-2"
-              >
-                <span className="text-2xl">{item.icon}</span>
-                <div>
-                  <div className="text-sm font-bold text-slate-800">{item.title}</div>
-                  <div className="text-xs text-slate-500">{item.desc}</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+      {/* Scrolling brand logo bar */}
+      <div className="bg-white border-b border-slate-100 overflow-hidden py-3">
+        <style>{`
+          @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          .marquee-track { display: flex; animation: marquee 28s linear infinite; width: max-content; }
+          .marquee-track:hover { animation-play-state: paused; }
+        `}</style>
+        <div className="marquee-track">
+          {[...brands, ...brands].map((brand, i) => (
+            <div key={i} className="flex items-center justify-center px-10 shrink-0" style={{ height: '52px' }}>
+              <img src={brand.src} alt={brand.name}
+                style={{ height: '28px', maxWidth: '90px', objectFit: 'contain', filter: 'grayscale(100%) opacity(0.6)', transition: 'filter 0.3s' }}
+                onMouseEnter={e => e.currentTarget.style.filter = 'grayscale(0%) opacity(1)'}
+                onMouseLeave={e => e.currentTarget.style.filter = 'grayscale(100%) opacity(0.6)'}
+              />
+            </div>
+          ))}
         </div>
       </div>
 
