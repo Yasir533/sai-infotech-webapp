@@ -1,44 +1,79 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PolicyPage from './PolicyPage'
 
-const Section = ({ title, children }) => (
-  <div
-    style={{
-      marginBottom: '32px',
-      padding: '30px',
-      minHeight: '260px',
-      background: '#ffffff',
-      borderRadius: '16px',
-      boxShadow: '0 4px 20px rgba(15, 23, 42, 0.06)',
-      border: '1px solid rgba(47, 111, 191, 0.08)',
-      transition: 'all 0.3s ease'
-    }}
-  >
-    <h2
-      style={{
-        fontSize: '1.25rem',
-        fontWeight: 700,
-        color: '#0f172a',
-        marginBottom: '16px',
-        borderLeft: '5px solid #2f6fbf',
-        paddingLeft: '14px',
-        lineHeight: '1.4'
-      }}
-    >
-      {title}
-    </h2>
+const Section = ({ title, children }) => {
+  const [open, setOpen] = useState(false)
 
-    <div
-      style={{
-        color: '#475569',
-        lineHeight: '1.9',
-        fontSize: '15px'
-      }}
-    >
-      {children}
+  return (
+    <div style={{
+      borderBottom: '1px solid #e8eef5',
+    }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '18px 28px',
+          background: open ? '#f0f6ff' : '#fff',
+          border: 'none',
+          cursor: 'pointer',
+          textAlign: 'left',
+          transition: 'background 0.2s',
+          gap: '12px',
+        }}
+        onMouseOver={e => { if (!open) e.currentTarget.style.background = '#f8fafc' }}
+        onMouseOut={e => { if (!open) e.currentTarget.style.background = '#fff' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '4px',
+            height: '20px',
+            borderRadius: '2px',
+            background: open ? '#2f6fbf' : '#cbd5e1',
+            flexShrink: 0,
+            transition: 'background 0.2s',
+          }} />
+          <span style={{
+            fontSize: '0.97rem',
+            fontWeight: 700,
+            color: open ? '#1e3a5f' : '#334155',
+            letterSpacing: '0.01em',
+          }}>
+            {title}
+          </span>
+        </div>
+        <span style={{
+          fontSize: '1.1rem',
+          color: '#2f6fbf',
+          fontWeight: 400,
+          flexShrink: 0,
+          transition: 'transform 0.25s',
+          transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
+          display: 'inline-block',
+        }}>
+          +
+        </span>
+      </button>
+
+      <div style={{
+        maxHeight: open ? '600px' : '0',
+        overflow: 'hidden',
+        transition: 'max-height 0.35s ease',
+      }}>
+        <div style={{
+          padding: '4px 28px 24px 46px',
+          color: '#475569',
+          fontSize: '0.93rem',
+          lineHeight: '1.85',
+        }}>
+          {children}
+        </div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default function PrivacyPolicy() {
   return (
@@ -53,39 +88,22 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="Information We Collect">
-  <p>
-    The information we collect depends on the products or services you
-    request from our Team. Depending on your Product, we may collect the following information:
-  </p>
-
- <ul
-  style={{
-    paddingLeft: '24px',
-    lineHeight: '2',
-    color: '#475569',
-    marginTop: '10px',
-    columns: '2 250px',
-    columnGap: '40px'
-  }}
->
-    <li>Full Name</li>
-    <li>Email Address</li>
-    <li>Phone Number</li>
-    <li>Billing and Shipping Address</li>
-    <li>Payment Information</li>
-    <li>Order and Purchase History</li>
-    <li>Device, Browser, and Usage Information</li>
-    <li>
-      For rental services, we may require identity verification documents
-      such as an Aadhaar Card, PAN Card, or other government-issued
-      identification as applicable.
-    </li>
-    <li>
-      Additional information may be requested depending on the type of
-      product, rental service, repair service, or support request.
-    </li>
-  </ul>
-</Section>
+        <p>
+          The information we collect depends on the products or services you
+          request from our Team. Depending on your Product, we may collect the following information:
+        </p>
+        <ul style={{ paddingLeft: '20px', lineHeight: '2', marginTop: '10px' }}>
+          <li>Full Name</li>
+          <li>Email Address</li>
+          <li>Phone Number</li>
+          <li>Billing and Shipping Address</li>
+          <li>Payment Information</li>
+          <li>Order and Purchase History</li>
+          <li>Device, Browser, and Usage Information</li>
+          <li>For rental services, we may require identity verification documents such as an Aadhaar Card, PAN Card, or other government-issued identification as applicable.</li>
+          <li>Additional information may be requested depending on the type of product, rental service, repair service, or support request.</li>
+        </ul>
+      </Section>
 
       <Section title="How We Use Your Information">
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
@@ -144,26 +162,17 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="Contact Us">
-        <p>
-          If you have any questions regarding this Privacy Policy or your
-          personal information, please contact us:
-        </p>
-        <div
-  style={{
-    background: '#f8fafc',
-    padding: '18px',
-    borderRadius: '12px',
-    border: '1px solid #e2e8f0'
-  }}
->
-  <p style={{ margin: '0 0 10px 0' }}>
-    <strong>Email:</strong> ssmb@sais.in
-  </p>
-
-  <p style={{ margin: 0 }}>
-    <strong>Company:</strong> Sai Infotech
-  </p>
-</div>
+        <p>If you have any questions regarding this Privacy Policy or your personal information, please contact us:</p>
+        <div style={{
+          background: '#f8fafc',
+          padding: '16px 18px',
+          borderRadius: '10px',
+          border: '1px solid #e2e8f0',
+          marginTop: '10px'
+        }}>
+          <p style={{ margin: '0 0 8px 0' }}><strong>Email:</strong> ssmb@sais.in</p>
+          <p style={{ margin: 0 }}><strong>Company:</strong> Sai Infotech</p>
+        </div>
       </Section>
     </PolicyPage>
   )

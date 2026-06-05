@@ -5,7 +5,7 @@ export default function PolicyPage({ title, children }) {
   const navigate = useNavigate()
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Segoe UI', sans-serif" }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f0f4f8', fontFamily: "'Segoe UI', sans-serif" }}>
       {/* Header */}
       <div style={{
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #2f6fbf 100%)',
@@ -44,15 +44,15 @@ export default function PolicyPage({ title, children }) {
 
       {/* Page Title Banner */}
       <div style={{
-        background:'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2f6fbf 100%)',
-        padding: '70px 24px 60px',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2f6fbf 100%)',
+        padding: '50px 24px 80px',
         textAlign: 'center',
       }}>
         <h1 style={{
           color: '#fff',
-          fontSize: 'clamp(2rem, 5vw, 3rem)',
+          fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
           textTransform: 'uppercase',
-          letterSpacing: '1px',
+          letterSpacing: '2px',
           fontWeight: 800,
           margin: 0,
         }}>
@@ -63,72 +63,32 @@ export default function PolicyPage({ title, children }) {
           height: '4px',
           background: 'rgba(255,255,255,0.5)',
           borderRadius: '2px',
-          margin: '16px auto 0',
+          margin: '14px auto 0',
         }} />
       </div>
 
       {/* Content */}
       <div style={{
-        maxWidth: '900px',
+        maxWidth: '860px',
         margin: '-40px auto 0',
-        padding: '48px 24px 80px',
+        padding: '0 20px 60px',
         position: 'relative',
         zIndex: 10,
       }}>
         <div style={{
-  background: '#fff',
-  borderRadius: '20px',
-  padding: 'clamp(24px, 5vw, 48px)',
-  boxShadow: '0 10px 40px rgba(15,23,42,0.08)',
-  color: '#334155',
-  fontSize: '0.97rem',
-  lineHeight: '1.75',
-  overflow: 'hidden'
-}}>
+          background: '#fff',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          boxShadow: '0 10px 40px rgba(15,23,42,0.10)',
+        }}>
+          {children}
+        </div>
 
-  {/* Intro Banner */}
-  <div
-    style={{
-      background: 'linear-gradient(135deg, #2f6fbf 0%, #1e40af 100%)',
-      color: '#fff',
-      padding: '32px',
-      borderRadius: '16px',
-      marginBottom: '32px',
-      boxShadow: '0 10px 30px rgba(47,111,191,0.25)'
-    }}
-  >
-    <h2
-      style={{
-        margin: '0 0 12px 0',
-        fontSize: '1.8rem',
-        fontWeight: 700
-      }}
-    >
-      Privacy & Data Protection
-    </h2>
-
-    <p
-      style={{
-        margin: 0,
-        lineHeight: '1.8',
-        opacity: 0.95
-      }}
-    >
-      Sai Infotech values your privacy and is committed to safeguarding your
-      personal information. This policy explains how we collect, use, store,
-      and protect your data while providing our products and services.
-    </p>
-  </div>
-
-  {children}
-</div>
-
-        {/* Footer note */}
         <p style={{
           textAlign: 'center',
           color: '#94a3b8',
           fontSize: '0.82rem',
-          marginTop: '32px',
+          marginTop: '28px',
         }}>
           © {new Date().getFullYear()} SAI INFOTECH. All rights reserved. · Basavanagudi, Bangalore
         </p>
