@@ -32,16 +32,31 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="Information We Collect">
-        <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
-          <li>Full Name</li>
-          <li>Email Address</li>
-          <li>Phone Number</li>
-          <li>Billing and Shipping Address</li>
-          <li>Payment Information</li>
-          <li>Order and Purchase History</li>
-          <li>Device, Browser, and Usage Information</li>
-        </ul>
-      </Section>
+  <p>
+    The information we collect depends on the products or services you
+    request from Sai Infotech. Depending on the nature of your order,
+    we may collect the following information:
+  </p>
+
+  <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
+    <li>Full Name</li>
+    <li>Email Address</li>
+    <li>Phone Number</li>
+    <li>Billing and Shipping Address</li>
+    <li>Payment Information</li>
+    <li>Order and Purchase History</li>
+    <li>Device, Browser, and Usage Information</li>
+    <li>
+      For rental services, we may require identity verification documents
+      such as an Aadhaar Card, PAN Card, or other government-issued
+      identification as applicable.
+    </li>
+    <li>
+      Additional information may be requested depending on the type of
+      product, rental service, repair service, or support request.
+    </li>
+  </ul>
+</Section>
 
       <Section title="How We Use Your Information">
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
