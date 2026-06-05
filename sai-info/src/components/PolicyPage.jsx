@@ -44,16 +44,17 @@ export default function PolicyPage({ title, children }) {
 
       {/* Page Title Banner */}
       <div style={{
-        background: 'linear-gradient(135deg, #1e3a5f 0%, #2f6fbf 100%)',
-        padding: '48px 24px 40px',
+        background:'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2f6fbf 100%)',
+        padding: '70px 24px 60px',
         textAlign: 'center',
       }}>
         <h1 style={{
           color: '#fff',
-          fontSize: 'clamp(1.6rem, 4vw, 2.4rem)',
+          fontSize: 'clamp(2rem, 5vw, 3rem)',
+          textTransform: 'uppercase',
+          letterSpacing: '1px',
           fontWeight: 800,
           margin: 0,
-          letterSpacing: '-0.02em',
         }}>
           {title}
         </h1>
@@ -68,21 +69,59 @@ export default function PolicyPage({ title, children }) {
 
       {/* Content */}
       <div style={{
-        maxWidth: '820px',
-        margin: '0 auto',
+        maxWidth: '900px',
+        margin: '-40px auto 0',
         padding: '48px 24px 80px',
+        position: 'relative',
+        zIndex: 10,
       }}>
         <div style={{
-          background: '#fff',
-          borderRadius: '12px',
-          padding: 'clamp(24px, 5vw, 48px)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 24px rgba(0,0,0,0.06)',
-          color: '#334155',
-          fontSize: '0.97rem',
-          lineHeight: '1.75',
-        }}>
-          {children}
-        </div>
+  background: '#fff',
+  borderRadius: '20px',
+  padding: 'clamp(24px, 5vw, 48px)',
+  boxShadow: '0 10px 40px rgba(15,23,42,0.08)',
+  color: '#334155',
+  fontSize: '0.97rem',
+  lineHeight: '1.75',
+  overflow: 'hidden'
+}}>
+
+  {/* Intro Banner */}
+  <div
+    style={{
+      background: 'linear-gradient(135deg, #2f6fbf 0%, #1e40af 100%)',
+      color: '#fff',
+      padding: '32px',
+      borderRadius: '16px',
+      marginBottom: '32px',
+      boxShadow: '0 10px 30px rgba(47,111,191,0.25)'
+    }}
+  >
+    <h2
+      style={{
+        margin: '0 0 12px 0',
+        fontSize: '1.8rem',
+        fontWeight: 700
+      }}
+    >
+      Privacy & Data Protection
+    </h2>
+
+    <p
+      style={{
+        margin: 0,
+        lineHeight: '1.8',
+        opacity: 0.95
+      }}
+    >
+      Sai Infotech values your privacy and is committed to safeguarding your
+      personal information. This policy explains how we collect, use, store,
+      and protect your data while providing our products and services.
+    </p>
+  </div>
+
+  {children}
+</div>
 
         {/* Footer note */}
         <p style={{

@@ -2,20 +2,40 @@ import React from 'react'
 import PolicyPage from './PolicyPage'
 
 const Section = ({ title, children }) => (
-  <div style={{ marginBottom: '28px' }}>
+  <div
+    style={{
+      marginBottom: '32px',
+      padding: '24px',
+      background: '#ffffff',
+      borderRadius: '16px',
+      boxShadow: '0 4px 20px rgba(15, 23, 42, 0.06)',
+      border: '1px solid rgba(47, 111, 191, 0.08)',
+      transition: 'all 0.3s ease'
+    }}
+  >
     <h2
       style={{
-        fontSize: '1.1rem',
+        fontSize: '1.25rem',
         fontWeight: 700,
         color: '#0f172a',
-        marginBottom: '10px',
-        borderLeft: '4px solid #2f6fbf',
-        paddingLeft: '12px'
+        marginBottom: '16px',
+        borderLeft: '5px solid #2f6fbf',
+        paddingLeft: '14px',
+        lineHeight: '1.4'
       }}
     >
       {title}
     </h2>
-    {children}
+
+    <div
+      style={{
+        color: '#475569',
+        lineHeight: '1.9',
+        fontSize: '15px'
+      }}
+    >
+      {children}
+    </div>
   </div>
 )
 
@@ -34,11 +54,17 @@ export default function PrivacyPolicy() {
       <Section title="Information We Collect">
   <p>
     The information we collect depends on the products or services you
-    request from Sai Infotech. Depending on the nature of your order,
-    we may collect the following information:
+    request from our Team. Depending on your Product, we may collect the following information:
   </p>
 
-  <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
+  <ul
+  style={{
+    paddingLeft: '24px',
+    lineHeight: '2',
+    color: '#475569',
+    marginTop: '10px'
+  }}
+>
     <li>Full Name</li>
     <li>Email Address</li>
     <li>Phone Number</li>
@@ -119,11 +145,22 @@ export default function PrivacyPolicy() {
           If you have any questions regarding this Privacy Policy or your
           personal information, please contact us:
         </p>
-        <p>
-          <strong>Email:</strong> ssmb@sais.in
-          <br />
-          <strong>Company:</strong> Sai Infotech
-        </p>
+        <div
+  style={{
+    background: '#f8fafc',
+    padding: '18px',
+    borderRadius: '12px',
+    border: '1px solid #e2e8f0'
+  }}
+>
+  <p style={{ margin: '0 0 10px 0' }}>
+    <strong>Email:</strong> ssmb@sais.in
+  </p>
+
+  <p style={{ margin: 0 }}>
+    <strong>Company:</strong> Sai Infotech
+  </p>
+</div>
       </Section>
     </PolicyPage>
   )
