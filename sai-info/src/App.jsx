@@ -24,6 +24,7 @@ import RefundPolicy from './components/Refundpolicy'
 import WarrantyPolicy from './components/Warrantypolicy'
 import TermsAndConditions from './components/Termsandconditions'
 import EWasteManagement from './components/EWasteManagement'
+import Products from './components/Products'
 
 function HomePage() {
   const location = useLocation()
