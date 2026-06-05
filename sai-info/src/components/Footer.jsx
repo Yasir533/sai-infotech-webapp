@@ -4,19 +4,19 @@ import { Link } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
 
 const quickLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Services', href: '#services' },
-  { label: 'About', href: '#about' },
-  { label: 'Certificate', href: '#certificate' },
-  { label: 'Clients', href: '#clients' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/#home' },
+  { label: 'Services', href: '/#services' },
+  { label: 'About', href: '/#about' },
+  { label: 'Certificate', href: '/#certificate' },
+  { label: 'Clients', href: '/#clients' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 const serviceLinks = [
-{ label: 'IT Products & Sales', href: '#it-products' },
-{ label: 'Repair & Recovery', href: '#repair-recovery' },
-{ label: 'IT Solutions', href: '#it-solutions' },
-{ label: 'E-Waste Solutions', href: '#ewaste-solutions' },
+  { label: 'IT Products & Sales', href: '/#it-products' },
+  { label: 'Repair & Recovery', href: '/#repair-recovery' },
+  { label: 'IT Solutions', href: '/#it-solutions' },
+  { label: 'E-Waste Solutions', href: '/#ewaste-solutions' },
 ]
 
 const helpLinks = [
@@ -52,7 +52,7 @@ export default function Footer() {
           <div style={{ marginBottom: '40px' }}>
             {/* Logo centered */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-              <a href="#home">
+              <a href="/#home">
                 <img src={logoImg} alt="SAI INFOTECH" style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
               </a>
             </div>
@@ -117,7 +117,7 @@ export default function Footer() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              
+              <a
                 href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -134,7 +134,7 @@ export default function Footer() {
 
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-              <a href="#home">
+              <a href="/#home">
                 <img src={logoImg} alt="SAI INFOTECH" style={{ height: '180px', width: 'auto', objectFit: 'contain', maxWidth: '260px', filter: 'drop-shadow(0 8px 20px rgba(15,23,42,0.10))' }} />
               </a>
             </div>
@@ -199,7 +199,7 @@ export default function Footer() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              
+              <a
                 href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
                 target="_blank"
                 rel="noopener noreferrer"
