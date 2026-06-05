@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getApiBase } from '../utils/apiBase'
-import VideoBackground from '../components/VideoBackground'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 const OTP_LENGTH = 6
@@ -179,7 +178,6 @@ export default function AdminReset() {
 
   return (
     <div className="gradient-bg min-h-screen relative overflow-hidden">
-      <VideoBackground />
       <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-10 relative z-10">
         <div className="grid w-full gap-8 overflow-hidden rounded-[2rem] border border-slate-200/50 bg-white/85 backdrop-blur-xl shadow-[0_20px_50px_rgba(15,23,42,0.12)] lg:grid-cols-[1.1fr_0.9fr]">
           <div className="relative hidden overflow-hidden border-r border-slate-200/50 bg-slate-50/70 p-10 lg:block">

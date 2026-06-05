@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 
 import Loader from './components/Loader'
-import VideoBackground from './components/VideoBackground'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -41,7 +40,6 @@ function HomePage() {
 
   return (
     <div className="gradient-bg min-h-screen">
-      <VideoBackground />
       <Navbar />
       <main>
         <Hero />

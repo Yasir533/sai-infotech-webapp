@@ -15,7 +15,6 @@ import {
   FiEyeOff,
 } from "react-icons/fi";
 import { getApiBase } from "../utils/apiBase";
-import VideoBackground from "../components/VideoBackground";
 import imageCompression from "browser-image-compression";
 
 export default function AdminDashboard() {
@@ -350,7 +349,6 @@ export default function AdminDashboard() {
   if (!authenticated) {
     return (
       <div className="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden px-4 text-slate-900">
-        <VideoBackground />
         <div className="w-full max-w-sm rounded-[2rem] border border-slate-200/50 bg-white/85 backdrop-blur-xl p-8 shadow-[0_20px_50px_rgba(15,23,42,0.12)] z-10 flex flex-col items-center">
           <Link to="/" className="flex flex-col items-center gap-2 group mb-6">
             <img
@@ -419,7 +417,6 @@ export default function AdminDashboard() {
   return (
 
     <div className="relative min-h-screen overflow-hidden gradient-bg text-slate-900">
-      <VideoBackground />
 
       {/* HEADER */}
       <div className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
