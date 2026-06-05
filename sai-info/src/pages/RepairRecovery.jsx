@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight, FiChevronRight, FiPhone, FiMail } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
+import logoIcon from '../assets/logo.png'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
 
@@ -154,22 +155,29 @@ export default function RepairRecovery() {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
 
       {/* Scrolling brand logo bar */}
-      <div className="bg-white border-b border-slate-100 overflow-hidden py-3">
+      <div className="bg-white border-b border-slate-200 flex items-stretch overflow-hidden" style={{ height: '64px' }}>
         <style>{`
-          @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-          .marquee-track { display: flex; animation: marquee 28s linear infinite; width: max-content; }
-          .marquee-track:hover { animation-play-state: paused; }
+          @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          .marquee-track-s { display: flex; align-items: center; animation: marquee-scroll 32s linear infinite; width: max-content; }
+          .marquee-track-s:hover { animation-play-state: paused; }
         `}</style>
-        <div className="marquee-track">
-          {[...brands, ...brands].map((brand, i) => (
-            <div key={i} className="flex items-center justify-center px-10 shrink-0" style={{ height: '52px' }}>
-              <img src={brand.src} alt={brand.name}
-                style={{ height: '28px', maxWidth: '90px', objectFit: 'contain', filter: 'grayscale(100%) opacity(0.6)', transition: 'filter 0.3s' }}
-                onMouseEnter={e => e.currentTarget.style.filter = 'grayscale(0%) opacity(1)'}
-                onMouseLeave={e => e.currentTarget.style.filter = 'grayscale(100%) opacity(0.6)'}
-              />
-            </div>
-          ))}
+        {/* Fixed SAI INFOTECH logo left */}
+        <div className="flex items-center gap-3 pl-4 pr-5 border-r border-slate-200 shrink-0 bg-white z-10">
+          <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '38px', objectFit: 'contain' }} />
+        </div>
+        {/* Scrolling logos */}
+        <div className="overflow-hidden flex-1">
+          <div className="marquee-track-s">
+            {[...brands, ...brands].map((brand, i) => (
+              <div key={i} className="flex items-center justify-center px-8 shrink-0" style={{ height: '64px' }}>
+                <img src={brand.src} alt={brand.name}
+                  style={{ height: '30px', maxWidth: '90px', objectFit: 'contain', transition: 'transform 0.3s' }}
+                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
