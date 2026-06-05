@@ -23,16 +23,15 @@ export default function EWasteManagement() {
   return (
     <PolicyPage title="E-Waste Management Solutions">
 
-      <Section title="About GRKMS">
+      <Section title="About E-Waste">
         <p>
-          Global Resource Knowledge Management Service (GRKMS) is a leading
-          E-Waste Management Company specializing in IT Asset Disposition,
-          Asset Remarketing, Secure Data Destruction, Logistics and
-          Sustainable Recycling Services across India.
+          We Sai infotech partner with leading e-waste management companies specialising in 
+          IT asset Remarketing, Secure Data Destruction, Logistics and
+          Sustainable Recycling Services across Karnataka.
         </p>
 
         <p>
-          Established in 2010, GRKMS brings over 20 years of industry
+          Established in 2010, We brings over 20 years of industry
           expertise in environmentally responsible recycling and IT asset
           lifecycle management.
         </p>
@@ -62,7 +61,7 @@ export default function EWasteManagement() {
 
       <Section title="The 6R Sustainability Approach">
         <p>
-          GRKMS follows the globally accepted 6R framework:
+          We follow the globally accepted 6R framework:
         </p>
 
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
@@ -99,7 +98,7 @@ export default function EWasteManagement() {
 
       <Section title="IT Asset Recovery & Remarketing">
         <p>
-          Before recycling, GRKMS evaluates equipment for reuse and
+          Before recycling, We evaluates equipment for reuse and
           remarketing opportunities to maximize asset value recovery.
         </p>
 
@@ -128,7 +127,7 @@ export default function EWasteManagement() {
         </p>
 
         <p>
-          GRKMS is committed to providing safe, secure and environmentally
+          Sai infotech is committed to providing safe, secure and environmentally
           responsible E-Waste management solutions while helping
           organizations achieve sustainability goals and regulatory
           compliance.
