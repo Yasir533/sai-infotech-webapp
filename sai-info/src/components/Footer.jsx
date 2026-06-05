@@ -5,11 +5,10 @@ import logoImg from '../assets/logo.png'
 
 const quickLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'About Us', href: '#about' },
   { label: 'Services', href: '#services' },
-  { label: 'IT Solutions', href: '#it-solutions' },
-  { label: 'Our Clients', href: '#clients' },
-  { label: 'Testimonials', href: '#testimonials' },
+  { label: 'About', href: '#about' },
+  { label: 'Certificate', href: '#certificate' },
+  { label: 'Clients', href: '#clients' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -118,7 +117,7 @@ export default function Footer() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <a
+              
                 href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -200,7 +199,7 @@ export default function Footer() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <a
+              
                 href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
                 target="_blank"
                 rel="noopener noreferrer"
