@@ -1,259 +1,350 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiArrowRight, FiMenu, FiX, FiChevronRight } from 'react-icons/fi'
+import { FiArrowRight, FiChevronRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import BrandTicker from '../components/BrandTicker'
-import Footer from '../components/Footer'
-import ScrollToTop from '../components/ScrollToTop'
-import itBg from '../assets/it-products-bg.png'
 
 const categories = [
   {
     id: 'computing',
-    label: 'Computing',
-    description: 'Our aim is to develop tomorrow\'s information technology that supports innovative applications, from big data analytics to the Internet of Things. It covers all aspects of information technology including energy efficient and robust hardware systems, software defined networks, secure distributed systems, scalability and integration in increasing computing density, reliability and lower power consumption and costs.',
-    products: ['Desktops', 'Processors', 'Chip Level', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation'],
+    name: 'Computing',
+    icon: '🖥️',
+    color: '#e53e3e',
+    bgImage: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&q=80',
+    description: "Our aim is to develop tomorrow's information technology that supports innovative applications, from big data analytics to the Internet of Things. It covers all aspects of information technology including energy efficient and robust hardware systems, software defined networks, secure distributed systems, scalability and integration in increasing computing density, reliability and lower power consumption and costs.",
+    products: ['Desktops', 'Processors', 'Chip Level', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation', 'Laptops', 'Servers'],
   },
   {
     id: 'data-centers',
-    label: 'Data Centers',
-    description: 'We determine optimum solutions for data center implementation that provide innovative technology, enabling agile infrastructure and cloud transformation.',
-    products: ['Storage Applications', 'Data Protection & Backup Recovery', 'High Performance Computing Solutions', 'Virtualization Solutions', 'Data Center Management Solutions', 'Storage Networking', 'Private Cloud', 'Hyper-Converged Solutions', 'Server Consolidation Solutions'],
+    name: 'Data Centers',
+    icon: '🗄️',
+    color: '#3182ce',
+    bgImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=80',
+    description: 'We provide comprehensive data center solutions including server infrastructure, storage systems, network equipment, and cooling solutions. Our expertise ensures your data center is optimized for performance, reliability, and energy efficiency.',
+    products: ['Rack Servers', 'Blade Servers', 'Storage Arrays', 'NAS/SAN', 'UPS Systems', 'PDU Units', 'Cooling Units', 'KVM Switches', 'Patch Panels', 'Cable Management'],
   },
   {
     id: 'electronic-security',
-    label: 'Electronic Security',
-    description: 'Comprehensive surveillance and access control solutions for enterprise-level security.',
-    products: ['IP & HD Cameras', 'PTZ Cameras', 'WiFi Cameras', 'DVR & NVR', 'Gating Solutions', 'Home Barriers', 'Boom Gates', 'Swing Gates', 'P Gates', 'Door Frame Metal Detectors', 'Hand Held Detectors', 'Biometric Access Controls', 'Facial Access Controls', 'Intrusion Analytics', 'Incident Handling', 'Motion Detectors', 'Access Controls'],
+    name: 'Electronic Security',
+    icon: '🛡️',
+    color: '#38a169',
+    bgImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&q=80',
+    description: 'Protect your premises with our state-of-the-art electronic security solutions. From CCTV surveillance to access control systems, we deliver end-to-end security infrastructure tailored to your needs.',
+    products: ['CCTV Cameras', 'DVR / NVR', 'IP Cameras', 'Access Control', 'Biometric Systems', 'Video Doorbells', 'Alarm Systems', 'Fire Detection', 'PA Systems', 'Video Analytics'],
   },
   {
     id: 'it-accessories',
-    label: 'IT Accessories',
-    description: 'We offer a wide variety of IT accessories to cater to present-day technology requirements and professional environments.',
-    products: ['SSD/HDD', 'Graphic Cards', 'Advanced Headsets', 'Gaming Keyboards', 'Gaming Headsets', 'RAM', 'Routers', 'Projectors', 'Gaming Mouse'],
+    name: 'IT Accessories',
+    icon: '🖱️',
+    color: '#d69e2e',
+    bgImage: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&q=80',
+    description: 'Complete your IT setup with our wide range of accessories. From peripherals to power solutions, we stock premium accessories from leading brands to enhance productivity and workflow.',
+    products: ['Keyboards & Mice', 'Headsets', 'Webcams', 'USB Hubs', 'External Drives', 'Memory Cards', 'Cables & Adapters', 'Laptop Bags', 'Mouse Pads', 'Screen Filters'],
   },
   {
     id: 'it-security',
-    label: 'IT Security',
-    description: 'As technology grows more advanced and sophisticated, businesses must remain vigilant against cyber security threats. We provide complete protection utilizing secure applications and security methodologies.',
-    products: ['Anti Virus & Firewall', 'Application Access Security', 'DLP (Data Loss Prevention)', 'Email & Web Security Isolation', 'UTM Unified Threat Management', 'Data Encryption', 'IoT & Server Security', 'Intrusion Analysis & Incident Handling'],
-  },
-  {
-    id: 'mobility',
-    label: 'Mobility',
-    description: 'Mobile technology continues transforming business operations and productivity through powerful and flexible device ecosystems.',
-    products: ['Laptops', 'Smart Phones', 'POS Solutions', 'Chromebooks', 'Industrial Thermal Scanners', 'Tablets', 'Wireless Cameras', 'Mobile Workstations', 'KIOSK Systems'],
+    name: 'IT Security',
+    icon: '🔒',
+    color: '#805ad5',
+    bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80',
+    description: 'Safeguard your digital assets with our comprehensive IT security solutions. We offer hardware and software security products to protect against cyber threats, data breaches, and unauthorized access.',
+    products: ['Firewalls', 'UTM Appliances', 'Antivirus Solutions', 'VPN Gateways', 'Endpoint Security', 'Email Security', 'Web Filtering', 'SIEM Solutions', 'Encryption Devices', 'Security Tokens'],
   },
   {
     id: 'networking',
-    label: 'Networking',
-    description: 'We provide secure, robust and scalable high-performance networking solutions tailored to business requirements.',
-    products: ['SDN / SDWAN', 'Wireless Solutions', 'NAS & SAN Solutions', 'Telephony Systems & VoIP', 'Email & Collaboration Solutions', 'Network Infrastructure', 'WAN, Intranet & VPN', 'Switching & Routing Solutions', 'Passive Cabling'],
-  }
+    name: 'Networking',
+    icon: '🌐',
+    color: '#dd6b20',
+    bgImage: 'https://images.unsplash.com/photo-1562547256-2c5ee93b60b7?w=400&q=80',
+    description: 'Build robust, scalable network infrastructure with our comprehensive range of networking products. From enterprise switches to wireless access points, we provide solutions for every network size and complexity.',
+    products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Load Balancers', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
+  },
+  {
+    id: 'cloud-solutions',
+    name: 'Cloud Solutions',
+    icon: '☁️',
+    color: '#2b6cb0',
+    bgImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80',
+    description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
+    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring'],
+  },
+  {
+    id: 'av-solutions',
+    name: 'AV Solutions',
+    icon: '📽️',
+    color: '#c05621',
+    bgImage: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&q=80',
+    description: 'Transform your meeting rooms, auditoriums, and training centres with our professional audio-visual solutions. We deliver seamless AV integration for corporate, educational, and entertainment environments.',
+    products: ['Projectors', 'LED Video Walls', 'Interactive Displays', 'Conference Cameras', 'Microphone Systems', 'Audio Amplifiers', 'Video Conferencing', 'Digital Signage', 'Control Systems', 'Presentation Tools'],
+  },
 ]
 
 export default function ITProductsSales() {
-  const [activeCategory, setActiveCategory] = useState('computing')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const currentCategory = categories.find(cat => cat.id === activeCategory)
+  const [selected, setSelected] = useState(null)
+  const [view, setView] = useState('grid') // 'grid' | 'detail'
 
-  const handleGetInTouch = (e) => {
-    e.preventDefault()
-    window.location.href = '/#contact'
+  const handleCardClick = (cat) => {
+    setSelected(cat)
+    setView('detail')
+  }
+
+  const handleBack = () => {
+    setView('grid')
+    setSelected(null)
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+    <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", background: '#f8fafc', minHeight: '100vh' }}>
 
-      {/* Brand Ticker at very top */}
-      <div className="relative z-10 pt-4">
+      {/* TOP NAV */}
+      <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)', padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
+        <Link to="/" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '8px', color: '#fff', padding: '6px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
+          ← Back to Home
+        </Link>
+        <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
+        <span style={{ color: '#fff', fontWeight: 700 }}>SAI INFOTECH</span>
+      </div>
+
+      {/* BRAND TICKER */}
+      <div style={{ position: 'relative', zIndex: 10, paddingTop: '0' }}>
         <BrandTicker />
       </div>
 
-      {/* Main content */}
-      <main className="flex-1 relative z-10 pt-6 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px 48px' }}>
 
-          {/* Breadcrumb */}
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-sm text-slate-600 mb-8">
-            <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
-            <FiChevronRight size={16} />
-            <span className="text-slate-900 font-semibold">IT Products & Sales</span>
-          </motion.div>
+        {/* PAGE HEADER */}
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+            IT Products <span style={{ color: '#345f9a' }}>&amp; Sales</span>
+          </h1>
+          <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
+            Browse our complete range of IT products across all categories
+          </p>
+        </div>
 
-          {/* Header banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12 rounded-2xl overflow-hidden relative"
-            style={{ minHeight: '220px' }}
-          >
-            {/* Background image */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `url(${itBg})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            />
-            {/* Strong uniform dark overlay so ALL text is visible */}
-            <div className="absolute inset-0" style={{ background: 'rgba(10,20,40,0.78)' }} />
+        <AnimatePresence mode="wait">
 
-            {/* Text content — centered so it's never hidden behind image */}
-            <div className="relative z-10 p-8 lg:p-12 flex flex-col items-center justify-center text-center" style={{ minHeight: '220px' }}>
-              <h1
-                className="font-black mb-3"
-                style={{
-                  fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                  color: '#ffffff',
-                  textShadow: '0 2px 16px rgba(0,0,0,0.8)',
-                }}
-              >
-                IT Products <span style={{ color: '#22d3ee' }}>&amp; Sales</span>
-              </h1>
-              <p
-                className="max-w-2xl"
-                style={{
-                  color: '#e2e8f0',
-                  fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
-                  textShadow: '0 1px 8px rgba(0,0,0,0.7)',
-                }}
-              >
-                Explore our comprehensive portfolio of IT solutions across computing, security, networking, and more.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Two-column layout */}
-          <div className="grid lg:grid-cols-4 gap-8">
-
-            {/* Left Sidebar */}
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-1">
-
-              {/* Mobile Categories Toggle Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden w-full mb-4 flex items-center justify-between gap-2 px-4 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
-                <span className="flex items-center gap-2">
-                  <FiMenu size={20} />
-                  {mobileMenuOpen ? 'Hide Categories' : `Categories — ${currentCategory?.label}`}
-                </span>
-                {mobileMenuOpen ? <FiX size={20} /> : <FiArrowRight size={20} />}
-              </button>
-
-              {/* Desktop sidebar */}
-              <div className="hidden lg:block space-y-2">
-                {categories.map((cat, idx) => (
-                  <motion.button
+          {/* GRID VIEW */}
+          {view === 'grid' && (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                gap: '20px',
+              }}>
+                {categories.map((cat, i) => (
+                  <motion.div
                     key={cat.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                      activeCategory === cat.id
-                        ? 'bg-red-600 text-white shadow-lg'
-                        : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                    }`}>
-                    <span>{cat.label}</span>
-                    <motion.div animate={{ x: activeCategory === cat.id ? 4 : 0 }} transition={{ type: 'spring', stiffness: 300 }}>
-                      <FiArrowRight size={18} />
-                    </motion.div>
-                  </motion.button>
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.06 }}
+                    whileHover={{ y: -6, boxShadow: `0 16px 40px rgba(0,0,0,0.14)` }}
+                    onClick={() => handleCardClick(cat)}
+                    style={{
+                      background: '#fff',
+                      borderRadius: '14px',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                      transition: 'box-shadow 0.2s',
+                      border: '1px solid #e2e8f0',
+                    }}
+                  >
+                    {/* Card image */}
+                    <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
+                      <img
+                        src={cat.bgImage}
+                        alt={cat.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.07)'}
+                        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                      />
+                      {/* Icon badge */}
+                      <div style={{
+                        position: 'absolute', top: '50%', left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: cat.color,
+                        borderRadius: '14px',
+                        width: '52px', height: '52px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '1.6rem',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                      }}>
+                        {cat.icon}
+                      </div>
+                    </div>
+
+                    {/* Card footer */}
+                    <div style={{
+                      padding: '14px 18px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      borderTop: `3px solid ${cat.color}`,
+                    }}>
+                      <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>{cat.name}</span>
+                      <FiArrowRight style={{ color: cat.color, fontSize: '1.1rem', fontWeight: 700 }} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* DETAIL VIEW */}
+          {view === 'detail' && selected && (
+            <motion.div
+              key="detail"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap' }}
+            >
+              {/* SIDEBAR */}
+              <div style={{
+                flex: '0 0 240px',
+                background: '#fff',
+                borderRadius: '14px',
+                overflow: 'hidden',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                border: '1px solid #e2e8f0',
+              }}>
+                {/* Back button */}
+                <button
+                  onClick={handleBack}
+                  style={{
+                    width: '100%', padding: '12px 18px',
+                    background: '#f1f5f9', border: 'none', borderBottom: '1px solid #e2e8f0',
+                    color: '#475569', fontSize: '0.82rem', fontWeight: 600,
+                    cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '6px',
+                  }}
+                >
+                  ← All Categories
+                </button>
+                {categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    onClick={() => setSelected(cat)}
+                    style={{
+                      padding: '12px 18px',
+                      cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      background: selected.id === cat.id ? cat.color : 'transparent',
+                      color: selected.id === cat.id ? '#fff' : '#334155',
+                      fontWeight: selected.id === cat.id ? 700 : 500,
+                      fontSize: '0.9rem',
+                      borderBottom: '1px solid #f1f5f9',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => { if (selected.id !== cat.id) e.currentTarget.style.background = '#f8fafc' }}
+                    onMouseLeave={e => { if (selected.id !== cat.id) e.currentTarget.style.background = 'transparent' }}
+                  >
+                    <span>{cat.name}</span>
+                    <FiChevronRight style={{ opacity: selected.id === cat.id ? 1 : 0.4 }} />
+                  </div>
                 ))}
               </div>
 
-              {/* Mobile dropdown */}
-              <AnimatePresence>
-                {mobileMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="lg:hidden space-y-2 mb-4">
-                    {categories.map((cat, idx) => (
-                      <motion.button
-                        key={cat.id}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.05 }}
-                        onClick={() => { setActiveCategory(cat.id); setMobileMenuOpen(false) }}
-                        className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                          activeCategory === cat.id
-                            ? 'bg-red-600 text-white shadow-lg'
-                            : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
-                        }`}>
-                        <span>{cat.label}</span>
-                        <FiArrowRight size={18} />
-                      </motion.button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-            </motion.div>
-
-            {/* Right Content Area */}
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 bg-white rounded-2xl p-8 sm:p-10 shadow-lg border border-slate-200">
+              {/* CONTENT PANEL */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeCategory}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}>
+                  key={selected.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.25 }}
+                  style={{
+                    flex: '1 1 500px',
+                    background: '#fff',
+                    borderRadius: '14px',
+                    padding: '32px 36px',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
+                    border: '1px solid #e2e8f0',
+                  }}
+                >
+                  {/* Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
+                    <div style={{
+                      background: selected.color, borderRadius: '12px',
+                      width: '48px', height: '48px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.5rem', flexShrink: 0,
+                    }}>
+                      {selected.icon}
+                    </div>
+                    <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                      {selected.name}
+                    </h2>
+                  </div>
 
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mb-4">
-                    {currentCategory?.label}
-                  </h2>
+                  {/* Description */}
+                  <p style={{ color: '#475569', lineHeight: 1.75, fontSize: '0.97rem', marginBottom: '28px' }}>
+                    {selected.description}
+                  </p>
 
-                  {currentCategory?.description && (
-                    <p className="text-slate-600 text-base leading-relaxed mb-8">
-                      {currentCategory.description}
-                    </p>
-                  )}
-
-                  <div className="mb-10">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                      <span className="text-red-600">▸</span> Product Offerings
+                  {/* Product Offerings */}
+                  <div style={{ borderTop: '2px solid #f1f5f9', paddingTop: '22px' }}>
+                    <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem' }}>
+                      <span style={{ color: selected.color, fontSize: '1.1rem' }}>▶</span>
+                      Product Offerings
                     </h3>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {currentCategory?.products.map((product, idx) => (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px 24px' }}>
+                      {selected.products.map((product, i) => (
                         <motion.div
-                          key={idx}
+                          key={i}
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.03 }}
-                          className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                          <IoCheckmarkCircle className="text-green-500 flex-shrink-0" size={18} />
-                          <span className="text-slate-700 font-medium">{product}</span>
+                          transition={{ delay: i * 0.04 }}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            background: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                          }}
+                        >
+                          <IoCheckmarkCircle style={{ color: '#22c55e', fontSize: '1.15rem', flexShrink: 0 }} />
+                          <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.88rem' }}>{product}</span>
                         </motion.div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                    <a
-                      href="/#contact"
-                      onClick={handleGetInTouch}
-                      className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-red-700 transition-colors text-sm">
-                      Get in Touch <FiArrowRight size={16} />
-                    </a>
+                  {/* CTA */}
+                  <div style={{ marginTop: '28px', paddingTop: '22px', borderTop: '2px solid #f1f5f9' }}>
+                    <Link
+                      to="/#contact"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '8px',
+                        background: selected.color, color: '#fff',
+                        padding: '11px 24px', borderRadius: '10px',
+                        fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
+                        boxShadow: `0 4px 16px ${selected.color}55`,
+                        transition: 'opacity 0.15s',
+                      }}
+                    >
+                      Get a Quote <FiArrowRight />
+                    </Link>
                   </div>
-
                 </motion.div>
               </AnimatePresence>
             </motion.div>
-          </div>
-        </div>
-      </main>
+          )}
 
-      <Footer />
-      <ScrollToTop />
+        </AnimatePresence>
+      </div>
+
+      {/* FOOTER */}
+      <div style={{ background: '#0f172a', padding: '20px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>
+        © {new Date().getFullYear()} SAI INFOTECH. All rights reserved. · Basavanagudi, Bangalore
+      </div>
+
     </div>
   )
 }
