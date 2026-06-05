@@ -13,10 +13,10 @@ const quickLinks = [
 ]
 
 const serviceLinks = [
-  { label: 'IT Products & Sales', href: '/#it-products' },
-  { label: 'Repair & Recovery', href: '/#repair-recovery' },
-  { label: 'IT Solutions', href: '/#it-solutions' },
-  { label: 'E-Waste Solutions', href: '/#ewaste-solutions' },
+  { label: "IT Products & Sales", href: "/#services" },
+  { label: "Repair & Recovery", href: "/#services" },
+  { label: "IT Solutions", href: "/#it-solutions" },
+  { label: "E-Waste Solutions", href: "/#services" },
 ]
 
 const helpLinks = [
