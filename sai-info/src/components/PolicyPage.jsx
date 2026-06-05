@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 export default function PolicyPage({ title, children }) {
   const navigate = useNavigate()
-
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f0f4f8', fontFamily: "'Segoe UI', sans-serif" }}>
+
       {/* Header */}
       <div style={{
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #2f6fbf 100%)',
@@ -67,29 +67,6 @@ export default function PolicyPage({ title, children }) {
         }} />
       </div>
 
-      {/* Jurisdiction Notice */}
-<div
-  style={{
-    background: '#fff7ed',
-    border: '1px solid #fdba74',
-    borderLeft: '5px solid #ea580c',
-    padding: '18px 20px',
-    borderRadius: '12px',
-    marginBottom: '32px',
-    color: '#7c2d12',
-    lineHeight: '1.8',
-    fontSize: '0.95rem'
-  }}
->
-  <strong>Jurisdiction & Governing Law:</strong>
-  <br />
-  All disputes arising out of any vendor agreements, service contracts,
-  sales contracts, or related transactions shall be governed by and
-  construed in accordance with the laws of India. Any dispute or
-  difference whatsoever shall be subject to the exclusive jurisdiction
-  of the courts located in Bangalore, India.
-</div>
-
       {/* Content */}
       <div style={{
         maxWidth: '860px',
@@ -98,6 +75,28 @@ export default function PolicyPage({ title, children }) {
         position: 'relative',
         zIndex: 10,
       }}>
+
+        {/* Jurisdiction Notice — inside content container, no overlap */}
+        <div style={{
+          background: '#fff7ed',
+          border: '1px solid #fdba74',
+          borderLeft: '5px solid #ea580c',
+          padding: '18px 20px',
+          borderRadius: '12px',
+          marginBottom: '16px',
+          color: '#7c2d12',
+          lineHeight: '1.8',
+          fontSize: '0.95rem'
+        }}>
+          <strong>Jurisdiction & Governing Law:</strong>
+          <br />
+          All disputes arising out of any vendor agreements, service contracts,
+          sales contracts, or related transactions shall be governed by and
+          construed in accordance with the laws of India. Any dispute or
+          difference whatsoever shall be subject to the exclusive jurisdiction
+          of the courts located in Bangalore, India.
+        </div>
+
         <div style={{
           background: '#fff',
           borderRadius: '20px',
