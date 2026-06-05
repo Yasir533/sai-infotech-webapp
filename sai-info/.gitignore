@@ -3,3 +3,5 @@ node_modules
 distnode_modules
 .vite
 dist
+.vercel
+.env*.local

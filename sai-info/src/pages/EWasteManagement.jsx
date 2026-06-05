@@ -1,23 +1,51 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PolicyPage from '../components/PolicyPage'
 
-const Section = ({ title, children }) => (
-  <div style={{ marginBottom: '32px' }}>
-    <h2
-      style={{
-        fontSize: '1.2rem',
-        fontWeight: 700,
-        color: '#0f172a',
-        borderLeft: '4px solid #2f6fbf',
-        paddingLeft: '12px',
-        marginBottom: '12px'
-      }}
-    >
-      {title}
-    </h2>
-    {children}
-  </div>
-)
+const Section = ({ title, children }) => {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div style={{ borderBottom: '1px solid #e8eef5' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '18px 28px',
+          background: open ? '#f0f6ff' : '#fff',
+          border: 'none',
+          cursor: 'pointer',
+          textAlign: 'left',
+          transition: 'background 0.2s',
+          gap: '12px',
+        }}
+        onMouseOver={e => { if (!open) e.currentTarget.style.background = '#f8fafc' }}
+        onMouseOut={e => { if (!open) e.currentTarget.style.background = '#fff' }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{
+            width: '4px', height: '20px', borderRadius: '2px',
+            background: open ? '#2f6fbf' : '#cbd5e1', flexShrink: 0, transition: 'background 0.2s',
+          }} />
+          <span style={{ fontSize: '0.97rem', fontWeight: 700, color: open ? '#1e3a5f' : '#334155' }}>
+            {title}
+          </span>
+        </div>
+        <span style={{
+          fontSize: '1.1rem', color: '#2f6fbf', flexShrink: 0,
+          transition: 'transform 0.25s', transform: open ? 'rotate(45deg)' : 'rotate(0deg)', display: 'inline-block',
+        }}>+</span>
+      </button>
+      <div style={{ maxHeight: open ? '600px' : '0', overflow: 'hidden', transition: 'max-height 0.35s ease' }}>
+        <div style={{ padding: '4px 28px 24px 46px', color: '#475569', fontSize: '0.93rem', lineHeight: '1.85' }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function EWasteManagement() {
   return (
@@ -25,11 +53,10 @@ export default function EWasteManagement() {
 
       <Section title="About E-Waste">
         <p>
-          We Sai infotech partner with leading e-waste management companies specialising in 
+          We Sai infotech partner with leading e-waste management companies specialising in
           IT asset Remarketing, Secure Data Destruction, Logistics and
           Sustainable Recycling Services across Karnataka.
         </p>
-
         <p>
           Established in 2010, We brings over 20 years of industry
           expertise in environmentally responsible recycling and IT asset
@@ -60,10 +87,7 @@ export default function EWasteManagement() {
       </Section>
 
       <Section title="The 6R Sustainability Approach">
-        <p>
-          We follow the globally accepted 6R framework:
-        </p>
-
+        <p>We follow the globally accepted 6R framework:</p>
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
           <li>Refuse</li>
           <li>Reduce</li>
@@ -72,11 +96,7 @@ export default function EWasteManagement() {
           <li>Repair</li>
           <li>Recycle</li>
         </ul>
-
-        <p>
-          Our mission is to minimize waste generation and maximize
-          environmental sustainability.
-        </p>
+        <p>Our mission is to minimize waste generation and maximize environmental sustainability.</p>
       </Section>
 
       <Section title="Secure Data Destruction">
@@ -85,7 +105,6 @@ export default function EWasteManagement() {
           certified data destruction services for organizations looking to
           dispose of IT assets safely.
         </p>
-
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
           <li>Onsite and Offsite Data Destruction</li>
           <li>Hard Drive Degaussing</li>
@@ -101,7 +120,6 @@ export default function EWasteManagement() {
           Before recycling, We evaluates equipment for reuse and
           remarketing opportunities to maximize asset value recovery.
         </p>
-
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
           <li>Refurbishment</li>
           <li>Redeployment</li>
@@ -122,15 +140,11 @@ export default function EWasteManagement() {
       </Section>
 
       <Section title="Our Commitment">
-        <p>
-          Recycle Today for a Better Tomorrow.
-        </p>
-
+        <p>Recycle Today for a Better Tomorrow.</p>
         <p>
           Sai infotech is committed to providing safe, secure and environmentally
           responsible E-Waste management solutions while helping
-          organizations achieve sustainability goals and regulatory
-          compliance.
+          organizations achieve sustainability goals and regulatory compliance.
         </p>
       </Section>
 
