@@ -142,7 +142,7 @@ export default function EWasteManagement() {
       <Section title="Our Commitment">
         <p>Recycle Today for a Better Tomorrow.</p>
         <p>
-          Sai infotech is committed to providing safe, secure and environmentally
+          Sai Infotech is committed to providing safe, secure and environmentally
           responsible E-Waste management solutions while helping
           organizations achieve sustainability goals and regulatory compliance.
         </p>
