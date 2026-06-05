@@ -208,6 +208,7 @@ export default function ITProductsSales() {
                 boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
                 border: '1px solid #e2e8f0',
                 maxWidth: '960px',
+                margin: '0 auto',
               }}>
                 {/* Title */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
