@@ -93,14 +93,14 @@ const categories = [
     description:
       'Can\'t visit our service centre? No problem. Our certified technicians come to you — whether at your office or home — to diagnose and resolve hardware and software issues on the spot.',
     services: [
-      'Doorstep Laptop Repair',
+      'Corporate AMC Services',
+      'Minor Doorstep Repairs',
       'Office Desktop Servicing',
       'Network Troubleshooting',
       'Printer Setup & Repair',
-      'Peripheral Configuration',
+      'Hardware Setup',
       'Emergency Breakdown Support',
       'Scheduled Maintenance Visits',
-      'Corporate AMC Services',
     ],
   },
 ]
