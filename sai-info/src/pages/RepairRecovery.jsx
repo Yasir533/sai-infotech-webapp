@@ -61,7 +61,7 @@ const categories = [
       'Chip-Level PCB Repair',
       'Motherboard Fault Detection',
       'IC Replacement',
-      'BGA Re-balling & Rebonding',
+      'BGA Chip Re-balling & Replacement',
       'Power Rail Diagnostics',
       'Capacitor & MOSFET Replacement',
       'BIOS Recovery',
