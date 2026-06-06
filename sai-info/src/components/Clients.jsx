@@ -25,7 +25,6 @@ const clients = [
   { name: 'Stibo Systems', logo: stiboLogo },
 ]
 
-// Duplicate for seamless infinite scroll
 const doubled = [...clients, ...clients]
 
 export default function Clients() {
@@ -60,17 +59,6 @@ export default function Clients() {
         className="relative mx-auto"
         style={{ height: '520px', overflow: 'hidden', maxWidth: '380px' }}
       >
-        {/* Top fade */}
-        <div
-          className="absolute top-0 left-0 right-0 h-16 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom, #0a0f1e, transparent)' }}
-        />
-        {/* Bottom fade */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-16 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #0a0f1e, transparent)' }}
-        />
-
         {/* Scrolling track */}
         <div className="animate-scroll-up">
           <div className="grid grid-cols-2 gap-4 pb-4">
