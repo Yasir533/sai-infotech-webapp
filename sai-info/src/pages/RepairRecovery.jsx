@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight, FiChevronRight, FiPhone, FiMail } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo.png'
+import samsungLogo from '../assets/samsung.png'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
 import BrandTicker from '../components/BrandTicker'
@@ -175,7 +176,7 @@ const brands = [
   { name: 'Acer', src: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Acer_2011.svg' },
   { name: 'Intel', src: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg' },
   { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' },
-  { name: 'Samsung', src: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/Samsung_Logo.svg/1200px-Samsung_Logo.svg.png' },
+  { name: 'Samsung', src: samsungLogo },
   { name: 'Apple', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
   { name: 'Cisco', src: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg' },
   { name: 'AWS', src: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
