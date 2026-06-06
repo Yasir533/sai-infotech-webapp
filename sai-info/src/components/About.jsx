@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiAward } from 'react-icons/fi'
+import { FiAward, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import isoBadge from '../assets/iso-seal.png'
 import qualityVeritas from '../assets/quality-veritas.png'
+
+const aboutImages = [
+  '/about.jpeg',
+  '/about2.jpeg',
+  '/about3.jpeg',
+  '/about4.jpeg',
+  '/about5.jpeg',
+  '/about6.jpeg',
+  '/about7.jpeg',
+]
 
 const mvvSections = [
   {
@@ -64,9 +74,18 @@ const mvvSections = [
 
 export default function About() {
   const [hoveredMVV, setHoveredMVV] = useState(null)
+  const [currentImg, setCurrentImg] = useState(0)
 
-  // Use hovered item if available, otherwise default to Mission when not hovered (to avoid blank layout spaces)
-  const activeMVV = hoveredMVV || mvvSections[0]
+  // Auto-advance every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % aboutImages.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const prevImg = () => setCurrentImg((prev) => (prev - 1 + aboutImages.length) % aboutImages.length)
+  const nextImg = () => setCurrentImg((prev) => (prev + 1) % aboutImages.length)
 
   return (
     <section id="about" className="section-pad relative overflow-hidden">
@@ -76,7 +95,7 @@ export default function About() {
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* ================= HEADER ================= */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -96,7 +115,8 @@ export default function About() {
 
         {/* ================= ROW 1: ABOUT US IMAGE & CONTENT ================= */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
-          {/* About Image - Bounded side-by-side view */}
+
+          {/* Image Carousel — same fixed size as before */}
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -104,12 +124,55 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="relative group flex justify-center"
           >
+            {/* Glow */}
             <div className="absolute inset-0 bg-blue-500/10 rounded-3xl blur-2xl group-hover:bg-blue-500/20 transition-all duration-500" />
-            <img
-              src="/about.jpeg"
-              alt="About Sai Infotech"
-              className="w-full max-w-[480px] max-h-[340px] md:max-h-[385px] object-cover rounded-3xl border border-white/10 shadow-2xl relative z-10 hover:border-blue-500/30 transition-all duration-500"
-            />
+
+            {/* Fixed-size carousel container — matches original image dimensions exactly */}
+            <div className="relative w-full max-w-[480px] h-[300px] md:h-[345px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl z-10 hover:border-blue-500/30 transition-all duration-500 flex-shrink-0">
+
+              {/* Sliding images */}
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImg}
+                  src={aboutImages[currentImg]}
+                  alt={`About Sai Infotech ${currentImg + 1}`}
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.97 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </AnimatePresence>
+
+              {/* Prev / Next buttons */}
+              <button
+                onClick={prevImg}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+              >
+                <FiChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextImg}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
+              >
+                <FiChevronRight size={16} />
+              </button>
+
+              {/* Dot indicators */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                {aboutImages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentImg(i)}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === currentImg
+                        ? 'w-4 h-1.5 bg-blue-400'
+                        : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* About Content */}
@@ -154,10 +217,9 @@ export default function About() {
         </div>
 
         {/* ================= ROW 2: SPLIT MVV & CERTIFICATE ================= */}
-        {/* Align items-start to prevent columns stretching and creating empty space */}
         <div className="grid lg:grid-cols-2 gap-10 items-start">
-          
-          {/* LEFT COLUMN: Mission Vision Values with interactive hover */}
+
+          {/* LEFT COLUMN: Mission Vision Values */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -173,7 +235,6 @@ export default function About() {
                 Mission, Vision & <span className="text-gradient">Values</span>
               </h4>
 
-              {/* Buttons Grid */}
               <div className="grid grid-cols-3 gap-3">
                 {mvvSections.map((sec) => {
                   const isActive = hoveredMVV?.id === sec.id
@@ -187,18 +248,10 @@ export default function About() {
                           ? 'border-blue-500/50 bg-blue-500/10 shadow-lg scale-105'
                           : 'border-white/10 hover:border-blue-500/30'
                       }`}
-                      style={{
-                        boxShadow: isActive ? `0 8px 24px ${sec.glow}` : 'none',
-                      }}
+                      style={{ boxShadow: isActive ? `0 8px 24px ${sec.glow}` : 'none' }}
                     >
-                      <div
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${sec.color} flex items-center justify-center`}
-                      >
-                        <img
-                          src={sec.icon}
-                          alt={sec.title}
-                          className="w-6 h-6 object-contain brightness-0 invert"
-                        />
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${sec.color} flex items-center justify-center`}>
+                        <img src={sec.icon} alt={sec.title} className="w-6 h-6 object-contain brightness-0 invert" />
                       </div>
                       <h5 className="text-white font-bold text-xs sm:text-sm">
                         {sec.title.split(' ')[1]}
@@ -209,7 +262,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Hover Detail Panel - Shows details only on hover and collapses to 0 height when not hovered */}
             <AnimatePresence>
               {hoveredMVV && (
                 <motion.div
@@ -228,26 +280,20 @@ export default function About() {
                     }}
                   >
                     <div className="flex items-center gap-2.5 mb-3">
-                      <span
-                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                        style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
-                      />
+                      <span className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                        style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }} />
                       <h4 className="text-white text-base font-bold tracking-wide">{hoveredMVV.title}</h4>
                     </div>
                     <p className="text-white text-xs sm:text-sm leading-relaxed mb-3 font-medium">
                       {hoveredMVV.desc}
                     </p>
-                    <div
-                      className="h-px w-full mb-3"
-                      style={{ background: `linear-gradient(to right, ${hoveredMVV.divider}, transparent)` }}
-                    />
+                    <div className="h-px w-full mb-3"
+                      style={{ background: `linear-gradient(to right, ${hoveredMVV.divider}, transparent)` }} />
                     <ul className="space-y-2">
                       {hoveredMVV.points.map((pt, index) => (
                         <li key={index} className="flex items-start gap-2 text-white text-xs sm:text-sm leading-relaxed font-medium">
-                          <span
-                            className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
-                            style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }}
-                          />
+                          <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                            style={{ background: `linear-gradient(135deg, ${hoveredMVV.dotFrom}, ${hoveredMVV.dotTo})` }} />
                           <span>{pt}</span>
                         </li>
                       ))}
@@ -258,7 +304,7 @@ export default function About() {
             </AnimatePresence>
           </motion.div>
 
-          {/* RIGHT COLUMN: ISO Certification Section */}
+          {/* RIGHT COLUMN: ISO Certification */}
           <motion.div
             id="certificate"
             initial={{ opacity: 0, y: 50 }}
@@ -268,31 +314,21 @@ export default function About() {
             className="glass rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative overflow-hidden"
           >
             <div>
-              {/* Header with Bureau Veritas logo */}
               <div className="flex items-center gap-4 mb-6">
-                <img
-                  src={qualityVeritas}
-                  alt="Quality Veritas Logo"
-                  className="w-12 h-12 rounded-xl object-contain bg-white p-0.5 shadow-md flex-shrink-0"
-                />
+                <img src={qualityVeritas} alt="Quality Veritas Logo"
+                  className="w-12 h-12 rounded-xl object-contain bg-white p-0.5 shadow-md flex-shrink-0" />
                 <div>
                   <h3 className="text-white text-2xl font-bold">Quality Assurance</h3>
                   <p className="text-slate-400 text-sm">Committed to the highest standards</p>
                 </div>
               </div>
 
-              {/* Glowing Badge with ISO badge logo (iso-seal.png) - round seal */}
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
                 <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
-                  <div
-                    className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
-                    style={{ boxShadow: '0 0 20px rgba(6,182,212,0.7), 0 0 50px rgba(6,182,212,0.3)' }}
-                  />
-                  <img
-                    src={isoBadge}
-                    alt="ISO Certification Badge"
-                    className="w-20 h-20 object-contain relative z-10 rounded-full shadow-inner"
-                  />
+                  <div className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
+                    style={{ boxShadow: '0 0 20px rgba(6,182,212,0.7), 0 0 50px rgba(6,182,212,0.3)' }} />
+                  <img src={isoBadge} alt="ISO Certification Badge"
+                    className="w-20 h-20 object-contain relative z-10 rounded-full shadow-inner" />
                 </div>
                 <div>
                   <h4 className="text-white text-2xl font-black">ISO 9001:2015</h4>
@@ -305,7 +341,6 @@ export default function About() {
                 SAI INFOTECH is officially certified under the ISO 9001:2015 Quality
                 Management System, reflecting our commitment to world-class IT services.
               </p>
-
               <p className="text-slate-300 text-sm leading-relaxed">
                 This certification demonstrates our dedication to quality,
                 reliability, customer satisfaction, and continuous improvement.
