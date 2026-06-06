@@ -131,7 +131,7 @@ const categories = [
 {
   id: 'windmill',
   label: 'Windmill Solutions',
-  icon: '🌬️',
+  icon: '⚡',
   accent: '#16a34a',
   bgColor: '#f0fdf4',
   image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80',
