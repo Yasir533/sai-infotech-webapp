@@ -96,7 +96,7 @@ const categories = [
     bgColor: '#fffbeb',
     image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&q=80',
     description:
-      'Beyond hardware repair, we offer a range of software and maintenance services to keep your systems healthy, secure, and running efficiently in the long term.',
+      'Beyond hardware repair, we offer a wide range of software, Application and maintenance services to keep your systems healthy, secure, and running efficiently in the long term.',
     services: [
       'Operating System Installation',
       'Virus & Malware Removal',
