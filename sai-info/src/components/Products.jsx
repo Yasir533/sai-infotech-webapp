@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
+import Navbar from "./Navbar"
+import Footer from "./Footer"
 import { getApiBase } from "../utils/apiBase"
 
 const PLACEHOLDER = "https://placehold.co/600x400/e2e8f0/94a3b8?text=No+Image"
