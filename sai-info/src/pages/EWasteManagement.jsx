@@ -230,27 +230,6 @@ export default function EWasteManagement() {
                   Explore our complete e-waste management services and sustainability solutions
                 </p>
               </div>
-
-              {/* Jurisdiction Notice */}
-              <div style={{
-                background: '#fff7ed',
-                border: '1px solid #fdba74',
-                borderLeft: '5px solid #ea580c',
-                padding: '14px 18px',
-                borderRadius: '10px',
-                marginBottom: '24px',
-                color: '#7c2d12',
-                lineHeight: '1.8',
-                fontSize: '0.88rem',
-              }}>
-                <strong>Jurisdiction & Governing Law:</strong>
-                {' '}All disputes arising out of any vendor agreements, service contracts,
-                sales contracts, or related transactions shall be governed by and
-                construed in accordance with the laws of India. Any dispute or
-                difference whatsoever shall be subject to the exclusive jurisdiction
-                of the courts located in Bangalore, India.
-              </div>
-
               {/* Cards Grid */}
               <div style={{
                 display: 'grid',
