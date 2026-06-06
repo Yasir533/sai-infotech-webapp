@@ -10,8 +10,8 @@ const navLinks = [
   { label: 'About',       href: '#about' },
   { label: 'Certificate', href: '#certificate' },
   { label: 'Clients',     href: '#clients' },
-  { label: 'Contact',     href: '#contact' },
   { label: 'Products',    href: '/products', isPage: true },
+  { label: 'Contact',     href: '#contact' },
 ]
 
 export default function Navbar() {

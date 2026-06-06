@@ -9,8 +9,8 @@ const quickLinks = [
   { label: 'About',       href: '/#about' },
   { label: 'Certificate', href: '/#certificate' },
   { label: 'Clients',     href: '/#clients' },
-  { label: 'Contact',     href: '/#contact' },
   { label: 'Products',    to: '/products' },
+  { label: 'Contact',     href: '/#contact' },
 ]
 
 const serviceLinks = [
