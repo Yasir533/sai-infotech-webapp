@@ -27,39 +27,81 @@ function StarRow({ size = 22, color = '#facc15' }) {
   )
 }
 
-// Happy Clients — group of people / community icon
-function IconHappyClients({ size = 20, color = '#60a5fa' }) {
+// Animated Happy Clients icon — people pulse in one by one
+function IconHappyClients() {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <motion.svg
+      width={22} height={22} viewBox="0 0 24 24" fill="none"
+      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+      animate={{ scale: [1, 1.15, 1] }}
+      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+    >
       <circle cx="9" cy="7" r="3" />
       <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      <path d="M21 21v-2a4 4 0 0 0-3-3.85" />
+      <motion.path
+        d="M16 3.13a4 4 0 0 1 0 7.75"
+        animate={{ opacity: [0.3, 1, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+      />
+      <motion.path
+        d="M21 21v-2a4 4 0 0 0-3-3.85"
+        animate={{ opacity: [0.3, 1, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+      />
+    </motion.svg>
+  )
+}
+
+// Animated Experience icon — clock hands rotate
+function IconExperience() {
+  return (
+    <svg width={22} height={22} viewBox="0 0 24 24" fill="none"
+      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      {/* Minute hand — rotates full circle */}
+      <motion.line
+        x1="12" y1="12" x2="12" y2="6"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+        style={{ originX: '12px', originY: '12px' }}
+        strokeLinecap="round"
+      />
+      {/* Hour hand — rotates slower */}
+      <motion.line
+        x1="12" y1="12" x2="15.5" y2="13.5"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+        style={{ originX: '12px', originY: '12px' }}
+        strokeLinecap="round"
+      />
     </svg>
   )
 }
 
-// Years Experience — hourglass / time proven icon
-function IconExperience({ size = 20, color = '#60a5fa' }) {
+// Animated Success icon — trophy shines / bounces
+function IconSuccess() {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  )
-}
-
-// Success Rate — trophy / achievement icon
-function IconSuccess({ size = 20, color = '#60a5fa' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <motion.svg
+      width={22} height={22} viewBox="0 0 24 24" fill="none"
+      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+      animate={{ y: [0, -3, 0] }}
+      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+    >
       <path d="M6 9H4a2 2 0 0 0 0 4h2" />
       <path d="M18 9h2a2 2 0 0 1 0 4h-2" />
       <path d="M6 9V5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4" />
       <path d="M6 13c0 3.87 2.69 7 6 7s6-3.13 6-7" />
       <line x1="12" y1="20" x2="12" y2="22" />
       <line x1="9" y1="22" x2="15" y2="22" />
-    </svg>
+      {/* Shine sparkle */}
+      <motion.circle
+        cx="15" cy="6" r="1"
+        fill="#60a5fa" stroke="none"
+        animate={{ opacity: [0, 1, 0], scale: [0.5, 1.3, 0.5] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+      />
+    </motion.svg>
   )
 }
 
@@ -69,6 +111,27 @@ export default function Ratings() {
   const customerCount = useCounter(50, 1600, inView)
   const ratingWhole = useCounter(4, 1200, inView)
   const ratingDec = useCounter(9, 1400, inView)
+
+  const stats = [
+    {
+      icon: <IconHappyClients />,
+      value: '100+',
+      label: 'Happy Clients',
+      delay: 0,
+    },
+    {
+      icon: <IconExperience />,
+      value: '25+',
+      label: 'Years Experience',
+      delay: 0.1,
+    },
+    {
+      icon: <IconSuccess />,
+      value: '100%',
+      label: 'Success Rate',
+      delay: 0.2,
+    },
+  ]
 
   return (
     <div className="relative z-10 w-full">
@@ -113,42 +176,28 @@ export default function Ratings() {
             <p className="text-slate-400 text-xs">Based on {customerCount}+ reviews</p>
           </div>
 
-          {/* Stats */}
+          {/* Stats with animated icons */}
           <div className="space-y-4">
-
-            {/* Happy Clients */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <IconHappyClients size={20} color="#60a5fa" />
-              </div>
-              <div>
-                <span className="text-blue-400 font-black text-lg">100+</span>
-                <span className="text-slate-300 text-sm ml-2">Happy Clients</span>
-              </div>
-            </div>
-
-            {/* Years Experience */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <IconExperience size={20} color="#60a5fa" />
-              </div>
-              <div>
-                <span className="text-blue-400 font-black text-lg">25+</span>
-                <span className="text-slate-300 text-sm ml-2">Years Experience</span>
-              </div>
-            </div>
-
-            {/* Success Rate */}
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <IconSuccess size={20} color="#60a5fa" />
-              </div>
-              <div>
-                <span className="text-blue-400 font-black text-lg">100%</span>
-                <span className="text-slate-300 text-sm ml-2">Success Rate</span>
-              </div>
-            </div>
-
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.4 + stat.delay }}
+              >
+                <div
+                  className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0"
+                  style={{ boxShadow: '0 0 12px rgba(96,165,250,0.15)' }}
+                >
+                  {stat.icon}
+                </div>
+                <div>
+                  <span className="text-blue-400 font-black text-lg">{stat.value}</span>
+                  <span className="text-slate-300 text-sm ml-2">{stat.label}</span>
+                </div>
+              </motion.div>
+            ))}
           </div>
 
           {/* Footer */}
