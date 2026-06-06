@@ -218,14 +218,14 @@ export default function RepairRecovery() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-12 rounded-2xl overflow-hidden relative"
-            style={{ minHeight: '220px' }}
+            style={{ minHeight: '140px' }}
           >
             <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #431407 0%, #7c2d12 40%, #ea580c 100%)' }} />
             <div className="absolute inset-0 opacity-10" style={{
               backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 40%)`,
             }} />
-            <div className="relative z-10 p-8 lg:p-12 flex flex-col items-center justify-center text-center" style={{ minHeight: '220px' }}>
+            <div className="relative z-10 p-8 lg:p-12 flex flex-col items-center justify-center text-center" style={{ minHeight: '140px' }}>
               <div className="text-4xl mb-3">🛠️</div>
               <h1 className="font-black mb-3" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', color: '#ffffff', textShadow: '0 2px 16px rgba(0,0,0,0.8)' }}>
                 Repair &amp; <span style={{ color: '#fed7aa' }}>Recovery</span>
