@@ -4,7 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight, FiChevronRight, FiPhone, FiMail } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo.png'
-import samsungLogo from '../assets/samsung.png'
+import acerLogo from '../assets/brands/acer.png'
+import appleLogo from '../assets/brands/apple.png'
+import asusLogo from '../assets/brands/asus.png'
+import awsLogo from '../assets/brands/aws.png'
+import ciscoLogo from '../assets/brands/cisco.png'
+import dellLogo from '../assets/brands/dell.png'
+import hpLogo from '../assets/brands/hp.png'
+import intelLogo from '../assets/brands/intel.png'
+import microsoftLogo from '../assets/brands/microsoft.png'
+import samsungLogo from '../assets/brands/samsung.png'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
 import BrandTicker from '../components/BrandTicker'
@@ -172,16 +181,16 @@ const categories = [
 ]
 
 const brands = [
-  { name: 'ASUS', src: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/ASUS_Logo.svg' },
-  { name: 'Acer', src: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Acer_2011.svg' },
-  { name: 'Intel', src: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg' },
-  { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' },
+  { name: 'ASUS', src: asusLogo },
+  { name: 'Acer', src: acerLogo },
+  { name: 'Intel', src: intelLogo },
+  { name: 'Microsoft', src: microsoftLogo },
   { name: 'Samsung', src: samsungLogo },
-  { name: 'Apple', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
-  { name: 'Cisco', src: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg' },
-  { name: 'AWS', src: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
-  { name: 'Dell', src: 'https://upload.wikimedia.org/wikipedia/commons/4/48/Dell_Logo.svg' },
-  { name: 'HP', src: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg' },
+  { name: 'Apple', src: appleLogo },
+  { name: 'Cisco', src: ciscoLogo },
+  { name: 'AWS', src: awsLogo },
+  { name: 'Dell', src: dellLogo },
+  { name: 'HP', src: hpLogo },
 ]
 
 export default function RepairRecovery() {
