@@ -237,7 +237,7 @@ export default function RepairRecovery() {
           {/* Breadcrumb */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2 text-sm text-slate-600 mb-8">
-            <Link to="/" className="hover:text-slate-900 transition-colors">Home</Link>
+            <Link to="/" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all" style={{ background: '#1e293b', color: '#fff', border: '1.5px solid #334155' }}>← Back to Home</Link>
             <FiChevronRight size={16} />
             <span className="text-slate-900 font-semibold">Repair &amp; Recovery</span>
           </motion.div>
