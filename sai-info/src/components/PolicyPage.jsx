@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import logoIcon from '../assets/logo.png'
+import logoIcon from '../assets/logo-dark-bg.png'
 
 export default function PolicyPage({ title, children }) {
   const navigate = useNavigate()
