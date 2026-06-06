@@ -4,59 +4,45 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 import logoIcon from '../assets/logo.png'
 
-// isPage: true  → navigates to a full route via React Router <Link>
-// isPage: false → scrolls to an anchor on the homepage
 const navLinks = [
   { label: 'Home',        href: '#home' },
   { label: 'Services',    href: '#services' },
   { label: 'About',       href: '#about' },
   { label: 'Certificate', href: '#certificate' },
-  { label: 'Products',    href: '/products', isPage: true },   // ← page route
   { label: 'Clients',     href: '#clients' },
   { label: 'Contact',     href: '#contact' },
+  { label: 'Products',    href: '/products', isPage: true },
 ]
 
 export default function Navbar() {
-  const [scrolled, setScrolled]   = useState(false)
-  const [menuOpen, setMenuOpen]   = useState(false)
-  const [active,   setActive]     = useState('#home')
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [active,   setActive]   = useState('#home')
 
-  const navigate  = useNavigate()
-  const location  = useLocation()
-
+  const navigate = useNavigate()
+  const location = useLocation()
   const isOnProductsPage = location.pathname === '/products'
 
-  // ── scroll spy (only meaningful on homepage) ──────────────────────────────
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 50)
-
-      const anchors = navLinks
-        .filter(l => !l.isPage)
-        .map(l => l.href.replace('#', ''))
-
+      const anchors = navLinks.filter(l => !l.isPage).map(l => l.href.replace('#', ''))
       let current = '#home'
       for (const section of anchors) {
         const el = document.getElementById(section)
-        if (el && el.getBoundingClientRect().top <= 120) {
-          current = `#${section}`
-        }
+        if (el && el.getBoundingClientRect().top <= 120) current = `#${section}`
       }
       setActive(current)
     }
-
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // ── anchor click handler ───────────────────────────────────────────────────
   const handleNavClick = (e, href) => {
     e.preventDefault()
     setMenuOpen(false)
     setActive(href)
-
     if (isOnProductsPage) {
-      // Navigate home first, then let HomePage's useEffect scroll to hash
       navigate('/' + href)
     } else {
       setTimeout(() => {
@@ -66,7 +52,6 @@ export default function Navbar() {
     }
   }
 
-  // ── shared link styles ─────────────────────────────────────────────────────
   const desktopLinkClass = (href) =>
     `px-4 py-2 text-[15px] font-bold transition-all duration-200 relative ${
       active === href
@@ -106,7 +91,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
 
-          {/* ── LOGO ── */}
+          {/* LOGO */}
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
@@ -133,11 +118,10 @@ export default function Navbar() {
             </div>
           </a>
 
-          {/* ── DESKTOP NAV ── */}
+          {/* DESKTOP NAV */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) =>
               link.isPage ? (
-                // React Router Link for page routes
                 <Link
                   key={link.href}
                   to={link.href}
@@ -147,7 +131,6 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ) : (
-                // Plain anchor for scroll links
                 <a
                   key={link.href}
                   href={link.href}
@@ -158,28 +141,19 @@ export default function Navbar() {
                 </a>
               )
             )}
-
-            <a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
-              className={`ml-3 ${desktopLinkClass('#contact')}`}
-            >
-              Get Services
-            </a>
           </div>
 
-          {/* ── MOBILE MENU BUTTON ── */}
+          {/* MOBILE BUTTON */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden p-2 rounded-lg nav-glass text-slate-600 hover:text-slate-900"
           >
             {menuOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
           </button>
-
         </div>
       </div>
 
-      {/* ── MOBILE MENU ── */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -211,14 +185,6 @@ export default function Navbar() {
                   </a>
                 )
               )}
-
-              <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
-                className={mobileLinkClass('#contact')}
-              >
-                Get Services
-              </a>
             </div>
           </motion.div>
         )}

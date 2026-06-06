@@ -4,34 +4,57 @@ import { Link } from 'react-router-dom'
 import logoImg from '../assets/logo.png'
 
 const quickLinks = [
-  { label: 'Home', href: '/#home' },
-  { label: 'Services', href: '/#services' },
-  { label: 'About', href: '/#about' },
+  { label: 'Home',        href: '/#home' },
+  { label: 'Services',    href: '/#services' },
+  { label: 'About',       href: '/#about' },
   { label: 'Certificate', href: '/#certificate' },
-  { label: 'Products', href: '/#products' },
-  { label: 'Clients', href: '/#clients' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Clients',     href: '/#clients' },
+  { label: 'Contact',     href: '/#contact' },
+  { label: 'Products',    to: '/products' },
 ]
 
 const serviceLinks = [
   { label: "IT Products & Sales", href: "/#services" },
-  { label: "Repair & Recovery", href: "/#services" },
-  { label: "IT Solutions", href: "/#it-solutions" },
-  { label: "E-Waste Solutions", href: "/#services" },
+  { label: "Repair & Recovery",   href: "/#services" },
+  { label: "IT Solutions",        href: "/#it-solutions" },
+  { label: "E-Waste Solutions",   href: "/#services" },
 ]
 
 const helpLinks = [
-  { label: 'Contact Us', href: '/#contact' },
-  { label: 'Privacy Policy', to: '/privacy-policy' },
-  { label: 'Return Policy', to: '/return-policy' },
-  { label: 'Shipping Policy', to: '/shipping-policy' },
-  { label: 'Refund Policy', to: '/refund-policy' },
-  { label: 'Warranty Policy', to: '/warranty-policy' },
+  { label: 'Contact Us',           href: '/#contact' },
+  { label: 'Privacy Policy',       to: '/privacy-policy' },
+  { label: 'Return Policy',        to: '/return-policy' },
+  { label: 'Shipping Policy',      to: '/shipping-policy' },
+  { label: 'Refund Policy',        to: '/refund-policy' },
+  { label: 'Warranty Policy',      to: '/warranty-policy' },
   { label: 'Terms And Conditions', to: '/terms-and-conditions' },
 ]
 
 const linkStyle = { color: '#334155', fontSize: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }
 const headingStyle = { color: '#0f172a', fontWeight: 700, marginBottom: '20px', letterSpacing: '0.05em' }
+const dot = { width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }
+const dotSm = { width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }
+
+function QuickLinkItem({ link, small }) {
+  const style = { ...linkStyle, fontSize: small ? '13px' : '14px' }
+  const d = small ? dotSm : dot
+  if (link.to) {
+    return (
+      <Link to={link.to} style={style}
+        onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'}
+        onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+        <span style={d} />{link.label}
+      </Link>
+    )
+  }
+  return (
+    <a href={link.href} style={style}
+      onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'}
+      onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+      <span style={d} />{link.label}
+    </a>
+  )
+}
 
 export default function Footer() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -49,28 +72,20 @@ export default function Footer() {
       <div style={{ position: 'relative', maxWidth: '1280px', margin: '0 auto', padding: '64px 24px 32px' }}>
 
         {isMobile ? (
-          /* ── MOBILE layout ── */
           <div style={{ marginBottom: '40px' }}>
-            {/* Logo centered */}
+            {/* Logo */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
               <a href="/#home">
                 <img src={logoImg} alt="SAI INFOTECH" style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
               </a>
             </div>
 
-            {/* Quick Links + Services side by side */}
+            {/* Quick Links + Services */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
               <div>
                 <h4 style={headingStyle}>Quick Links</h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {quickLinks.map((link, i) => (
-                    <li key={i}>
-                      <a href={link.href} style={{ ...linkStyle, fontSize: '13px' }}>
-                        <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
+                  {quickLinks.map((link, i) => <li key={i}><QuickLinkItem link={link} small /></li>)}
                 </ul>
               </div>
               <div>
@@ -79,8 +94,7 @@ export default function Footer() {
                   {serviceLinks.map((link, i) => (
                     <li key={i}>
                       <a href={link.href} style={{ ...linkStyle, fontSize: '13px' }}>
-                        <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                        {link.label}
+                        <span style={dotSm} />{link.label}
                       </a>
                     </li>
                   ))}
@@ -88,49 +102,41 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Help full width */}
+            {/* Help */}
             <div style={{ marginBottom: '32px' }}>
               <h4 style={headingStyle}>Help</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {helpLinks.map((link, i) => (
                   <li key={i}>
                     {link.href
-                      ? <a href={link.href} style={{ ...linkStyle, fontSize: '13px' }}><span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</a>
-                      : <Link to={link.to} style={{ ...linkStyle, fontSize: '13px' }}><span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</Link>
+                      ? <a href={link.href} style={{ ...linkStyle, fontSize: '13px' }}><span style={dotSm} />{link.label}</a>
+                      : <Link to={link.to} style={{ ...linkStyle, fontSize: '13px' }}><span style={dotSm} />{link.label}</Link>
                     }
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Our Location — Google Maps embed (mobile) */}
+            {/* Map */}
             <div>
               <h4 style={headingStyle}>Our Location</h4>
               <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(47,111,191,0.18)', boxShadow: '0 4px 18px rgba(47,111,191,0.10)' }}>
                 <iframe
                   title="SAI INFOTECH Location Mobile"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9!2d77.5748!3d12.9362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3f00a1d0b44b%3A0xd37c54bcf1741e8a!2sSAI%20INFOTECH!5e0!3m2!1sen!2sin!4v1717000000001!5m2!1sen!2sin"
-                  width="100%"
-                  height="180"
-                  style={{ display: 'block', border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
+                  width="100%" height="180" style={{ display: 'block', border: 0 }}
+                  allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <a
-                href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, color: '#2f6fbf', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}
-              >
+              <a href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
+                target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, color: '#2f6fbf', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
                 <FiMapPin size={13}/> Get Directions ↗
               </a>
             </div>
           </div>
 
         ) : (
-          /* ── DESKTOP layout ── */
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '56px' }}>
 
             {/* Logo */}
@@ -144,14 +150,7 @@ export default function Footer() {
             <div>
               <h4 style={headingStyle}>Quick Links</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {quickLinks.map((link, i) => (
-                  <li key={i}>
-                    <a href={link.href} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                {quickLinks.map((link, i) => <li key={i}><QuickLinkItem link={link} /></li>)}
               </ul>
             </div>
 
@@ -161,9 +160,10 @@ export default function Footer() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {serviceLinks.map((link, i) => (
                   <li key={i}>
-                    <a href={link.href} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />
-                      {link.label}
+                    <a href={link.href} style={linkStyle}
+                      onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'}
+                      onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+                      <span style={dot} />{link.label}
                     </a>
                   </li>
                 ))}
@@ -177,37 +177,38 @@ export default function Footer() {
                 {helpLinks.map((link, i) => (
                   <li key={i}>
                     {link.href
-                      ? <a href={link.href} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</a>
-                      : <Link to={link.to} style={linkStyle} onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'} onMouseLeave={e => e.currentTarget.style.color='#334155'}><span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2f6fbf', flexShrink: 0 }} />{link.label}</Link>
+                      ? <a href={link.href} style={linkStyle}
+                          onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'}
+                          onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+                          <span style={dot} />{link.label}
+                        </a>
+                      : <Link to={link.to} style={linkStyle}
+                          onMouseEnter={e => e.currentTarget.style.color='#2f6fbf'}
+                          onMouseLeave={e => e.currentTarget.style.color='#334155'}>
+                          <span style={dot} />{link.label}
+                        </Link>
                     }
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Our Location — Google Maps embed */}
+            {/* Map */}
             <div>
               <h4 style={headingStyle}>Our Location</h4>
               <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(47,111,191,0.18)', boxShadow: '0 4px 18px rgba(47,111,191,0.10)' }}>
                 <iframe
                   title="SAI INFOTECH Location"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9!2d77.5748!3d12.9362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3f00a1d0b44b%3A0xd37c54bcf1741e8a!2sSAI%20INFOTECH!5e0!3m2!1sen!2sin!4v1717000000001!5m2!1sen!2sin"
-                  width="100%"
-                  height="200"
-                  style={{ display: 'block', border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
+                  width="100%" height="200" style={{ display: 'block', border: 0 }}
+                  allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <a
-                href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a href="https://www.google.com/maps/place/SAI+INFOTECH/@12.9361754,77.5770133,17z?cid=15249029826734825098"
+                target="_blank" rel="noopener noreferrer"
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10, color: '#2f6fbf', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}
                 onMouseEnter={e => e.currentTarget.style.color='#1a4a8a'}
-                onMouseLeave={e => e.currentTarget.style.color='#2f6fbf'}
-              >
+                onMouseLeave={e => e.currentTarget.style.color='#2f6fbf'}>
                 <FiMapPin size={13}/> Get Directions ↗
               </a>
             </div>
@@ -215,10 +216,8 @@ export default function Footer() {
           </div>
         )}
 
-        {/* Divider */}
         <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, rgba(148,163,184,0.35), transparent)', marginBottom: '32px' }} />
 
-        {/* Bottom */}
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <p style={{ color: '#475569', fontSize: '14px', margin: 0 }}>© {new Date().getFullYear()} SAI INFOTECH. All rights reserved.</p>
         </div>
