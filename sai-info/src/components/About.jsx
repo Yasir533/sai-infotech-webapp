@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiAward, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import isoBadge from '../assets/iso-seal.png'
 import qualityVeritas from '../assets/quality-veritas.png'
+import saiLogo from '../assets/logo-icon-sm.png'
 
 const aboutImages = [
   '/about.jpeg',
@@ -76,7 +77,6 @@ export default function About() {
   const [hoveredMVV, setHoveredMVV] = useState(null)
   const [currentImg, setCurrentImg] = useState(0)
 
-  // Auto-advance every 3 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentImg((prev) => (prev + 1) % aboutImages.length)
@@ -89,14 +89,13 @@ export default function About() {
 
   return (
     <section id="about" className="section-pad relative overflow-hidden">
-      {/* Background patterns */}
       <div className="absolute inset-0 dot-pattern opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* ================= HEADER ================= */}
+        {/* HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -113,10 +112,9 @@ export default function About() {
           <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full mt-4" />
         </motion.div>
 
-        {/* ================= ROW 1: ABOUT US IMAGE & CONTENT ================= */}
+        {/* ROW 1: IMAGE CAROUSEL & CONTENT */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
 
-          {/* Image Carousel — same fixed size as before */}
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -124,13 +122,8 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="relative group flex justify-center"
           >
-            {/* Glow */}
             <div className="absolute inset-0 bg-blue-500/10 rounded-3xl blur-2xl group-hover:bg-blue-500/20 transition-all duration-500" />
-
-            {/* Fixed-size carousel container — matches original image dimensions exactly */}
             <div className="relative w-full max-w-[480px] h-[300px] md:h-[345px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl z-10 hover:border-blue-500/30 transition-all duration-500 flex-shrink-0">
-
-              {/* Sliding images */}
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImg}
@@ -143,31 +136,19 @@ export default function About() {
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </AnimatePresence>
-
-              {/* Prev / Next buttons */}
-              <button
-                onClick={prevImg}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
-              >
+              <button onClick={prevImg} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm">
                 <FiChevronLeft size={16} />
               </button>
-              <button
-                onClick={nextImg}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm"
-              >
+              <button onClick={nextImg} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center text-white transition-all duration-200 backdrop-blur-sm">
                 <FiChevronRight size={16} />
               </button>
-
-              {/* Dot indicators */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
                 {aboutImages.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrentImg(i)}
                     className={`rounded-full transition-all duration-300 ${
-                      i === currentImg
-                        ? 'w-4 h-1.5 bg-blue-400'
-                        : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                      i === currentImg ? 'w-4 h-1.5 bg-blue-400' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
                     }`}
                   />
                 ))}
@@ -184,8 +165,13 @@ export default function About() {
             className="glass rounded-3xl p-8 sm:p-10 border border-white/10 shadow-xl relative"
           >
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center">
-                <FiAward className="text-blue-400 text-xl" />
+              {/* Sai Infotech Logo replacing FiAward icon */}
+              <div className="w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-white/5 flex-shrink-0">
+                <img
+                  src={saiLogo}
+                  alt="Sai Infotech Logo"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div>
                 <h3 className="text-white text-2xl font-bold">About Sai Infotech</h3>
@@ -216,10 +202,9 @@ export default function About() {
           </motion.div>
         </div>
 
-        {/* ================= ROW 2: SPLIT MVV & CERTIFICATE ================= */}
+        {/* ROW 2: MVV & CERTIFICATE */}
         <div className="grid lg:grid-cols-2 gap-10 items-start">
 
-          {/* LEFT COLUMN: Mission Vision Values */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -234,7 +219,6 @@ export default function About() {
               <h4 className="text-white font-bold text-2xl mb-6">
                 Mission, Vision & <span className="text-gradient">Values</span>
               </h4>
-
               <div className="grid grid-cols-3 gap-3">
                 {mvvSections.map((sec) => {
                   const isActive = hoveredMVV?.id === sec.id
@@ -244,9 +228,7 @@ export default function About() {
                       onMouseEnter={() => setHoveredMVV(sec)}
                       onMouseLeave={() => setHoveredMVV(null)}
                       className={`glass rounded-2xl p-3 sm:p-4 border cursor-pointer flex flex-col items-center text-center gap-3 transition-all duration-300 ${
-                        isActive
-                          ? 'border-blue-500/50 bg-blue-500/10 shadow-lg scale-105'
-                          : 'border-white/10 hover:border-blue-500/30'
+                        isActive ? 'border-blue-500/50 bg-blue-500/10 shadow-lg scale-105' : 'border-white/10 hover:border-blue-500/30'
                       }`}
                       style={{ boxShadow: isActive ? `0 8px 24px ${sec.glow}` : 'none' }}
                     >
@@ -304,7 +286,7 @@ export default function About() {
             </AnimatePresence>
           </motion.div>
 
-          {/* RIGHT COLUMN: ISO Certification */}
+          {/* ISO Certification */}
           <motion.div
             id="certificate"
             initial={{ opacity: 0, y: 50 }}
@@ -322,7 +304,6 @@ export default function About() {
                   <p className="text-slate-400 text-sm">Committed to the highest standards</p>
                 </div>
               </div>
-
               <div className="glass rounded-2xl border border-blue-500/20 p-6 mb-6 flex items-center gap-6">
                 <div className="flex-shrink-0 w-24 h-24 relative flex items-center justify-center">
                   <div className="absolute inset-0 rounded-full border-4 border-cyan-400 opacity-80"
@@ -336,7 +317,6 @@ export default function About() {
                   <p className="text-slate-400 text-sm mt-1">Quality Management System</p>
                 </div>
               </div>
-
               <p className="text-slate-300 text-sm leading-relaxed mb-4">
                 SAI INFOTECH is officially certified under the ISO 9001:2015 Quality
                 Management System, reflecting our commitment to world-class IT services.
