@@ -110,12 +110,12 @@ export default function ITProductsSales() {
               <div style={{ marginBottom: '32px' }}>
                 <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
                   IT Products <span style={{ color: '#345f9a' }}>&amp; Sales</span>
+                  <span style={{ color: '#64748b', fontWeight: 400, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', marginLeft: '10px' }}>
+                    : <span style={{ color: '#345f9a', fontWeight: 700 }}>We Buy, Sell &amp; Refurbish Pre-Owned IT Equipment.</span>
+                  </span>
                 </h1>
                 <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
                   Browse our complete range of IT products across all categories
-                </p>
-                <p style={{ color: '#345f9a', marginTop: '6px', fontSize: '0.9rem', fontWeight: 700 }}>
-                  We Buy, Sell &amp; Refurbish Pre-Owned IT Equipment.
                 </p>
               </div>
 
@@ -178,7 +178,7 @@ export default function ITProductsSales() {
             </motion.div>
           )}
 
-          {/* ── DETAIL VIEW (no sidebar) ── */}
+          {/* ── DETAIL VIEW ── */}
           {selected && (
             <motion.div
               key={selected.id}
