@@ -86,6 +86,11 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* Background image — fixed behind all pages */}
+      <div className="video-bg" />
+      <div className="video-overlay" />
+      <div className="video-stars" />
+
       <Routes>
         <Route path="/" element={<HomePage />} />
 
