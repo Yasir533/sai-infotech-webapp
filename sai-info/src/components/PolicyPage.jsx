@@ -38,7 +38,7 @@ export default function PolicyPage({ title, children }) {
           ← Back to Home
         </button>
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1rem' }}>|</span>
-        <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '36px', objectFit: 'contain' }} />
+        <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '52px', objectFit: 'contain' }} />
       </div>
 
       {/* Page Title Banner */}
