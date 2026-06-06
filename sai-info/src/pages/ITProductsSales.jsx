@@ -13,7 +13,7 @@ const categories = [
     color: '#e53e3e',
     bgImage: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&q=80',
     description: "Our aim is to develop tomorrow's information technology that supports innovative applications, from big data analytics to the Internet of Things. It covers all aspects of information technology including energy efficient and robust hardware systems, software defined networks, secure distributed systems, scalability and integration in increasing computing density, reliability and lower power consumption and costs.",
-    products: ['Desktops', 'Processors', 'Chip Level', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation', 'Laptops', 'Servers'],
+    products: ['Laptops', 'Desktops', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation', 'Processors', 'Servers'],
   },
   {
     id: 'data-centers',
@@ -22,7 +22,7 @@ const categories = [
     color: '#3182ce',
     bgImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=80',
     description: 'We provide comprehensive data center solutions including server infrastructure, storage systems, network equipment, and cooling solutions. Our expertise ensures your data center is optimized for performance, reliability, and energy efficiency.',
-    products: ['Rack Servers', 'Blade Servers', 'Storage Arrays', 'NAS/SAN', 'UPS Systems', 'PDU Units', 'Cooling Units', 'KVM Switches', 'Patch Panels', 'Cable Management'],
+    products: ['Rack Servers', 'Blade Servers', 'Storage Arrays', 'NAS/SAN', 'UPS Systems', 'PDU Units', 'Cooling Units', 'KVM Switches', 'Patch Panels', 'Cable Management', 'Load Balancers'],
   },
   {
     id: 'electronic-security',
@@ -40,7 +40,7 @@ const categories = [
     color: '#d69e2e',
     bgImage: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&q=80',
     description: 'Complete your IT setup with our wide range of accessories. From peripherals to power solutions, we stock premium accessories from leading brands to enhance productivity and workflow.',
-    products: ['Keyboards & Mice', 'Headsets', 'Webcams', 'USB Hubs', 'External Drives', 'Memory Cards', 'Cables & Adapters', 'Laptop Bags', 'Mouse Pads', 'Screen Filters'],
+    products: ['Keyboards & Mice', 'Headsets', 'Webcams', 'USB Hubs', 'External Drives', 'Memory Cards', 'Cables & Adapters', 'Laptop Bags', 'Mouse Pads', 'Screen Filters', 'Motherboards', 'PCBs', 'SMPS', 'Display Panels'],
   },
   {
     id: 'it-security',
@@ -58,7 +58,7 @@ const categories = [
     color: '#dd6b20',
     bgImage: 'https://images.unsplash.com/photo-1562547256-2c5ee93b60b7?w=400&q=80',
     description: 'Build robust, scalable network infrastructure with our comprehensive range of networking products. From enterprise switches to wireless access points, we provide solutions for every network size and complexity.',
-    products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Load Balancers', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
+    products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
   },
   {
     id: 'cloud-solutions',
@@ -67,7 +67,7 @@ const categories = [
     color: '#2b6cb0',
     bgImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80',
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
-    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring'],
+    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution'],
   },
 ]
 
