@@ -128,6 +128,27 @@ const categories = [
       'Corporate AMC Services',
     ],
   },
+{
+  id: 'windmill',
+  label: 'Windmill Solutions',
+  icon: '🌬️',
+  accent: '#16a34a',
+  bgColor: '#f0fdf4',
+  image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80',
+  description:
+    'We provide IT and technical support services for windmill sites. Our team handles networking, CCTV surveillance, access control, system maintenance, and troubleshooting to ensure smooth and reliable operations.',
+  services: [
+    'Windmill Site IT Support',
+    'CCTV Installation & Maintenance',
+    'Network Infrastructure Setup',
+    'Access Control Systems',
+    'Remote Monitoring Solutions',
+    'System Troubleshooting',
+    'Preventive Maintenance',
+    'Annual Maintenance Contracts (AMC)',
+  ],
+},
+
 ]
 
 const brands = [
