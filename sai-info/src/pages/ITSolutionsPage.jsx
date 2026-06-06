@@ -108,26 +108,7 @@ const categories = [
       'AMC & Maintenance Services',
     ],
   },
-  {
-    id: 'pos-software',
-    label: 'POS & Software',
-    icon: '🖨️',
-    accent: '#d97706',
-    bgColor: '#fffbeb',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80',
-    description:
-      'From point-of-sale system deployment to complete software installation and licensing, our team ensures your business-critical applications are properly configured and compliant.',
-    services: [
-      'POS System Setup & Configuration',
-      'OS Installation & Licensing',
-      'ERP & Business Software Deployment',
-      'Application Access Security',
-      'Software Audits',
-      'Virus & Malware Removal',
-      'Remote IT Support',
-      'Preventive Maintenance Contracts',
-    ],
-  },
+  
   {
     id: 'server',
     label: 'Server & Cloud',
