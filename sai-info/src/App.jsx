@@ -23,8 +23,8 @@ import ShippingPolicy from './components/Shippingpolicy'
 import RefundPolicy from './components/Refundpolicy'
 import WarrantyPolicy from './components/Warrantypolicy'
 import TermsAndConditions from './components/Termsandconditions'
-import EWasteManagement from './components/EWasteManagement'
-import Products from './components/Products'
+import EWasteManagement from './pages/EWasteManagement'   // ← fixed: was ./components/EWasteManagement
+import Products from './pages/Products'                    // ← fixed: was ./components/Products
 
 function HomePage() {
   const location = useLocation()
@@ -93,6 +93,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
+
+        {/* ↓ NEW: Products page route */}
+        <Route path="/products" element={<Products />} />
 
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/return-policy" element={<ReturnPolicy />} />
