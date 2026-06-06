@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
-import BrandTicker from '../components/BrandTicker'
 import logoIcon from '../assets/logo-dark-bg.png'
 import logo from '../assets/logo.png'
 
@@ -14,15 +13,27 @@ const sections = [
     icon: '♻️',
     color: '#16a34a',
     bgImage: 'https://images.unsplash.com/photo-1605600659908-0ef719419d41?w=400&q=80',
-    description:
-      'We Sai infotech partner with leading e-waste management companies specialising in IT asset Remarketing, Secure Data Destruction, Logistics and Sustainable Recycling Services across Karnataka. Established in 2010, We brings over 20 years of industry expertise in environmentally responsible recycling and IT asset lifecycle management.',
-    products: [
-      'IT Asset Disposition Services (ITAD)',
-      'IT Asset Remarketing Services (ITAR)',
+    description: (
+      <>
+        <p>
+          We Sai infotech partner with leading e-waste management companies specialising in
+          IT asset Remarketing, Secure Data Destruction, Logistics and
+          Sustainable Recycling Services across Karnataka.
+        </p>
+        <p>
+          Established in 2010, We brings over 20 years of industry
+          expertise in environmentally responsible recycling and IT asset
+          lifecycle management.
+        </p>
+      </>
+    ),
+    points: [
+      'IT Asset Remarketing',
       'Secure Data Destruction',
-      'Asset Decommissioning',
-      'Secure Logistics',
-      'E-Waste Collection & Recycling',
+      'Logistics Services',
+      'Sustainable Recycling',
+      'Karnataka-wide Coverage',
+      '20+ Years of Expertise',
     ],
   },
   {
@@ -31,9 +42,8 @@ const sections = [
     icon: '🛠️',
     color: '#2f6fbf',
     bgImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80',
-    description:
-      'We offer a full spectrum of IT asset lifecycle and e-waste management services tailored to meet the needs of businesses of all sizes. Our solutions are compliant with national and international standards, ensuring your organization meets its environmental and regulatory obligations responsibly.',
-    products: [
+    description: null,
+    points: [
       'IT Asset Disposition Services (ITAD)',
       'IT Asset Remarketing Services (ITAR)',
       'Secure Data Destruction Services',
@@ -48,15 +58,14 @@ const sections = [
     icon: '🏅',
     color: '#d97706',
     bgImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80',
-    description:
-      'GRKMS is a trusted, certified e-waste recycling partner with a proven track record across Karnataka. Our certifications and authorizations ensure that your IT assets and data are handled with the highest levels of security, compliance, and environmental responsibility.',
-    products: [
+    description: null,
+    points: [
       'KSPCB Authorized E-Waste Recycler',
       'ISO 14001:2015 Certified',
       'ISO 45001:2018 Certified',
       'ISO 9001 Certified',
       'R2 Certified Recycler',
-      'Nationwide Collection & Recycling Support',
+      'Nationwide Collection and Recycling Support',
     ],
   },
   {
@@ -65,16 +74,13 @@ const sections = [
     icon: '🌍',
     color: '#059669',
     bgImage: 'https://images.unsplash.com/photo-1574155376612-bfa4dff8c08d?w=400&q=80',
-    description:
-      'We follow the globally accepted 6R framework. Our mission is to minimize waste generation and maximize environmental sustainability. By implementing this systematic approach, we help organizations reduce their carbon footprint while extracting maximum value from retiring IT assets.',
-    products: [
-      'Refuse',
-      'Reduce',
-      'Rethink',
-      'Reuse',
-      'Repair',
-      'Recycle',
-    ],
+    description: (
+      <>
+        <p>We follow the globally accepted 6R framework:</p>
+      </>
+    ),
+    points: ['Refuse', 'Reduce', 'Rethink', 'Reuse', 'Repair', 'Recycle'],
+    footer: 'Our mission is to minimize waste generation and maximize environmental sustainability.',
   },
   {
     id: 'data-destruction',
@@ -82,9 +88,16 @@ const sections = [
     icon: '🔐',
     color: '#7c3aed',
     bgImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&q=80',
-    description:
-      'Data security is our highest priority. We provide secure and certified data destruction services for organizations looking to dispose of IT assets safely. Every destruction event is documented and certified to give your organization complete peace of mind and regulatory compliance.',
-    products: [
+    description: (
+      <>
+        <p>
+          Data security is our highest priority. We provide secure and
+          certified data destruction services for organizations looking to
+          dispose of IT assets safely.
+        </p>
+      </>
+    ),
+    points: [
       'Onsite and Offsite Data Destruction',
       'Hard Drive Degaussing',
       'SSD Destruction',
@@ -99,9 +112,15 @@ const sections = [
     icon: '💰',
     color: '#ea580c',
     bgImage: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&q=80',
-    description:
-      'Before recycling, We evaluates equipment for reuse and remarketing opportunities to maximize asset value recovery. Our remarketing process ensures organizations receive fair value for retiring assets while promoting sustainable reuse of functional equipment.',
-    products: [
+    description: (
+      <>
+        <p>
+          Before recycling, We evaluates equipment for reuse and
+          remarketing opportunities to maximize asset value recovery.
+        </p>
+      </>
+    ),
+    points: [
       'Refurbishment',
       'Redeployment',
       'Reselling',
@@ -115,9 +134,8 @@ const sections = [
     icon: '🚛',
     color: '#0891b2',
     bgImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80',
-    description:
-      'Our end-to-end logistics solution ensures that IT assets are safely packed, securely transported, and properly processed at every step of the journey. We maintain a complete chain of custody and provide full documentation throughout the entire process.',
-    products: [
+    description: null,
+    points: [
       'Safe Packing of IT Assets',
       'Secure Transportation',
       'Material Handling & Movement',
@@ -131,16 +149,24 @@ const sections = [
     icon: '🤝',
     color: '#1e3a5f',
     bgImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&q=80',
-    description:
-      'Sai Infotech is committed to providing safe, secure and environmentally responsible E-Waste management solutions while helping organizations achieve sustainability goals and regulatory compliance. We believe in a future where technology and environmental responsibility go hand in hand.',
-    products: [
-      'Environmental Compliance',
-      'Sustainability Goals Support',
+    description: (
+      <>
+        <p>
+          Sai Infotech is committed to providing safe, secure and environmentally
+          responsible E-Waste management solutions while helping organizations
+          achieve sustainability goals and regulatory compliance.
+        </p>
+      </>
+    ),
+    points: [
+      'Environmental Responsibility',
+      'Sustainability Goal Support',
       'Regulatory Compliance',
       'Certified Processes',
       'Transparent Reporting',
       'Recycle Today for a Better Tomorrow',
     ],
+    showLogo: true,
   },
 ]
 
@@ -148,26 +174,35 @@ export default function EWasteManagement() {
   const navigate = useNavigate()
   const [selected, setSelected] = useState(null)
 
-  const handleBack = () => setSelected(null)
-
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", background: '#f8fafc', minHeight: '100vh' }}>
 
-      {/* TOP NAV */}
-      <div style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)', padding: '12px 24px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.3)' }}>
+      {/* TOP NAV — same as ITProductsSales but with company logo instead of BrandTicker */}
+      <div style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
+        padding: '12px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
+      }}>
         <button
           onClick={() => navigate('/')}
-          style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '8px', color: '#fff', padding: '6px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}
+          style={{
+            background: 'rgba(255,255,255,0.12)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            borderRadius: '8px',
+            color: '#fff',
+            padding: '6px 14px',
+            cursor: 'pointer',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+          }}
         >
           ← Back to Home
         </button>
         <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
-        <span style={{ color: '#fff', fontWeight: 700 }}>SAI INFOTECH</span>
-      </div>
-
-      {/* BRAND TICKER */}
-      <div style={{ position: 'relative', zIndex: 10 }}>
-        <BrandTicker />
+        <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '40px', objectFit: 'contain' }} />
       </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px 48px' }}>
@@ -184,7 +219,7 @@ export default function EWasteManagement() {
               transition={{ duration: 0.3 }}
             >
               {/* Header */}
-              <div style={{ marginBottom: '32px' }}>
+              <div style={{ marginBottom: '24px' }}>
                 <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
                   E-Waste <span style={{ color: '#16a34a' }}>Management</span>
                   <span style={{ color: '#64748b', fontWeight: 400, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', marginLeft: '10px' }}>
@@ -205,12 +240,18 @@ export default function EWasteManagement() {
                 borderRadius: '10px',
                 marginBottom: '24px',
                 color: '#7c2d12',
-                lineHeight: '1.7',
-                fontSize: '0.88rem'
+                lineHeight: '1.8',
+                fontSize: '0.88rem',
               }}>
-                <strong>Jurisdiction & Governing Law:</strong> All disputes arising out of any vendor agreements, service contracts, sales contracts, or related transactions shall be governed by and construed in accordance with the laws of India. Any dispute or difference whatsoever shall be subject to the exclusive jurisdiction of the courts located in Bangalore, India.
+                <strong>Jurisdiction & Governing Law:</strong>
+                {' '}All disputes arising out of any vendor agreements, service contracts,
+                sales contracts, or related transactions shall be governed by and
+                construed in accordance with the laws of India. Any dispute or
+                difference whatsoever shall be subject to the exclusive jurisdiction
+                of the courts located in Bangalore, India.
               </div>
 
+              {/* Cards Grid */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
@@ -279,10 +320,10 @@ export default function EWasteManagement() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Breadcrumb / back */}
+              {/* Breadcrumb */}
               <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button
-                  onClick={handleBack}
+                  onClick={() => setSelected(null)}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     color: '#16a34a', fontWeight: 700, fontSize: '0.9rem',
@@ -305,7 +346,8 @@ export default function EWasteManagement() {
                 maxWidth: '960px',
                 margin: '0 auto',
               }}>
-                {/* Title */}
+
+                {/* Title row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
                   <div style={{
                     background: selected.color, borderRadius: '12px',
@@ -320,20 +362,36 @@ export default function EWasteManagement() {
                   </h2>
                 </div>
 
-                {/* Description */}
-                <p style={{ color: '#475569', lineHeight: 1.8, fontSize: '1rem', marginBottom: '28px', borderBottom: '2px solid #f1f5f9', paddingBottom: '24px' }}>
-                  {selected.description}
-                </p>
+                {/* Logo row — only for "Our Commitment" */}
+                {selected.showLogo && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: '16px',
+                    marginBottom: '20px', flexWrap: 'wrap',
+                  }}>
+                    <img src={logo} alt="SAI INFOTECH" style={{ width: '60px', height: '60px', objectFit: 'contain' }} />
+                    <div>
+                      <h3 style={{ margin: 0, color: '#1e3a5f', fontSize: '1.1rem', fontWeight: 700 }}>SAI INFOTECH</h3>
+                      <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '0.9rem' }}>Recycle Today for a Better Tomorrow</p>
+                    </div>
+                  </div>
+                )}
 
-                {/* Key Points heading */}
-                <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.05rem' }}>
+                {/* Description text */}
+                {selected.description && (
+                  <div style={{ color: '#475569', lineHeight: 1.8, fontSize: '1rem', marginBottom: '24px', borderBottom: '2px solid #f1f5f9', paddingBottom: '20px' }}>
+                    {selected.description}
+                  </div>
+                )}
+
+                {/* Points heading */}
+                <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.05rem' }}>
                   <span style={{ color: selected.color, fontSize: '1.1rem' }}>▶</span>
                   Key Points
                 </h3>
 
                 {/* Points grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px 20px' }}>
-                  {selected.products.map((product, i) => (
+                  {selected.points.map((point, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, x: -12 }}
@@ -348,25 +406,32 @@ export default function EWasteManagement() {
                       }}
                     >
                       <IoCheckmarkCircle style={{ color: '#22c55e', fontSize: '1.25rem', flexShrink: 0 }} />
-                      <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.92rem' }}>{product}</span>
+                      <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.92rem' }}>{point}</span>
                     </motion.div>
                   ))}
                 </div>
 
-                {/* CTA */}
+                {/* Optional footer note (6R section) */}
+                {selected.footer && (
+                  <p style={{ marginTop: '16px', color: '#64748b', fontSize: '0.93rem', fontStyle: 'italic' }}>
+                    {selected.footer}
+                  </p>
+                )}
+
+                {/* CTA buttons */}
                 <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '2px solid #f1f5f9', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                  <Link
-                    to="/#contact"
+                  <button
+                    onClick={() => navigate('/#contact')}
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: '8px',
                       background: selected.color, color: '#fff',
                       padding: '12px 28px', borderRadius: '10px',
-                      fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
+                      fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer',
                       boxShadow: `0 4px 16px ${selected.color}55`,
                     }}
                   >
                     Get a Quote <FiArrowRight />
-                  </Link>
+                  </button>
                   <a
                     href={`https://wa.me/919986914248?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(selected.name)}%20services.`}
                     target="_blank"
