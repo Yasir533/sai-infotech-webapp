@@ -129,27 +129,45 @@ const categories = [
       'Corporate AMC Services',
     ],
   },
-{
-  id: 'windmill',
-  label: 'Windmill Solutions',
-  icon: '⚡',
-  accent: '#16a34a',
-  bgColor: '#f0fdf4',
-  image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80',
-  description:
-    'We provide IT and technical support services for windmill sites. Our team handles networking, CCTV surveillance, access control, system maintenance, and troubleshooting to ensure smooth and reliable operations.',
-  services: [
-    'Windmill Site IT Support',
-    'CCTV Installation & Maintenance',
-    'Network Infrastructure Setup',
-    'Access Control Systems',
-    'Remote Monitoring Solutions',
-    'System Troubleshooting',
-    'Preventive Maintenance',
-    'Annual Maintenance Contracts (AMC)',
-  ],
-},
-
+  {
+    id: 'windmill',
+    label: 'Windmill Solutions',
+    icon: '⚡',
+    accent: '#16a34a',
+    bgColor: '#f0fdf4',
+    image: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&q=80',
+    description:
+      'We provide IT and technical support services for windmill sites. Our team handles control board repairs, networking, SCADA systems, and remote monitoring to ensure smooth and reliable wind turbine operations.',
+    serviceGroups: [
+      {
+        heading: '🔧 Hardware Repair',
+        items: [
+          'CCU Controller Convertor Unit Repair',
+          'Wind Turbine Control Board Repair & Inspection',
+          'Ethernet Port & Serial Port Board Refurbishing',
+          'Hardware Protection Board Servicing',
+          'Capacitor, Diode & IC Replacement',
+          'Power Supply Repair & Replacement',
+          'Logic Board Diagnostics & Repair',
+          'Controller Unit Refurbishing',
+        ],
+      },
+      {
+        heading: '🌐 Networking',
+        items: [
+          'Ethernet Networking Switch Repair',
+          'Wind Turbine Control Network Setup',
+        ],
+      },
+      {
+        heading: '📡 Monitoring & Software',
+        items: [
+          'SCADA System Support',
+          'Remote Site Monitoring',
+        ],
+      },
+    ],
+  },
 ]
 
 const brands = [
@@ -157,7 +175,7 @@ const brands = [
   { name: 'Acer', src: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Acer_2011.svg' },
   { name: 'Intel', src: 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Intel_logo_%282006-2020%29.svg' },
   { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' },
-  { name: 'Samsung', src: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg' },
+  { name: 'Samsung', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/800px-Samsung_Logo.svg.png' },
   { name: 'Apple', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
   { name: 'Cisco', src: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg' },
   { name: 'AWS', src: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg' },
@@ -319,21 +337,51 @@ export default function RepairRecovery() {
                             <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                               <span style={{ color: cat.accent }}>▸</span> Service Offerings
                             </h3>
-                            <div className="grid sm:grid-cols-2 gap-3">
-                              {cat.services.map((service, idx) => (
-                                <motion.div
-                                  key={idx}
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: idx * 0.03 }}
-                                  className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:opacity-90 transition-colors"
-                                  style={{ background: cat.bgColor }}
-                                >
-                                  <IoCheckmarkCircle className="flex-shrink-0" size={18} style={{ color: cat.accent }} />
-                                  <span className="text-slate-700 font-medium">{service}</span>
-                                </motion.div>
-                              ))}
-                            </div>
+
+                            {/* Grouped services (Windmill) */}
+                            {cat.serviceGroups ? (
+                              <div className="space-y-6">
+                                {cat.serviceGroups.map((group, gi) => (
+                                  <div key={gi}>
+                                    <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3 px-1">
+                                      {group.heading}
+                                    </h4>
+                                    <div className="grid sm:grid-cols-2 gap-3">
+                                      {group.items.map((service, idx) => (
+                                        <motion.div
+                                          key={idx}
+                                          initial={{ opacity: 0, x: -10 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{ delay: idx * 0.03 }}
+                                          className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:opacity-90 transition-colors"
+                                          style={{ background: cat.bgColor }}
+                                        >
+                                          <IoCheckmarkCircle className="flex-shrink-0" size={18} style={{ color: cat.accent }} />
+                                          <span className="text-slate-700 font-medium">{service}</span>
+                                        </motion.div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              /* Flat services (all other categories) */
+                              <div className="grid sm:grid-cols-2 gap-3">
+                                {cat.services.map((service, idx) => (
+                                  <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: idx * 0.03 }}
+                                    className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:opacity-90 transition-colors"
+                                    style={{ background: cat.bgColor }}
+                                  >
+                                    <IoCheckmarkCircle className="flex-shrink-0" size={18} style={{ color: cat.accent }} />
+                                    <span className="text-slate-700 font-medium">{service}</span>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            )}
                           </div>
 
                           <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
