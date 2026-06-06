@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logoIcon from '../assets/logo-dark-bg.png'
 import PolicyPage from '../components/PolicyPage'
+import logo from '../assets/logo.png'
 
 const Section = ({ title, children }) => {
   const [open, setOpen] = useState(false)
@@ -95,16 +96,38 @@ export default function EWasteManagement() {
         padding: '50px 24px 80px',
         textAlign: 'center',
       }}>
-        <h1 style={{
-          color: '#fff',
-          fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
-          textTransform: 'uppercase',
-          letterSpacing: '2px',
-          fontWeight: 800,
-          margin: 0,
-        }}>
-          E-Waste Management Solutions
-        </h1>
+        <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '16px',
+    flexWrap: 'wrap'
+  }}
+>
+  <img
+    src={logo}
+    alt="SAI INFOTECH"
+    style={{
+      width: '70px',
+      height: '70px',
+      objectFit: 'contain'
+    }}
+  />
+
+  <h1
+    style={{
+      color: '#fff',
+      fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
+      textTransform: 'uppercase',
+      letterSpacing: '2px',
+      fontWeight: 800,
+      margin: 0
+    }}
+  >
+    E-Waste Management Solutions
+  </h1>
+</div>
         <div style={{
           width: '60px',
           height: '4px',
@@ -240,13 +263,54 @@ export default function EWasteManagement() {
           </Section>
 
           <Section title="Our Commitment">
-            <p>Recycle Today for a Better Tomorrow.</p>
-            <p>
-              Sai Infotech is committed to providing safe, secure and environmentally
-              responsible E-Waste management solutions while helping
-              organizations achieve sustainability goals and regulatory compliance.
-            </p>
-          </Section>
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '16px',
+      marginBottom: '16px',
+      flexWrap: 'wrap'
+    }}
+  >
+    <img
+      src={logo}
+      alt="SAI INFOTECH"
+      style={{
+        width: '60px',
+        height: '60px',
+        objectFit: 'contain'
+      }}
+    />
+
+    <div>
+      <h3
+        style={{
+          margin: 0,
+          color: '#1e3a5f',
+          fontSize: '1.1rem',
+          fontWeight: 700
+        }}
+      >
+        SAI INFOTECH
+      </h3>
+      <p
+        style={{
+          margin: '4px 0 0',
+          color: '#64748b',
+          fontSize: '0.9rem'
+        }}
+      >
+        Recycle Today for a Better Tomorrow
+      </p>
+    </div>
+  </div>
+
+  <p>
+    Sai Infotech is committed to providing safe, secure and environmentally
+    responsible E-Waste management solutions while helping organizations
+    achieve sustainability goals and regulatory compliance.
+  </p>
+</Section>
 
         </div>
 
