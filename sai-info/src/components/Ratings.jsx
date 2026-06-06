@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { HiStar } from 'react-icons/hi'
-import { FiUsers, FiShield, FiTarget } from 'react-icons/fi'
+import { FiUsers } from 'react-icons/fi'
 
 function useCounter(target, duration = 1800, inView = false) {
   const [count, setCount] = useState(0)
@@ -24,6 +24,42 @@ function StarRow({ size = 22, color = '#facc15' }) {
     <div className="flex items-center justify-center gap-1 w-full">
       {[...Array(5)].map((_, i) => <HiStar key={i} size={size} color={color} />)}
     </div>
+  )
+}
+
+// Happy Clients — group of people / community icon
+function IconHappyClients({ size = 20, color = '#60a5fa' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="7" r="3" />
+      <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      <path d="M21 21v-2a4 4 0 0 0-3-3.85" />
+    </svg>
+  )
+}
+
+// Years Experience — hourglass / time proven icon
+function IconExperience({ size = 20, color = '#60a5fa' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  )
+}
+
+// Success Rate — trophy / achievement icon
+function IconSuccess({ size = 20, color = '#60a5fa' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 9H4a2 2 0 0 0 0 4h2" />
+      <path d="M18 9h2a2 2 0 0 1 0 4h-2" />
+      <path d="M6 9V5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4" />
+      <path d="M6 13c0 3.87 2.69 7 6 7s6-3.13 6-7" />
+      <line x1="12" y1="20" x2="12" y2="22" />
+      <line x1="9" y1="22" x2="15" y2="22" />
+    </svg>
   )
 }
 
@@ -79,9 +115,11 @@ export default function Ratings() {
 
           {/* Stats */}
           <div className="space-y-4">
+
+            {/* Happy Clients */}
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <FiUsers className="text-blue-400" size={18} />
+                <IconHappyClients size={20} color="#60a5fa" />
               </div>
               <div>
                 <span className="text-blue-400 font-black text-lg">100+</span>
@@ -89,9 +127,10 @@ export default function Ratings() {
               </div>
             </div>
 
+            {/* Years Experience */}
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <FiShield className="text-blue-400" size={18} />
+                <IconExperience size={20} color="#60a5fa" />
               </div>
               <div>
                 <span className="text-blue-400 font-black text-lg">25+</span>
@@ -99,15 +138,17 @@ export default function Ratings() {
               </div>
             </div>
 
+            {/* Success Rate */}
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
-                <FiTarget className="text-blue-400" size={18} />
+                <IconSuccess size={20} color="#60a5fa" />
               </div>
               <div>
                 <span className="text-blue-400 font-black text-lg">100%</span>
                 <span className="text-slate-300 text-sm ml-2">Success Rate</span>
               </div>
             </div>
+
           </div>
 
           {/* Footer */}
