@@ -2,6 +2,9 @@ import React, { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { HiStar } from 'react-icons/hi'
 import { FiUsers } from 'react-icons/fi'
+import { IoPeopleSharp } from 'react-icons/io5'
+import { BsShieldFillCheck } from 'react-icons/bs'
+import { MdOutlineTrackChanges } from 'react-icons/md'
 
 function useCounter(target, duration = 1800, inView = false) {
   const [count, setCount] = useState(0)
@@ -27,83 +30,32 @@ function StarRow({ size = 22, color = '#facc15' }) {
   )
 }
 
-// Animated Happy Clients icon — people pulse in one by one
-function IconHappyClients() {
-  return (
-    <motion.svg
-      width={22} height={22} viewBox="0 0 24 24" fill="none"
-      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-      animate={{ scale: [1, 1.15, 1] }}
-      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <circle cx="9" cy="7" r="3" />
-      <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-      <motion.path
-        d="M16 3.13a4 4 0 0 1 0 7.75"
-        animate={{ opacity: [0.3, 1, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-      />
-      <motion.path
-        d="M21 21v-2a4 4 0 0 0-3-3.85"
-        animate={{ opacity: [0.3, 1, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-      />
-    </motion.svg>
-  )
-}
-
-// Animated Experience icon — clock hands rotate
-function IconExperience() {
-  return (
-    <svg width={22} height={22} viewBox="0 0 24 24" fill="none"
-      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      {/* Minute hand — rotates full circle */}
-      <motion.line
-        x1="12" y1="12" x2="12" y2="6"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-        style={{ originX: '12px', originY: '12px' }}
-        strokeLinecap="round"
-      />
-      {/* Hour hand — rotates slower */}
-      <motion.line
-        x1="12" y1="12" x2="15.5" y2="13.5"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-        style={{ originX: '12px', originY: '12px' }}
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
-
-// Animated Success icon — trophy shines / bounces
-function IconSuccess() {
-  return (
-    <motion.svg
-      width={22} height={22} viewBox="0 0 24 24" fill="none"
-      stroke="#60a5fa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-      animate={{ y: [0, -3, 0] }}
-      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <path d="M6 9H4a2 2 0 0 0 0 4h2" />
-      <path d="M18 9h2a2 2 0 0 1 0 4h-2" />
-      <path d="M6 9V5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4" />
-      <path d="M6 13c0 3.87 2.69 7 6 7s6-3.13 6-7" />
-      <line x1="12" y1="20" x2="12" y2="22" />
-      <line x1="9" y1="22" x2="15" y2="22" />
-      {/* Shine sparkle */}
-      <motion.circle
-        cx="15" cy="6" r="1"
-        fill="#60a5fa" stroke="none"
-        animate={{ opacity: [0, 1, 0], scale: [0.5, 1.3, 0.5] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-      />
-    </motion.svg>
-  )
-}
+const stats = [
+  {
+    icon: <IoPeopleSharp size={22} />,
+    gradient: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+    glow: 'rgba(59,130,246,0.35)',
+    value: '100+',
+    label: 'Happy Clients',
+    delay: 0,
+  },
+  {
+    icon: <BsShieldFillCheck size={20} />,
+    gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+    glow: 'rgba(99,102,241,0.35)',
+    value: '25+',
+    label: 'Years Experience',
+    delay: 0.1,
+  },
+  {
+    icon: <MdOutlineTrackChanges size={22} />,
+    gradient: 'linear-gradient(135deg, #0ea5e9, #22d3ee)',
+    glow: 'rgba(14,165,233,0.35)',
+    value: '100%',
+    label: 'Success Rate',
+    delay: 0.2,
+  },
+]
 
 export default function Ratings() {
   const ref = useRef(null)
@@ -111,27 +63,6 @@ export default function Ratings() {
   const customerCount = useCounter(50, 1600, inView)
   const ratingWhole = useCounter(4, 1200, inView)
   const ratingDec = useCounter(9, 1400, inView)
-
-  const stats = [
-    {
-      icon: <IconHappyClients />,
-      value: '100+',
-      label: 'Happy Clients',
-      delay: 0,
-    },
-    {
-      icon: <IconExperience />,
-      value: '25+',
-      label: 'Years Experience',
-      delay: 0.1,
-    },
-    {
-      icon: <IconSuccess />,
-      value: '100%',
-      label: 'Success Rate',
-      delay: 0.2,
-    },
-  ]
 
   return (
     <div className="relative z-10 w-full">
@@ -176,7 +107,7 @@ export default function Ratings() {
             <p className="text-slate-400 text-xs">Based on {customerCount}+ reviews</p>
           </div>
 
-          {/* Stats with animated icons */}
+          {/* Stats */}
           <div className="space-y-4">
             {stats.map((stat, i) => (
               <motion.div
@@ -186,9 +117,13 @@ export default function Ratings() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.4 + stat.delay }}
               >
+                {/* Gradient icon box — matches the style in your screenshot */}
                 <div
-                  className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/20 flex items-center justify-center flex-shrink-0"
-                  style={{ boxShadow: '0 0 12px rgba(96,165,250,0.15)' }}
+                  className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 text-white"
+                  style={{
+                    background: stat.gradient,
+                    boxShadow: `0 4px 14px ${stat.glow}`,
+                  }}
                 >
                   {stat.icon}
                 </div>
