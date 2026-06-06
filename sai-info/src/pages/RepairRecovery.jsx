@@ -116,7 +116,7 @@ const categories = [
     bgColor: '#fef2f2',
     image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80',
     description:
-      "Can't visit our service centre? No problem. Our certified technicians come to you — whether at your office or home — to diagnose and resolve hardware and software issues on the spot.",
+      "We offer doorstep hardware and software support. Our technicians visit your location to diagnose and resolve minor hardware and software issues on-site.",
     services: [
       'Doorstep Laptop Repair',
       'Office Desktop Servicing',
