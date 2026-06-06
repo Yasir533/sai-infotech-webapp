@@ -210,7 +210,7 @@ export default function RepairRecovery() {
                 Repair &amp; <span style={{ color: '#fed7aa' }}>Recovery</span>
               </h1>
               <p className="max-w-2xl" style={{ color: '#ffedd5', fontSize: 'clamp(0.95rem, 2vw, 1.15rem)', textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>
-                Specializing in laptop and desktop repair, chip-level servicing, &amp; and data recovery solutions. Providing trusted and reliable support across Bangalore and Karnataka.
+                Specializing in laptop and desktop repair, chip-level servicing,and data recovery solutions. &amp; Providing trusted and reliable support across Bangalore and Karnataka.
               </p>
               <div className="flex flex-wrap gap-4 justify-center mt-6">
                 <a href="tel:+917676952139" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm transition-all"
