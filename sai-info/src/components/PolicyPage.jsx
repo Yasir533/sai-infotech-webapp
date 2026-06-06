@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoIcon from '../assets/logo-icon-sm.png'
 
 export default function PolicyPage({ title, children }) {
   const navigate = useNavigate()
@@ -37,9 +38,7 @@ export default function PolicyPage({ title, children }) {
           ← Back to Home
         </button>
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1rem' }}>|</span>
-        <span style={{ color: '#fff', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.01em' }}>
-          SAI INFOTECH
-        </span>
+        <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '36px', objectFit: 'contain' }} />
       </div>
 
       {/* Page Title Banner */}
@@ -76,7 +75,7 @@ export default function PolicyPage({ title, children }) {
         zIndex: 10,
       }}>
 
-        {/* Jurisdiction Notice — inside content container, no overlap */}
+        {/* Jurisdiction Notice */}
         <div style={{
           background: '#fff7ed',
           border: '1px solid #fdba74',
