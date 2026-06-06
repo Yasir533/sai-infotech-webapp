@@ -102,14 +102,6 @@ export default function Clients() {
 
         {/* Right side progress track */}
         <div className="flex flex-col items-center gap-2 py-1 flex-shrink-0">
-          {/* Scroll label */}
-          <span
-            className="text-blue-400 font-semibold tracking-widest"
-            style={{ fontSize: '9px', writingMode: 'vertical-rl', textOrientation: 'mixed', letterSpacing: '0.15em' }}
-          >
-            SCROLLING
-          </span>
-
           {/* Track */}
           <div className="relative flex-1 w-1 bg-white/10 rounded-full overflow-hidden">
             {/* Moving thumb */}
