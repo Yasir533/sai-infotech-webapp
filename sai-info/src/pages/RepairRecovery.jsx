@@ -6,6 +6,7 @@ import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo.png'
 import Footer from '../components/Footer'
 import ScrollToTop from '../components/ScrollToTop'
+import BrandTicker from '../components/BrandTicker'
 
 const categories = [
   {
