@@ -700,8 +700,8 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// POST /api/products — create a new product (images → Cloudinary)
-app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
+// POST /api/products — create a new product (local disk storage)
+app.post('/api/products', upload.array('images', 15), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
@@ -709,8 +709,8 @@ app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    // Cloudinary returns secure URL in f.path
-    const images = req.files.map((f) => f.path);
+    // Save relative paths to local uploads directory
+    const images = req.files.map((file) => `/uploads/${file.filename}`);
 
     const newProduct = await Product.create({
       name: name.trim(),
@@ -728,6 +728,13 @@ app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
+    // Clean up uploaded files on error
+    (req.files || []).forEach((f) => {
+      if (fs.existsSync(f.path)) {
+        try { fs.unlinkSync(f.path); } catch (e) {}
+      }
+    });
+
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
         return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
@@ -755,8 +762,8 @@ app.patch('/api/products/:id', async (req, res) => {
   }
 });
 
-// PUT /api/products/:id — full edit (name, description, inStock, manage images)
-app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res) => {
+// PUT /api/products/:id — full edit (local disk storage)
+app.put('/api/products/:id', upload.array('newImages', 15), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
@@ -765,22 +772,25 @@ app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res
     let keepIndexes = [];
     try { keepIndexes = JSON.parse(req.body.keepImageIndexes || '[]'); } catch {}
 
-    // Delete removed images from Cloudinary
+    // Delete removed images from local disk
     const removedImages = product.images.filter((_, i) => !keepIndexes.includes(i));
     for (const url of removedImages) {
       try {
-        const parts = url.split('/');
-        const folder = parts[parts.length - 2];
-        const filename = parts[parts.length - 1].split('.')[0];
-        await cloudinary.uploader.destroy(`${folder}/${filename}`);
+        if (url && url.includes('/uploads/')) {
+          const filename = url.split('/uploads/')[1];
+          const imagePath = path.join(__dirname, 'uploads', filename);
+          if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+          }
+        }
       } catch (e) {
-        console.warn('Cloudinary delete warn:', e.message);
+        console.warn('Local image delete warn:', e.message);
       }
     }
 
     // Build updated images: kept existing + newly uploaded
     const keptImages = keepIndexes.map((i) => product.images[i]).filter(Boolean);
-    const newImageUrls = req.files ? req.files.map((f) => f.path) : [];
+    const newImageUrls = req.files ? req.files.map((f) => `/uploads/${f.filename}`) : [];
     const allImages = [...keptImages, ...newImageUrls].slice(0, 15);
 
     product.name = req.body.name || product.name;
@@ -794,6 +804,13 @@ app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res
     await product.save();
     res.json(product);
   } catch (err) {
+    // Clean up newly uploaded files on error
+    (req.files || []).forEach((f) => {
+      if (fs.existsSync(f.path)) {
+        try { fs.unlinkSync(f.path); } catch (e) {}
+      }
+    });
+
     console.log('Product put error', err);
     res.status(500).json({ message: err.message });
   }
