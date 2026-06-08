@@ -53,19 +53,26 @@ const sections = [
     ],
   },
   {
-    id: 'why-grkms',
-    name: 'Why Choose GRKMS',
+    id: 'why-sai-infotech',
+    name: 'Why Choose Sai Infotech',
     icon: '🏅',
     color: '#d97706',
     bgImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80',
-    description: null,
+    description: (
+      <>
+        <p>
+          Sai Infotech provides secure, reliable and environmentally
+          responsible e-waste management solutions across Karnataka.
+        </p>
+      </>
+    ),
     points: [
-      'KSPCB Authorized E-Waste Recycler',
-      'ISO 14001:2015 Certified',
-      'ISO 45001:2018 Certified',
-      'ISO 9001 Certified',
-      'R2 Certified Recycler',
-      'Nationwide Collection and Recycling Support',
+      'Professional E-Waste Management',
+      'Secure Data Destruction',
+      'IT Asset Recovery & Remarketing',
+      'Reliable Logistics Support',
+      'Sustainable Recycling Practices',
+      'Customer-Focused Service',
     ],
   },
   {
@@ -177,7 +184,7 @@ export default function EWasteManagement() {
   return (
     <div style={{ fontFamily: "'Segoe UI', system-ui, sans-serif", background: '#f8fafc', minHeight: '100vh' }}>
 
-      {/* TOP NAV — same as ITProductsSales but with company logo instead of BrandTicker */}
+      {/* TOP NAV */}
       <div style={{
         background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
         padding: '12px 24px',
