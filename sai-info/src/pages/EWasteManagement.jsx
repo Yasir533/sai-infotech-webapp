@@ -80,7 +80,7 @@ const sections = [
     name: 'The 6R Sustainability Approach',
     icon: '🌍',
     color: '#059669',
-    bgImage: 'https://images.unsplash.com/photo-1574155376612-bfa4dff8c08d?w=400&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200&q=80',
     description: (
       <>
         <p>We follow the globally accepted 6R framework:</p>
