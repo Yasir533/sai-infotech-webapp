@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs");
@@ -11,6 +10,7 @@ if (typeof dns.setDefaultResultOrder === "function") {
   dns.setDefaultResultOrder("ipv4first");
 }
 
+const sequelize = require("./config/db");
 const Contact = require("./models/Contact");
 const Product = require("./models/Product");
 const Admin = require("./models/Admin");
@@ -180,14 +180,13 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
   });
 }
 
-// MongoDB connection
-
-mongoose.connect(process.env.MONGO_URI)
+// MySQL connection via Sequelize
+sequelize.sync({ alter: true })
 .then(async () => {
-  console.log("MongoDB Connected");
+  console.log("MySQL Database Connected & Synced");
   await ensureAdminSeed();
 })
-.catch((err) => console.log(err));
+.catch((err) => console.error("Database connection/sync failed:", err));
 
 const OTP_EXPIRY_MS = 5 * 60 * 1000;
 const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.JWT_SECRET || "admin-auth-secret";
@@ -215,7 +214,7 @@ function readLegacyAdminPasswordHash() {
 }
 
 async function ensureAdminSeed() {
-  const existingAdmin = await Admin.findOne().sort({ createdAt: 1 });
+  const existingAdmin = await Admin.findOne({ order: [['createdAt', 'ASC']] });
   if (existingAdmin) {
     return existingAdmin;
   }
@@ -223,7 +222,7 @@ async function ensureAdminSeed() {
   const legacyPasswordHash = readLegacyAdminPasswordHash();
   const passwordHash = legacyPasswordHash || bcrypt.hashSync(DEFAULT_ADMIN_PASSWORD, 10);
 
-  return Admin.create({
+  return await Admin.create({
     email: DEFAULT_ADMIN_EMAIL,
     passwordHash,
   });
@@ -255,9 +254,9 @@ function createResetToken(admin) {
 
 async function sendAdminOtpEmail(normalizedEmail) {
   const admin =
-    (normalizedEmail && await Admin.findOne({ email: normalizedEmail })) ||
-    (DEFAULT_ADMIN_EMAIL && await Admin.findOne({ email: DEFAULT_ADMIN_EMAIL })) ||
-    (await Admin.findOne().sort({ createdAt: 1 }));
+    (normalizedEmail && await Admin.findOne({ where: { email: normalizedEmail } })) ||
+    (DEFAULT_ADMIN_EMAIL && await Admin.findOne({ where: { email: DEFAULT_ADMIN_EMAIL } })) ||
+    (await Admin.findOne({ order: [['createdAt', 'ASC']] }));
 
   if (!admin) {
     return { status: 404, body: { success: false, message: 'Email not registered' } };
@@ -267,17 +266,13 @@ async function sendAdminOtpEmail(normalizedEmail) {
   const otpHash = await bcrypt.hash(otp, 10);
   const expiresAt = new Date(Date.now() + OTP_EXPIRY_MS);
 
-  await AdminOtp.findOneAndUpdate(
-    { email: normalizedEmail },
-    {
-      email: normalizedEmail,
-      otpHash,
-      expiresAt,
-      verified: false,
-      verifiedAt: null,
-    },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  );
+  await AdminOtp.upsert({
+    email: normalizedEmail,
+    otpHash,
+    expiresAt,
+    verified: false,
+    verifiedAt: null,
+  });
 
   await sendEmail({
     to: normalizedEmail,
@@ -349,7 +344,7 @@ app.post('/api/admin/login', async (req, res) => {
     let admin = null;
 
     if (queryEmail) {
-      admin = await Admin.findOne({ email: queryEmail });
+      admin = await Admin.findOne({ where: { email: queryEmail } });
       if (!admin) {
         return res.status(401).json({ success: false, message: 'Invalid credentials' });
       }
@@ -359,7 +354,7 @@ app.post('/api/admin/login', async (req, res) => {
         return res.status(401).json({ success: false, message: 'Invalid credentials' });
       }
     } else {
-      const admins = await Admin.find().sort({ createdAt: 1 });
+      const admins = await Admin.findAll({ order: [['createdAt', 'ASC']] });
 
       for (const candidate of admins) {
         const match = await bcrypt.compare(password, candidate.passwordHash || '');
@@ -432,14 +427,14 @@ app.post('/api/admin/verify-otp', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email and OTP are required' });
     }
 
-    const otpRecord = await AdminOtp.findOne({ email: normalizedEmail });
+    const otpRecord = await AdminOtp.findOne({ where: { email: normalizedEmail } });
 
     if (!otpRecord) {
       return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
     }
 
     if (new Date(otpRecord.expiresAt).getTime() <= Date.now()) {
-      await AdminOtp.deleteOne({ _id: otpRecord._id });
+      await otpRecord.destroy();
       return res.status(400).json({ success: false, message: 'OTP expired' });
     }
 
@@ -449,12 +444,12 @@ app.post('/api/admin/verify-otp', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid OTP' });
     }
 
-    const admin = await Admin.findOne({ email: normalizedEmail });
+    const admin = await Admin.findOne({ where: { email: normalizedEmail } });
     if (!admin) {
       return res.status(404).json({ success: false, message: 'Email not registered' });
     }
 
-    await AdminOtp.deleteOne({ _id: otpRecord._id });
+    await otpRecord.destroy();
 
     return res.json({
       success: true,
@@ -499,15 +494,15 @@ app.post('/api/admin/reset-password', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid reset session' });
     }
 
-    const admins = await Admin.find();
+    const admins = await Admin.findAll();
     if (!admins.length) {
       return res.status(404).json({ success: false, message: 'Email not registered' });
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
-    await Admin.updateMany({}, { passwordHash });
+    await Admin.update({ passwordHash }, { where: {} });
 
-    await AdminOtp.deleteMany({ email: normalizeEmail(payload.email) });
+    await AdminOtp.destroy({ where: { email: normalizeEmail(payload.email) } });
 
     return res.json({ success: true, message: 'Password updated successfully' });
   } catch (err) {
@@ -538,15 +533,13 @@ app.post("/api/contact", async (req, res) => {
       console.log("CONTACT MAIL CONFIG WARNING: No admin recipient email is configured");
     }
 
-    const newContact = new Contact({
+    const newContact = await Contact.create({
       name,
       email,
       phone,
       message,
       services,
     });
-
-    await newContact.save();
 
     console.log("CONTACT SAVED ID:", newContact._id);
     console.log("CONTACT MAIL SEND START");
@@ -614,7 +607,7 @@ app.post("/api/contact", async (req, res) => {
 
 app.get("/api/enquiries", async (req, res) => {
   try {
-    const enquiries = await Contact.find().sort({ createdAt: -1 });
+    const enquiries = await Contact.findAll({ order: [['createdAt', 'DESC']] });
     res.json(enquiries);
   } catch (error) {
     console.log(error);
@@ -624,7 +617,7 @@ app.get("/api/enquiries", async (req, res) => {
 
 app.delete("/api/enquiries/:id", async (req, res) => {
   try {
-    await Contact.findByIdAndDelete(req.params.id);
+    await Contact.destroy({ where: { id: req.params.id } });
     res.json({ message: "Enquiry Deleted" });
   } catch (error) {
     console.log(error);
@@ -634,7 +627,7 @@ app.delete("/api/enquiries/:id", async (req, res) => {
 
 app.put("/api/enquiries/:id", async (req, res) => {
   try {
-    await Contact.findByIdAndUpdate(req.params.id, { status: "Completed" });
+    await Contact.update({ status: "Completed" }, { where: { id: req.params.id } });
     res.json({ message: "Marked as Completed" });
   } catch (error) {
     console.log(error);
@@ -692,7 +685,7 @@ app.post("/api/chat", async (req, res) => {
 // GET /api/products — return all products, newest first
 app.get('/api/products', async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 }).lean();
+    const products = await Product.findAll({ order: [['createdAt', 'DESC']] });
     res.json(products);
   } catch (error) {
     console.log('Products API error', error);
@@ -743,12 +736,12 @@ app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
 // PATCH /api/products/:id — toggle inStock status
 app.patch('/api/products/:id', async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { inStock: req.body.inStock },
-      { new: true }
-    );
+    const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    product.inStock = req.body.inStock;
+    await product.save();
+
     res.json(product);
   } catch (err) {
     console.log('Product patch error', err);
@@ -760,7 +753,7 @@ app.patch('/api/products/:id', async (req, res) => {
 // ✅ FIX: Changed upload → uploadCloud, f.filename → f.path
 app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
 
     // keepImageIndexes: JSON array of existing image indices to keep
@@ -807,7 +800,7 @@ app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res
 // DELETE /api/products/:id — delete product and its Cloudinary images
 app.delete('/api/products/:id', async (req, res) => {
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id).lean();
+    const deletedProduct = await Product.findByPk(req.params.id);
 
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
@@ -839,6 +832,8 @@ app.delete('/api/products/:id', async (req, res) => {
         console.warn('Image cleanup warn:', e.message);
       }
     }
+
+    await deletedProduct.destroy();
 
     res.json({ success: true, message: 'Product deleted successfully' });
   } catch (error) {
