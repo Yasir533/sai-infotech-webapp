@@ -19,6 +19,10 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiLogOut,
+  FiEdit2,
+  FiToggleLeft,
+  FiToggleRight,
+  FiSave,
 } from "react-icons/fi";
 import { getApiBase } from "../utils/apiBase";
 import imageCompression from "browser-image-compression";
@@ -55,17 +59,32 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("enquiries");
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  const [productImages, setProductImages] = useState([]); // File[]
-  const [imagePreviews, setImagePreviews] = useState([]); // string[] (object URLs)
+  const [productImages, setProductImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState("");
+  const [togglingStockId, setTogglingStockId] = useState("");
+
   // Gallery modal
   const [galleryProduct, setGalleryProduct] = useState(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // ── Edit Modal ───────────────────────────────────────────────────────────────
+  const [editProduct, setEditProduct] = useState(null); // product being edited
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editInStock, setEditInStock] = useState(true);
+  const [editNewImages, setEditNewImages] = useState([]); // new File[] to add
+  const [editNewPreviews, setEditNewPreviews] = useState([]);
+  const [editRemovedIndexes, setEditRemovedIndexes] = useState([]); // indexes of existing images to remove
+  const [editSaving, setEditSaving] = useState(false);
+  const [editMessage, setEditMessage] = useState("");
+  const [editSuccess, setEditSuccess] = useState(false);
+  const editFileInputRef = useRef(null);
 
   const fileInputRef = useRef(null);
 
@@ -171,9 +190,7 @@ export default function AdminDashboard() {
 
     setProductImages((cur) => {
       const merged = [...cur, ...selected].slice(0, MAX_IMAGES);
-      // Build previews for merged list
       setImagePreviews((prevPreviews) => {
-        // Revoke old URLs to avoid memory leaks
         prevPreviews.forEach((url) => URL.revokeObjectURL(url));
         return merged.map((f) => URL.createObjectURL(f));
       });
@@ -244,7 +261,6 @@ export default function AdminDashboard() {
       const formData = new FormData();
       formData.append("name", productName.trim());
       formData.append("description", productDescription.trim());
-      // category and price left as defaults (empty string) since not required
       compressedImages.forEach((img) => formData.append("images", img));
 
       const res = await fetch(`${API_BASE}/api/products`, {
@@ -310,6 +326,144 @@ export default function AdminDashboard() {
     }
   };
 
+  // ── Toggle In Stock ──────────────────────────────────────────────────────────
+  const toggleStock = async (product) => {
+    try {
+      setTogglingStockId(product._id);
+      const res = await fetch(`${API_BASE}/api/products/${product._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(adminToken ? { Authorization: `Bearer ${adminToken}` } : {}),
+        },
+        body: JSON.stringify({ inStock: !product.inStock }),
+      });
+
+      if (res.ok) {
+        // Optimistic update in local state
+        setProducts((prev) =>
+          prev.map((p) =>
+            p._id === product._id ? { ...p, inStock: !p.inStock } : p
+          )
+        );
+        // Also update if it's the edit modal product
+        if (editProduct?._id === product._id) {
+          setEditInStock(!product.inStock);
+          setEditProduct((ep) => ep ? { ...ep, inStock: !ep.inStock } : ep);
+        }
+      } else {
+        alert("Failed to update stock status.");
+      }
+    } catch (error) {
+      alert("Error updating stock status.");
+    } finally {
+      setTogglingStockId("");
+    }
+  };
+
+  // ── Open Edit Modal ──────────────────────────────────────────────────────────
+  const openEditModal = (product) => {
+    setEditProduct(product);
+    setEditName(product.name || "");
+    setEditDescription(product.description || "");
+    setEditInStock(product.inStock !== false); // default true if not set
+    setEditNewImages([]);
+    setEditNewPreviews([]);
+    setEditRemovedIndexes([]);
+    setEditMessage("");
+    setEditSuccess(false);
+  };
+
+  const closeEditModal = () => {
+    editNewPreviews.forEach((url) => URL.revokeObjectURL(url));
+    setEditProduct(null);
+    setEditNewImages([]);
+    setEditNewPreviews([]);
+    setEditRemovedIndexes([]);
+    setEditMessage("");
+  };
+
+  const handleEditNewImages = (e) => {
+    const selected = Array.from(e.target.files || []);
+    if (!selected.length) return;
+    const existingKept = (editProduct?.images?.length ?? 0) - editRemovedIndexes.length;
+    const canAdd = MAX_IMAGES - existingKept - editNewImages.length;
+    const toAdd = selected.slice(0, canAdd);
+    if (toAdd.length === 0) {
+      setEditMessage(`Maximum ${MAX_IMAGES} images allowed.`);
+      return;
+    }
+    setEditNewImages((cur) => [...cur, ...toAdd]);
+    setEditNewPreviews((cur) => [...cur, ...toAdd.map((f) => URL.createObjectURL(f))]);
+    e.target.value = "";
+  };
+
+  const removeExistingEditImage = (idx) => {
+    setEditRemovedIndexes((cur) =>
+      cur.includes(idx) ? cur.filter((i) => i !== idx) : [...cur, idx]
+    );
+  };
+
+  const removeNewEditImage = (idx) => {
+    setEditNewImages((cur) => cur.filter((_, i) => i !== idx));
+    setEditNewPreviews((cur) => {
+      URL.revokeObjectURL(cur[idx]);
+      return cur.filter((_, i) => i !== idx);
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editName.trim()) { setEditMessage("Product name is required."); setEditSuccess(false); return; }
+
+    try {
+      setEditSaving(true);
+      setEditMessage("Saving…");
+
+      const compressionOptions = { maxSizeMB: 0.3, maxWidthOrHeight: 1400, useWebWorker: true };
+      const compressedNew = await Promise.all(
+        editNewImages.map(async (img) => {
+          try { return await imageCompression(img, compressionOptions); } catch { return img; }
+        })
+      );
+
+      const formData = new FormData();
+      formData.append("name", editName.trim());
+      formData.append("description", editDescription.trim());
+      formData.append("inStock", editInStock ? "true" : "false");
+      // Send indexes of images to keep (existing images NOT in removedIndexes)
+      const keepIndexes = (editProduct?.images || [])
+        .map((_, i) => i)
+        .filter((i) => !editRemovedIndexes.includes(i));
+      formData.append("keepImageIndexes", JSON.stringify(keepIndexes));
+      compressedNew.forEach((img) => formData.append("newImages", img));
+
+      const res = await fetch(`${API_BASE}/api/products/${editProduct._id}`, {
+        method: "PUT",
+        headers: adminToken ? { Authorization: `Bearer ${adminToken}` } : {},
+        body: formData,
+      });
+
+      const raw = await res.text();
+      let data = {};
+      try { data = raw ? JSON.parse(raw) : {}; } catch { data = { message: raw }; }
+
+      if (res.ok) {
+        setEditMessage("✓ Product updated!");
+        setEditSuccess(true);
+        fetchProducts();
+        setTimeout(() => { closeEditModal(); }, 1500);
+      } else {
+        setEditMessage("Error: " + (data.message || `HTTP ${res.status}`));
+        setEditSuccess(false);
+      }
+    } catch (err) {
+      setEditMessage("Error saving product.");
+      setEditSuccess(false);
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   // ── Enquiry filters ──────────────────────────────────────────────────────────
   const normalizedSearch = search.trim().toLowerCase();
   const filteredEnquiries = enquiries.filter((item) => {
@@ -326,7 +480,6 @@ export default function AdminDashboard() {
   const completedCount = enquiries.filter((e) => e.status === "Completed").length;
   const pendingCount = enquiries.filter((e) => e.status !== "Completed").length;
 
-  // ── Image requirement indicator ───────────────────────────────────────────────
   const imageCount = productImages.length;
   const imageFillPct = Math.min((imageCount / MAX_IMAGES) * 100, 100);
   const imageStatusColor = imageCount === 0 ? "bg-slate-200" : "bg-emerald-500";
@@ -411,7 +564,6 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
-            {/* Search (visible in enquiries tab) */}
             {activeTab === "enquiries" && (
               <div className="relative w-full lg:w-96">
                 <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -431,7 +583,6 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* Logout */}
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:border-red-300 hover:text-red-500 flex-shrink-0"
@@ -480,9 +631,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* ═══════════════════════════════════════════════════════════════════════
-            ENQUIRIES TAB
-        ═══════════════════════════════════════════════════════════════════════ */}
+        {/* ENQUIRIES TAB */}
         {activeTab === "enquiries" && (
           <>
             <div className="flex gap-3 flex-wrap">
@@ -574,16 +723,13 @@ export default function AdminDashboard() {
           </>
         )}
 
-        {/* ═══════════════════════════════════════════════════════════════════════
-            PRODUCTS TAB
-        ═══════════════════════════════════════════════════════════════════════ */}
+        {/* PRODUCTS TAB */}
         {activeTab === "products" && (
           <div className="grid lg:grid-cols-2 gap-10 pb-10">
 
-            {/* ── LEFT: Upload Form ─────────────────────────────────────────── */}
+            {/* LEFT: Upload Form */}
             <div>
               <div className="rounded-3xl border border-slate-200 bg-white shadow-[0_14px_34px_rgba(15,23,42,0.06)] overflow-hidden">
-                {/* Form header */}
                 <div className="px-6 pt-6 pb-4 border-b border-slate-100">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500">
@@ -597,8 +743,6 @@ export default function AdminDashboard() {
                 </div>
 
                 <form onSubmit={uploadProduct} className="p-6 space-y-5">
-
-                  {/* Product Name */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                       Product Name <span className="text-red-500">*</span>
@@ -612,7 +756,6 @@ export default function AdminDashboard() {
                     />
                   </div>
 
-                  {/* Description */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                       Description <span className="text-red-500">*</span>
@@ -626,21 +769,18 @@ export default function AdminDashboard() {
                     />
                   </div>
 
-                  {/* Image Upload */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <label className="block text-sm font-semibold text-slate-700">
                         Product Images <span className="text-red-500">*</span>
                       </label>
                       <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                        imageCount === 0 ? "bg-slate-100 text-slate-500"
-                        : "bg-emerald-100 text-emerald-700"
+                        imageCount === 0 ? "bg-slate-100 text-slate-500" : "bg-emerald-100 text-emerald-700"
                       }`}>
                         {imageCount} / {MAX_IMAGES}
                       </span>
                     </div>
 
-                    {/* Requirement bar */}
                     <div className="flex items-center gap-3 mb-3">
                       <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
                         <div
@@ -648,9 +788,7 @@ export default function AdminDashboard() {
                           style={{ width: `${imageFillPct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-slate-500 whitespace-nowrap">
-                        Max {MAX_IMAGES}
-                      </span>
+                      <span className="text-xs text-slate-500 whitespace-nowrap">Max {MAX_IMAGES}</span>
                     </div>
 
                     {imageCount >= 1 && imageCount <= MAX_IMAGES && (
@@ -660,7 +798,6 @@ export default function AdminDashboard() {
                       </div>
                     )}
 
-                    {/* Drop zone / button */}
                     {imageCount < MAX_IMAGES && (
                       <button
                         type="button"
@@ -672,26 +809,16 @@ export default function AdminDashboard() {
                         <span className="text-xs">JPG, PNG, WEBP · Up to {MAX_IMAGES - imageCount} more</span>
                       </button>
                     )}
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className="hidden"
-                      onChange={handleProductImagesChange}
-                    />
+                    <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleProductImagesChange} />
 
-                    {/* Previews grid */}
                     {imagePreviews.length > 0 && (
                       <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 mt-3">
                         {imagePreviews.map((src, i) => (
                           <div key={i} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
                             <img src={src} alt="" className="h-full w-full object-cover" />
-                            {/* Order badge */}
                             <div className="absolute top-1 left-1 bg-black/60 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                               {i + 1}
                             </div>
-                            {/* Remove btn */}
                             <button
                               type="button"
                               onClick={() => removeImage(i)}
@@ -705,7 +832,6 @@ export default function AdminDashboard() {
                     )}
                   </div>
 
-                  {/* Status message */}
                   <AnimatePresence>
                     {uploadMessage && (
                       <motion.div
@@ -721,29 +847,22 @@ export default function AdminDashboard() {
                     )}
                   </AnimatePresence>
 
-                  {/* Submit */}
                   <button
                     type="submit"
                     disabled={uploading}
                     className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {uploading ? (
-                      <>
-                        <FiRefreshCw size={16} className="animate-spin" />
-                        {uploadMessage || "Processing…"}
-                      </>
+                      <><FiRefreshCw size={16} className="animate-spin" />{uploadMessage || "Processing…"}</>
                     ) : (
-                      <>
-                        <FiUpload size={16} />
-                        Upload Product
-                      </>
+                      <><FiUpload size={16} />Upload Product</>
                     )}
                   </button>
                 </form>
               </div>
             </div>
 
-            {/* ── RIGHT: Product List ────────────────────────────────────────── */}
+            {/* RIGHT: Product List */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-slate-900">
@@ -776,10 +895,9 @@ export default function AdminDashboard() {
 
               <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-1">
                 {products.map((product, idx) => {
-                  const firstImg = product.images?.[0]
-                    ? resolveImg(product.images[0])
-                    : null;
+                  const firstImg = product.images?.[0] ? resolveImg(product.images[0]) : null;
                   const imgCount = product.images?.length ?? 0;
+                  const inStock = product.inStock !== false;
 
                   return (
                     <motion.div
@@ -789,7 +907,7 @@ export default function AdminDashboard() {
                       transition={{ duration: 0.3, delay: idx * 0.04 }}
                       className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:border-blue-300 transition-colors"
                     >
-                      {/* Thumbnail (clickable for gallery) */}
+                      {/* Thumbnail */}
                       <div
                         className="relative flex-shrink-0 h-20 w-20 rounded-xl overflow-hidden bg-slate-100 cursor-pointer group"
                         onClick={() => { setGalleryProduct(product); setGalleryIndex(0); }}
@@ -810,7 +928,17 @@ export default function AdminDashboard() {
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 text-sm leading-snug truncate">{product.name}</h3>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-semibold text-slate-900 text-sm leading-snug truncate">{product.name}</h3>
+                          {/* Stock badge */}
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
+                            inStock
+                              ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                              : "bg-red-100 text-red-600 border border-red-200"
+                          }`}>
+                            {inStock ? "In Stock" : "Out of Stock"}
+                          </span>
+                        </div>
                         {product.description && (
                           <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{product.description}</p>
                         )}
@@ -825,16 +953,48 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      {/* Delete */}
-                      <button
-                        onClick={() => deleteProduct(product._id)}
-                        disabled={deletingProductId === product._id}
-                        className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-xl border border-red-200 bg-red-50 text-red-500 transition hover:bg-red-500 hover:text-white disabled:opacity-50"
-                      >
-                        {deletingProductId === product._id
-                          ? <FiRefreshCw size={14} className="animate-spin" />
-                          : <FiTrash2 size={14} />}
-                      </button>
+                      {/* Action buttons */}
+                      <div className="flex flex-col gap-1.5 flex-shrink-0">
+                        {/* Stock toggle */}
+                        <button
+                          onClick={() => toggleStock(product)}
+                          disabled={togglingStockId === product._id}
+                          title={inStock ? "Mark as Out of Stock" : "Mark as In Stock"}
+                          className={`flex items-center justify-center h-9 w-9 rounded-xl border transition ${
+                            inStock
+                              ? "border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white"
+                              : "border-orange-200 bg-orange-50 text-orange-500 hover:bg-orange-500 hover:text-white"
+                          } disabled:opacity-50`}
+                        >
+                          {togglingStockId === product._id
+                            ? <FiRefreshCw size={13} className="animate-spin" />
+                            : inStock
+                              ? <FiToggleRight size={16} />
+                              : <FiToggleLeft size={16} />
+                          }
+                        </button>
+
+                        {/* Edit */}
+                        <button
+                          onClick={() => openEditModal(product)}
+                          title="Edit product"
+                          className="flex items-center justify-center h-9 w-9 rounded-xl border border-blue-200 bg-blue-50 text-blue-500 transition hover:bg-blue-500 hover:text-white"
+                        >
+                          <FiEdit2 size={13} />
+                        </button>
+
+                        {/* Delete */}
+                        <button
+                          onClick={() => deleteProduct(product._id)}
+                          disabled={deletingProductId === product._id}
+                          title="Delete product"
+                          className="flex items-center justify-center h-9 w-9 rounded-xl border border-red-200 bg-red-50 text-red-500 transition hover:bg-red-500 hover:text-white disabled:opacity-50"
+                        >
+                          {deletingProductId === product._id
+                            ? <FiRefreshCw size={14} className="animate-spin" />
+                            : <FiTrash2 size={14} />}
+                        </button>
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -844,7 +1004,7 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      {/* ── IMAGE GALLERY MODAL ─────────────────────────────────────────────────── */}
+      {/* IMAGE GALLERY MODAL */}
       <AnimatePresence>
         {galleryProduct && (
           <motion.div
@@ -861,7 +1021,6 @@ export default function AdminDashboard() {
               className="relative w-full max-w-3xl bg-white rounded-3xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Gallery header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                 <div>
                   <h3 className="font-bold text-slate-900">{galleryProduct.name}</h3>
@@ -873,7 +1032,6 @@ export default function AdminDashboard() {
                 </button>
               </div>
 
-              {/* Main image */}
               <div className="relative bg-slate-100" style={{ height: "360px" }}>
                 {galleryProduct.images?.[galleryIndex] && (
                   <img
@@ -882,40 +1040,29 @@ export default function AdminDashboard() {
                     className="h-full w-full object-contain"
                   />
                 )}
-                {/* Prev */}
                 {galleryIndex > 0 && (
-                  <button
-                    onClick={() => setGalleryIndex((i) => i - 1)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-white shadow transition"
-                  >
+                  <button onClick={() => setGalleryIndex((i) => i - 1)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-white shadow transition">
                     <FiChevronLeft size={20} />
                   </button>
                 )}
-                {/* Next */}
                 {galleryIndex < (galleryProduct.images?.length ?? 0) - 1 && (
-                  <button
-                    onClick={() => setGalleryIndex((i) => i + 1)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-white shadow transition"
-                  >
+                  <button onClick={() => setGalleryIndex((i) => i + 1)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-white shadow transition">
                     <FiChevronRight size={20} />
                   </button>
                 )}
-                {/* Counter */}
                 <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs font-bold rounded-full px-2.5 py-1">
                   {galleryIndex + 1} / {galleryProduct.images?.length}
                 </div>
               </div>
 
-              {/* Thumbnail strip */}
               <div className="flex gap-2 p-4 overflow-x-auto">
                 {galleryProduct.images?.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setGalleryIndex(i)}
+                  <button key={i} onClick={() => setGalleryIndex(i)}
                     className={`flex-shrink-0 h-14 w-14 rounded-xl overflow-hidden border-2 transition ${
                       i === galleryIndex ? "border-blue-500" : "border-transparent"
-                    }`}
-                  >
+                    }`}>
                     <img src={resolveImg(img)} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
@@ -924,6 +1071,237 @@ export default function AdminDashboard() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── EDIT PRODUCT MODAL ───────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {editProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-6"
+            onClick={closeEditModal}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500">
+                    <FiEdit2 className="text-white" size={15} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base">Edit Product</h3>
+                    <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[220px]">{editProduct.name}</p>
+                  </div>
+                </div>
+                <button onClick={closeEditModal}
+                  className="h-8 w-8 rounded-full border border-slate-200 text-slate-400 flex items-center justify-center hover:bg-slate-100 transition">
+                  <FiX size={16} />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="overflow-y-auto flex-1 p-6 space-y-5">
+
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                    Product Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white"
+                  />
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
+                  <textarea
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    rows={3}
+                    className="w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white resize-none leading-relaxed"
+                  />
+                </div>
+
+                {/* Stock Toggle */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Stock Status</label>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setEditInStock(true)}
+                      className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold border transition ${
+                        editInStock
+                          ? "bg-emerald-500 border-emerald-500 text-white shadow"
+                          : "bg-white border-slate-200 text-slate-500 hover:border-emerald-300"
+                      }`}
+                    >
+                      <FiToggleRight size={16} />
+                      In Stock
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditInStock(false)}
+                      className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-semibold border transition ${
+                        !editInStock
+                          ? "bg-red-500 border-red-500 text-white shadow"
+                          : "bg-white border-slate-200 text-slate-500 hover:border-red-300"
+                      }`}
+                    >
+                      <FiToggleLeft size={16} />
+                      Out of Stock
+                    </button>
+                  </div>
+                </div>
+
+                {/* Existing Images */}
+                {(editProduct.images?.length ?? 0) > 0 && (
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">
+                      Current Images
+                      <span className="ml-2 text-xs font-normal text-slate-400">(click to remove)</span>
+                    </label>
+                    <div className="grid grid-cols-5 gap-2">
+                      {editProduct.images.map((img, i) => {
+                        const removed = editRemovedIndexes.includes(i);
+                        return (
+                          <div key={i}
+                            onClick={() => removeExistingEditImage(i)}
+                            className={`relative aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition ${
+                              removed ? "border-red-400 opacity-40" : "border-slate-200 hover:border-red-300"
+                            }`}
+                          >
+                            <img src={resolveImg(img)} alt="" className="h-full w-full object-cover" />
+                            {removed && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-red-500/20">
+                                <FiX className="text-red-600" size={18} />
+                              </div>
+                            )}
+                            {!removed && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                                <FiX className="text-white" size={16} />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {editRemovedIndexes.length > 0 && (
+                      <p className="text-xs text-red-500 mt-1.5">
+                        {editRemovedIndexes.length} image{editRemovedIndexes.length > 1 ? "s" : ""} will be removed on save.{" "}
+                        <button type="button" onClick={() => setEditRemovedIndexes([])} className="underline">Undo all</button>
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Add New Images */}
+                {(() => {
+                  const keptCount = (editProduct.images?.length ?? 0) - editRemovedIndexes.length;
+                  const totalAfter = keptCount + editNewImages.length;
+                  const canAddMore = totalAfter < MAX_IMAGES;
+                  return (
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                        Add More Images
+                        <span className="ml-2 text-xs font-normal text-slate-400">({totalAfter}/{MAX_IMAGES} total)</span>
+                      </label>
+
+                      {canAddMore && (
+                        <button
+                          type="button"
+                          onClick={() => editFileInputRef.current?.click()}
+                          className="w-full rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 py-5 flex flex-col items-center gap-1.5 text-slate-500 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-500"
+                        >
+                          <FiImage size={22} />
+                          <span className="text-xs font-medium">Click to add more photos</span>
+                          <span className="text-[11px]">Up to {MAX_IMAGES - totalAfter} more</span>
+                        </button>
+                      )}
+                      <input
+                        ref={editFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleEditNewImages}
+                      />
+
+                      {editNewPreviews.length > 0 && (
+                        <div className="grid grid-cols-5 gap-2 mt-2">
+                          {editNewPreviews.map((src, i) => (
+                            <div key={i} className="relative group aspect-square rounded-xl overflow-hidden border border-emerald-300 bg-slate-100">
+                              <img src={src} alt="" className="h-full w-full object-cover" />
+                              <div className="absolute top-0.5 left-0.5 bg-emerald-500 text-white text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">+</div>
+                              <button
+                                type="button"
+                                onClick={() => removeNewEditImage(i)}
+                                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <FiX className="text-white" size={16} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Message */}
+                <AnimatePresence>
+                  {editMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                      className={`rounded-2xl px-4 py-3 text-sm font-medium ${
+                        editSuccess
+                          ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                          : "bg-rose-50 border border-rose-200 text-rose-600"
+                      }`}
+                    >
+                      {editMessage}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex gap-3 px-6 py-4 border-t border-slate-100 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="flex-1 rounded-2xl border border-slate-300 bg-white py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={saveEdit}
+                  disabled={editSaving}
+                  className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {editSaving
+                    ? <><FiRefreshCw size={15} className="animate-spin" /> Saving…</>
+                    : <><FiSave size={15} /> Save Changes</>
+                  }
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }

@@ -7,6 +7,21 @@ import { getApiBase } from "../utils/apiBase"
 
 const PLACEHOLDER = "https://placehold.co/800x600/e2e8f0/94a3b8?text=No+Image"
 
+// ── Robust image URL resolver ─────────────────────────────────────────────────
+// Handles all possible formats the backend might store:
+//   "/uploads/file.jpg"  →  API_BASE + "/uploads/file.jpg"
+//   "uploads/file.jpg"   →  API_BASE + "/uploads/file.jpg"
+//   "http://..."         →  returned as-is
+//   ""  / null           →  PLACEHOLDER
+function resolveImageUrl(src, API_BASE) {
+  if (!src) return PLACEHOLDER
+  if (src.startsWith("http://") || src.startsWith("https://")) return src
+  if (src.startsWith("/uploads/")) return `${API_BASE}${src}`
+  if (src.startsWith("uploads/"))  return `${API_BASE}/${src}`
+  // fallback: assume it's a relative path
+  return `${API_BASE}/${src}`
+}
+
 function SkeletonCard() {
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
@@ -14,6 +29,7 @@ function SkeletonCard() {
       <div className="p-4 space-y-2">
         <div className="h-4 bg-slate-200 rounded w-3/4" />
         <div className="h-3 bg-slate-100 rounded w-full" />
+        <div className="h-8 bg-slate-100 rounded-xl w-full mt-2" />
       </div>
     </div>
   )
@@ -32,21 +48,20 @@ function ImageCarousel({ images, alt, API_BASE, height = "h-44" }) {
     )
   }
 
-  const resolve = (src) => {
-    if (!src) return PLACEHOLDER
-    if (src.startsWith("/uploads/")) return `${API_BASE}${src}`
-    return src
-  }
-
   const prev = (e) => { e.stopPropagation(); setCurrent((c) => (c - 1 + total) % total) }
   const next = (e) => { e.stopPropagation(); setCurrent((c) => (c + 1) % total) }
+
+  const getSrc = (idx) => {
+    if (imgErrors[idx]) return PLACEHOLDER
+    return resolveImageUrl(images[idx], API_BASE)
+  }
 
   return (
     <div className={`relative ${height} bg-slate-100 overflow-hidden group`}>
       <AnimatePresence mode="wait">
         <motion.img
           key={current}
-          src={imgErrors[current] ? PLACEHOLDER : resolve(images[current])}
+          src={getSrc(current)}
           alt={`${alt} ${current + 1}`}
           onError={() => setImgErrors((e) => ({ ...e, [current]: true }))}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -92,34 +107,60 @@ function ImageCarousel({ images, alt, API_BASE, height = "h-44" }) {
 
 // ── Compact card (default view) ───────────────────────────────────────────────
 function ProductCard({ product, index, API_BASE, onOpenLightbox, onClick }) {
+  const inStock = product.inStock !== false
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
-      whileHover={{ y: -4, boxShadow: '0 12px 32px rgba(0,0,0,0.12)' }}
-      onClick={onClick}
-      className="bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer border border-slate-100 flex flex-col"
+      className="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-100 flex flex-col"
     >
-      {/* Image */}
-      <div onClick={(e) => { e.stopPropagation(); onOpenLightbox(product, 0) }}>
+      {/* Image — click opens lightbox */}
+      <div
+        className="cursor-pointer"
+        onClick={(e) => { e.stopPropagation(); onOpenLightbox(product, 0) }}
+      >
         <ImageCarousel images={product.images ?? []} alt={product.name} API_BASE={API_BASE} height="h-44" />
       </div>
 
-      {/* Compact footer */}
-      <div className="px-4 py-3 flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          <h3 className="text-sm font-bold text-slate-900 truncate">{product.name}</h3>
-          {product.description && (
-            <p className="text-xs text-slate-400 truncate mt-0.5">{product.description}</p>
-          )}
+      {/* Card body */}
+      <div className="px-4 pt-3 pb-4 flex flex-col gap-3 flex-1">
+
+        {/* Name + stock badge */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">{product.name}</h3>
+            {product.description && (
+              <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{product.description}</p>
+            )}
+          </div>
+          <span className={`flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full border mt-0.5 ${
+            inStock
+              ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+              : "bg-red-50 text-red-500 border-red-200"
+          }`}>
+            {inStock ? "In Stock" : "Out of Stock"}
+          </span>
         </div>
-        <div className="flex-shrink-0 flex items-center gap-1.5 text-[#345f9a]">
-          <span className="text-xs font-semibold">Details</span>
+
+        {/* Get Details button */}
+        <button
+          onClick={onClick}
+          className="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200"
+          style={{
+            background: "linear-gradient(135deg, #345f9a 0%, #2a8fc7 100%)",
+            color: "#fff",
+            boxShadow: "0 4px 14px rgba(52,95,154,0.30)",
+          }}
+          onMouseEnter={e => e.currentTarget.style.filter = "brightness(1.1)"}
+          onMouseLeave={e => e.currentTarget.style.filter = "brightness(1)"}
+        >
+          Get Details
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M5 3l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M5 3l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-        </div>
+        </button>
       </div>
     </motion.div>
   )
@@ -128,6 +169,8 @@ function ProductCard({ product, index, API_BASE, onOpenLightbox, onClick }) {
 // ── Detail modal (shown on click) ─────────────────────────────────────────────
 function ProductModal({ product, API_BASE, onClose, onOpenLightbox }) {
   if (!product) return null
+
+  const inStock = product.inStock !== false
 
   return (
     <motion.div
@@ -158,6 +201,14 @@ function ProductModal({ product, API_BASE, onClose, onOpenLightbox }) {
               <path d="M2 2l10 10M12 2L2 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </button>
+          {/* Stock badge on modal */}
+          <div className={`absolute top-3 right-3 z-20 text-[11px] font-bold px-2.5 py-1 rounded-full border backdrop-blur-sm ${
+            inStock
+              ? "bg-emerald-100/90 text-emerald-700 border-emerald-300"
+              : "bg-red-100/90 text-red-600 border-red-300"
+          }`}>
+            {inStock ? "✓ In Stock" : "✗ Out of Stock"}
+          </div>
         </div>
 
         {/* Modal content */}
@@ -172,11 +223,16 @@ function ProductModal({ product, API_BASE, onClose, onOpenLightbox }) {
           {(product.images?.length ?? 0) > 1 && (
             <div className="flex gap-2 overflow-x-auto pb-1">
               {product.images.slice(0, 8).map((img, i) => {
-                const src = img?.startsWith("/uploads/") ? `${API_BASE}${img}` : img
+                const src = resolveImageUrl(img, API_BASE)
                 return (
                   <button key={i} onClick={() => onOpenLightbox(product, i)}
                     className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden border-2 border-transparent hover:border-[#345f9a] transition-colors">
-                    <img src={src || PLACEHOLDER} alt="" className="h-full w-full object-cover" />
+                    <img
+                      src={src}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      onError={(e) => { e.target.src = PLACEHOLDER }}
+                    />
                   </button>
                 )
               })}
@@ -237,12 +293,6 @@ function Lightbox({ product, startIndex, onClose, API_BASE }) {
   const images = product?.images ?? []
   const total = images.length
 
-  const resolve = (src) => {
-    if (!src) return PLACEHOLDER
-    if (src.startsWith("/uploads/")) return `${API_BASE}${src}`
-    return src
-  }
-
   const prev = useCallback(() => setCurrent((c) => (c - 1 + total) % total), [total])
   const next = useCallback(() => setCurrent((c) => (c + 1) % total), [total])
 
@@ -279,10 +329,15 @@ function Lightbox({ product, startIndex, onClose, API_BASE }) {
 
       <div className="flex-1 flex items-center justify-center relative px-12 min-h-0" onClick={(e) => e.stopPropagation()}>
         <AnimatePresence mode="wait">
-          <motion.img key={current} src={resolve(images[current])} alt={`${product.name} ${current + 1}`}
+          <motion.img
+            key={current}
+            src={resolveImageUrl(images[current], API_BASE)}
+            alt={`${product.name} ${current + 1}`}
             initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.2 }} className="max-h-full max-w-full object-contain rounded-xl"
-            onError={(e) => { e.target.src = PLACEHOLDER }} />
+            transition={{ duration: 0.2 }}
+            className="max-h-full max-w-full object-contain rounded-xl"
+            onError={(e) => { e.target.src = PLACEHOLDER }}
+          />
         </AnimatePresence>
         {total > 1 && (
           <>
@@ -300,7 +355,12 @@ function Lightbox({ product, startIndex, onClose, API_BASE }) {
         {images.map((img, i) => (
           <button key={i} onClick={() => setCurrent(i)}
             className={`flex-shrink-0 h-14 w-14 rounded-xl overflow-hidden border-2 transition ${i === current ? "border-white" : "border-white/20 hover:border-white/50"}`}>
-            <img src={resolve(img)} alt="" className="h-full w-full object-cover" onError={(e) => { e.target.src = PLACEHOLDER }} />
+            <img
+              src={resolveImageUrl(img, API_BASE)}
+              alt=""
+              className="h-full w-full object-cover"
+              onError={(e) => { e.target.src = PLACEHOLDER }}
+            />
           </button>
         ))}
       </div>
@@ -333,7 +393,7 @@ export default function Products() {
   useEffect(() => { loadProducts() }, [API_BASE])
 
   const filtered = products.filter((p) => {
-    if (filter === "inStock") return p.inStock === true
+    if (filter === "inStock") return p.inStock !== false
     if (filter === "outOfStock") return p.inStock === false
     return true
   })
@@ -370,7 +430,7 @@ export default function Products() {
               Our <span className="text-[#345f9a]">Products</span>
             </h1>
             <p className="text-slate-500 max-w-xl mx-auto text-base leading-relaxed">
-              Browse our range of quality IT products. Click any card to view full details, images and enquiry options.
+              Browse our range of quality IT products. Click <strong>Get Details</strong> on any card to view full info and enquiry options.
             </p>
           </motion.div>
 
@@ -379,9 +439,9 @@ export default function Products() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
               className="flex justify-center gap-3 mb-10 flex-wrap">
               {[
-                { key: "all", label: "All Products", count: products.length },
-                { key: "inStock", label: "In Stock", count: products.filter((p) => p.inStock).length },
-                { key: "outOfStock", label: "Out Of Stock", count: products.filter((p) => !p.inStock).length },
+                { key: "all",        label: "All Products", count: products.length },
+                { key: "inStock",    label: "In Stock",     count: products.filter((p) => p.inStock !== false).length },
+                { key: "outOfStock", label: "Out of Stock", count: products.filter((p) => p.inStock === false).length },
               ].map(({ key, label, count }) => (
                 <button key={key} onClick={() => setFilter(key)}
                   className={`px-5 py-2 rounded-full text-sm font-bold border transition-all duration-200 ${
@@ -423,7 +483,7 @@ export default function Products() {
             </div>
           )}
 
-          {/* ── Compact grid ── */}
+          {/* Product grid */}
           {!loading && !error && filtered.length > 0 && (
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {filtered.map((product, i) => (
@@ -444,7 +504,7 @@ export default function Products() {
 
       <Footer />
 
-      {/* ── Detail modal ── */}
+      {/* Detail modal */}
       <AnimatePresence>
         {selectedProduct && (
           <ProductModal
@@ -456,7 +516,7 @@ export default function Products() {
         )}
       </AnimatePresence>
 
-      {/* ── Lightbox ── */}
+      {/* Lightbox */}
       <AnimatePresence>
         {lightboxProduct && (
           <Lightbox product={lightboxProduct} startIndex={lightboxIndex} onClose={closeLightbox} API_BASE={API_BASE} />
