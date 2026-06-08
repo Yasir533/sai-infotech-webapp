@@ -11,6 +11,13 @@
   - `ADMIN_EMAIL`
   - `ADMIN_JWT_SECRET`
   - `ADMIN_RESET_JWT_SECRET`
+- **Persistent Storage (Crucial)**:
+  - To prevent uploaded product images from getting deleted when Render restarts or redeploys, add a **Persistent Disk**:
+    - Go to the **Disks** section of your Web Service in the Render Dashboard.
+    - Click **Add Disk**.
+    - **Name**: `uploads`
+    - **Mount Path**: `/opt/render/project/src/uploads`
+    - **Size**: `1 GiB` (or more)
 
 ## Frontend (Vercel)
 - Create a new project from the repo root.
