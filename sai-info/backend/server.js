@@ -760,12 +760,12 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-app.post('/api/products', upload.array('images', 10), async (req, res) => {
+app.post('/api/products', upload.array('images', 15), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
-    if (!name || !req.files || req.files.length === 0) {
-      return res.status(400).json({ message: 'Name and at least one image are required' });
+    if (!name || !req.files || req.files.length < 10) {
+      return res.status(400).json({ message: 'Name and at least 10 images are required' });
     }
 
     const images = req.files.map((file) => `/uploads/${file.filename}`);
@@ -799,7 +799,7 @@ app.post('/api/products', upload.array('images', 10), async (req, res) => {
   } catch (error) {
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
-        return res.status(400).json({ message: 'You can upload a maximum of 10 photos' });
+        return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
       }
       return res.status(400).json({ message: error.message });
     }
