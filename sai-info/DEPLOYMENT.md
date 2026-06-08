@@ -11,6 +11,9 @@
   - `ADMIN_EMAIL`
   - `ADMIN_JWT_SECRET`
   - `ADMIN_RESET_JWT_SECRET`
+  - `CLOUDINARY_CLOUD_NAME`
+  - `CLOUDINARY_API_KEY`
+  - `CLOUDINARY_API_SECRET`
 
 ## Frontend (Vercel)
 - Create a new project from the repo root.

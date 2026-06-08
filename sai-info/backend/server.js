@@ -842,6 +842,23 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
+// Error handling middleware to catch errors (like Cloudinary/Multer errors) and return JSON
+app.use((err, req, res, next) => {
+  console.error("Unhandled server error:", err);
+  
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+      return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
+    }
+    return res.status(400).json({ message: err.message });
+  }
+
+  const statusCode = err.status || err.statusCode || 500;
+  res.status(statusCode).json({
+    message: err.message || "An unexpected error occurred on the server",
+  });
+});
+
 // ─────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 5000;
