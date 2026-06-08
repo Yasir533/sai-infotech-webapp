@@ -723,12 +723,11 @@ app.post('/api/products', upload.array('images', 15), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
-    if (!name || !req.files || req.files.length < 10) {
-      // Clean up any uploaded files if validation fails
+    if (!name || !req.files || req.files.length === 0) {
       (req.files || []).forEach((f) => {
         if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
       });
-      return res.status(400).json({ message: 'Name and at least 10 images are required' });
+      return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
     const images = req.files.map((file) => `/uploads/${file.filename}`);

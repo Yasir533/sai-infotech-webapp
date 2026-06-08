@@ -16,7 +16,6 @@ import {
   FiPackage,
   FiX,
   FiImage,
-  FiAlertCircle,
   FiChevronLeft,
   FiChevronRight,
   FiLogOut,
@@ -24,7 +23,6 @@ import {
 import { getApiBase } from "../utils/apiBase";
 import imageCompression from "browser-image-compression";
 
-const MIN_IMAGES = 10;
 const MAX_IMAGES = 15;
 
 export default function AdminDashboard() {
@@ -210,10 +208,8 @@ export default function AdminDashboard() {
       setUploadSuccess(false);
       return;
     }
-    if (productImages.length < MIN_IMAGES) {
-      setUploadMessage(
-        `Please select at least ${MIN_IMAGES} images (${productImages.length} selected so far).`
-      );
+    if (productImages.length === 0) {
+      setUploadMessage("Please select at least one image.");
       setUploadSuccess(false);
       return;
     }
@@ -333,10 +329,7 @@ export default function AdminDashboard() {
   // ── Image requirement indicator ───────────────────────────────────────────────
   const imageCount = productImages.length;
   const imageFillPct = Math.min((imageCount / MAX_IMAGES) * 100, 100);
-  const imageStatusColor =
-    imageCount === 0 ? "bg-slate-200"
-    : imageCount < MIN_IMAGES ? "bg-amber-400"
-    : "bg-emerald-500";
+  const imageStatusColor = imageCount === 0 ? "bg-slate-200" : "bg-emerald-500";
 
   // ── LOGIN SCREEN ─────────────────────────────────────────────────────────────
   if (!authenticated) {
@@ -598,7 +591,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-slate-900">Add New Product</h2>
-                      <p className="text-xs text-slate-500 mt-0.5">Fill in details and upload {MIN_IMAGES}–{MAX_IMAGES} photos</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Fill in details and upload up to {MAX_IMAGES} photos</p>
                     </div>
                   </div>
                 </div>
@@ -641,7 +634,6 @@ export default function AdminDashboard() {
                       </label>
                       <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                         imageCount === 0 ? "bg-slate-100 text-slate-500"
-                        : imageCount < MIN_IMAGES ? "bg-amber-100 text-amber-700"
                         : "bg-emerald-100 text-emerald-700"
                       }`}>
                         {imageCount} / {MAX_IMAGES}
@@ -657,21 +649,14 @@ export default function AdminDashboard() {
                         />
                       </div>
                       <span className="text-xs text-slate-500 whitespace-nowrap">
-                        Min {MIN_IMAGES} · Max {MAX_IMAGES}
+                        Max {MAX_IMAGES}
                       </span>
                     </div>
 
-                    {/* Requirement note */}
-                    {imageCount < MIN_IMAGES && imageCount > 0 && (
-                      <div className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-3">
-                        <FiAlertCircle size={14} className="flex-shrink-0" />
-                        Add {MIN_IMAGES - imageCount} more image{MIN_IMAGES - imageCount !== 1 ? "s" : ""} to meet the minimum requirement.
-                      </div>
-                    )}
-                    {imageCount >= MIN_IMAGES && imageCount <= MAX_IMAGES && (
+                    {imageCount >= 1 && imageCount <= MAX_IMAGES && (
                       <div className="flex items-center gap-2 text-xs text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 mb-3">
                         <FiCheckCircle size={14} className="flex-shrink-0" />
-                        {imageCount === MAX_IMAGES ? "Maximum reached." : `Good! You can add ${MAX_IMAGES - imageCount} more.`}
+                        {imageCount === MAX_IMAGES ? "Maximum reached." : `${imageCount} selected. You can add ${MAX_IMAGES - imageCount} more.`}
                       </div>
                     )}
 
