@@ -853,10 +853,12 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ message: err.message });
   }
 
+  const message = typeof err === 'string'
+    ? err
+    : (err.message || "An unexpected error occurred on the server");
+
   const statusCode = err.status || err.statusCode || 500;
-  res.status(statusCode).json({
-    message: err.message || "An unexpected error occurred on the server",
-  });
+  res.status(statusCode).json({ message });
 });
 
 // ─────────────────────────────────────────────────────────────
