@@ -12,6 +12,7 @@ if (typeof dns.setDefaultResultOrder === "function") {
 }
 
 const Contact = require("./models/Contact");
+const Product = require("./models/Product");
 const Admin = require("./models/Admin");
 const AdminOtp = require("./models/AdminOtp");
 const nodemailer = require("nodemailer");
@@ -164,7 +165,6 @@ mongoose.connect(process.env.MONGO_URI)
 .then(async () => {
   console.log("MongoDB Connected");
   await ensureAdminSeed();
-  migrateProductImageUrls();
 })
 .catch((err) => console.log(err));
 
@@ -173,42 +173,6 @@ const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET || process.env.JWT_SECRET 
 const RESET_JWT_SECRET = process.env.ADMIN_RESET_JWT_SECRET || ADMIN_JWT_SECRET;
 const DEFAULT_ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "admin@sai-infotech.com").trim().toLowerCase();
 const DEFAULT_ADMIN_PASSWORD = process.env.INIT_ADMIN_PASSWORD || "admin123";
-
-function migrateProductImageUrls() {
-  try {
-    const productsPath = path.join(__dirname, 'products.json');
-    if (!fs.existsSync(productsPath)) return;
-
-    const raw = fs.readFileSync(productsPath, 'utf8');
-    const products = JSON.parse(raw);
-    let changed = false;
-
-    const fixUrl = (url) => {
-      if (!url) return url;
-      return url.replace(/^https?:\/\/[^/]+(?=\/uploads\/)/, '');
-    };
-
-    products.forEach((p) => {
-      const fixedImage = fixUrl(p.image);
-      if (fixedImage !== p.image) { p.image = fixedImage; changed = true; }
-
-      if (Array.isArray(p.images)) {
-        p.images = p.images.map((img) => {
-          const fixed = fixUrl(img);
-          if (fixed !== img) changed = true;
-          return fixed;
-        });
-      }
-    });
-
-    if (changed) {
-      fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
-      console.log('products.json migrated: removed hardcoded localhost URLs');
-    }
-  } catch (err) {
-    console.log('Product URL migration error:', err);
-  }
-}
 
 function normalizeEmail(email) {
   return (email || "").trim().toLowerCase();
@@ -742,54 +706,41 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ─── PRODUCTS ───────────────────────────────────────────────
+// ─── PRODUCTS (MongoDB Atlas) ────────────────────────────────
+// GET /api/products — return all products, newest first
 app.get('/api/products', async (req, res) => {
   try {
-    const productsPath = path.join(__dirname, 'products.json');
-
-    if (fs.existsSync(productsPath)) {
-      const raw = fs.readFileSync(productsPath, 'utf8');
-      const products = JSON.parse(raw);
-      return res.json(products);
-    }
-
-    res.json([]);
+    const products = await Product.find().sort({ createdAt: -1 }).lean();
+    res.json(products);
   } catch (error) {
     console.log('Products API error', error);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });
 
+// POST /api/products — create a new product (admin only)
 app.post('/api/products', upload.array('images', 15), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
     if (!name || !req.files || req.files.length < 10) {
+      // Clean up any uploaded files if validation fails
+      (req.files || []).forEach((f) => {
+        if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
+      });
       return res.status(400).json({ message: 'Name and at least 10 images are required' });
     }
 
     const images = req.files.map((file) => `/uploads/${file.filename}`);
 
-    const newProduct = {
-      _id: Date.now().toString(),
-      name,
-      category: category || 'general',
-      description: description || '',
+    const newProduct = await Product.create({
+      name: name.trim(),
+      category: (category || 'general').trim(),
+      description: (description || '').trim(),
       price: price || '0',
       image: images[0],
       images,
-    };
-
-    const productsPath = path.join(__dirname, 'products.json');
-    let products = [];
-
-    if (fs.existsSync(productsPath)) {
-      const raw = fs.readFileSync(productsPath, 'utf8');
-      products = JSON.parse(raw);
-    }
-
-    products.push(newProduct);
-    fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+    });
 
     res.status(201).json({
       success: true,
@@ -797,6 +748,11 @@ app.post('/api/products', upload.array('images', 15), async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
+    // Clean up uploaded files on any error
+    (req.files || []).forEach((f) => {
+      if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
+    });
+
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
         return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
@@ -809,29 +765,19 @@ app.post('/api/products', upload.array('images', 15), async (req, res) => {
   }
 });
 
+// DELETE /api/products/:id — delete a product and its images (admin only)
 app.delete('/api/products/:id', async (req, res) => {
   try {
-    const productsPath = path.join(__dirname, 'products.json');
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id).lean();
 
-    if (!fs.existsSync(productsPath)) {
-      return res.status(404).json({ message: 'Products list not found' });
-    }
-
-    const raw = fs.readFileSync(productsPath, 'utf8');
-    const products = JSON.parse(raw);
-
-    const productIndex = products.findIndex((p) => p._id === req.params.id);
-
-    if (productIndex === -1) {
+    if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    const [deletedProduct] = products.splice(productIndex, 1);
-    fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
-
-    const imageUrls = Array.isArray(deletedProduct?.images)
+    // Remove image files from disk
+    const imageUrls = Array.isArray(deletedProduct.images)
       ? deletedProduct.images
-      : deletedProduct?.image
+      : deletedProduct.image
         ? [deletedProduct.image]
         : [];
 
@@ -840,7 +786,7 @@ app.delete('/api/products/:id', async (req, res) => {
         const filename = imageUrl.split('/uploads/')[1];
         const imagePath = path.join(__dirname, 'uploads', filename);
         if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
+          try { fs.unlinkSync(imagePath); } catch (e) { console.log('File delete error:', e); }
         }
       }
     });
