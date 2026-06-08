@@ -264,7 +264,7 @@ function ProductModal({ product, API_BASE, onClose, onOpenLightbox }) {
               </svg>
             </a>
             <a
-              href={`https://wa.me/919986914248?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(product.name)}.`}
+              href={`https://wa.me/917676952139?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(product.name)}.`}
               target="_blank" rel="noopener noreferrer"
               style={{
                 flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '7px',

@@ -419,7 +419,7 @@ export default function EWasteManagement() {
                     Get a Quote <FiArrowRight />
                   </button>
                   <a
-                    href={`https://wa.me/919986914248?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(selected.name)}%20services.`}
+                    href={`https://wa.me/917676952139?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(selected.name)}%20services.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

@@ -276,7 +276,7 @@ export default function ITProductsSales() {
                     Get a Quote <FiArrowRight />
                   </Link>
                   <a
-                    href={`https://wa.me/919986914248?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(selected.name)}%20products.`}
+                    href={`https://wa.me/917676952139?text=Hi%20SAI%20INFOTECH%2C%20I%20would%20like%20to%20enquire%20about%20${encodeURIComponent(selected.name)}%20products.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
