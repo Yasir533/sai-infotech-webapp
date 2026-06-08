@@ -20,6 +20,26 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
+// ─── CLOUDINARY SETUP ────────────────────────────────────────
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "sai-infotech-products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+  },
+});
+const uploadCloud = multer({ storage: cloudinaryStorage });
+// ─────────────────────────────────────────────────────────────
+
 const app = express();
 
 app.use(cors());
@@ -45,6 +65,7 @@ app.get('/health', (req, res) => {
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Keep local multer for non-product uploads if needed
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadsDir = path.join(__dirname, "uploads");
@@ -528,7 +549,6 @@ app.post("/api/contact", async (req, res) => {
     await newContact.save();
 
     console.log("CONTACT SAVED ID:", newContact._id);
-
     console.log("CONTACT MAIL SEND START");
 
     const [adminMailResult, customerMailResult] = await Promise.allSettled([
@@ -538,23 +558,11 @@ app.post("/api/contact", async (req, res) => {
         subject: "New Customer Enquiry - SAI INFOTECH",
         html: `
           <h2>New Customer Enquiry</h2>
-
           <p><strong>Name:</strong> ${name}</p>
-
           <p><strong>Email:</strong> ${email}</p>
-
           <p><strong>Phone:</strong> ${phone}</p>
-
-          <p><strong>Services:</strong>
-            ${
-              Array.isArray(services)
-                ? services.join(", ")
-                : services
-            }
-          </p>
-
+          <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
           <p><strong>Message:</strong></p>
-
           <p>${message}</p>
         `,
       }),
@@ -563,34 +571,14 @@ app.post("/api/contact", async (req, res) => {
         subject: "Thank You for Contacting SAI INFOTECH",
         html: `
           <div style="font-family: Arial; padding:20px;">
-
-            <h2 style="color:#2563eb;">
-              Thank You for Contacting SAI INFOTECH
-            </h2>
-
+            <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
             <p>Dear ${name},</p>
-
             <p>Your enquiry has been received successfully.</p>
-
             <p>Our technical team will contact you shortly.</p>
-
             <p><strong>Selected Services:</strong></p>
-
-            <p>
-              ${
-                Array.isArray(services)
-                  ? services.join(", ")
-                  : services
-              }
-            </p>
-
+            <p>${Array.isArray(services) ? services.join(", ") : services}</p>
             <br/>
-
-            <p>
-              Regards,<br/>
-              SAI INFOTECH
-            </p>
-
+            <p>Regards,<br/>SAI INFOTECH</p>
           </div>
         `,
       }),
@@ -598,14 +586,12 @@ app.post("/api/contact", async (req, res) => {
 
     if (adminMailResult.status === "fulfilled") {
       console.log("ADMIN MAIL SENT");
-      console.log("ADMIN MAIL RESPONSE:", adminMailResult.value);
     } else {
       console.log("CONTACT ADMIN MAIL ERROR:", adminMailResult.reason);
     }
 
     if (customerMailResult.status === "fulfilled") {
       console.log("CUSTOMER MAIL SENT");
-      console.log("CUSTOMER MAIL RESPONSE:", customerMailResult.value);
     } else {
       console.log("CONTACT CUSTOMER MAIL ERROR:", customerMailResult.reason);
     }
@@ -618,9 +604,7 @@ app.post("/api/contact", async (req, res) => {
     });
 
   } catch (error) {
-
     console.log("FULL ERROR:", error);
-
     res.status(500).json({
       success: false,
       message: "Server Error",
@@ -661,13 +645,10 @@ app.put("/api/enquiries/:id", async (req, res) => {
 // ─── CHATBOT ────────────────────────────────────────────────
 app.post("/api/chat", async (req, res) => {
   try {
-
     const { message } = req.body;
-
     console.log("/api/chat received:", message);
 
     const msg = (message ?? "").toString().toLowerCase();
-
     let reply = "";
 
     if (msg.includes("services") || msg.includes("service")) {
@@ -706,7 +687,8 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ─── PRODUCTS (MongoDB Atlas) ────────────────────────────────
+// ─── PRODUCTS ────────────────────────────────────────────────
+
 // GET /api/products — return all products, newest first
 app.get('/api/products', async (req, res) => {
   try {
@@ -718,19 +700,17 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// POST /api/products — create a new product (admin only)
-app.post('/api/products', upload.array('images', 15), async (req, res) => {
+// POST /api/products — create a new product (images → Cloudinary)
+app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
     if (!name || !req.files || req.files.length === 0) {
-      (req.files || []).forEach((f) => {
-        if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
-      });
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    const images = req.files.map((file) => `/uploads/${file.filename}`);
+    // Cloudinary returns secure URL in f.path
+    const images = req.files.map((f) => f.path);
 
     const newProduct = await Product.create({
       name: name.trim(),
@@ -739,6 +719,7 @@ app.post('/api/products', upload.array('images', 15), async (req, res) => {
       price: price || '0',
       image: images[0],
       images,
+      inStock: true,
     });
 
     res.status(201).json({
@@ -747,24 +728,78 @@ app.post('/api/products', upload.array('images', 15), async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
-    // Clean up uploaded files on any error
-    (req.files || []).forEach((f) => {
-      if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
-    });
-
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
         return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
       }
       return res.status(400).json({ message: error.message });
     }
-
     console.log('Product upload error', error);
     res.status(500).json({ message: 'Error uploading product' });
   }
 });
 
-// DELETE /api/products/:id — delete a product and its images (admin only)
+// PATCH /api/products/:id — toggle inStock status
+app.patch('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { inStock: req.body.inStock },
+      { new: true }
+    );
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.json(product);
+  } catch (err) {
+    console.log('Product patch error', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PUT /api/products/:id — full edit (name, description, inStock, manage images)
+app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    // keepImageIndexes: JSON array of existing image indices to keep
+    let keepIndexes = [];
+    try { keepIndexes = JSON.parse(req.body.keepImageIndexes || '[]'); } catch {}
+
+    // Delete removed images from Cloudinary
+    const removedImages = product.images.filter((_, i) => !keepIndexes.includes(i));
+    for (const url of removedImages) {
+      try {
+        const parts = url.split('/');
+        const folder = parts[parts.length - 2];
+        const filename = parts[parts.length - 1].split('.')[0];
+        await cloudinary.uploader.destroy(`${folder}/${filename}`);
+      } catch (e) {
+        console.warn('Cloudinary delete warn:', e.message);
+      }
+    }
+
+    // Build updated images: kept existing + newly uploaded
+    const keptImages = keepIndexes.map((i) => product.images[i]).filter(Boolean);
+    const newImageUrls = req.files ? req.files.map((f) => f.path) : [];
+    const allImages = [...keptImages, ...newImageUrls].slice(0, 15);
+
+    product.name = req.body.name || product.name;
+    product.description = req.body.description ?? product.description;
+    product.inStock = req.body.inStock !== undefined
+      ? req.body.inStock === 'true' || req.body.inStock === true
+      : product.inStock;
+    product.images = allImages;
+    product.image = allImages[0] || product.image;
+
+    await product.save();
+    res.json(product);
+  } catch (err) {
+    console.log('Product put error', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE /api/products/:id — delete product and its Cloudinary images
 app.delete('/api/products/:id', async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id).lean();
@@ -773,22 +808,32 @@ app.delete('/api/products/:id', async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    // Remove image files from disk
+    // Remove images from Cloudinary (and legacy local files)
     const imageUrls = Array.isArray(deletedProduct.images)
       ? deletedProduct.images
       : deletedProduct.image
         ? [deletedProduct.image]
         : [];
 
-    imageUrls.forEach((imageUrl) => {
-      if (imageUrl && imageUrl.includes('/uploads/')) {
-        const filename = imageUrl.split('/uploads/')[1];
-        const imagePath = path.join(__dirname, 'uploads', filename);
-        if (fs.existsSync(imagePath)) {
-          try { fs.unlinkSync(imagePath); } catch (e) { console.log('File delete error:', e); }
+    for (const url of imageUrls) {
+      try {
+        if (url && url.includes('cloudinary.com')) {
+          const parts = url.split('/');
+          const folder = parts[parts.length - 2];
+          const filename = parts[parts.length - 1].split('.')[0];
+          await cloudinary.uploader.destroy(`${folder}/${filename}`);
+        } else if (url && url.includes('/uploads/')) {
+          // Legacy local file cleanup
+          const filename = url.split('/uploads/')[1];
+          const imagePath = path.join(__dirname, 'uploads', filename);
+          if (fs.existsSync(imagePath)) {
+            try { fs.unlinkSync(imagePath); } catch (e) { console.log('File delete error:', e); }
+          }
         }
+      } catch (e) {
+        console.warn('Image cleanup warn:', e.message);
       }
-    });
+    }
 
     res.json({ success: true, message: 'Product deleted successfully' });
   } catch (error) {
@@ -796,6 +841,8 @@ app.delete('/api/products/:id', async (req, res) => {
     res.status(500).json({ message: 'Error deleting product' });
   }
 });
+
+// ─────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 5000;
 
