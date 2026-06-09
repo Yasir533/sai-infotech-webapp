@@ -16,6 +16,7 @@ const PLACEHOLDER = "https://placehold.co/800x600/e2e8f0/94a3b8?text=No+Image"
 function resolveImageUrl(src, API_BASE) {
   if (!src) return PLACEHOLDER
   if (src.startsWith("http://") || src.startsWith("https://")) return src
+  if (src.startsWith("data:")) return src
   if (src.startsWith("/uploads/")) return `${API_BASE}${src}`
   if (src.startsWith("uploads/"))  return `${API_BASE}/${src}`
   // fallback: assume it's a relative path
