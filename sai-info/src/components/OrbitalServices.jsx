@@ -457,7 +457,7 @@ const BADGES = [
   { label:'10+ Yrs',       sub:'Experience',   pos:{ left: 120, top: 140 } },
   { label:'Trusted by',    sub:'100+ Clients', pos:{ left: 780, top:  94 } },
   { label:'ISO Certified', sub:'Process',      pos:{ left:  80, top: 622 } },
-  { label:'Pan India',     sub:'Service',      pos:{ left: 780, top: 640 } },
+  { label:'All Over Karnataka',     sub:'Service',      pos:{ left: 780, top: 640 } },
 ]
 
 const DESIGN_W = 900
