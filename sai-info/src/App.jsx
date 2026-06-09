@@ -11,7 +11,6 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import FloatingButtons from './components/FloatingButtons'
 import ScrollToTop from './components/ScrollToTop'
-import AIChat from './components/AIChat'
 import AdminDashboard from "./pages/AdminDashboard"
 import AdminReset from "./pages/AdminReset"
 import ITProductsSales from "./pages/ITProductsSales"
@@ -60,7 +59,6 @@ function HomePage() {
       <Footer />
       <FloatingButtons />
       <ScrollToTop />
-      <AIChat />
     </div>
   )
 }
