@@ -64,6 +64,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+const uploadMemory = multer({ storage: multer.memoryStorage() });
 
 const useCloudinary = !!(
   process.env.CLOUDINARY_CLOUD_NAME &&
@@ -93,7 +94,7 @@ const uploadProductMiddleware = (req, res, next) => {
   if (useCloudinary) {
     uploadCloud.array('images', 8)(req, res, next);
   } else {
-    upload.array('images', 8)(req, res, next);
+    uploadMemory.array('images', 8)(req, res, next);
   }
 };
 
@@ -101,7 +102,7 @@ const uploadProductEditMiddleware = (req, res, next) => {
   if (useCloudinary) {
     uploadCloud.array('newImages', 8)(req, res, next);
   } else {
-    upload.array('newImages', 8)(req, res, next);
+    uploadMemory.array('newImages', 8)(req, res, next);
   }
 };
 
@@ -725,12 +726,12 @@ app.post('/api/products', uploadProductMiddleware, async (req, res) => {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    // Cloudinary returns full https:// URLs in file.path. Local storage returns relative path.
+    // Cloudinary returns full https:// URLs in file.path. Memory storage returns file.buffer.
     const images = req.files.map((file) => {
       if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
         return file.path;
       }
-      return `/uploads/${file.filename}`;
+      return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
     });
 
     const newProduct = await Product.create({
@@ -821,12 +822,12 @@ app.put('/api/products/:id', uploadProductEditMiddleware, async (req, res) => {
 
     // Build updated images: kept existing + newly uploaded
     const keptImages = keepIndexes.map((i) => product.images[i]).filter(Boolean);
-    // Cloudinary returns full https:// URLs in file.path. Local storage returns relative path.
+    // Cloudinary returns full https:// URLs in file.path. Memory storage returns file.buffer.
     const newImageUrls = req.files ? req.files.map((file) => {
       if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
         return file.path;
       }
-      return `/uploads/${file.filename}`;
+      return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
     }) : [];
     const allImages = [...keptImages, ...newImageUrls].slice(0, 8);
 
