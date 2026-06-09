@@ -24,22 +24,6 @@ const jwt = require('jsonwebtoken');
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const cloudinaryStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "sai-infotech-products",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-  },
-});
-const uploadCloud = multer({ storage: cloudinaryStorage });
-// ─────────────────────────────────────────────────────────────
-
 const app = express();
 
 app.use(cors());
@@ -80,6 +64,46 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+const useCloudinary = !!(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
+
+if (useCloudinary) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
+
+const cloudinaryStorage = useCloudinary ? new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "sai-infotech-products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+  },
+}) : null;
+
+const uploadCloud = useCloudinary ? multer({ storage: cloudinaryStorage }) : null;
+
+const uploadProductMiddleware = (req, res, next) => {
+  if (useCloudinary) {
+    uploadCloud.array('images', 8)(req, res, next);
+  } else {
+    upload.array('images', 8)(req, res, next);
+  }
+};
+
+const uploadProductEditMiddleware = (req, res, next) => {
+  if (useCloudinary) {
+    uploadCloud.array('newImages', 8)(req, res, next);
+  } else {
+    upload.array('newImages', 8)(req, res, next);
+  }
+};
 
 // ─── EMAIL CONFIG ───────────────────────────────────────────
 
@@ -700,9 +724,8 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// POST /api/products — create a new product (Cloudinary storage)
-// ✅ FIX: Changed upload → uploadCloud, file.filename → file.path
-app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
+// POST /api/products — create a new product (Dynamic Cloudinary / Local storage)
+app.post('/api/products', uploadProductMiddleware, async (req, res) => {
   try {
     const { name, category, description, price } = req.body;
 
@@ -710,8 +733,13 @@ app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
       return res.status(400).json({ message: 'Name and at least one image are required' });
     }
 
-    // Cloudinary returns full https:// URLs in file.path
-    const images = req.files.map((file) => file.path);
+    // Cloudinary returns full https:// URLs in file.path. Local storage returns relative path.
+    const images = req.files.map((file) => {
+      if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
+        return file.path;
+      }
+      return `/uploads/${file.filename}`;
+    });
 
     const newProduct = await Product.create({
       name: name.trim(),
@@ -729,9 +757,20 @@ app.post('/api/products', uploadCloud.array('images', 15), async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
+    // Clean up local files if local storage was used and error occurred
+    if (req.files) {
+      req.files.forEach((f) => {
+        if (f.path && !f.path.startsWith('http')) {
+          if (fs.existsSync(f.path)) {
+            try { fs.unlinkSync(f.path); } catch (e) {}
+          }
+        }
+      });
+    }
+
     if (error instanceof multer.MulterError) {
       if (error.code === 'LIMIT_UNEXPECTED_FILE') {
-        return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
+        return res.status(400).json({ message: 'You can upload a maximum of 8 photos' });
       }
       return res.status(400).json({ message: error.message });
     }
@@ -756,9 +795,8 @@ app.patch('/api/products/:id', async (req, res) => {
   }
 });
 
-// PUT /api/products/:id — full edit (Cloudinary storage)
-// ✅ FIX: Changed upload → uploadCloud, f.filename → f.path
-app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res) => {
+// PUT /api/products/:id — full edit (Dynamic Cloudinary / Local storage)
+app.put('/api/products/:id', uploadProductEditMiddleware, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
@@ -767,26 +805,38 @@ app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res
     let keepIndexes = [];
     try { keepIndexes = JSON.parse(req.body.keepImageIndexes || '[]'); } catch {}
 
-    // Delete removed images from Cloudinary
+    // Delete removed images from Cloudinary or local disk
     const removedImages = product.images.filter((_, i) => !keepIndexes.includes(i));
     for (const url of removedImages) {
       try {
-        if (url && url.includes('cloudinary.com')) {
+        if (url && url.includes('cloudinary.com') && useCloudinary) {
           const parts = url.split('/');
           const folder = parts[parts.length - 2];
           const filename = parts[parts.length - 1].split('.')[0];
           await cloudinary.uploader.destroy(`${folder}/${filename}`);
+        } else if (url && url.includes('/uploads/')) {
+          // Local file cleanup
+          const filename = url.split('/uploads/')[1];
+          const imagePath = path.join(__dirname, 'uploads', filename);
+          if (fs.existsSync(imagePath)) {
+            try { fs.unlinkSync(imagePath); } catch (e) {}
+          }
         }
       } catch (e) {
-        console.warn('Cloudinary image delete warn:', e.message);
+        console.warn('Image delete warn:', e.message);
       }
     }
 
     // Build updated images: kept existing + newly uploaded
     const keptImages = keepIndexes.map((i) => product.images[i]).filter(Boolean);
-    // Cloudinary returns full https:// URLs in file.path
-    const newImageUrls = req.files ? req.files.map((f) => f.path) : [];
-    const allImages = [...keptImages, ...newImageUrls].slice(0, 15);
+    // Cloudinary returns full https:// URLs in file.path. Local storage returns relative path.
+    const newImageUrls = req.files ? req.files.map((file) => {
+      if (file.path && (file.path.startsWith('http://') || file.path.startsWith('https://'))) {
+        return file.path;
+      }
+      return `/uploads/${file.filename}`;
+    }) : [];
+    const allImages = [...keptImages, ...newImageUrls].slice(0, 8);
 
     product.name = req.body.name || product.name;
     product.description = req.body.description ?? product.description;
@@ -799,6 +849,17 @@ app.put('/api/products/:id', uploadCloud.array('newImages', 15), async (req, res
     await product.save();
     res.json(product);
   } catch (err) {
+    // Clean up local files if local storage was used and error occurred
+    if (req.files) {
+      req.files.forEach((f) => {
+        if (f.path && !f.path.startsWith('http')) {
+          if (fs.existsSync(f.path)) {
+            try { fs.unlinkSync(f.path); } catch (e) {}
+          }
+        }
+      });
+    }
+
     console.log('Product put error', err);
     res.status(500).json({ message: err.message });
   }
@@ -822,7 +883,7 @@ app.delete('/api/products/:id', async (req, res) => {
 
     for (const url of imageUrls) {
       try {
-        if (url && url.includes('cloudinary.com')) {
+        if (url && url.includes('cloudinary.com') && useCloudinary) {
           const parts = url.split('/');
           const folder = parts[parts.length - 2];
           const filename = parts[parts.length - 1].split('.')[0];
@@ -853,7 +914,7 @@ app.use((err, req, res, next) => {
 
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      return res.status(400).json({ message: 'You can upload a maximum of 15 photos' });
+      return res.status(400).json({ message: 'You can upload a maximum of 8 photos' });
     }
     return res.status(400).json({ message: err.message });
   }

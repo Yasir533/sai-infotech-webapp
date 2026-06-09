@@ -27,7 +27,7 @@ import {
 import { getApiBase } from "../utils/apiBase";
 import imageCompression from "browser-image-compression";
 
-const MAX_IMAGES = 15;
+const MAX_IMAGES = 8;
 
 export default function AdminDashboard() {
   const API_BASE = getApiBase();
