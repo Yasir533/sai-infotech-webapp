@@ -112,34 +112,36 @@ const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER || "nodemailer";
 let transporter = null;
 
 // NODEMAILER (Gmail)
+// NODEMAILER (Roundcube / Custom SMTP)
 if (EMAIL_PROVIDER === "nodemailer" || EMAIL_PROVIDER === "smtp") {
 
   transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
+  requireTLS: true,
 
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
 
-    tls: {
-      rejectUnauthorized: false,
-    },
+  tls: {
+    rejectUnauthorized: false,
+  },
 
-    family: 4,
+  connectionTimeout: 120000,
+  greetingTimeout: 60000,
+  socketTimeout: 120000,
+});
 
-    connectionTimeout: 120000,
-    greetingTimeout: 60000,
-    socketTimeout: 120000,
-  });
-
-  transporter.verify((error) => {
+  transporter.verify((error, success) => {
     if (error) {
       console.log("EMAIL ERROR FULL:", error);
     } else {
       console.log("Email Server Ready ✓");
+      console.log("SMTP HOST:", process.env.SMTP_HOST);
+      console.log("SMTP USER:", process.env.EMAIL_USER);
     }
   });
 }
