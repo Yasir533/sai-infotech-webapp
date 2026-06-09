@@ -575,52 +575,42 @@ app.post("/api/contact", async (req, res) => {
     console.log("CONTACT SAVED ID:", newContact._id);
     console.log("CONTACT MAIL SEND START");
 
-    const [adminMailResult, customerMailResult] = await Promise.allSettled([
-      sendEmail({
-        to: contactRecipient,
-        replyTo: email,
-        subject: "New Customer Enquiry - SAI INFOTECH",
-        html: `
-          <h2>New Customer Enquiry</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        `,
-      }),
-      sendEmail({
-        to: email,
-        subject: "Thank You for Contacting SAI INFOTECH",
-        html: `
-          <div style="font-family: Arial; padding:20px;">
-            <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
-            <p>Dear ${name},</p>
-            <p>Your enquiry has been received successfully.</p>
-            <p>Our technical team will contact you shortly.</p>
-            <p><strong>Selected Services:</strong></p>
-            <p>${Array.isArray(services) ? services.join(", ") : services}</p>
-            <br/>
-            <p>Regards,<br/>SAI INFOTECH</p>
-          </div>
-        `,
-      }),
-    ]);
+    // Send email notifications asynchronously in the background so the user gets an instant response
+    sendEmail({
+      to: contactRecipient,
+      replyTo: email,
+      subject: "New Customer Enquiry - SAI INFOTECH",
+      html: `
+        <h2>New Customer Enquiry</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Services:</strong> ${Array.isArray(services) ? services.join(", ") : services}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    })
+      .then(() => console.log("ADMIN MAIL SENT"))
+      .catch((err) => console.error("CONTACT ADMIN MAIL ERROR:", err));
 
-    if (adminMailResult.status === "fulfilled") {
-      console.log("ADMIN MAIL SENT");
-    } else {
-      console.log("CONTACT ADMIN MAIL ERROR:", adminMailResult.reason);
-    }
-
-    if (customerMailResult.status === "fulfilled") {
-      console.log("CUSTOMER MAIL SENT");
-    } else {
-      console.log("CONTACT CUSTOMER MAIL ERROR:", customerMailResult.reason);
-    }
-
-    console.log("CONTACT MAIL SEND COMPLETE");
+    sendEmail({
+      to: email,
+      subject: "Thank You for Contacting SAI INFOTECH",
+      html: `
+        <div style="font-family: Arial; padding:20px;">
+          <h2 style="color:#2563eb;">Thank You for Contacting SAI INFOTECH</h2>
+          <p>Dear ${name},</p>
+          <p>Your enquiry has been received successfully.</p>
+          <p>Our technical team will contact you shortly.</p>
+          <p><strong>Selected Services:</strong></p>
+          <p>${Array.isArray(services) ? services.join(", ") : services}</p>
+          <br/>
+          <p>Regards,<br/>SAI INFOTECH</p>
+        </div>
+      `,
+    })
+      .then(() => console.log("CUSTOMER MAIL SENT"))
+      .catch((err) => console.error("CONTACT CUSTOMER MAIL ERROR:", err));
 
     res.status(201).json({
       success: true,
