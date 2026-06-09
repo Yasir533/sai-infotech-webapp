@@ -1,55 +1,37 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require('mongoose');
 
-const AdminOtp = sequelize.define('AdminOtp', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
+const adminOtpSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+      index: true,
     },
-    set(value) {
-      if (value) {
-        this.setDataValue('email', value.trim().toLowerCase());
-      }
-    }
+    otpHash: {
+      type: String,
+      required: true,
+    },
+    expiresAt: {
+      type: Date,
+      required: true,
+      index: {
+        expires: 0,
+      },
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    verifiedAt: {
+      type: Date,
+      default: null,
+    },
   },
-  otpHash: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  expiresAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  verified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  verifiedAt: {
-    type: DataTypes.DATE,
-    defaultValue: null,
-  },
-}, {
-  timestamps: true,
-});
-
-// Serialize _id virtual for frontend backwards compatibility
-AdminOtp.prototype.toJSON = function () {
-  const values = Object.assign({}, this.get());
-  values._id = values.id.toString();
-  return values;
-};
-Object.defineProperty(AdminOtp.prototype, '_id', {
-  get() {
-    return this.id ? this.id.toString() : undefined;
+  {
+    timestamps: true,
   }
-});
+);
 
-module.exports = AdminOtp;
+module.exports = mongoose.model('AdminOtp', adminOtpSchema);

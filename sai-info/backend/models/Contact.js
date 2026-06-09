@@ -1,50 +1,25 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require("mongoose");
 
-const Contact = sequelize.define('Contact', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    defaultValue: '',
-  },
-  email: {
-    type: DataTypes.STRING,
-    defaultValue: '',
-  },
-  phone: {
-    type: DataTypes.STRING,
-    defaultValue: '',
-  },
-  message: {
-    type: DataTypes.TEXT,
-    defaultValue: '',
-  },
-  services: {
-    type: DataTypes.JSON,
-    defaultValue: () => [],
-  },
-  status: {
-    type: DataTypes.STRING,
-    defaultValue: 'Pending',
-  },
-}, {
-  timestamps: true,
-});
+const contactSchema = new mongoose.Schema(
+  {
+    name: String,
 
-// Serialize _id virtual for frontend backwards compatibility
-Contact.prototype.toJSON = function () {
-  const values = Object.assign({}, this.get());
-  values._id = values.id.toString();
-  return values;
-};
-Object.defineProperty(Contact.prototype, '_id', {
-  get() {
-    return this.id ? this.id.toString() : undefined;
+    email: String,
+
+    phone: String,
+
+    message: String,
+
+    services: [String],
+
+    status: {
+      type: String,
+      default: "Pending",
+    },
+  },
+  {
+    timestamps: true,
   }
-});
+);
 
-module.exports = Contact;
+module.exports = mongoose.model("Contact", contactSchema);
