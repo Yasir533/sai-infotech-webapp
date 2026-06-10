@@ -56,7 +56,7 @@ const categories = [
     name: 'Networking',
     icon: '🌐',
     color: '#dd6b20',
-    bgImage: 'https://images.unsplash.com/photo-1562751362-404243064541?w=400&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&q=80',
     description: 'Build robust, scalable network infrastructure with our comprehensive range of networking products. From enterprise switches to wireless access points, we provide solutions for every network size and complexity.',
     products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
   },
@@ -69,27 +69,15 @@ const categories = [
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
     products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution', 'Cloud Migration Support', 'Private Cloud Infrastructure'],
   },
-  
   {
-  id: 'it-rentals',
-  name: 'IT Rentals',
-  icon: '💻',
-  color: '#38a169',
-  bgImage: 'https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?w=400&q=80',
-  description: 'Flexible and cost-effective IT hardware rental solutions in Bangalore. We provide high-quality refurbished and enterprise-grade systems for businesses, startups, training centers, events, and temporary projects. Our rental services ensure reliable performance, quick deployment, and dedicated technical support.',
-  products: [
-    'Laptops',
-    'Desktop Computers',
-    'Workstations',
-    'Printers & Multifunction Devices',
-    'Servers',
-    'Networking Equipment',
-    'Monitors & Display Units',
-    'Projectors',
-    'Storage Devices',
-    'Refurbished IT Systems'
-  ],
-}
+    id: 'it-rentals',
+    name: 'IT Rentals',
+    icon: '💻',
+    color: '#38a169',
+    bgImage: 'https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?w=400&q=80',
+    description: 'Flexible and cost-effective IT hardware rental solutions in Bangalore. We provide high-quality refurbished and enterprise-grade systems for businesses, startups, training centers, events, and temporary projects. Our rental services ensure reliable performance, quick deployment, and dedicated technical support.',
+    products: ['Laptops', 'Desktop Computers', 'Workstations', 'Printers & Multifunction Devices', 'Servers', 'Networking Equipment', 'Monitors & Display Units', 'Projectors', 'Storage Devices', 'Refurbished IT Systems'],
+  },
 ]
 
 export default function ITProductsSales() {
@@ -213,9 +201,14 @@ export default function ITProductsSales() {
                 <button
                   onClick={handleBack}
                   style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    color: '#345f9a', fontWeight: 700, fontSize: '0.9rem',
-                    padding: 0, display: 'flex', alignItems: 'center', gap: '4px',
+                    background: '#1e293b',
+                    border: '1.5px solid #334155',
+                    borderRadius: '8px',
+                    color: '#fff',
+                    padding: '6px 14px',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
                   }}
                 >
                   ← All Categories
