@@ -25,8 +25,8 @@ const categories = [
     products: ['Rack Servers', 'Blade Servers', 'Storage Arrays', 'NAS/SAN', 'UPS Systems', 'PDU Units', 'Cooling Units', 'KVM Switches', 'Patch Panels', 'Cable Management', 'Load Balancers'],
   },
   {
-    id: 'electronic-security',
-    name: 'Electronic Security',
+    id: 'Security Surveillance',
+    name: 'Security Surveillance',
     icon: '🛡️',
     color: '#38a169',
     bgImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&q=80',
