@@ -69,6 +69,27 @@ const categories = [
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
     products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution', 'Cloud Migration Support','Private Cloud Infrastructure'],
   },
+  
+  {
+  id: 'it-rentals',
+  name: 'IT Rentals',
+  icon: '💻',
+  color: '#38a169',
+  bgImage: 'https://images.unsplash.com/photo-1496171367470-9ed9a91ea931?w=400&q=80',
+  description: 'Flexible and cost-effective IT hardware rental solutions in Bangalore. We provide high-quality refurbished and enterprise-grade systems for businesses, startups, training centers, events, and temporary projects. Our rental services ensure reliable performance, quick deployment, and dedicated technical support.',
+  products: [
+    'Laptops',
+    'Desktop Computers',
+    'Workstations',
+    'Printers & Multifunction Devices',
+    'Servers',
+    'Networking Equipment',
+    'Monitors & Display Units',
+    'Projectors',
+    'Storage Devices',
+    'Refurbished IT Systems'
+  ],
+}
 ]
 
 export default function ITProductsSales() {
