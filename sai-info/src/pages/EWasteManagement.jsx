@@ -86,7 +86,7 @@ const sections = [
         <p>We follow the globally accepted 6R framework:</p>
       </>
     ),
-    points: ['Refuse', 'Reduce', 'Rethink', 'Reuse', 'Repair', 'Recycle'],
+    points: ['Recycle','Repair','Reuse','Reduce','Rethink','Refuse'],
     footer: 'Our mission is to minimize waste generation and maximize environmental sustainability.',
   },
   {
