@@ -49,7 +49,7 @@ const categories = [
     color: '#805ad5',
     bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80',
     description: 'Safeguard your digital assets with our comprehensive IT security solutions. We offer hardware and software security products to protect against cyber threats, data breaches, and unauthorized access.',
-    products: ['Firewalls', 'UTM Appliances', 'Antivirus Solutions', 'VPN Gateways', 'Endpoint Security', 'Email Security', 'Web Filtering', 'SIEM Solutions', 'Encryption Devices', 'Security Tokens'],
+    products: ['UTM Appliances', 'Antivirus Solutions', 'VPN Gateways', 'Endpoint Security', 'Email Security', 'Web Filtering', 'SIEM Solutions', 'Encryption Devices', 'Security Tokens'],
   },
   {
     id: 'networking',
