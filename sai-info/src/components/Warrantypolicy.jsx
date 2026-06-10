@@ -51,11 +51,11 @@ export default function WarrantyPolicy() {
   return (
     <PolicyPage title="Warranty Policy">
       <Section title="Service Warranty">
-        <p>All repairs and services performed by SAI INFOTECH come with a <strong>90-day service warranty</strong>. If the same issue recurs within this period due to our workmanship, we will repair it free of charge.</p>
+        <p>All repairs and services performed by SAI INFOTECH come with a <strong>30-day service warranty</strong>, which may vary depending on the type of service performed. If the same issue recurs within this period due to our workmanship, we will repair it free of charge.</p>
       </Section>
       <Section title="Parts Warranty">
         <ul style={{ paddingLeft: '20px', lineHeight: '2' }}>
-          <li><strong>Original/OEM Parts:</strong> Covered by the original manufacturer's warranty (typically 6 months – 1 year).</li>
+          <li><strong>Original/OEM Parts:</strong> Warranty depends on the parts and the repairs performed — typically up to <strong>3 months</strong>.</li>
           <li><strong>Third-party Parts:</strong> 30-day warranty provided by SAI INFOTECH.</li>
           <li>Warranty cards and purchase receipts must be retained for warranty claims.</li>
         </ul>
