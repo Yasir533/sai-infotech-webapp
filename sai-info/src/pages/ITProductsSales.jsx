@@ -11,7 +11,7 @@ const categories = [
     name: 'Computing',
     icon: '🖥️',
     color: '#e53e3e',
-    bgImage: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80',
     description: "Our aim is to develop tomorrow's information technology that supports innovative applications, from big data analytics to the Internet of Things. It covers all aspects of information technology including energy efficient and robust hardware systems, software defined networks, secure distributed systems, scalability and integration in increasing computing density, reliability and lower power consumption and costs.",
     products: ['Laptops', 'Desktops', 'Printers', 'Monitors', 'Thin Client', 'All-in-Ones', 'Workstation', 'Processors', 'Servers'],
   },
@@ -56,7 +56,7 @@ const categories = [
     name: 'Networking',
     icon: '🌐',
     color: '#dd6b20',
-    bgImage: 'https://images.unsplash.com/photo-1562547256-2c5ee93b60b7?w=400&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1562751362-404243064541?w=400&q=80',
     description: 'Build robust, scalable network infrastructure with our comprehensive range of networking products. From enterprise switches to wireless access points, we provide solutions for every network size and complexity.',
     products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
   },
@@ -67,7 +67,7 @@ const categories = [
     color: '#2b6cb0',
     bgImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80',
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
-    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution', 'Cloud Migration Support','Private Cloud Infrastructure'],
+    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution', 'Cloud Migration Support', 'Private Cloud Infrastructure'],
   },
   
   {

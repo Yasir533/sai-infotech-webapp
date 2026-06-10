@@ -329,7 +329,7 @@ export default function RepairRecovery() {
                         onClick={() => setSelected(null)}
                         className="mb-6 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
                       >
-                        ← All Services
+                        ← All Categories
                       </button>
                       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
                         <div className="h-2" style={{ background: cat.accent }} />

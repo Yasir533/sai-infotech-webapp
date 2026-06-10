@@ -293,7 +293,7 @@ export default function EWasteManagement() {
             <motion.div key={selected.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
               <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#16a34a', fontWeight: 700, fontSize: '0.9rem', padding: 0 }}>
-                  ← All Sections
+                  ← All Categories
                 </button>
                 <span style={{ color: '#cbd5e1' }}>/</span>
                 <span style={{ color: '#64748b', fontSize: '0.9rem' }}>{selected.name}</span>
