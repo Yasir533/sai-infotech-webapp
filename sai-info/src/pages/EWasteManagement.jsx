@@ -5,7 +5,7 @@ import { FiArrowRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo-dark-bg.png'
 import logo from '../assets/logo.png'
-import workflowBg from '../assets/work flow.jpeg'
+import workflowBg from '../assets/work-flow.jpeg'
 
 const sections = [
   {
