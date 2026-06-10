@@ -5,6 +5,7 @@ import { FiArrowRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo-dark-bg.png'
 import logo from '../assets/logo.png'
+import workflowBg from '../assets/work flow.jpeg'
 
 const sections = [
   {
@@ -212,7 +213,17 @@ export default function EWasteManagement() {
               transition={{ duration: 0.3 }}
             >
               {/* Header */}
-              <div style={{ marginBottom: '24px' }}>
+              <div style={{
+                marginBottom: '24px',
+                backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.97) 55%, rgba(255,255,255,0.7) 75%, rgba(255,255,255,0.1) 100%), url(${workflowBg})`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right center',
+                borderRadius: '12px',
+                padding: '24px 28px',
+                border: '1px solid #e2e8f0',
+                minHeight: '110px',
+              }}>
                 <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
                   E-Waste <span style={{ color: '#16a34a' }}>Management</span>
                   <span style={{ color: '#64748b', fontWeight: 400, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', marginLeft: '10px' }}>
