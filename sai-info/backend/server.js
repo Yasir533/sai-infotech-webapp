@@ -119,21 +119,17 @@ if (EMAIL_PROVIDER === "nodemailer" || EMAIL_PROVIDER === "smtp") {
   transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
-  secure: false,
-  requireTLS: true,
-
+  secure: Number(process.env.SMTP_PORT) === 465,   // true for 465, false for 587
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-
   tls: {
     rejectUnauthorized: false,
   },
-
-  connectionTimeout: 120000,
-  greetingTimeout: 60000,
-  socketTimeout: 120000,
+  connectionTimeout: 60000,
+  greetingTimeout: 30000,
+  socketTimeout: 60000,
 });
 
   transporter.verify((error, success) => {
