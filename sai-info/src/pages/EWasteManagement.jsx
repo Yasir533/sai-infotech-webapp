@@ -226,12 +226,12 @@ export default function EWasteManagement() {
                 gridTemplateColumns: '3fr 2fr',
                 gap: '16px',
                 marginBottom: '28px',
-                alignItems: 'start',
+                alignItems: 'stretch',
               }}>
                 {/* Left: Carousel */}
                 <EwasteCarousel />
 
-                {/* Right: Workflow image — no label, clean card */}
+                {/* Right: Workflow image — matches carousel height */}
                 <div style={{
                   borderRadius: '14px',
                   overflow: 'hidden',
@@ -248,7 +248,7 @@ export default function EWasteManagement() {
                     alt="ITAD Process Workflow"
                     style={{
                       width: '100%',
-                      height: 'auto',
+                      height: '100%',
                       objectFit: 'contain',
                       display: 'block',
                       borderRadius: '8px',

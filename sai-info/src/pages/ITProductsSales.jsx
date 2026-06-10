@@ -56,7 +56,7 @@ const categories = [
     name: 'Networking',
     icon: '🌐',
     color: '#dd6b20',
-    bgImage: 'https://images.unsplash.com/photo-1562751362-404243064541?w=400&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&q=80',
     description: 'Build robust, scalable network infrastructure with our comprehensive range of networking products. From enterprise switches to wireless access points, we provide solutions for every network size and complexity.',
     products: ['Managed Switches', 'Routers', 'Wireless APs', 'Network Cables', 'Fiber Optics', 'Media Converters', 'Network Racks', 'PoE Switches', 'SD-WAN'],
   },
