@@ -436,7 +436,7 @@ const SERVICES = [
   {
     id: 'ewaste',
     title: 'E-Waste Solutions',
-    subtitle: 'Refurbished Systems',
+    subtitle: 'Sustainable IT Asset Disposal',
     icon: FiPackage,
     color: '#10b981',
     iconBg: 'linear-gradient(135deg,#064e3b,#10b981)',
