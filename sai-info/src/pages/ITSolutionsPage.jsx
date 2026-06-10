@@ -131,12 +131,10 @@ const categories = [
     services: [
       'Server Procurement & Setup',
       'VMware & Hyper-V Virtualization',
-      'Private Cloud Infrastructure',
       'Hyper-Converged Solutions',
       'Storage & Backup Solutions',
       'Disaster Recovery Planning',
       'Server Consolidation',
-      'Cloud Migration Support',
       'Web & Mail Hosting Solutions',
     ],
   },

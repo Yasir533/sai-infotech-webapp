@@ -67,7 +67,7 @@ const categories = [
     color: '#2b6cb0',
     bgImage: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80',
     description: 'Accelerate your digital transformation with our cloud solutions. We offer cloud infrastructure, migration services, and hybrid cloud setups to help businesses scale efficiently and cost-effectively.',
-    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution'],
+    products: ['Cloud Servers', 'Backup Solutions', 'Cloud Storage', 'Virtual Desktops', 'Cloud Security', 'Disaster Recovery', 'SaaS Products', 'Cloud Migration', 'Hybrid Cloud', 'Cloud Monitoring', 'Web & Mail Hosting Solution', 'Cloud Migration Support','Private Cloud Infrastructure'],
   },
 ]
 
