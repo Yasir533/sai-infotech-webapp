@@ -1,11 +1,163 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiArrowRight } from 'react-icons/fi'
+import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { IoCheckmarkCircle } from 'react-icons/io5'
 import logoIcon from '../assets/logo-dark-bg.png'
 import logo from '../assets/logo.png'
 import workflowBg from '../assets/work-flow.jpeg'
+
+import ew1 from '../assets/Ewaste/image (1).png'
+import ew2 from '../assets/Ewaste/image (2).png'
+import ew3 from '../assets/Ewaste/image (3).png'
+import ew4 from '../assets/Ewaste/image (4).png'
+import ew5 from '../assets/Ewaste/image (5).png'
+import ew6 from '../assets/Ewaste/image (6).png'
+import ew7 from '../assets/Ewaste/image (7).png'
+
+const ewasteSlides = [
+  { img: ew1, caption: 'E-Waste Sorting Facility' },
+  { img: ew2, caption: 'IT Asset Refurbishment' },
+  { img: ew3, caption: 'Recycling Plant Operations' },
+  { img: ew4, caption: 'Manual Component Sorting' },
+  { img: ew5, caption: 'Industrial Shredding Equipment' },
+  { img: ew6, caption: 'High-Volume Processing Line' },
+  { img: ew7, caption: 'Circuit Board Recovery' },
+]
+
+function EwasteCarousel() {
+  const [current, setCurrent] = useState(0)
+  const timerRef = useRef(null)
+
+  const startTimer = () => {
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCurrent(prev => (prev + 1) % ewasteSlides.length)
+    }, 3000)
+  }
+
+  useEffect(() => {
+    startTimer()
+    return () => clearInterval(timerRef.current)
+  }, [])
+
+  const go = (dir) => {
+    setCurrent(prev => (prev + dir + ewasteSlides.length) % ewasteSlides.length)
+    startTimer()
+  }
+
+  return (
+    <div style={{
+      marginBottom: '28px',
+      borderRadius: '14px',
+      overflow: 'hidden',
+      boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+      border: '1px solid #e2e8f0',
+      position: 'relative',
+      background: '#0f172a',
+      height: '320px',
+    }}>
+      {/* Slides */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.45 }}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          <img
+            src={ewasteSlides[current].img}
+            alt={ewasteSlides[current].caption}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+          {/* Dark gradient overlay at bottom */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)',
+            padding: '32px 24px 16px',
+          }}>
+            <span style={{
+              color: '#fff', fontWeight: 600, fontSize: '1rem',
+              textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+              letterSpacing: '0.01em',
+            }}>
+              {ewasteSlides[current].caption}
+            </span>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Left Arrow */}
+      <button
+        onClick={() => go(-1)}
+        style={{
+          position: 'absolute', left: '12px', top: '50%',
+          transform: 'translateY(-50%)',
+          background: 'rgba(255,255,255,0.85)',
+          border: 'none', borderRadius: '50%',
+          width: '36px', height: '36px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', zIndex: 10,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+          transition: 'background 0.2s',
+        }}
+      >
+        <FiChevronLeft style={{ fontSize: '1.2rem', color: '#0f172a' }} />
+      </button>
+
+      {/* Right Arrow */}
+      <button
+        onClick={() => go(1)}
+        style={{
+          position: 'absolute', right: '12px', top: '50%',
+          transform: 'translateY(-50%)',
+          background: 'rgba(255,255,255,0.85)',
+          border: 'none', borderRadius: '50%',
+          width: '36px', height: '36px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', zIndex: 10,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+          transition: 'background 0.2s',
+        }}
+      >
+        <FiChevronRight style={{ fontSize: '1.2rem', color: '#0f172a' }} />
+      </button>
+
+      {/* Dot indicators */}
+      <div style={{
+        position: 'absolute', bottom: '12px', right: '20px',
+        display: 'flex', gap: '6px', zIndex: 10,
+      }}>
+        {ewasteSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => { setCurrent(i); startTimer() }}
+            style={{
+              width: i === current ? '20px' : '8px',
+              height: '8px',
+              borderRadius: '4px',
+              background: i === current ? '#16a34a' : 'rgba(255,255,255,0.6)',
+              border: 'none', cursor: 'pointer', padding: 0,
+              transition: 'all 0.3s',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Slide counter */}
+      <div style={{
+        position: 'absolute', top: '12px', right: '16px',
+        background: 'rgba(0,0,0,0.45)',
+        color: '#fff', fontSize: '0.75rem', fontWeight: 600,
+        padding: '3px 10px', borderRadius: '20px', zIndex: 10,
+      }}>
+        {current + 1} / {ewasteSlides.length}
+      </div>
+    </div>
+  )
+}
 
 const sections = [
   {
@@ -136,7 +288,6 @@ const sections = [
       'Asset Tracking & Reporting',
     ],
   },
-  
   {
     id: 'commitment',
     name: 'Our Commitment',
@@ -215,25 +366,39 @@ export default function EWasteManagement() {
               {/* Header */}
               <div style={{
                 marginBottom: '24px',
-                backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.97) 55%, rgba(255,255,255,0.7) 75%, rgba(255,255,255,0.1) 100%), url(${workflowBg})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right center',
-                borderRadius: '12px',
-                padding: '24px 28px',
-                border: '1px solid #e2e8f0',
-                minHeight: '110px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '24px',
+                flexWrap: 'wrap',
               }}>
-                <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
-                  E-Waste <span style={{ color: '#16a34a' }}>Management</span>
-                  <span style={{ color: '#64748b', fontWeight: 400, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', marginLeft: '10px' }}>
-                    : <span style={{ color: '#16a34a', fontWeight: 700 }}>Responsible Recycling & IT Asset Lifecycle Management.</span>
-                  </span>
-                </h1>
-                <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
-                  Explore our complete e-waste management services and sustainability solutions
-                </p>
+                <div style={{ flex: 1, minWidth: '280px' }}>
+                  <h1 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                    E-Waste <span style={{ color: '#16a34a' }}>Management</span>
+                    <span style={{ color: '#64748b', fontWeight: 400, fontSize: 'clamp(0.85rem, 1.5vw, 1rem)', marginLeft: '10px' }}>
+                      : <span style={{ color: '#16a34a', fontWeight: 700 }}>Responsible Recycling & IT Asset Lifecycle Management.</span>
+                    </span>
+                  </h1>
+                  <p style={{ color: '#64748b', marginTop: '8px', fontSize: '0.95rem' }}>
+                    Explore our complete e-waste management services and sustainability solutions
+                  </p>
+                </div>
+                <img
+                  src={workflowBg}
+                  alt="ITAD Process Workflow"
+                  style={{
+                    width: '300px',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    flexShrink: 0,
+                    borderRadius: '8px',
+                  }}
+                />
               </div>
+
+              {/* ── IMAGE CAROUSEL ── */}
+              <EwasteCarousel />
+
               {/* Cards Grid */}
               <div style={{
                 display: 'grid',
@@ -257,14 +422,12 @@ export default function EWasteManagement() {
                       border: '1px solid #e2e8f0',
                     }}
                   >
-                    {/* Image area */}
                     <div style={{ position: 'relative', height: '160px', overflow: 'hidden' }}>
                       <img
                         src={cat.bgImage}
                         alt={cat.name}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
-                      {/* Icon badge */}
                       <div style={{
                         position: 'absolute', top: '50%', left: '50%',
                         transform: 'translate(-50%, -50%)',
@@ -278,8 +441,6 @@ export default function EWasteManagement() {
                         {cat.icon}
                       </div>
                     </div>
-
-                    {/* Card footer */}
                     <div style={{
                       padding: '14px 18px',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -303,7 +464,6 @@ export default function EWasteManagement() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Breadcrumb */}
               <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button
                   onClick={() => setSelected(null)}
@@ -319,7 +479,6 @@ export default function EWasteManagement() {
                 <span style={{ color: '#64748b', fontSize: '0.9rem' }}>{selected.name}</span>
               </div>
 
-              {/* Content card */}
               <div style={{
                 background: '#fff',
                 borderRadius: '16px',
@@ -329,8 +488,6 @@ export default function EWasteManagement() {
                 maxWidth: '960px',
                 margin: '0 auto',
               }}>
-
-                {/* Title row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
                   <div style={{
                     background: selected.color, borderRadius: '12px',
@@ -345,7 +502,6 @@ export default function EWasteManagement() {
                   </h2>
                 </div>
 
-                {/* Logo row — only for "Our Commitment" */}
                 {selected.showLogo && (
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: '16px',
@@ -359,20 +515,17 @@ export default function EWasteManagement() {
                   </div>
                 )}
 
-                {/* Description text */}
                 {selected.description && (
                   <div style={{ color: '#475569', lineHeight: 1.8, fontSize: '1rem', marginBottom: '24px', borderBottom: '2px solid #f1f5f9', paddingBottom: '20px' }}>
                     {selected.description}
                   </div>
                 )}
 
-                {/* Points heading */}
                 <h3 style={{ fontWeight: 800, color: '#0f172a', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.05rem' }}>
                   <span style={{ color: selected.color, fontSize: '1.1rem' }}>▶</span>
                   Key Points
                 </h3>
 
-                {/* Points grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px 20px' }}>
                   {selected.points.map((point, i) => (
                     <motion.div
@@ -394,14 +547,12 @@ export default function EWasteManagement() {
                   ))}
                 </div>
 
-                {/* Optional footer note (6R section) */}
                 {selected.footer && (
                   <p style={{ marginTop: '16px', color: '#64748b', fontSize: '0.93rem', fontStyle: 'italic' }}>
                     {selected.footer}
                   </p>
                 )}
 
-                {/* CTA buttons */}
                 <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '2px solid #f1f5f9', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
                   <button
                     onClick={() => navigate('/#contact')}
