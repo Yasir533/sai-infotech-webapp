@@ -135,21 +135,7 @@ const sections = [
       'Asset Tracking & Reporting',
     ],
   },
-  {
-    id: 'logistics',
-    name: 'Logistics & Transportation',
-    icon: '🚛',
-    color: '#0891b2',
-    bgImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80',
-    description: null,
-    points: [
-      'Safe Packing of IT Assets',
-      'Secure Transportation',
-      'Material Handling & Movement',
-      'Asset Inspection & Segregation',
-      'Recycling & Resale Processing',
-    ],
-  },
+  
   {
     id: 'commitment',
     name: 'Our Commitment',
