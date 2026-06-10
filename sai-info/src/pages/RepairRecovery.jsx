@@ -20,8 +20,8 @@ import BrandTicker from '../components/BrandTicker'
 
 const categories = [
   {
-    id: 'laptop-repair',
-    label: 'Laptop Repairs',
+    id: 'laptop Accessories',
+    label: 'Laptop Accessories',
     icon: '💻',
     accent: '#ea580c',
     bgColor: '#fff7ed',
@@ -30,13 +30,14 @@ const categories = [
       'We provide expert laptop repair services with skilled technicians who diagnose and fix hardware and software issues quickly. Our focus is quality and transparency, ensuring your device is restored to peak performance with minimal downtime.',
     services: [
       'Screen Replacement',
-      'Keyboard Repair & Replacement',
+      'Keyboard Replacement',
       'Battery & Adapter Issues',
       'Motherboard Servicing',
       'RAM & SSD Upgrades',
       'Hinge & Chassis Repair',
       'Touchpad Repair',
       'Speaker & Audio Fix',
+      'Other Peripheral',
     ],
   },
   {
