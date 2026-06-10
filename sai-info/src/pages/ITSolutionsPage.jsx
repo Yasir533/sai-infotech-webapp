@@ -171,11 +171,9 @@ export default function ITSolutionsPage() {
           .marquee-track-s { display: flex; align-items: center; animation: marquee-scroll 32s linear infinite; width: max-content; }
           .marquee-track-s:hover { animation-play-state: paused; }
         `}</style>
-        {/* Fixed SAI INFOTECH logo left */}
         <div className="flex items-center gap-3 pl-4 pr-5 border-r border-slate-200 shrink-0 bg-white z-10">
           <img src={logoIcon} alt="SAI INFOTECH" style={{ height: '38px', objectFit: 'contain' }} />
         </div>
-        {/* Scrolling logos */}
         <div className="overflow-hidden flex-1">
           <div className="marquee-track-s">
             {[...brands, ...brands].map((brand, i) => (
@@ -254,14 +252,8 @@ export default function ITSolutionsPage() {
                       className="cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100"
                       style={{ borderBottom: `3px solid ${cat.accent}` }}
                     >
-                      {/* Image area */}
                       <div className="relative h-44 overflow-hidden">
-                        <img
-                          src={cat.image}
-                          alt={cat.label}
-                          className="w-full h-full object-cover"
-                        />
-                        {/* Icon badge centered */}
+                        <img src={cat.image} alt={cat.label} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
                             style={{ background: cat.accent }}>
@@ -269,7 +261,6 @@ export default function ITSolutionsPage() {
                           </div>
                         </div>
                       </div>
-                      {/* Label row */}
                       <div className="flex items-center justify-between px-4 py-3">
                         <span className="font-bold text-slate-800 text-base">{cat.label}</span>
                         <FiArrowRight size={18} style={{ color: cat.accent }} />
@@ -284,12 +275,25 @@ export default function ITSolutionsPage() {
                   const cat = categories.find(c => c.id === selected)
                   return (
                     <div className="max-w-3xl mx-auto">
-                      <button
-                        onClick={() => setSelected(null)}
-                        className="mb-6 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-                      >
-                        ← All Categories
-                      </button>
+                      <div className="mb-6 flex items-center gap-3">
+                        <button
+                          onClick={() => setSelected(null)}
+                          style={{
+                            background: '#1e293b',
+                            border: '1.5px solid #334155',
+                            borderRadius: '8px',
+                            color: '#fff',
+                            padding: '6px 14px',
+                            cursor: 'pointer',
+                            fontSize: '0.82rem',
+                            fontWeight: 600,
+                          }}
+                        >
+                          ← All Categories
+                        </button>
+                        <span className="text-slate-400">/</span>
+                        <span className="text-slate-500 text-sm">{cat.label}</span>
+                      </div>
                       <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
                         <div className="h-2" style={{ background: cat.accent }} />
                         <div className="p-8 sm:p-10">
