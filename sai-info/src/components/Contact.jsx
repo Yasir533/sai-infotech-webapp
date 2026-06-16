@@ -250,7 +250,7 @@ export default function Contact() {
                   {info.title === 'LinkedIn' && (
                     <div className="mt-3">
                       <a
-                        href="#"
+                        href="https://www.linkedin.com/in/sai-infotech-753186417/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 rounded-lg bg-[#0077b5] border border-[#0077b5] px-3 py-2 text-sm text-white hover:bg-[#005e93] transition-colors"
