@@ -6,6 +6,7 @@ import {
   FiMail,
   FiSend,
   FiCheck,
+  FiLinkedin,
 } from 'react-icons/fi'
 import { getApiBase } from '../utils/apiBase'
 
@@ -34,7 +35,7 @@ const contactInfo = [
   {
     icon: FiPhone,
     title: 'Phone',
-    lines: ['+91 83 10 33 85 44','+91 76 76 95 21 39'],
+    lines: ['+91 83 10 33 85 44', '+91 76 76 95 21 39'],
     color: 'from-emerald-600 to-emerald-400',
   },
   {
@@ -42,6 +43,12 @@ const contactInfo = [
     title: 'Email',
     lines: ['ssmb@sais.in'],
     color: 'from-violet-600 to-violet-400',
+  },
+  {
+    icon: FiLinkedin,
+    title: 'LinkedIn',
+    lines: ['Connect with us on LinkedIn'],
+    color: 'from-[#0077b5] to-[#00a0dc]',
   },
 ]
 
@@ -54,8 +61,6 @@ const iconImageByTitle = {
 export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
-
-  // Use FiMail (from react-icons) for email icon — avoid optional FontAwesome import
 
   const [form, setForm] = useState({
     name: '',
@@ -109,8 +114,6 @@ export default function Contact() {
     setLoading(true)
 
     try {
-      // Determine API base dynamically so mobile devices can reach the backend.
-      // Prefer Vite env `VITE_API_BASE`, otherwise fall back to laptop host on port 5000.
       const API_BASE = getApiBase()
 
       const response = await fetch(`${API_BASE}/api/contact`, {
@@ -176,7 +179,7 @@ export default function Contact() {
                 key={i}
                 className="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 flex gap-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)]"
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center`}>
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} flex items-center justify-center flex-shrink-0`}>
                   {iconImageByTitle[info.title] ? (
                     <>
                       <img
@@ -203,14 +206,14 @@ export default function Contact() {
 
                   {info.lines.map((line, index) => {
                     if (info.title === 'Phone') {
-                      const tel = String(line).replace(/[^0-9+]/g, '');
+                      const tel = String(line).replace(/[^0-9+]/g, '')
                       return (
                         <p key={index} className="text-slate-600 text-sm">
                           <a href={`tel:${tel}`} className="hover:underline">
                             {line}
                           </a>
                         </p>
-                      );
+                      )
                     }
 
                     if (info.title === 'Email') {
@@ -220,15 +223,16 @@ export default function Contact() {
                             {line}
                           </a>
                         </p>
-                      );
+                      )
                     }
 
                     return (
                       <p key={index} className="text-slate-600 text-sm">
                         {line}
                       </p>
-                    );
+                    )
                   })}
+
                   {info.title === 'Regd. & Corp. Office' && (
                     <div className="mt-3">
                       <a
@@ -238,6 +242,21 @@ export default function Contact() {
                         className="inline-block rounded-lg bg-[#2f6fbf] border border-[#2f6fbf] px-3 py-2 text-sm text-white hover:bg-[#255c9d]"
                       >
                         View Map
+                      </a>
+                    </div>
+                  )}
+
+                  {/* LinkedIn Button */}
+                  {info.title === 'LinkedIn' && (
+                    <div className="mt-3">
+                      <a
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#0077b5] border border-[#0077b5] px-3 py-2 text-sm text-white hover:bg-[#005e93] transition-colors"
+                      >
+                        <FiLinkedin size={15} />
+                        View Profile
                       </a>
                     </div>
                   )}
