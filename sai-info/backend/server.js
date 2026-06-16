@@ -168,7 +168,7 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
       },
       body: JSON.stringify({
         from: RESEND_FROM,
-        to,
+        to: Array.isArray(to) ? to : [to],
         subject,
         html,
         text,
@@ -180,8 +180,7 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
 
     if (!response.ok) {
       throw new Error(
-        result.message ||
-        `Resend request failed with status ${response.status}`
+      `Resend error ${response.status}: ${JSON.stringify(result)}`
       );
     }
 
